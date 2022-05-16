@@ -1,0 +1,23 @@
+{"Poly": 
+    {"Length": 200,
+    "N_Faces" : 5,
+    "Radius": 30,
+    "N": 30,
+    "M": 30, 
+    "C1": 1, 
+    "B": 2, 
+    "Number_segments": 50,
+    "Raw_stl": "na"}, 
+
+"Output": 
+    {"ATOM_lmp": 1, 
+    "FEM_stl": 0}, 
+
+"ATOM_Param": 
+    {"Lattice_parameter": 4.02, 
+    "Material": "Al", 
+    "Orien_z": [1,1,1], 
+    "Orien_y":[1,-2,1] , 
+    "Orien_x": [-1,0,1], 
+    "Lattice_structure": "fcc"}
+}

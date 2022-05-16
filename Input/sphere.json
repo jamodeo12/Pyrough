@@ -1,0 +1,21 @@
+{"Sphere": 
+    {"Number_segments": 5, 
+    "C1": 200000000, 
+    "B": 9.2, 
+    "Radius": 50, 
+    "N": 30,
+    "M": 30,
+    "Raw_stl": "na"}, 
+
+"Output": 
+    {"ATOM_lmp": 1, 
+    "FEM_stl": 0}, 
+
+"ATOM_Param": 
+    {"Lattice_parameter": 4.02, 
+    "Material": "Al", 
+    "Orien_x": [1,0,0], 
+    "Orien_y":[0,1,0] , 
+    "Orien_z": [0,0,1], 
+    "Lattice_structure": "fcc"}
+}

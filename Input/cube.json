@@ -1,0 +1,22 @@
+{"Wulff":
+    {"B": 4, 
+    "C1": 0.7,
+    "n_atoms": 50000, 
+    "N": 30,
+    "M": 30,
+    "Surfaces": [[1,0,0]],
+    "Energies": [1],
+    "Raw_stl": "na"},
+
+"Output":
+    {"ATOM_lmp":1, 
+    "FEM_stl": 0},
+
+"ATOM_Param": 
+    {"Lattice_parameter": 4.07, 
+    "Material": "Au", 
+    "Orien_z": [1,0,0], 
+    "Orien_y":[0,1,0] , 
+    "Orien_x": [0,0,1], 
+    "Lattice_structure": "fcc"}
+}

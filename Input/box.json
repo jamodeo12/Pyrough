@@ -1,0 +1,23 @@
+{"Box":
+    {"B": 2, 
+    "Height": 30.0, 
+    "Width": 150.0, 
+    "Length": 150.0, 
+    "Number_segments": 50, 
+    "C1": 1, 
+    "N": 30,
+    "M": 30,
+    "Raw_stl": "na"},
+
+"Output":
+    {"ATOM_lmp":1, 
+    "FEM_stl": 0},
+
+"ATOM_Param": 
+    {"Lattice_parameter": 4.02, 
+    "Material": "Al", 
+    "Orien_x": [1,0,0], 
+    "Orien_y":[0,1,0] , 
+    "Orien_z": [0,0,1], 
+    "Lattice_structure": "fcc"}
+}
