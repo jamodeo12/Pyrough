@@ -230,7 +230,7 @@ def cube(length):
     """
     print('====== > Creating the Mesh')
     with pygmsh.geo.Geometry() as geom:
-        geom.add_box(0, length, 0, length, 0, length, mesh_size=3)
+        geom.add_box(0, length, 0, length, 0, length, mesh_size=length/30)
         mesh = geom.generate_mesh()
     vertices = mesh.points
     faces = mesh.get_cells_type('triangle')
