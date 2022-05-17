@@ -12,8 +12,5 @@ install_requires=[
     'meshio>=4.4.6',
     'wulffpack>=1.1',
     'ase>=3.21.1'
-],
-extras_require={
-    'interactive': ['matplotlib>=3.3.4']
-}
+]
       )
