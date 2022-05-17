@@ -119,6 +119,23 @@ class Parameter(object):
             self.width = 0
             self.raw_stl = read_param['Wulff']['Raw_stl']
 
+        elif 'Cube' in read_param:
+            self.type_S = 'cube'
+            self.B = read_param['Cube']['B']
+            self.C1 = read_param['Cube']['C1']
+            self.n_at = 0
+            self.surfaces = 0
+            self.energies = 0
+            self.N = read_param['Cube']['N']
+            self.M = read_param['Cube']['M']
+            self.length = read_param['Cube']['l']
+            self.nfaces = 0
+            self.radius = 0
+            self.ns = 0
+            self.height = read_param['Cube']['l']
+            self.width = read_param['Cube']['l']
+            self.raw_stl = read_param['Cube']['Raw_stl']
+
         # This loop is storing all the parameters from the json file and storing them, so they can be called in the
         # main code to fun the functions
         self.lattice_structure = read_param['ATOM_Param']['Lattice_structure']

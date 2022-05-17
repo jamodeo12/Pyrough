@@ -219,6 +219,25 @@ def wulff(obj_points, obj_faces):
     write_stl("Raw_wulff.stl", vertices, faces)
     return (vertices, faces)
 
+def cube(length):
+    """
+    Creates a cube mesh.
+
+    :param length: Length of the desired box
+    :type length: float
+
+    :return: List of points and faces
+    """
+    print('====== > Creating the Mesh')
+    with pygmsh.geo.Geometry() as geom:
+        geom.add_box(0, length, 0, length, 0, length, mesh_size=3)
+        mesh = geom.generate_mesh()
+    vertices = mesh.points
+    faces = mesh.get_cells_type('triangle')
+    mesh.write("Raw_cube.stl")
+    print('====== > Done creating the Mesh')
+    return (vertices, faces)
+
 
 def make_obj(surfaces, energies, n_at, lattice_structure, lattice_parameter, material):
     """
@@ -294,6 +313,8 @@ def read_stl(sample_type, raw_stl, width, length, height, radius, ns, points):
             vertices, faces = sphere(radius, ns)
         elif sample_type == "poly":
             vertices, faces = poly(length, points)
+        elif sample_type == "cube":
+            vertices, faces = cube(length)
     else:
         mesh = meshio.read(raw_stl)
         vertices, faces = mesh.vertices, mesh.faces
@@ -315,6 +336,26 @@ def read_stl_wulff(raw_stl, obj_points, obj_faces):
     """
     if raw_stl == "na":
         vertices, faces = wulff(obj_points, obj_faces)
+    else:
+        mesh = meshio.read(raw_stl)
+        vertices, faces = mesh.vertices, mesh.faces
+    return (vertices, faces)
+
+def read_stl_cube(raw_stl, obj_points, obj_faces):
+    """
+    Reads an input stl file or creates a new one if no input. Cube case.
+
+    :param raw_stl: Name of the input stl file
+    :type raw_stl: str
+    :param obj_points: List of points
+    :type obj_points: list
+    :param obj_faces: List of faces
+    :type obj_faces: list
+
+    :returns: List of points and faces
+    """
+    if raw_stl == "na":
+        vertices, faces = cube(obj_points, obj_faces)
     else:
         mesh = meshio.read(raw_stl)
         vertices, faces = mesh.vertices, mesh.faces
@@ -591,7 +632,7 @@ def node_surface(sample_type, vertices, nodenumber, points, faces):
         nodesurf = np.reshape(face, [int(l / 4), 4])
         return nodesurf
 
-    elif sample_type == 'wulff':
+    elif sample_type == 'wulff' or sample_type == 'cube' :
         nodesurf = []
         for F in faces:
             L = []
@@ -1116,3 +1157,22 @@ def normalize(surf) :
     surf_norm = [[Xf[i], Yf[i], Zf[i], T[i]] for i in range(len(Xf))]
     surf_norm = np.asarray(surf_norm)
     return(surf_norm)
+
+def cube_faces(length):
+    obj_points = [[0,0,0],
+                 [length, 0, 0],
+                 [0,length, 0],
+                 [length, length, 0],
+                 [0,0,length],
+                 [length, 0, length],
+                 [0,length,length],
+                 [length,length,length]]
+    obj_faces = [[1,2,3,4],
+                 [1,2,5,6],
+                 [2,4,6,8],
+                 [4,8,3,7],
+                 [1,5,3,7],
+                 [5,6,7,8]]
+    obj_faces = np.asarray(obj_faces)
+    obj_points = np.asarray(obj_points)
+    return obj_points, obj_faces
