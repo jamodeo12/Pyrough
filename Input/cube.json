@@ -1,11 +1,9 @@
-{"Wulff":
-    {"B": 4, 
-    "C1": 0.7,
-    "n_atoms": 50000, 
+{"Cube":
+    {"B": 2.5,
+    "C1": 1,
     "N": 30,
     "M": 30,
-    "Surfaces": [[1,0,0]],
-    "Energies": [1],
+    "l": 100,
     "Raw_stl": "na"},
 
 "Output":

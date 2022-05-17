@@ -55,8 +55,7 @@ vertices, FEM_stl = sample.make_stl(param.type_S,
                           param.n_at,
                           param.lattice_structure,
                           param.lattice_parameter,
-                          param.material
-                          )
+                          param.material)
 # Calling the sample class function of MAKE it which returns an stl file of the object desired.
 if param.output(Param_file) == 'ATOM_lmp':
     sample.make_atom(FEM_stl,

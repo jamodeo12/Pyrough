@@ -162,6 +162,19 @@ class Sample(object):
 
             return (vertices, stl)
 
+        elif type_sample == 'cube':
+            vertices, stl = make_cube(type_sample,
+                                      B,
+                                      C1,
+                                      N,
+                                      M,
+                                      length,
+                                      ns,
+                                      raw_stl
+                                      )
+
+            return (vertices, stl)
+
     def make_atom(self,
                   STL,
                   lattice_str,
@@ -530,3 +543,46 @@ def make_wulff(type_sample,
     fp.stl_file(vertices, faces, type_sample)
 
     return vertices, 'wulff.stl'
+
+def make_cube(type_sample,
+             B,
+             C1,
+             N,
+             M,
+             length,
+             ns,
+             raw_stl
+             ):
+
+    """
+
+    :param type_sample:
+    :param B:
+    :param C1:
+    :param N:
+    :param M:
+    :param length:
+    :param height:
+    :param width:
+    :param ns:
+    :param raw_stl:
+    :return:
+    """
+
+    obj_points, obj_faces = fp.cube_faces(length)
+    list_n = fp.faces_normals(obj_points, obj_faces)
+
+    vertices, faces = fp.read_stl(type_sample, raw_stl, 0, length, 0, 0, ns, 0)
+    vertices, nodenumber = fp.node_indexing(vertices)
+
+    nodesurf = fp.node_surface(type_sample, vertices, nodenumber, obj_points, obj_faces)
+    node_edge, node_corner = fp.node_corner(nodesurf)
+
+    vertices = fp.make_rough_wulff(vertices, B, C1, N, M, nodesurf, node_edge, node_corner, list_n)
+
+    vertices = vertices[:, :3]
+
+    fp.stl_file(vertices, faces, type_sample)
+
+    return vertices, 'cube.stl'
+
