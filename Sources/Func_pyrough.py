@@ -22,7 +22,6 @@ import math
 import scipy.special as sp
 from wulffpack import SingleCrystal
 from ase.build import bulk
-from ase.io import write
 
 np.set_printoptions(threshold=sys.maxsize)
 

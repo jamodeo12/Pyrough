@@ -16,11 +16,7 @@
 
 from Sources import Func_pyrough as fp
 import numpy as np
-import sys
-import scipy.special as sp
 import subprocess
-import pygmsh
-import matplotlib.pyplot as plt
 
 #np.set_printoptions(threshold=sys.maxsize)
 
@@ -214,7 +210,6 @@ class Sample(object):
 
         fp.rebox('sample_with_atoms.lmp')
         RAW = 'Raw_' + STL
-        #subprocess.call(['mv', RAW, STL, './Output'])
 
 
 def make_wire(type_sample,
