@@ -29,7 +29,7 @@ np.set_printoptions(threshold=sys.maxsize)
 
 def rdnsurf(m, n, B, xv, yv, sfrM, sfrN):
     """
-    Generates random surface roughness that will replace the pervious z values in the vertices matrix.
+    Generates random surface roughness that will replace the previous z values in the vertices matrix.
 
     :type m: array 
     :param m: Wavenumber
