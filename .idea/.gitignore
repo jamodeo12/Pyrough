@@ -4,3 +4,4 @@
 ./*.stl
 ./*.lmp
 ./*.obj
+./*_stat.txt
