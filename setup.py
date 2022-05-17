@@ -1,11 +1,19 @@
 from setuptools import setup
 
-setup(name="Pyrough",
+setup(name="pyrough",
 version="1.0",
-description="",
+description="A tool for rough samples constructions",
 author="Hugo Iteney",
 author_email="hugo.iteney@im2np.fr",
 packages=[],
-install_requires=[],
-extras_require={},
-license="Apache 2.0")
+install_requires=[
+    'numpy>=1.19.5',
+    'pygmsh>=7.1.12',
+    'meshio>=4.4.6',
+    'wulffpack>=1.1',
+    'ase>=3.21.1'
+],
+extras_require={
+    'interactive': ['matplotlib>=3.3.4']
+}
+      )
