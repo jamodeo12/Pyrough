@@ -1,19 +1,17 @@
 from setuptools import setup
 
+with open("requirements.txt") as f:
+    requirements = f.read().splitlines()
+
 setup(name="pyrough",
 version="1.0",
 description="A tool for rough samples constructions",
 author="Hugo Iteney",
 author_email="hugo.iteney@im2np.fr",
 packages=[],
-install_requires=[
-    'numpy>=1.19.5',
-    'pygmsh>=7.1.12',
-    'meshio>=4.4.6',
-    'wulffpack>=1.1',
-    'ase>=3.21.1'
+install_requires=requirements
 ]
       )
 
-ATOMSK_PATH=/usr/local/bin/atomsk
-GMSH_PATH=/home/hiteney/.local/bin/gmsh
+#ATOMSK_PATH=''/usr/local/bin/atomsk''
+#GMSH_PATH=/home/hiteney/.local/bin/gmsh

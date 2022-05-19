@@ -1,0 +1,5 @@
+numpy>=1.19.5
+pygmsh>=7.1.12
+meshio>=4.4.6
+wulffpack>=1.1
+ase>=3.21.1
