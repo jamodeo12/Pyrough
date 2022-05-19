@@ -14,3 +14,6 @@ install_requires=[
     'ase>=3.21.1'
 ]
       )
+
+ATOMSK_PATH=/usr/local/bin/atomsk
+GMSH_PATH=/home/hiteney/.local/bin/gmsh
