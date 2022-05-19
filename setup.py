@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 with open("requirements.txt") as f:
     requirements = f.read().splitlines()
@@ -8,7 +8,7 @@ version="1.0",
 description="A tool for rough samples constructions",
 author="Hugo Iteney",
 author_email="hugo.iteney@im2np.fr",
-packages=[],
+packages=find_packages(),
 install_requires=requirements
 ]
       )
