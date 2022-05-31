@@ -16,10 +16,10 @@ from Sources import Param_class
 from Sources import Sample_class
 import sys, subprocess
 
-print('#########################################################################')
-print('#                    Running Random Surface script                      #')
-print('#     Jonathan Amodeo & Javier Gonzalez & Jennifer Izaguirre 2020       #')
-print('#########################################################################')
+print('#######################################################################################')
+print('#                            Running Random Surface script                            #')
+print('#     Jonathan Amodeo & Javier Gonzalez & Jennifer Izaguirre & Hugo Iteney 2022       #')
+print('#######################################################################################')
 
 # _____________________Removing previous data____________________
 
