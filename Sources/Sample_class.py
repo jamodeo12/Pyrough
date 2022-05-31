@@ -576,7 +576,7 @@ def make_cube(type_sample,
     :param raw_stl: Name of the input stl file
     :type raw_stl: str
 
-    :return:
+    :return: List of nodes and STL file name
     """
 
     obj_points, obj_faces = fp.cube_faces(length)
