@@ -341,26 +341,6 @@ def read_stl_wulff(raw_stl, obj_points, obj_faces):
         vertices, faces = mesh.vertices, mesh.faces
     return (vertices, faces)
 
-def read_stl_cube(raw_stl, obj_points, obj_faces):
-    """
-    Reads an input stl file or creates a new one if no input. Cube case.
-
-    :param raw_stl: Name of the input stl file
-    :type raw_stl: str
-    :param obj_points: List of points
-    :type obj_points: list
-    :param obj_faces: List of faces
-    :type obj_faces: list
-
-    :returns: List of points and faces
-    """
-    if raw_stl == "na":
-        vertices, faces = cube(obj_points, obj_faces)
-    else:
-        mesh = meshio.read(raw_stl)
-        vertices, faces = mesh.vertices, mesh.faces
-    return (vertices, faces)
-
 
 def stl_file(vertices, faces, sample_type):
     """
