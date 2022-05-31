@@ -507,6 +507,8 @@ def make_wulff(type_sample,
     :type C1: float
     :param N: Scaling cartesian position
     :type N: int
+    :param M: Scaling cartesian position
+    :type M: int
     :param surfaces: Orientation of surfaces used for Wulff theory
     :type surfaces: list
     :param energies: Energies of associated surfaces for Wulff theory
@@ -555,17 +557,25 @@ def make_cube(type_sample,
              ):
 
     """
+    Creates an stl file of a cubic NP
 
-    :param type_sample:
-    :param B:
-    :param C1:
-    :param N:
-    :param M:
-    :param length:
-    :param height:
-    :param width:
-    :param ns:
-    :param raw_stl:
+    :param type_sample: The name of the sample
+    :type type_sample: str
+    :param B: The degree the roughness is dependent on
+    :type B: float
+    :param C1: Roughness normalization factor
+    :type C1: float
+    :param N: Scaling cartesian position
+    :type N: int
+    :param M: Scaling cartesian position
+    :type N: int
+    :param length: Dimension of the cube
+    :type length: float
+    :param ns: The number of segments desired
+    :type ns: int
+    :param raw_stl: Name of the input stl file
+    :type raw_stl: str
+
     :return:
     """
 
