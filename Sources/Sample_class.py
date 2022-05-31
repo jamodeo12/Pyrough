@@ -568,7 +568,7 @@ def make_cube(type_sample,
     :param N: Scaling cartesian position
     :type N: int
     :param M: Scaling cartesian position
-    :type N: int
+    :type M: int
     :param length: Dimension of the cube
     :type length: float
     :param ns: The number of segments desired
