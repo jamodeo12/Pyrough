@@ -2,9 +2,9 @@
 # 
 # Title: Main code pyrough
 #
-# Authors: Jonathan Amodeo Javier Gonzalez Jennifer Izaguirre Christophe Le Bourlot
+# Authors: Jonathan Amodeo, Javier Gonzalez, Jennifer Izaguirre, Christophe Le Bourlot & Hugo Iteney
 #
-# Date: January 30, 2020
+# Date: June 01, 2022
 #
 # Pyrough is a code used to provide the user with either FEM or MD files of various objects that have had random surface roughness applied to it.
 # The objects included in this code are nanowire , slab, sphere. In the main code the user must provide what type of 

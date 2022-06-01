@@ -2,9 +2,9 @@
 # 
 # Title: SAMPLE CLASS
 #
-# Authors: Jonathan Amodeo Javier Gonzalez Jennifer Izaguirre Christophe Le Bourlot
+# Authors: Jonathan Amodeo, Javier Gonzalez, Jennifer Izaguirre, Christophe Le Bourlot & Hugo Iteney
 #
-# Date: January 30, 2020
+# Date: June 01, 2022
 #
 # The SAMPLE_class is a class that obtains the desired object shape (nanowire,slab,sphere) 
 # and creates a desired file type. MAKE_STL creates an stl file of the shape, this
