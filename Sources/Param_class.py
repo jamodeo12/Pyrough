@@ -128,12 +128,12 @@ class Parameter(object):
             self.energies = 0
             self.N = read_param['Cube']['N']
             self.M = read_param['Cube']['M']
-            self.length = read_param['Cube']['l']
+            self.length = read_param['Cube']['Length']
             self.nfaces = 0
             self.radius = 0
             self.ns = 0
-            self.height = read_param['Cube']['l']
-            self.width = read_param['Cube']['l']
+            self.height = read_param['Cube']['Length']
+            self.width = read_param['Cube']['Length']
             self.raw_stl = read_param['Cube']['Raw_stl']
 
         # This loop is storing all the parameters from the json file and storing them, so they can be called in the
