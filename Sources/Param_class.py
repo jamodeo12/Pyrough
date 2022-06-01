@@ -2,9 +2,9 @@
 # 
 # Title: PARAM CLASS
 #
-# Authors: Jonathan Amodeo Javier Gonzalez Jennifer Izaguirre Christophe Le Bourlot
+# Authors: Jonathan Amodeo, Javier Gonzalez, Jennifer Izaguirre, Christophe Le Bourlot & Hugo Iteney
 #
-# Date: January 30, 2020
+# Date: June 01, 2022
 #
 # This class file is used to store the parameters desired by the user. 
 # It requires a JSON file to be able to function, as it reads directly

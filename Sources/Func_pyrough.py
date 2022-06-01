@@ -2,9 +2,9 @@
 # 
 # Title: Func_pyrough
 #
-# Authors: Jonathan Amodeo Javier Gonzalez Jennifer Izaguirre Christophe Le Bourlot
+# Authors: Jonathan Amodeo, Javier Gonzalez, Jennifer Izaguirre, Christophe Le Bourlot & Hugo Iteney
 #
-# Date: January 30, 2020
+# Date: June 01, 2022
 #
 # 
 # Func_pyrough are all the functions used in pyrough. These are required to excute the Pyroughs main code.
