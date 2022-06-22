@@ -14,8 +14,8 @@
     "FEM_stl": 0}, 
 
 "ATOM_Param": 
-    {"Lattice_parameter": 4.02, 
-    "Material": "Al", 
+    {"Lattice_parameter": 4.07,
+    "Material": "Au",
     "Orien_z": [1,1,1], 
     "Orien_y":[1,-2,1] , 
     "Orien_x": [-1,0,1], 
