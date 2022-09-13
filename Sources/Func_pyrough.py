@@ -533,7 +533,7 @@ def random_numbers(sfrN, sfrM):
     :returns: G and U matrices
     """
     m = 0 + 1 * np.random.randn(len(sfrM), len(sfrN))  # Gaussian distributed
-    n = np.pi / 2 * np.random.rand(len(sfrM), len(sfrN))  # Uniform distributed
+    n = -np.pi/2 + np.pi * np.random.rand(len(sfrM), len(sfrN))  # Uniform distributed
     #np.savetxt('m.txt', m, fmt='%s')
     #np.savetxt('n.txt', n, fmt='%s')
     return m, n
