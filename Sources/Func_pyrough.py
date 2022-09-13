@@ -690,7 +690,7 @@ def rough_matrix_sphere(nbPoint, B, thetaa, phii, vert_phi_theta, C1, r):
     for degree in range(N_s, N_e + 1, 1):  # EQUATION
         print("degree: {}".format(degree))
         _r_amplitude = 0 + 1 * np.random.randn(nbPoint)
-        _r_phase = (np.pi / 2) * np.random.rand(nbPoint)
+        _r_phase = -np.pi/2 + np.pi * np.random.rand(nbPoint)
         mod = degree ** (-B / 2)
         for i, [theta, phi] in enumerate(vert_phi_theta):
             _phase = sp.sph_harm(0, degree, thetaa - theta, phii - phi).real
