@@ -163,7 +163,7 @@ def sphere(r, ns):
     """
     print('====== > Creating the Mesh')
     with pygmsh.geo.Geometry() as geom:
-        poly = geom.add_ball([0.0, 0.0, 0.0], r, mesh_size=4)
+        poly = geom.add_ball([0.0, 0.0, 0.0], r, mesh_size=7)
         mesh = geom.generate_mesh()
     vertices = mesh.points
     faces = mesh.get_cells_type('triangle')
@@ -686,7 +686,7 @@ def rough_matrix_sphere(nbPoint, B, thetaa, phii, vert_phi_theta, C1, r):
     :return: Rough matrix
     """
     N_s = 9
-    N_e = 15
+    N_e = 17
     for degree in range(N_s, N_e + 1, 1):  # EQUATION
         print("degree: {}".format(degree))
         _r_amplitude = 0 + 1 * np.random.randn(nbPoint)
