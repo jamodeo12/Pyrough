@@ -620,7 +620,7 @@ def node_surface(sample_type, vertices, nodenumber, points, faces):
             A = points[int(F[0] - 1)]
             B = points[int(F[1] - 1)]
             C = points[int(F[2] - 1)]
-            AB = B - A;
+            AB = B - A
             AC = C - A
             for M in vertices:
                 AM = M[:3] - A
