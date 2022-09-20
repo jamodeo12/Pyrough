@@ -140,7 +140,7 @@ def box(width, length, height, ns):
     """
     print('====== > Creating the Mesh')
     with pygmsh.geo.Geometry() as geom:
-        geom.add_box(0, length, 0, width, 0, height, mesh_size=3)
+        geom.add_box(0, length, 0, width, 0, height, mesh_size=5)
         mesh = geom.generate_mesh()
     vertices = mesh.points
     faces = mesh.get_cells_type('triangle')
@@ -833,10 +833,11 @@ def random_surf2(type_sample, m, n, N, M, B, xv, yv, sfrM, sfrN, C1):
     :return: Surface roughness
     """
     Z = rdnsurf(m, n, B, xv, yv, sfrM, sfrN)
-    #ax = plt.axes(projection='3d')
-    #color_map = plt.get_cmap('spring')
-    #ax.scatter3D(xv, yv, Z, c=Z, cmap = cm.coolwarm)
-    #ax.scatter3D(xv, yv, Z, c=Z)
+    # ax = plt.axes(projection='3d')
+    # color_map = plt.get_cmap('jet')
+    # ax.scatter3D(xv, yv, Z, c = Z, cmap = color_map)
+    # ax.view_init(90, -90)
+    # ax.plot_surface(xv,yv,Z)
     #plt.show()
     stat_analysis(Z, N, M, C1, B, type_sample)
     Z = C1 * Z
