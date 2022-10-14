@@ -1140,6 +1140,14 @@ def normalize(surf) :
     return(surf_norm)
 
 def cube_faces(length):
+    """
+    Generates the points and faces of a cube
+
+    :param length: Size of the cube
+    :type length: float
+
+    :return: Points and faces of the cube
+    """
     obj_points = [[0,0,0],
                  [length, 0, 0],
                  [0,length, 0],
