@@ -227,8 +227,6 @@ class Sample(object):
         subprocess.call(['atomsk', 'material_supercell.lmp', '-select', 'stl', 'center', STL, '-select', 'invert', '-rmatom', 'select', out_pre+'.lmp'])
         subprocess.call(['rm', 'material_supercell.lmp'])
         fp.rebox(out_pre+'.lmp')
-        RAW = 'Raw_' + STL
-
 
 def make_wire(type_sample,
               B,
