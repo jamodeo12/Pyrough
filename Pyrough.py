@@ -73,6 +73,6 @@ if param.output(Param_file) == 'ATOM_lmp':
                      vertices,
                      out_pre)
     # call make it md to create atomsk file
-    print('JOB DONE!' + '  File name: '+out_pre+'.lmp')
+    print('JOB DONE!' + '  File name: ' + out_pre + '.lmp')
 else:
     print('JOB DONE!' + '  File name: ' + FEM_stl)
