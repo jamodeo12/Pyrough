@@ -94,7 +94,7 @@ def theta(x, y):
     return np.arctan2(y, x)
 
 
-def cylinder(l, r, ns):
+def cylinder(l, r, ns, out_pre):
     """
     Creates a cylindrical mesh.
     
@@ -118,12 +118,12 @@ def cylinder(l, r, ns):
         mesh = geom.generate_mesh()
     vertices = mesh.points
     faces = mesh.get_cells_type('triangle')
-    write_stl("Raw_wire.stl", vertices, faces)
+    write_stl('Raw_'+out_pre+'.stl', vertices, faces)
     print('====== > Done creating the Mesh')
     return (vertices, faces)
 
 
-def box(width, length, height, ns):
+def box(width, length, height, ns, out_pre):
     """
     Creates a box mesh.
 
@@ -144,12 +144,12 @@ def box(width, length, height, ns):
         mesh = geom.generate_mesh()
     vertices = mesh.points
     faces = mesh.get_cells_type('triangle')
-    mesh.write("Raw_box.stl")
+    mesh.write('Raw_'+out_pre+'.stl')
     print('====== > Done creating the Mesh')
     return (vertices, faces)
 
 
-def sphere(r, ns):
+def sphere(r, ns, out_pre):
     """
     Creates a sphere mesh.
 
@@ -167,12 +167,12 @@ def sphere(r, ns):
         mesh = geom.generate_mesh()
     vertices = mesh.points
     faces = mesh.get_cells_type('triangle')
-    write_stl("Raw_sphere.stl", vertices, faces)
+    write_stl('Raw_'+out_pre+'.stl', vertices, faces)
     print('====== > Done creating the Mesh')
     return (vertices, faces)
 
 
-def poly(length, points):
+def poly(length, points, out_pre):
     """
     Creates a faceted wire mesh.
 
@@ -186,16 +186,16 @@ def poly(length, points):
     print('====== > Creating the Mesh')
     with pygmsh.geo.Geometry() as geom:
         poly = geom.add_polygon(points, mesh_size=3)
-        geom.extrude(poly, [0, 0, length], num_layers=100)
+        geom.extrude(poly, [0.0, 0.0, length], num_layers=100)
         mesh = geom.generate_mesh()
     vertices = mesh.points
     faces = mesh.get_cells_type('triangle')
-    mesh.write("Raw_poly.stl")
+    mesh.write('Raw_'+out_pre+'.stl')
     print('====== > Done creating the Mesh')
     return (vertices, faces)
 
 
-def wulff(obj_points, obj_faces):
+def wulff(obj_points, obj_faces, out_pre):
     """
     Creates a Wulff-Shaped NP mesh
 
@@ -216,10 +216,10 @@ def wulff(obj_points, obj_faces):
         mesh = geom.generate_mesh()
         vertices = mesh.points
         faces = mesh.get_cells_type('triangle')
-    write_stl("Raw_wulff.stl", vertices, faces)
+    write_stl('Raw_'+out_pre+'.stl', vertices, faces)
     return (vertices, faces)
 
-def cube(length):
+def cube(length, out_pre):
     """
     Creates a cube mesh.
 
@@ -234,12 +234,12 @@ def cube(length):
         mesh = geom.generate_mesh()
     vertices = mesh.points
     faces = mesh.get_cells_type('triangle')
-    mesh.write("Raw_cube.stl")
+    mesh.write('Raw_'+out_pre+'.stl')
     print('====== > Done creating the Mesh')
     return (vertices, faces)
 
 
-def make_obj(surfaces, energies, n_at, lattice_structure, lattice_parameter, material):
+def make_obj(surfaces, energies, n_at, lattice_structure, lattice_parameter, material, out_pre):
     """
     Creates an OBJ file of a faceted NP. Stores the points and faces from this file.
 
@@ -261,8 +261,8 @@ def make_obj(surfaces, energies, n_at, lattice_structure, lattice_parameter, mat
     surface_energies = {tuple(surfaces[i]): float(energies[i]) for i in range(0, len(surfaces))}
     prim = bulk(material, crystalstructure=lattice_structure, a=lattice_parameter)
     particle = SingleCrystal(surface_energies, primitive_structure=prim, natoms=n_at)
-    particle.write('particle.obj')
-    with open('particle.obj') as f:
+    particle.write(out_pre+'.obj')
+    with open(out_pre+'.obj') as f:
         list_lines = f.readlines()
         obj_points = []
         obj_faces = []
@@ -279,7 +279,7 @@ def make_obj(surfaces, energies, n_at, lattice_structure, lattice_parameter, mat
     return (obj_points, obj_faces)
 
 
-def read_stl(sample_type, raw_stl, width, length, height, radius, ns, points):
+def read_stl(sample_type, raw_stl, width, length, height, radius, ns, points, out_pre):
     """
     Reads an input stl file or creates a new one if no input
 
@@ -306,22 +306,22 @@ def read_stl(sample_type, raw_stl, width, length, height, radius, ns, points):
     faces = []
     if raw_stl == "na":
         if sample_type == "box":
-            vertices, faces = box(width, length, height, ns)
+            vertices, faces = box(width, length, height, ns, out_pre)
         elif sample_type == "wire":
-            vertices, faces = cylinder(length, radius, ns)
+            vertices, faces = cylinder(length, radius, ns, out_pre)
         elif sample_type == "sphere":
-            vertices, faces = sphere(radius, ns)
+            vertices, faces = sphere(radius, ns, out_pre)
         elif sample_type == "poly":
-            vertices, faces = poly(length, points)
+            vertices, faces = poly(length, points, out_pre)
         elif sample_type == "cube":
-            vertices, faces = cube(length)
+            vertices, faces = cube(length, out_pre)
     else:
         mesh = meshio.read(raw_stl)
         vertices, faces = mesh.vertices, mesh.faces
     return (vertices, faces)
 
 
-def read_stl_wulff(raw_stl, obj_points, obj_faces):
+def read_stl_wulff(raw_stl, obj_points, obj_faces, out_pre):
     """
     Reads an input stl file or creates a new one if no input. Wulff case.
 
@@ -335,14 +335,14 @@ def read_stl_wulff(raw_stl, obj_points, obj_faces):
     :returns: List of points and faces
     """
     if raw_stl == "na":
-        vertices, faces = wulff(obj_points, obj_faces)
+        vertices, faces = wulff(obj_points, obj_faces, out_pre)
     else:
         mesh = meshio.read(raw_stl)
         vertices, faces = mesh.vertices, mesh.faces
     return (vertices, faces)
 
 
-def stl_file(vertices, faces, sample_type):
+def stl_file(vertices, faces, out_pre):
     """
     Creates an stl file from the vertices and faces of the desired object. 
     
@@ -353,7 +353,7 @@ def stl_file(vertices, faces, sample_type):
     :param sample_type: Name of the sample 
     :type sample_type: str
     """
-    write_stl(sample_type + '.stl', vertices, np.array(faces))
+    write_stl(out_pre + '.stl', vertices, np.array(faces))
     return
 
 
@@ -401,7 +401,7 @@ def radius(v):
     return np.linalg.norm(v, axis=1)
 
 
-def stat_analysis(z, N, M, C1, B, sample_type):
+def stat_analysis(z, N, M, C1, B, sample_type, out_pre):
     """
     Displays the statistical analysis of the surface roughness generator
     
@@ -434,7 +434,7 @@ def stat_analysis(z, N, M, C1, B, sample_type):
              'Mean_Value = ' + stats[5], 'Stand_dev = ' + stats[6], 'RMS = ' + stats[7], 'Skewness = ' + stats[8],
              'Kurtosis = ' + stats[9]]
 
-    np.savetxt(sample_type + '_stat.txt', stats, fmt='%s')
+    np.savetxt(out_pre + '_stat.txt', stats, fmt='%s')
     print('')
     print('------------ Random Surface Parameters-----------------')
     print('         N =', N, '  M = ', M, '  C1 = ', C1, '  b = ', B)
@@ -448,7 +448,7 @@ def stat_analysis(z, N, M, C1, B, sample_type):
     return
 
 
-def stat_sphere(r, C1, C2):
+def stat_sphere(r, C1, C2, out_pre):
     """
     Displays the statistical analysis of the surface roughness generator with regards to the sphere. 
     
@@ -468,7 +468,7 @@ def stat_sphere(r, C1, C2):
     stats = ['Sphere', 'C1 = ' + stats[0], 'C2 = ' + stats[1], 'Mean_Value = ' + stats[2], 'Stand_dev = ' + stats[3],
              'RMS = ' + stats[4]]
 
-    np.savetxt('sphere_stat.txt', stats, fmt='%s')
+    np.savetxt(out_pre+'_stat.txt', stats, fmt='%s')
 
     print("ave: {}".format(np.mean(r)))  # out
     print("RMS: {}".format(np.std(C1 * C2 * r)))
@@ -805,7 +805,7 @@ def write_stl(filename, vertices, face_list):
     return
 
 
-def random_surf2(type_sample, m, n, N, M, B, xv, yv, sfrM, sfrN, C1):
+def random_surf2(sample_type, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, out_pre):
     """
     Returns an array with the Z values representing the surface roughness.
 
@@ -839,7 +839,7 @@ def random_surf2(type_sample, m, n, N, M, B, xv, yv, sfrM, sfrN, C1):
     # ax.view_init(90, -90)
     # ax.plot_surface(xv,yv,Z)
     #plt.show()
-    stat_analysis(Z, N, M, C1, B, type_sample)
+    stat_analysis(Z, N, M, C1, B, sample_type, out_pre)
     Z = C1 * Z
     return Z
 

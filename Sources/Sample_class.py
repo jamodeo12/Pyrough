@@ -43,7 +43,8 @@ class Sample(object):
                  n_at,
                  lattice_structure,
                  lattice_parameter,
-                 material
+                 material,
+                 out_pre
                  ):
         """
         Creates an stl file based on the parameters chosen by the user.
@@ -98,7 +99,8 @@ class Sample(object):
                             radius,
                             length,
                             ns,
-                            raw_stl
+                            raw_stl,
+                            out_pre
                             )
 
             return (vertices, stl)
@@ -113,7 +115,8 @@ class Sample(object):
                            height,
                            width,
                            ns,
-                           raw_stl
+                           raw_stl,
+                           out_pre
                            )
 
             return (vertices, stl)
@@ -125,7 +128,8 @@ class Sample(object):
                               N,
                               radius,
                               ns,
-                              raw_stl
+                              raw_stl,
+                              out_pre
                               )
 
             return (vertices, stl)
@@ -140,7 +144,8 @@ class Sample(object):
                             nfaces,
                             radius,
                             ns,
-                            raw_stl
+                            raw_stl,
+                            out_pre
                             )
             return (vertices, stl)
 
@@ -157,7 +162,8 @@ class Sample(object):
                              raw_stl,
                              lattice_structure,
                              lattice_parameter,
-                             material
+                             material,
+                             out_pre
                              )
 
             return (vertices, stl)
@@ -170,7 +176,8 @@ class Sample(object):
                                       M,
                                       length,
                                       ns,
-                                      raw_stl
+                                      raw_stl,
+                                      out_pre
                                       )
 
             return (vertices, stl)
@@ -183,7 +190,8 @@ class Sample(object):
                   orien_x,
                   orien_y,
                   orien_z,
-                  vertices
+                  vertices,
+                  out_pre
                   ):
 
         """
@@ -215,13 +223,10 @@ class Sample(object):
 
         lattice_par = str(lattice_par)
 
-        subprocess.call(['atomsk', '--create', lattice_str, lattice_par, material, 'orient', orien_x, orien_y, orien_z,
-                         '-duplicate', dup_x, dup_y, dup_z, 'material_supercell.lmp'])
-        subprocess.call(
-            ['atomsk', 'material_supercell.lmp', '-select', 'stl', 'center', STL, '-select', 'invert', '-rmatom',
-             'select', 'sample_with_atoms.lmp'])
-
-        fp.rebox('sample_with_atoms.lmp')
+        subprocess.call(['atomsk', '--create', lattice_str, lattice_par, material, 'orient', orien_x, orien_y, orien_z, '-duplicate', dup_x, dup_y, dup_z, 'material_supercell.lmp'])
+        subprocess.call(['atomsk', 'material_supercell.lmp', '-select', 'stl', 'center', STL, '-select', 'invert', '-rmatom', 'select', out_pre+'.lmp'])
+        subprocess.call(['rm', 'material_supercell.lmp'])
+        fp.rebox(out_pre+'.lmp')
         RAW = 'Raw_' + STL
 
 
@@ -233,7 +238,8 @@ def make_wire(type_sample,
               radius,
               length,
               ns,
-              raw_stl
+              raw_stl,
+              out_pre
               ):
     """
     Creates an stl file of a rough wire
@@ -259,8 +265,7 @@ def make_wire(type_sample,
 
     :return: List of nodes and STL file name
     """
-    vertices, faces = fp.read_stl(type_sample, raw_stl, 0, length, 0, radius, ns,
-                                  0)  # reads if the user has inputted a stl file or if the mesh needs to me generated and returnes the faces and the vertices of the stl file
+    vertices, faces = fp.read_stl(type_sample, raw_stl, 0, length, 0, radius, ns, 0, out_pre)  # reads if the user has inputted a stl file or if the mesh needs to me generated and returnes the faces and the vertices of the stl file
 
     vertices, nodenumber = fp.node_indexing(
         vertices)  # creates a column that has an assigned index number for each row in vertices; returns vertices with the addtion of this new column and also returns the nodenumbers which is an array file from 0 - length of the vertices
@@ -281,15 +286,15 @@ def make_wire(type_sample,
     sfrN, sfrM = fp.vectors(N ,M)  # creating vectors for M and N
     m, n = fp.random_numbers(sfrN, sfrM)  # normal gaussian for the amplitude
 
-    z = fp.random_surf2(type_sample, m, n, N, M, B, xv, yv, sfrM, sfrN, C1)  # Returns an array with the Z values that will replace the previous z vlaues in the vertices array these represent the rougness on the surface
+    z = fp.random_surf2(type_sample, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, out_pre)  # Returns an array with the Z values that will replace the previous z vlaues in the vertices array these represent the rougness on the surface
 
     vertices = fp.make_rough(type_sample, z, cy_nodesurf, vertices, 0)
 
     vertices = vertices[:,
                :3]  # gets ride of the index column because stl file generator takes only a matrix with 3 columns
 
-    fp.stl_file(vertices, faces, type_sample)  # creates an stl file of the cylinder with roughness on the surface
-    return (vertices, 'wire.stl')  # returns the stl file name
+    fp.stl_file(vertices, faces, out_pre)  # creates an stl file of the cylinder with roughness on the surface
+    return (vertices, out_pre+'.stl')  # returns the stl file name
 
 
 def make_box(type_sample,
@@ -301,7 +306,8 @@ def make_box(type_sample,
              height,
              width,
              ns,
-             raw_stl
+             raw_stl,
+             out_pre
              ):
     """
     Creates an stl file of a rough box
@@ -329,8 +335,7 @@ def make_box(type_sample,
 
     :return: List of nodes and STL file name
     """
-    vertices, faces = fp.read_stl(type_sample, raw_stl, width, length, height, 0, ns,
-                                  0)  # reads if the user has inputted a stl file or if the mesh needs to me generated and returnes the faces and the vertices of the stl file
+    vertices, faces = fp.read_stl(type_sample, raw_stl, width, length, height, 0, ns, 0, out_pre)  # reads if the user has inputted a stl file or if the mesh needs to me generated and returnes the faces and the vertices of the stl file
 
     vertices, nodenumber = fp.node_indexing(vertices)  # creates a column that has an assigned index number for each row in vertices; returns vertices with the addtion of this new column and also returns the nodenumbers which is an array fille from 0 - length of the vertices
 
@@ -343,13 +348,13 @@ def make_box(type_sample,
     sfrN, sfrM = fp.vectors(N, M)  # creating vectors for M and N
     m, n = fp.random_numbers(sfrN, sfrM)  # normal gaussian for the amplitude
 
-    z = fp.random_surf2(type_sample, m, n, N, M, B, xv, yv, sfrM, sfrN, C1)  # Returns an array with the Z values that will replace the previous z vlaues in the vertices array these represent the rougness on the surface
+    z = fp.random_surf2(type_sample, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, out_pre)  # Returns an array with the Z values that will replace the previous z vlaues in the vertices array these represent the rougness on the surface
     vertices = fp.make_rough(type_sample, z, nodesurf, vertices, 0)
 
     vertices = vertices[:,:3]  # gets rid of the index column because stl file generator takes only a matrix with 3 columns
 
-    fp.stl_file(vertices, faces, type_sample)  # creates an stl file of the box with roughness on the surface
-    return (vertices, 'box.stl')  # returns the stl file name
+    fp.stl_file(vertices, faces, out_pre)  # creates an stl file of the box with roughness on the surface
+    return (vertices, out_pre+'.stl')  # returns the stl file name
 
 
 def make_sphere(type_sample,
@@ -358,7 +363,8 @@ def make_sphere(type_sample,
                 N,
                 radius,
                 ns,
-                raw_stl
+                raw_stl,
+                out_pre
                 ):
     """
     Creates an stl file of a rough sphere
@@ -380,8 +386,7 @@ def make_sphere(type_sample,
 
     :return: List of nodes and STL file name
     """
-    vertices, faces = fp.read_stl(type_sample, raw_stl, 0, 0, 0, radius, ns,
-                                  0)  # reads if the user has inputted a stl file or if the mesh needs to me generated and returnes the faces and the vertices of the stl file
+    vertices, faces = fp.read_stl(type_sample, raw_stl, 0, 0, 0, radius, ns, 0, out_pre)  # reads if the user has inputted a stl file or if the mesh needs to me generated and returnes the faces and the vertices of the stl file
 
     nbPoint = len(vertices)  # Stores an int that repesents the number of points on the sphere
 
@@ -397,19 +402,18 @@ def make_sphere(type_sample,
     phii = fp.phi(t,
                   z)  # Calculates the arctan2 of an array filled with vector norms and an arrray filled with z cooridnates which are the same size.
 
-    r = fp.rough_matrix_sphere(nbPoint, B, thetaa, phii, vert_phi_theta, C1,
-                               r)  # creates the displacement values of the nodes on the surface of the sphere
+    r = fp.rough_matrix_sphere(nbPoint, B, thetaa, phii, vert_phi_theta, C1, r)  # creates the displacement values of the nodes on the surface of the sphere
 
     C2 = 1. / nbPoint / N / 2.
 
-    fp.stat_sphere(r, C1, C2)  # prints the statistics of the sphere
+    fp.stat_sphere(r, C1, C2, out_pre)  # prints the statistics of the sphere
 
     new_vertex = fp.coord_cart_sphere(C1, C2, r, vertices, t, z, y,
                                       x)  # creates a new matrix with x, y, z in cartesian coordinates
 
-    fp.stl_file(new_vertex, faces, type_sample)  # creates an stl file of the sphere with roughness on the surface
+    fp.stl_file(new_vertex, faces, out_pre)  # creates an stl file of the sphere with roughness on the surface
 
-    return vertices, 'sphere.stl'  # returns the stl file name
+    return(vertices, out_pre+'.stl')  # returns the stl file name
 
 
 def make_poly(type_sample,
@@ -421,7 +425,8 @@ def make_poly(type_sample,
               nfaces,
               radius,
               ns,
-              raw_stl
+              raw_stl,
+              out_pre
               ):
     """
     Creates an stl file of a faceted wire
@@ -449,8 +454,7 @@ def make_poly(type_sample,
     """
     points, angles = fp.base(radius, nfaces)
 
-    vertices, faces = fp.read_stl(type_sample, raw_stl, 0, length, 0, radius, ns,
-                                  points)  # reads if the user has inputted a stl file or if the mesh needs to me generated and returnes the faces and the vertices of the stl file
+    vertices, faces = fp.read_stl(type_sample, raw_stl, 0, length, 0, radius, ns, points, out_pre)  # reads if the user has inputted a stl file or if the mesh needs to me generated and returnes the faces and the vertices of the stl file
 
     vertices, nodenumber = fp.node_indexing(
         vertices)  # creates a column that has an assigned index number for each row in vertices; returns vertices with the addtion of this new column and also returns the nodenumbers which is an array fille from 0 - length of the vertices
@@ -471,15 +475,15 @@ def make_poly(type_sample,
     sfrN, sfrM = fp.vectors(N, M)  # creating vectors for M and N
     m, n = fp.random_numbers(sfrN, sfrM)  # normal gaussian for the amplitude
 
-    z = fp.random_surf2(type_sample, m, n, N, M, B, xv, yv, sfrM, sfrN, C1)  # Returns an array with the Z values that will replace the previous z vlaues in the vertices array these represent the rougness on the surface
+    z = fp.random_surf2(type_sample, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, out_pre)  # Returns an array with the Z values that will replace the previous z vlaues in the vertices array these represent the rougness on the surface
 
     vertices = fp.make_rough(type_sample, z, nodesurf, vertices, angles)
 
     vertices = vertices[:,:3]  # gets rid of the index column because stl file generator takes only a matrix with 3 columns
 
-    fp.stl_file(vertices, faces, type_sample)  # creates an stl file of the box with roughness on the surface
+    fp.stl_file(vertices, faces, out_pre)  # creates an stl file of the box with roughness on the surface
 
-    return vertices, 'poly.stl'
+    return(vertices, out_pre+'.stl')
 
 
 def make_wulff(type_sample,
@@ -494,7 +498,8 @@ def make_wulff(type_sample,
                raw_stl,
                lattice_structure,
                lattice_parameter,
-               material
+               material,
+               out_pre
                ):
     """
     Creates an stl file of a Wulff-shaped NP
@@ -528,9 +533,9 @@ def make_wulff(type_sample,
 
     :return: List of nodes and STL file name
     """
-    obj_points, obj_faces = fp.make_obj(surfaces, energies, n_at, lattice_structure, lattice_parameter, material)
-
-    vertices, faces = fp.read_stl_wulff(raw_stl, obj_points,obj_faces)  # reads if the user has inputted a stl file or if the mesh needs to me generated and returnes the faces and the vertices of the stl file
+    obj_points, obj_faces = fp.make_obj(surfaces, energies, n_at, lattice_structure, lattice_parameter, material, out_pre)
+    subprocess.call(['rm', out_pre+'.obj'])
+    vertices, faces = fp.read_stl_wulff(raw_stl, obj_points,obj_faces, out_pre)  # reads if the user has inputted a stl file or if the mesh needs to me generated and returnes the faces and the vertices of the stl file
     list_n = fp.faces_normals(obj_points, obj_faces)
 
     vertices, nodenumber = fp.node_indexing(vertices)  # creates a column that has an assigned index number for each row in vertices; returns vertices with the addtion of this new column and also returns the nodenumbers which is an array fille from 0 - length of the vertices
@@ -542,9 +547,9 @@ def make_wulff(type_sample,
 
     vertices = vertices[:,:3]
 
-    fp.stl_file(vertices, faces, type_sample)
+    fp.stl_file(vertices, faces, out_pre)
 
-    return vertices, 'wulff.stl'
+    return(vertices, out_pre+'.stl')
 
 def make_cube(type_sample,
              B,
@@ -553,7 +558,8 @@ def make_cube(type_sample,
              M,
              length,
              ns,
-             raw_stl
+             raw_stl,
+             out_pre
              ):
 
     """
@@ -582,7 +588,7 @@ def make_cube(type_sample,
     obj_points, obj_faces = fp.cube_faces(length)
     list_n = fp.faces_normals(obj_points, obj_faces)
 
-    vertices, faces = fp.read_stl(type_sample, raw_stl, 0, length, 0, 0, ns, 0)
+    vertices, faces = fp.read_stl(type_sample, raw_stl, 0, length, 0, 0, ns, 0, out_pre)
     vertices, nodenumber = fp.node_indexing(vertices)
 
     nodesurf = fp.node_surface(type_sample, vertices, nodenumber, obj_points, obj_faces)
@@ -592,7 +598,7 @@ def make_cube(type_sample,
 
     vertices = vertices[:, :3]
 
-    fp.stl_file(vertices, faces, type_sample)
+    fp.stl_file(vertices, faces, out_pre)
 
-    return vertices, 'cube.stl'
+    return(vertices, out_pre+'.stl')
 

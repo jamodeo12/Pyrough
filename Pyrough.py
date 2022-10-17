@@ -16,6 +16,7 @@
 # ---------------------------------------------------------------------------
 from Sources import Param_class
 from Sources import Sample_class
+import os
 import sys, subprocess
 
 print('#######################################################################################')
@@ -31,6 +32,7 @@ subprocess.call(['rm', 'sample_with_atoms.lmp'])
 # _____________________Main Code____________________
 
 Param_file = sys.argv[1]
+out_pre = os.path.basename(Param_file)[:-5]
 
 param = Param_class.Parameter(Param_file)
 
@@ -57,7 +59,8 @@ vertices, FEM_stl = sample.make_stl(param.type_S,
                           param.n_at,
                           param.lattice_structure,
                           param.lattice_parameter,
-                          param.material)
+                          param.material,
+                          out_pre)
 # Calling the sample class function of MAKE it which returns an stl file of the object desired.
 if param.output(Param_file) == 'ATOM_lmp':
     sample.make_atom(FEM_stl,
@@ -67,8 +70,9 @@ if param.output(Param_file) == 'ATOM_lmp':
                      param.orien_x,
                      param.orien_y,
                      param.orien_z,
-                     vertices)
+                     vertices,
+                     out_pre)
     # call make it md to create atomsk file
-    print('JOB DONE!' + '  File name: sample_with_atoms.lmp')
+    print('JOB DONE!' + '  File name: '+out_pre+'.lmp')
 else:
     print('JOB DONE!' + '  File name: ' + FEM_stl)
