@@ -1,8 +1,8 @@
 {"Box":
     {"B": 2.5,
-    "Height": 100.0,
-    "Width": 300.0,
-    "Length": 300.0,
+    "Height": 50.0,
+    "Width": 100.0,
+    "Length": 100.0,
     "Number_segments": 50, 
     "C1": 5,
     "N": 30,
