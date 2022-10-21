@@ -40,27 +40,31 @@ param = Param_class.Parameter(Param_file)
 
 # SAMPLE IS THE PATH GUIDE TO CALLING THE CLASS TO CREATE THE STL FILE
 
-sample = Sample_class.Sample(param.type_S)  # THIS CLASS CALLING REAUIRES A SAMPLE WITH A DESIRED OBJECT NAME AS AN INPUT
+sample = Sample_class.Sample(
+    param.type_S)  # THIS CLASS CALLING REAUIRES A SAMPLE WITH A DESIRED OBJECT NAME AS AN INPUT
 
 vertices, FEM_stl = sample.make_stl(param.type_S,
-                          param.B,
-                          param.C1,
-                          param.N,
-                          param.M,
-                          param.radius,
-                          param.length,
-                          param.height,
-                          param.width,
-                          param.ns,
-                          param.raw_stl,
-                          param.nfaces,
-                          param.surfaces,
-                          param.energies,
-                          param.n_at,
-                          param.lattice_structure,
-                          param.lattice_parameter,
-                          param.material,
-                          out_pre)
+                                    param.B,
+                                    param.C1,
+                                    param.N,
+                                    param.M,
+                                    param.radius,
+                                    param.length,
+                                    param.height,
+                                    param.width,
+                                    param.ns,
+                                    param.raw_stl,
+                                    param.nfaces,
+                                    param.surfaces,
+                                    param.energies,
+                                    param.n_at,
+                                    param.lattice_structure,
+                                    param.lattice_parameter,
+                                    param.material,
+                                    param.orien_x,
+                                    param.orien_y,
+                                    param.orien_z,
+                                    out_pre)
 # Calling the sample class function of MAKE it which returns an stl file of the object desired.
 if param.output(Param_file) == 'ATOM_lmp':
     sample.make_atom(FEM_stl,
