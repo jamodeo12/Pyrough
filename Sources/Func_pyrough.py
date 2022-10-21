@@ -1176,6 +1176,16 @@ def cube_faces(length):
     return obj_points, obj_faces
 
 def rotate_obj_wulff(obj_points, orien_x, orien_z):
+    """
+    :param obj_points: Points describing the facets of the wulff-shape
+    :type obj_points: array
+    :param orien_x: Orientation along x-axis
+    :type orien_x: list
+    :param orien_z: Orientation along z-axis
+    :type orien_z: list
+
+    :return: Points respecting the desired orientation
+    """
     n2 = np.array([0, 0, 1])
     n = np.cross(orien_z, n2)
     if n[0] == 0 and n[1] == 0 and n[2] == 0:
