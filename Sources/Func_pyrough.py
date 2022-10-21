@@ -239,7 +239,7 @@ def cube(length, out_pre):
     return (vertices, faces)
 
 
-def make_obj(surfaces, energies, n_at, lattice_structure, lattice_parameter, material, out_pre):
+def make_obj(surfaces, energies, n_at, lattice_structure, lattice_parameter, material, orien_x, orien_y, orien_z, out_pre):
     """
     Creates an OBJ file of a faceted NP. Stores the points and faces from this file.
 
@@ -255,6 +255,14 @@ def make_obj(surfaces, energies, n_at, lattice_structure, lattice_parameter, mat
     :type lattice_parameter: float
     :param material: Type of atom
     :type material: str
+    :param orien_x: Orientation along x-axis
+    :type orien_x: list
+    :param orien_y: Orientation along y-axis
+    :type orien_y: list
+    :param orien_z: Orientation along z-axis
+    :type orien_z: list
+    :param out_pre: Prefix for output files
+    :type out_pre: str
 
     :returns: List of points and faces of OBJ file
     """
@@ -276,7 +284,8 @@ def make_obj(surfaces, energies, n_at, lattice_structure, lattice_parameter, mat
                 coord = [float(i) for i in splited]
                 obj_faces.append(coord)
     obj_points = np.asarray(obj_points)
-    return (obj_points, obj_faces)
+    obj_points_f = rotate_obj_wulff(obj_points, orien_x, orien_z)
+    return (obj_points_f, obj_faces)
 
 
 def read_stl(sample_type, raw_stl, width, length, height, radius, ns, points, out_pre):
@@ -1165,3 +1174,31 @@ def cube_faces(length):
     obj_faces = np.asarray(obj_faces)
     obj_points = np.asarray(obj_points)
     return obj_points, obj_faces
+
+def rotate_obj_wulff(obj_points, orien_x, orien_z):
+    n2 = np.array([0, 0, 1])
+    n = np.cross(orien_z, n2)
+    if n[0] == 0 and n[1] == 0 and n[2] == 0:
+        n = n2
+    n = n / np.linalg.norm(n)
+    theta = np.arccos(np.dot(orien_z, n2)/(np.linalg.norm(orien_z)*np.linalg.norm(n2)))
+    R = rot_matrix(n, theta)
+    surf_rot = []
+    for p in obj_points:
+        point_rot = np.dot(R,p)
+        surf_rot.append([point_rot[0], point_rot[1], point_rot[2]])
+    surf_rot = np.asarray(surf_rot)
+    x_axis = np.array([1, 0, 0])
+    x_rot = np.dot(R,x_axis)
+    theta_x = np.arccos(np.dot(x_rot, orien_x)/(np.linalg.norm(x_rot)*np.linalg.norm(orien_x)))
+    R_x = np.array([[np.cos(theta_x), -1*np.sin(theta_x), 0], [np.sin(theta_x), np.cos(theta_x), 0], [0,0,1]])
+    points_f = []
+    for p in surf_rot:
+        rot_f = np.dot(R_x,p)
+        points_f.append([rot_f[0], rot_f[1], rot_f[2]])
+    obj_points_f = np.asarray(points_f)
+    fig = plt.figure(figsize=(4, 4))
+    ax = fig.add_subplot(111, projection='3d')
+    ax.scatter(obj_points_f[:,0], obj_points_f[:,1], obj_points_f[:,2])
+    plt.show()
+    return(obj_points_f)
