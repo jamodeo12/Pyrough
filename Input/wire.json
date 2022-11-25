@@ -2,7 +2,7 @@
     {"Length": 200, 
     "Radius": 20, 
     "C1": 2, 
-    "B": 2,
+    "H": 0,
     "N": 30, 
     "M": 30, 
     "Number_segments": 50,

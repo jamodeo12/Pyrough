@@ -34,7 +34,7 @@ class Parameter(object):
 
         if 'Wire' in read_param:
             self.type_S = 'wire'
-            self.B = read_param['Wire']['B']
+            self.H = read_param['Wire']['H']
             self.C1 = read_param['Wire']['C1']
             self.N = read_param['Wire']['N']
             self.M = read_param['Wire']['M']
@@ -54,7 +54,7 @@ class Parameter(object):
             self.type_S = 'box'
             self.N = read_param['Box']['N']
             self.M = read_param['Box']['M']
-            self.B = read_param['Box']['B']
+            self.H = read_param['Box']['H']
             self.C1 = read_param['Box']['C1']
             self.height = read_param['Box']['Height']
             self.length = read_param['Box']['Length']
@@ -70,7 +70,7 @@ class Parameter(object):
 
         elif 'Sphere' in read_param:
             self.type_S = 'sphere'
-            self.B = read_param['Sphere']['B']
+            self.H = read_param['Sphere']['H']
             self.N = read_param['Sphere']['N']
             self.M = read_param['Sphere']['M']
             self.C1 = read_param['Sphere']['C1']
@@ -87,7 +87,7 @@ class Parameter(object):
 
         elif 'Poly' in read_param:
             self.type_S = 'poly'
-            self.B = read_param['Poly']['B']
+            self.H = read_param['Poly']['H']
             self.C1 = read_param['Poly']['C1']
             self.N = read_param['Poly']['N']
             self.M = read_param['Poly']['M']
@@ -104,7 +104,7 @@ class Parameter(object):
 
         elif 'Wulff' in read_param:
             self.type_S = 'wulff'
-            self.B = read_param['Wulff']['B']
+            self.H = read_param['Wulff']['H']
             self.C1 = read_param['Wulff']['C1']
             self.n_at = read_param['Wulff']['n_atoms']
             self.surfaces = read_param['Wulff']['Surfaces']
@@ -121,7 +121,7 @@ class Parameter(object):
 
         elif 'Cube' in read_param:
             self.type_S = 'cube'
-            self.B = read_param['Cube']['B']
+            self.H = read_param['Cube']['H']
             self.C1 = read_param['Cube']['C1']
             self.n_at = 0
             self.surfaces = 0

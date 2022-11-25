@@ -44,7 +44,7 @@ sample = Sample_class.Sample(
     param.type_S)  # THIS CLASS CALLING REAUIRES A SAMPLE WITH A DESIRED OBJECT NAME AS AN INPUT
 
 vertices, FEM_stl = sample.make_stl(param.type_S,
-                                    param.B,
+                                    param.H,
                                     param.C1,
                                     param.N,
                                     param.M,
