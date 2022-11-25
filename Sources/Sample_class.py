@@ -28,7 +28,7 @@ class Sample(object):
 
     def make_stl(self,
                  type_sample,
-                 B,
+                 H,
                  C1,
                  N,
                  M,
@@ -96,7 +96,7 @@ class Sample(object):
         """
         if type_sample == 'wire':
             vertices, stl = make_wire(type_sample,
-                                      B,
+                                      2*(1+H),
                                       C1,
                                       N,
                                       M,
@@ -111,7 +111,7 @@ class Sample(object):
 
         elif type_sample == 'box':
             vertices, stl = make_box(type_sample,
-                                     B,
+                                     2*(1+H),
                                      C1,
                                      N,
                                      M,
@@ -127,7 +127,7 @@ class Sample(object):
 
         elif type_sample == 'sphere':
             vertices, stl = make_sphere(type_sample,
-                                        B,
+                                        2*(1+H),     #### TO MODIFY
                                         C1,
                                         N,
                                         radius,
@@ -140,7 +140,7 @@ class Sample(object):
 
         elif type_sample == 'poly':
             vertices, stl = make_poly(type_sample,
-                                      B,
+                                      2*(1+H),
                                       C1,
                                       N,
                                       M,
@@ -155,7 +155,7 @@ class Sample(object):
 
         elif type_sample == 'wulff':
             vertices, stl = make_wulff(type_sample,
-                                       B,
+                                       2*(1+H),
                                        C1,
                                        N,
                                        M,
@@ -177,7 +177,7 @@ class Sample(object):
 
         elif type_sample == 'cube':
             vertices, stl = make_cube(type_sample,
-                                      B,
+                                      2*(1+H),
                                       C1,
                                       N,
                                       M,
