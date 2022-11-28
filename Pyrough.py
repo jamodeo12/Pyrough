@@ -46,6 +46,7 @@ sample = Sample_class.Sample(
 vertices, FEM_stl = sample.make_stl(param.type_S,
                                     param.H,
                                     param.C1,
+                                    param.RMS,
                                     param.N,
                                     param.M,
                                     param.radius,

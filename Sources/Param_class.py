@@ -35,7 +35,14 @@ class Parameter(object):
         if 'Wire' in read_param:
             self.type_S = 'wire'
             self.H = read_param['Wire']['H']
-            self.C1 = read_param['Wire']['C1']
+            try:
+                self.C1 = read_param['Wire']['C1']
+            except KeyError:
+                self.C1 = ''
+            try:
+                self.RMS = read_param['Wire']['RMS']
+            except KeyError:
+                self.RMS = ''
             self.N = read_param['Wire']['N']
             self.M = read_param['Wire']['M']
             self.length = read_param['Wire']['Length']
@@ -55,7 +62,14 @@ class Parameter(object):
             self.N = read_param['Box']['N']
             self.M = read_param['Box']['M']
             self.H = read_param['Box']['H']
-            self.C1 = read_param['Box']['C1']
+            try:
+                self.C1 = read_param['Box']['C1']
+            except KeyError:
+                self.C1 = ''
+            try:
+                self.RMS = read_param['Box']['RMS']
+            except KeyError :
+                self.RMS = ''
             self.height = read_param['Box']['Height']
             self.length = read_param['Box']['Length']
             self.width = read_param['Box']['Width']
@@ -73,7 +87,14 @@ class Parameter(object):
             self.H = read_param['Sphere']['H']
             self.N = read_param['Sphere']['N']
             self.M = read_param['Sphere']['M']
-            self.C1 = read_param['Sphere']['C1']
+            try:
+                self.C1 = read_param['Sphere']['C1']
+            except KeyError:
+                self.C1 = ''
+            try:
+                self.RMS = read_param['Sphere']['RMS']
+            except KeyError:
+                self.RMS = ''
             self.radius = read_param['Sphere']['Radius']
             self.ns = read_param['Sphere']['Number_segments']
             self.height = 0
@@ -88,7 +109,14 @@ class Parameter(object):
         elif 'Poly' in read_param:
             self.type_S = 'poly'
             self.H = read_param['Poly']['H']
-            self.C1 = read_param['Poly']['C1']
+            try:
+                self.C1 = read_param['Poly']['C1']
+            except KeyError:
+                self.C1 = ''
+            try:
+                self.RMS = read_param['Poly']['RMS']
+            except KeyError:
+                self.RMS = ''
             self.N = read_param['Poly']['N']
             self.M = read_param['Poly']['M']
             self.length = read_param['Poly']['Length']
@@ -105,7 +133,14 @@ class Parameter(object):
         elif 'Wulff' in read_param:
             self.type_S = 'wulff'
             self.H = read_param['Wulff']['H']
-            self.C1 = read_param['Wulff']['C1']
+            try:
+                self.C1 = read_param['Wulff']['C1']
+            except KeyError:
+                self.C1 = ''
+            try:
+                self.RMS = read_param['Wulff']['RMS']
+            except KeyError:
+                self.RMS = ''
             self.n_at = read_param['Wulff']['n_atoms']
             self.surfaces = read_param['Wulff']['Surfaces']
             self.energies = read_param['Wulff']['Energies']
@@ -122,7 +157,14 @@ class Parameter(object):
         elif 'Cube' in read_param:
             self.type_S = 'cube'
             self.H = read_param['Cube']['H']
-            self.C1 = read_param['Cube']['C1']
+            try:
+                self.C1 = read_param['Cube']['C1']
+            except KeyError:
+                self.C1 = ''
+            try:
+                self.RMS = read_param['Cube']['RMS']
+            except KeyError:
+                self.RMS = ''
             self.n_at = 0
             self.surfaces = 0
             self.energies = 0
