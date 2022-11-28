@@ -1,10 +1,10 @@
 {"Box":
-    {"H": 0,
+    {"H": 0.45,
     "Height": 30.0,
     "Width": 101.0,
     "Length": 101.0,
     "Number_segments": 50, 
-    "C1": 1,
+    "RMS": 1,
     "N": 30,
     "M": 30,
     "Raw_stl": "na"},

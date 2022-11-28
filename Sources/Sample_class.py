@@ -30,6 +30,7 @@ class Sample(object):
                  type_sample,
                  H,
                  C1,
+                 RMS,
                  N,
                  M,
                  radius,
@@ -98,6 +99,7 @@ class Sample(object):
             vertices, stl = make_wire(type_sample,
                                       2*(1+H),
                                       C1,
+                                      RMS,
                                       N,
                                       M,
                                       radius,
@@ -113,6 +115,7 @@ class Sample(object):
             vertices, stl = make_box(type_sample,
                                      2*(1+H),
                                      C1,
+                                     RMS,
                                      N,
                                      M,
                                      length,
@@ -127,8 +130,9 @@ class Sample(object):
 
         elif type_sample == 'sphere':
             vertices, stl = make_sphere(type_sample,
-                                        2*(1+H),     #### TO MODIFY
+                                        H,
                                         C1,
+                                        RMS,
                                         N,
                                         radius,
                                         ns,
@@ -142,6 +146,7 @@ class Sample(object):
             vertices, stl = make_poly(type_sample,
                                       2*(1+H),
                                       C1,
+                                      RMS,
                                       N,
                                       M,
                                       length,
@@ -157,6 +162,7 @@ class Sample(object):
             vertices, stl = make_wulff(type_sample,
                                        2*(1+H),
                                        C1,
+                                       RMS,
                                        N,
                                        M,
                                        surfaces,
@@ -179,6 +185,7 @@ class Sample(object):
             vertices, stl = make_cube(type_sample,
                                       2*(1+H),
                                       C1,
+                                      RMS,
                                       N,
                                       M,
                                       length,
@@ -242,6 +249,7 @@ class Sample(object):
 def make_wire(type_sample,
               B,
               C1,
+              RMS,
               N,
               M,
               radius,
@@ -296,7 +304,7 @@ def make_wire(type_sample,
     sfrN, sfrM = fp.vectors(N, M)  # creating vectors for M and N
     m, n = fp.random_numbers(sfrN, sfrM)  # normal gaussian for the amplitude
 
-    z = fp.random_surf2(type_sample, m, n, N, M, B, xv, yv, sfrM, sfrN, C1,
+    z = fp.random_surf2(type_sample, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, RMS,
                         out_pre)  # Returns an array with the Z values that will replace the previous z vlaues in the vertices array these represent the rougness on the surface
 
     vertices = fp.make_rough(type_sample, z, cy_nodesurf, vertices, 0)
@@ -311,6 +319,7 @@ def make_wire(type_sample,
 def make_box(type_sample,
              B,
              C1,
+             RMS,
              N,
              M,
              length,
@@ -362,8 +371,7 @@ def make_box(type_sample,
     sfrN, sfrM = fp.vectors(N, M)  # creating vectors for M and N
     m, n = fp.random_numbers(sfrN, sfrM)  # normal gaussian for the amplitude
 
-    z = fp.random_surf2(type_sample, m, n, N, M, B, xv, yv, sfrM, sfrN, C1,
-                        out_pre)  # Returns an array with the Z values that will replace the previous z vlaues in the vertices array these represent the rougness on the surface
+    z = fp.random_surf2(type_sample, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, RMS, out_pre)  # Returns an array with the Z values that will replace the previous z vlaues in the vertices array these represent the rougness on the surface
     vertices = fp.make_rough(type_sample, z, nodesurf, vertices, 0)
 
     vertices = vertices[:,
@@ -376,6 +384,7 @@ def make_box(type_sample,
 def make_sphere(type_sample,
                 B,
                 C1,
+                RMS,
                 N,
                 radius,
                 ns,
@@ -417,18 +426,15 @@ def make_sphere(type_sample,
                                   z)  # Creates an array filled with two elements that are the angles coresponding to the postion of the node on the sphere.
 
     thetaa = fp.theta(y, x)  # Calculates the arctan2 of two given arrays whose size are the same.
-    phii = fp.phi(t,
-                  z)  # Calculates the arctan2 of an array filled with vector norms and an arrray filled with z cooridnates which are the same size.
+    phii = fp.phi(t, z)  # Calculates the arctan2 of an array filled with vector norms and an arrray filled with z cooridnates which are the same size.
 
-    r = fp.rough_matrix_sphere(nbPoint, B, thetaa, phii, vert_phi_theta, C1,
-                               r)  # creates the displacement values of the nodes on the surface of the sphere
+    r = fp.rough_matrix_sphere(nbPoint, B, thetaa, phii, vert_phi_theta, C1, RMS, r)  # creates the displacement values of the nodes on the surface of the sphere
 
     C2 = 1. / nbPoint / N / 2.
 
     fp.stat_sphere(r, C1, C2, out_pre)  # prints the statistics of the sphere
 
-    new_vertex = fp.coord_cart_sphere(C1, C2, r, vertices, t, z, y,
-                                      x)  # creates a new matrix with x, y, z in cartesian coordinates
+    new_vertex = fp.coord_cart_sphere(C1, C2, r, vertices, t, z, y, x)  # creates a new matrix with x, y, z in cartesian coordinates
 
     fp.stl_file(new_vertex, faces, out_pre)  # creates an stl file of the sphere with roughness on the surface
 
@@ -438,6 +444,7 @@ def make_sphere(type_sample,
 def make_poly(type_sample,
               B,
               C1,
+              RMS,
               N,
               M,
               length,
@@ -495,7 +502,7 @@ def make_poly(type_sample,
     sfrN, sfrM = fp.vectors(N, M)  # creating vectors for M and N
     m, n = fp.random_numbers(sfrN, sfrM)  # normal gaussian for the amplitude
 
-    z = fp.random_surf2(type_sample, m, n, N, M, B, xv, yv, sfrM, sfrN, C1,
+    z = fp.random_surf2(type_sample, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, RMS,
                         out_pre)  # Returns an array with the Z values that will replace the previous z vlaues in the vertices array these represent the rougness on the surface
 
     vertices = fp.make_rough(type_sample, z, nodesurf, vertices, angles)
@@ -511,6 +518,7 @@ def make_poly(type_sample,
 def make_wulff(type_sample,
                B,
                C1,
+               RMS,
                N,
                M,
                surfaces,
@@ -578,7 +586,7 @@ def make_wulff(type_sample,
     nodesurf = fp.node_surface(type_sample, vertices, nodenumber, obj_points, obj_faces)
     node_edge, node_corner = fp.node_corner(nodesurf)
 
-    vertices = fp.make_rough_wulff(vertices, B, C1, N, M, nodesurf, node_edge, node_corner, list_n)
+    vertices = fp.make_rough_wulff(vertices, B, C1, RMS, N, M, nodesurf, node_edge, node_corner, list_n)
 
     vertices = vertices[:, :3]
 
@@ -590,6 +598,7 @@ def make_wulff(type_sample,
 def make_cube(type_sample,
               B,
               C1,
+              RMS,
               N,
               M,
               length,
@@ -629,7 +638,7 @@ def make_cube(type_sample,
     nodesurf = fp.node_surface(type_sample, vertices, nodenumber, obj_points, obj_faces)
     node_edge, node_corner = fp.node_corner(nodesurf)
 
-    vertices = fp.make_rough_wulff(vertices, B, C1, N, M, nodesurf, node_edge, node_corner, list_n)
+    vertices = fp.make_rough_wulff(vertices, B, C1, RMS, N, M, nodesurf, node_edge, node_corner, list_n)
 
     vertices = vertices[:, :3]
 

@@ -427,8 +427,8 @@ def stat_analysis(z, N, M, C1, B, sample_type, out_pre):
     :param sample_type: The name of the sample 
     :type sample_type: str
     """
-    z_an = np.reshape(z, -1)
-
+    #z_an = np.reshape(z, -1)
+    z_an = z.flatten()
     nu_points = len(z_an)
     mean = np.mean(z_an)
     stand = np.std(z_an)
@@ -436,9 +436,9 @@ def stat_analysis(z, N, M, C1, B, sample_type, out_pre):
     skewness = np.sum(np.power((z_an - np.mean(z_an)), 3) / len(z_an)) / np.power(np.std(z_an), 3)
     kurtosis = np.sum(np.power((z_an - np.mean(z_an)), 4) / len(z_an)) / np.power(np.std(z_an), 4)
 
-    stats = [N, M, C1, B, nu_points, mean, stand, rms, skewness, kurtosis]
+    stats = [N, M, C1, round(0.5*B-1,2), nu_points, mean, stand, rms, skewness, kurtosis]
     stats = list(map(str, stats))
-    stats = [sample_type, 'N = ' + stats[0], 'M = ' + stats[1], 'C1 = ' + stats[2], 'B = ' + stats[3],
+    stats = [sample_type, 'N = ' + stats[0], 'M = ' + stats[1], 'C1 = ' + stats[2], 'H = ' + stats[3],
              'No. points = ' + stats[4],
              'Mean_Value = ' + stats[5], 'Stand_dev = ' + stats[6], 'RMS = ' + stats[7], 'Skewness = ' + stats[8],
              'Kurtosis = ' + stats[9]]
@@ -446,7 +446,7 @@ def stat_analysis(z, N, M, C1, B, sample_type, out_pre):
     np.savetxt(out_pre + '_stat.txt', stats, fmt='%s')
     print('')
     print('------------ Random Surface Parameters-----------------')
-    print('         N =', N, '  M = ', M, '  C1 = ', C1, '  b = ', B)
+    print('         N =', N, '  M = ', M, '  C1 = ', C1, '  H = ', round(0.5*B-1,2))
     print('No. points = ', nu_points)
     print('Mean_Value = ', mean)
     print(' Stand_dev = ', stand)
@@ -479,9 +479,9 @@ def stat_sphere(r, C1, C2, out_pre):
 
     np.savetxt(out_pre+'_stat.txt', stats, fmt='%s')
 
-    print("ave: {}".format(np.mean(r)))  # out
-    print("RMS: {}".format(np.std(C1 * C2 * r)))
-    print("RMS: {}".format(np.sqrt(C1 * C2 * np.sum(r * r) / len(r))))
+    print("ave = {}".format(np.mean(r)))  # out
+    print("Stand_dev = {}".format(np.std(C1 * C2 * r)))
+    print("RMS = {}".format(np.sqrt(C1 * C2 * np.sum(r * r) / len(r))))
     return
 
 
@@ -673,7 +673,7 @@ def coord_sphere(vertices):
     return (x, y, z, t)
 
 
-def rough_matrix_sphere(nbPoint, B, thetaa, phii, vert_phi_theta, C1, r):
+def rough_matrix_sphere(nbPoint, B, thetaa, phii, vert_phi_theta, C1, RMS, r):
     """
     Creates the displacement values of the nodes on the surface of the sphere
 
@@ -705,7 +705,10 @@ def rough_matrix_sphere(nbPoint, B, thetaa, phii, vert_phi_theta, C1, r):
             _phase = sp.sph_harm(0, degree, thetaa - theta, phii - phi).real
             _phase = 2 * _phase / _phase.ptp()
             r += _r_amplitude[i] * mod * np.cos(_phase + _r_phase)
-    return r
+    if type(C1) == str :
+        print(rms_calc(r))
+        C1 = RMS/rms_calc(r)
+    return (C1*r)
 
 
 def coord_cart_sphere(C1, C2, r, vertices, t, z, y, x):
@@ -813,8 +816,12 @@ def write_stl(filename, vertices, face_list):
         f.write('endsolid Created by Gmsh')
     return
 
+def rms_calc(Z):
+    Z = np.asarray(Z)
+    Z = Z.flatten()
+    return(np.sqrt(np.sum(Z*Z)/len(Z)))
 
-def random_surf2(sample_type, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, out_pre):
+def random_surf2(sample_type, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, RMS, out_pre):
     """
     Returns an array with the Z values representing the surface roughness.
 
@@ -848,8 +855,13 @@ def random_surf2(sample_type, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, out_pre):
     # ax.view_init(90, -90)
     # ax.plot_surface(xv,yv,Z)
     #plt.show()
+    if type(C1) == str :
+        RMS_i = rms_calc(Z)
+        C1 = RMS / RMS_i
+        Z = C1 * Z
+    else :
+        Z = C1 * Z
     stat_analysis(Z, N, M, C1, B, sample_type, out_pre)
-    Z = C1 * Z
     return Z
 
 
@@ -1027,7 +1039,7 @@ def node_corner(nodesurf):
     node_corner = np.where(counts >= 3)[0]
     return (node_edge, node_corner)
 
-def make_rough_wulff(vertices, B, C1, N, M, nodesurf, node_edge, node_corner, list_n) :
+def make_rough_wulff(vertices, B, C1, RMS, N, M, nodesurf, node_edge, node_corner, list_n) :
     """
     Applies roughness on the sample in the case of a Wulff Shaped NP.
 
@@ -1059,7 +1071,12 @@ def make_rough_wulff(vertices, B, C1, N, M, nodesurf, node_edge, node_corner, li
         xv = surf_norm[:,0]
         yv = surf_norm[:,1]
         m, n = random_numbers(sfrN, sfrM)
-        z = C1*rdnsurf(m, n, B, xv, yv, sfrM, sfrN)
+        if type(C1) == str:
+            z = rdnsurf(m, n, B, xv, yv, sfrM, sfrN)
+            C1 = RMS/rms_calc(z)
+            z = C1*z
+        else :
+            z = C1*rdnsurf(m, n, B, xv, yv, sfrM, sfrN)
         for i in range(len(surf)):
             p = surf[i]
             index = p[3]

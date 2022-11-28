@@ -1,8 +1,8 @@
 {"Wire": 
     {"Length": 200, 
     "Radius": 20, 
-    "C1": 2, 
-    "H": 0,
+    "C1": 2,
+    "H": 0.1,
     "N": 30, 
     "M": 30, 
     "Number_segments": 50,

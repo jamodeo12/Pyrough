@@ -4,8 +4,8 @@
     "Radius": 30,
     "N": 30,
     "M": 30, 
-    "C1": 1, 
-    "H": 0,
+    "C1": 1,
+    "H": 1,
     "Number_segments": 50,
     "Raw_stl": "na"}, 
 
