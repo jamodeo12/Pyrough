@@ -87,14 +87,8 @@ class Parameter(object):
             self.H = read_param['Sphere']['H']
             self.N = read_param['Sphere']['N']
             self.M = read_param['Sphere']['M']
-            try:
-                self.C1 = read_param['Sphere']['C1']
-            except KeyError:
-                self.C1 = ''
-            try:
-                self.RMS = read_param['Sphere']['RMS']
-            except KeyError:
-                self.RMS = ''
+            self.C1 = read_param['Sphere']['C1']
+            self.RMS = ''
             self.radius = read_param['Sphere']['Radius']
             self.ns = read_param['Sphere']['Number_segments']
             self.height = 0
