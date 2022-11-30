@@ -1,7 +1,7 @@
 {"Sphere": 
     {"Number_segments": 5, 
-    "RMS": 0.5,
-    "H": 1,
+    "C1": 0.5,
+    "H": 7,
     "Radius": 75,
     "N": 30,
     "M": 30,

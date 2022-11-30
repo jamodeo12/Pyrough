@@ -706,7 +706,6 @@ def rough_matrix_sphere(nbPoint, B, thetaa, phii, vert_phi_theta, C1, RMS, r):
             _phase = 2 * _phase / _phase.ptp()
             r += _r_amplitude[i] * mod * np.cos(_phase + _r_phase)
     if type(C1) == str :
-        print(rms_calc(r))
         C1 = RMS/rms_calc(r)
     return (C1*r)
 

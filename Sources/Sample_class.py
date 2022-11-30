@@ -17,6 +17,7 @@
 from Sources import Func_pyrough as fp
 import numpy as np
 import subprocess
+import matplotlib.pyplot as plt
 
 
 # np.set_printoptions(threshold=sys.maxsize)
