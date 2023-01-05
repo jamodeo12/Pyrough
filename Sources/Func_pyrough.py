@@ -314,7 +314,7 @@ def read_stl(sample_type, raw_stl, width, length, height, radius, ns, points, ou
     vertices = []
     faces = []
     if raw_stl == "na":
-        if sample_type == "box":
+        if sample_type == "box" or sample_type == "grain":
             vertices, faces = box(width, length, height, ns, out_pre)
         elif sample_type == "wire":
             vertices, faces = cylinder(length, radius, ns, out_pre)
@@ -587,7 +587,7 @@ def node_surface(sample_type, vertices, nodenumber, points, faces):
         nodesurf = np.delete(vertices, no_need, 0)
         return nodesurf
 
-    elif sample_type == 'box':
+    elif sample_type == 'box' or sample_type == 'grain':
         eps = 0.000001
         max_height = max(vertices[:, 2])
         for index in range(0, len(vertices)):
@@ -882,7 +882,7 @@ def make_rough(type_sample, z, nodesurf, vertices, angles):
     :return: Rough sample
     """
     min_dz = abs(z.min())
-    if type_sample == 'box':
+    if type_sample == 'box' or type_sample == 'grain':
         for i in range(len(z)) :
             dz = z[i] + min_dz
             node = nodesurf[i]
