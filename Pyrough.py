@@ -36,48 +36,79 @@ out_pre = os.path.basename(Param_file)[:-5]
 
 param = Param_class.Parameter(Param_file)
 
-# -----------------------second task callingthe nanowire into the sample to get an stl
+# -----------------------second task calling the nanowire into the sample to get an stl
 
 # SAMPLE IS THE PATH GUIDE TO CALLING THE CLASS TO CREATE THE STL FILE
 
-sample = Sample_class.Sample(
-    param.type_S)  # THIS CLASS CALLING REAUIRES A SAMPLE WITH A DESIRED OBJECT NAME AS AN INPUT
-
-vertices, FEM_stl = sample.make_stl(param.type_S,
-                                    param.H,
-                                    param.C1,
-                                    param.RMS,
-                                    param.N,
-                                    param.M,
-                                    param.radius,
-                                    param.length,
-                                    param.height,
-                                    param.width,
-                                    param.ns,
-                                    param.raw_stl,
-                                    param.nfaces,
-                                    param.surfaces,
-                                    param.energies,
-                                    param.n_at,
-                                    param.lattice_structure,
-                                    param.lattice_parameter,
-                                    param.material,
-                                    param.orien_x,
-                                    param.orien_y,
-                                    param.orien_z,
-                                    out_pre)
-# Calling the sample class function of MAKE it which returns an stl file of the object desired.
-if param.output(Param_file) == 'ATOM_lmp':
-    sample.make_atom(FEM_stl,
-                     param.lattice_structure,
-                     param.lattice_parameter,
-                     param.material,
-                     param.orien_x,
-                     param.orien_y,
-                     param.orien_z,
-                     vertices,
-                     out_pre)
-    # call make it md to create atomsk file
+if param.type_S == 'grain' :
+    vertices, FEM_stl = Sample_class.make_box(param.type_S,
+                                              2*(1+param.H),
+                                              param.C1,
+                                              param.RMS,
+                                              param.N,
+                                              param.M,
+                                              param.length,
+                                              param.height,
+                                              param.width,
+                                              param.ns,
+                                              param.raw_stl,
+                                              out_pre)
+    Sample_class.make_atom_grain(FEM_stl,
+                         param.lattice_structure1,
+                         param.lattice_parameter1,
+                         param.material1,
+                         param.orien_x1,
+                         param.orien_y1,
+                         param.orien_z1,
+                         param.lattice_structure2,
+                         param.lattice_parameter2,
+                         param.material2,
+                         param.orien_x2,
+                         param.orien_y2,
+                         param.orien_z2,
+                         vertices,
+                         out_pre)
+        # call make it md to create atomsk file
     print('JOB DONE!' + '  File name: ' + out_pre + '.lmp')
-else:
-    print('JOB DONE!' + '  File name: ' + FEM_stl)
+
+else :
+    sample = Sample_class.Sample(param.type_S)  # THIS CLASS CALLING REAUIRES A SAMPLE WITH A DESIRED OBJECT NAME AS AN INPUT
+
+    vertices, FEM_stl = sample.make_stl(param.type_S,
+                                        param.H,
+                                        param.C1,
+                                        param.RMS,
+                                        param.N,
+                                        param.M,
+                                        param.radius,
+                                        param.length,
+                                        param.height,
+                                        param.width,
+                                        param.ns,
+                                        param.raw_stl,
+                                        param.nfaces,
+                                        param.surfaces,
+                                        param.energies,
+                                        param.n_at,
+                                        param.lattice_structure,
+                                        param.lattice_parameter,
+                                        param.material,
+                                        param.orien_x,
+                                        param.orien_y,
+                                        param.orien_z,
+                                        out_pre)
+    # Calling the sample class function of MAKE it which returns an stl file of the object desired.
+    if param.output(Param_file) == 'ATOM_lmp':
+        sample.make_atom(FEM_stl,
+                         param.lattice_structure,
+                         param.lattice_parameter,
+                         param.material,
+                         param.orien_x,
+                         param.orien_y,
+                         param.orien_z,
+                         vertices,
+                         out_pre)
+        # call make it md to create atomsk file
+        print('JOB DONE!' + '  File name: ' + out_pre + '.lmp')
+    else:
+        print('JOB DONE!' + '  File name: ' + FEM_stl)

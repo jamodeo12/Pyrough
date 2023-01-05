@@ -358,7 +358,6 @@ def make_box(type_sample,
     """
     vertices, faces = fp.read_stl(type_sample, raw_stl, width, length, height, 0, ns, 0,
                                   out_pre)  # reads if the user has inputted a stl file or if the mesh needs to me generated and returnes the faces and the vertices of the stl file
-
     vertices, nodenumber = fp.node_indexing(
         vertices)  # creates a column that has an assigned index number for each row in vertices; returns vertices with the addtion of this new column and also returns the nodenumbers which is an array fille from 0 - length of the vertices
 
@@ -646,3 +645,44 @@ def make_cube(type_sample,
     fp.stl_file(vertices, faces, out_pre)
 
     return (vertices, out_pre + '.stl')
+
+def make_atom_grain(STL,
+                    lattice_structure1,
+                    lattice_parameter1,
+                    material1,
+                    orien_x1,
+                    orien_y1,
+                    orien_z1,
+                    lattice_structure2,
+                    lattice_parameter2,
+                    material2,
+                    orien_x2,
+                    orien_y2,
+                    orien_z2,
+                    vertices,
+                    out_pre):
+    dim_x = max(vertices[:, 0]) - min(vertices[:, 0])
+    dim_y = max(vertices[:, 1]) - min(vertices[:, 1])
+    dim_z = max(vertices[:, 2]) - min(vertices[:, 2])
+    dup_x1, orien_x1 = fp.duplicate(dim_x, orien_x1, lattice_parameter1)
+    dup_y1, orien_y1 = fp.duplicate(dim_y, orien_y1, lattice_parameter1)
+    dup_z1, orien_z1 = fp.duplicate(2*dim_z, orien_z1, lattice_parameter1)
+    dup_x2, orien_x2 = fp.duplicate(dim_x, orien_x2, lattice_parameter2)
+    dup_y2, orien_y2 = fp.duplicate(dim_y, orien_y2, lattice_parameter2)
+    dup_z2, orien_z2 = fp.duplicate(2*dim_z, orien_z2, lattice_parameter2)
+
+    lattice_parameter1 = str(lattice_parameter1)
+    lattice_parameter2 = str(lattice_parameter2)
+
+    subprocess.call(['atomsk', '--create', lattice_structure1, lattice_parameter1, material1, 'orient', orien_x1, orien_y1, orien_z1,
+                     '-duplicate', dup_x1, dup_y1, dup_z1, str(material1)+'_supercell.atsk'])
+    subprocess.call(['atomsk', str(material1)+'_supercell.atsk', '-select', 'stl', STL, '-rmatom', 'select', str(material1)+'_out.atsk'])
+
+    subprocess.call(['atomsk', '--create', lattice_structure2, lattice_parameter2, material2, 'orient', orien_x2, orien_y2, orien_z2,
+                     '-duplicate', dup_x2, dup_y2, dup_z2, str(material2)+'_supercell.atsk'])
+    subprocess.call(['atomsk', str(material2)+'_supercell.atsk', '-select', 'stl', STL, '-select', 'invert', '-rmatom', 'select', str(material2)+'_out.atsk'])
+
+    subprocess.call(['atomsk', '--merge', '2', str(material1)+'_out.atsk', str(material2)+'_out.atsk', out_pre+'.lmp'])
+
+    subprocess.call(['rm', str(material1)+'_supercell.atsk', str(material2)+'_supercell.atsk', str(material1)+'_out.atsk', str(material2)+'_out.atsk'])
+    #fp.rebox(out_pre + '.lmp')
