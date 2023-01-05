@@ -666,10 +666,10 @@ def make_atom_grain(STL,
     dim_z = max(vertices[:, 2]) - min(vertices[:, 2])
     dup_x1, orien_x1 = fp.duplicate(dim_x, orien_x1, lattice_parameter1)
     dup_y1, orien_y1 = fp.duplicate(dim_y, orien_y1, lattice_parameter1)
-    dup_z1, orien_z1 = fp.duplicate(2*dim_z, orien_z1, lattice_parameter1)
+    dup_z1, orien_z1 = fp.duplicate(0.5*dim_z, orien_z1, lattice_parameter1)
     dup_x2, orien_x2 = fp.duplicate(dim_x, orien_x2, lattice_parameter2)
     dup_y2, orien_y2 = fp.duplicate(dim_y, orien_y2, lattice_parameter2)
-    dup_z2, orien_z2 = fp.duplicate(2*dim_z, orien_z2, lattice_parameter2)
+    dup_z2, orien_z2 = fp.duplicate(0.5*dim_z, orien_z2, lattice_parameter2)
 
     lattice_parameter1 = str(lattice_parameter1)
     lattice_parameter2 = str(lattice_parameter2)
