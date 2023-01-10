@@ -705,10 +705,7 @@ def rough_matrix_sphere(nbPoint, B, thetaa, phii, vert_phi_theta, C1, RMS, r):
             _phase = sp.sph_harm(0, degree, thetaa - theta, phii - phi).real
             _phase = 2 * _phase / _phase.ptp()
             r += _r_amplitude[i] * mod * np.cos(_phase + _r_phase)
-    if type(C1) == str :
-        C1 = RMS/rms_calc(r)
-    return (C1*r)
-
+    return r
 
 def coord_cart_sphere(C1, C2, r, vertices, t, z, y, x):
     """

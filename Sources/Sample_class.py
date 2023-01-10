@@ -675,14 +675,14 @@ def make_atom_grain(STL,
     lattice_parameter2 = str(lattice_parameter2)
 
     subprocess.call(['atomsk', '--create', lattice_structure1, lattice_parameter1, material1, 'orient', orien_x1, orien_y1, orien_z1,
-                     '-duplicate', dup_x1, dup_y1, dup_z1, str(material1)+'_supercell.atsk'])
-    subprocess.call(['atomsk', str(material1)+'_supercell.atsk', '-select', 'stl', STL, '-rmatom', 'select', str(material1)+'_out.atsk'])
+                     '-duplicate', dup_x1, dup_y1, dup_z1, 'mat1_supercell.atsk'])
+    subprocess.call(['atomsk', 'mat1_supercell.atsk', '-select', 'stl', STL, '-rmatom', 'select', 'mat1_out.atsk'])
 
     subprocess.call(['atomsk', '--create', lattice_structure2, lattice_parameter2, material2, 'orient', orien_x2, orien_y2, orien_z2,
-                     '-duplicate', dup_x2, dup_y2, dup_z2, str(material2)+'_supercell.atsk'])
-    subprocess.call(['atomsk', str(material2)+'_supercell.atsk', '-select', 'stl', STL, '-select', 'invert', '-rmatom', 'select', str(material2)+'_out.atsk'])
+                     '-duplicate', dup_x2, dup_y2, dup_z2, 'mat2_supercell.atsk'])
+    subprocess.call(['atomsk', 'mat2_supercell.atsk', '-select', 'stl', STL, '-select', 'invert', '-rmatom', 'select', 'mat2_out.atsk'])
 
-    subprocess.call(['atomsk', '--merge', '2', str(material1)+'_out.atsk', str(material2)+'_out.atsk', out_pre+'.lmp'])
+    subprocess.call(['atomsk', '--merge', '2', 'mat1_out.atsk', 'mat2_out.atsk', out_pre+'.lmp'])
 
-    subprocess.call(['rm', str(material1)+'_supercell.atsk', str(material2)+'_supercell.atsk', str(material1)+'_out.atsk', str(material2)+'_out.atsk'])
+    subprocess.call(['rm', 'mat1_supercell.atsk', 'mat2_supercell.atsk', 'mat1_out.atsk', 'mat2_out.atsk'])
     #fp.rebox(out_pre + '.lmp')
