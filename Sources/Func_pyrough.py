@@ -140,7 +140,7 @@ def box(width, length, height, ns, out_pre):
     """
     print('====== > Creating the Mesh')
     with pygmsh.geo.Geometry() as geom:
-        geom.add_box(0, length, 0, width, 0, height, mesh_size=5)
+        geom.add_box(0, length, 0, width, 0, height, mesh_size=4)
         mesh = geom.generate_mesh()
     vertices = mesh.points
     faces = mesh.get_cells_type('triangle')
@@ -326,7 +326,7 @@ def read_stl(sample_type, raw_stl, width, length, height, radius, ns, points, ou
             vertices, faces = cube(length, out_pre)
     else:
         mesh = meshio.read(raw_stl)
-        vertices, faces = mesh.vertices, mesh.faces
+        vertices, faces = mesh.points, mesh.cells["triangle"]
     return (vertices, faces)
 
 
@@ -849,8 +849,8 @@ def random_surf2(sample_type, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, RMS, out_pr
     # color_map = plt.get_cmap('jet')
     # ax.scatter3D(xv, yv, Z, c = Z, cmap = color_map)
     # ax.view_init(90, -90)
-    # ax.plot_surface(xv,yv,Z)
-    #plt.show()
+    # plt.axis('off')
+    # plt.show()
     if type(C1) == str :
         RMS_i = rms_calc(Z)
         C1 = RMS / RMS_i

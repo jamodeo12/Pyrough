@@ -131,7 +131,7 @@ class Sample(object):
 
         elif type_sample == 'sphere':
             vertices, stl = make_sphere(type_sample,
-                                        H,
+                                        4*H,
                                         C1,
                                         RMS,
                                         N,

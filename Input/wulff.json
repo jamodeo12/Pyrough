@@ -15,8 +15,8 @@
 "ATOM_Param": 
     {"Lattice_parameter": 4.07, 
     "Material": "Au", 
-    "Orien_x": [1,0,0], 
-    "Orien_y":[0,1,0], 
-    "Orien_z": [0,0,1], 
+    "Orien_x": [-2,1,1], 
+    "Orien_y":[0,-1,1], 
+    "Orien_z": [1,1,1], 
     "Lattice_structure": "fcc"}
 }
