@@ -99,7 +99,5 @@ ax3.view_init(90, -90)
 
 plt.show()
 
-j = int(input('Save z data ? (1 for yes) '))
-if j == 1 :
-	df = pd.DataFrame(Z)
-	df.to_csv('Rough_data_2.csv')
+df = pd.DataFrame(Z)
+df.to_csv('Rough_data.csv')
