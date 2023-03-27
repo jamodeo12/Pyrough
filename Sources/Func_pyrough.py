@@ -118,7 +118,7 @@ def cylinder(l, r, ns, out_pre):
         mesh = geom.generate_mesh()
     vertices = mesh.points
     faces = mesh.get_cells_type('triangle')
-    write_stl('Raw_'+out_pre+'.stl', vertices, faces)
+    write_stl('Raw_' + out_pre + '.stl', vertices, faces)
     print('====== > Done creating the Mesh')
     return (vertices, faces)
 
@@ -144,7 +144,7 @@ def box(width, length, height, ns, out_pre):
         mesh = geom.generate_mesh()
     vertices = mesh.points
     faces = mesh.get_cells_type('triangle')
-    mesh.write('Raw_'+out_pre+'.stl')
+    mesh.write('Raw_' + out_pre + '.stl')
     print('====== > Done creating the Mesh')
     return (vertices, faces)
 
@@ -167,7 +167,7 @@ def sphere(r, ns, out_pre):
         mesh = geom.generate_mesh()
     vertices = mesh.points
     faces = mesh.get_cells_type('triangle')
-    write_stl('Raw_'+out_pre+'.stl', vertices, faces)
+    write_stl('Raw_' + out_pre + '.stl', vertices, faces)
     print('====== > Done creating the Mesh')
     return (vertices, faces)
 
@@ -190,7 +190,7 @@ def poly(length, points, out_pre):
         mesh = geom.generate_mesh()
     vertices = mesh.points
     faces = mesh.get_cells_type('triangle')
-    mesh.write('Raw_'+out_pre+'.stl')
+    mesh.write('Raw_' + out_pre + '.stl')
     print('====== > Done creating the Mesh')
     return (vertices, faces)
 
@@ -216,8 +216,9 @@ def wulff(obj_points, obj_faces, out_pre):
         mesh = geom.generate_mesh()
         vertices = mesh.points
         faces = mesh.get_cells_type('triangle')
-    write_stl('Raw_'+out_pre+'.stl', vertices, faces)
+    write_stl('Raw_' + out_pre + '.stl', vertices, faces)
     return (vertices, faces)
+
 
 def cube(length, out_pre):
     """
@@ -230,16 +231,17 @@ def cube(length, out_pre):
     """
     print('====== > Creating the Mesh')
     with pygmsh.geo.Geometry() as geom:
-        geom.add_box(0, length, 0, length, 0, length, mesh_size=length/30)
+        geom.add_box(0, length, 0, length, 0, length, mesh_size=length / 30)
         mesh = geom.generate_mesh()
     vertices = mesh.points
     faces = mesh.get_cells_type('triangle')
-    mesh.write('Raw_'+out_pre+'.stl')
+    mesh.write('Raw_' + out_pre + '.stl')
     print('====== > Done creating the Mesh')
     return (vertices, faces)
 
 
-def make_obj(surfaces, energies, n_at, lattice_structure, lattice_parameter, material, orien_x, orien_y, orien_z, out_pre):
+def make_obj(surfaces, energies, n_at, lattice_structure, lattice_parameter, material, orien_x, orien_y, orien_z,
+             out_pre):
     """
     Creates an OBJ file of a faceted NP. Stores the points and faces from this file.
 
@@ -269,8 +271,8 @@ def make_obj(surfaces, energies, n_at, lattice_structure, lattice_parameter, mat
     surface_energies = {tuple(surfaces[i]): float(energies[i]) for i in range(0, len(surfaces))}
     prim = bulk(material, crystalstructure=lattice_structure, a=lattice_parameter)
     particle = SingleCrystal(surface_energies, primitive_structure=prim, natoms=n_at)
-    particle.write(out_pre+'.obj')
-    with open(out_pre+'.obj') as f:
+    particle.write(out_pre + '.obj')
+    with open(out_pre + '.obj') as f:
         list_lines = f.readlines()
         obj_points = []
         obj_faces = []
@@ -427,7 +429,7 @@ def stat_analysis(z, N, M, C1, B, sample_type, out_pre):
     :param sample_type: The name of the sample 
     :type sample_type: str
     """
-    #z_an = np.reshape(z, -1)
+    # z_an = np.reshape(z, -1)
     z_an = z.flatten()
     nu_points = len(z_an)
     mean = np.mean(z_an)
@@ -436,7 +438,7 @@ def stat_analysis(z, N, M, C1, B, sample_type, out_pre):
     skewness = np.sum(np.power((z_an - np.mean(z_an)), 3) / len(z_an)) / np.power(np.std(z_an), 3)
     kurtosis = np.sum(np.power((z_an - np.mean(z_an)), 4) / len(z_an)) / np.power(np.std(z_an), 4)
 
-    stats = [N, M, C1, round(0.5*B-1,2), nu_points, mean, stand, rms, skewness, kurtosis]
+    stats = [N, M, C1, round(0.5 * B - 1, 2), nu_points, mean, stand, rms, skewness, kurtosis]
     stats = list(map(str, stats))
     stats = [sample_type, 'N = ' + stats[0], 'M = ' + stats[1], 'C1 = ' + stats[2], 'H = ' + stats[3],
              'No. points = ' + stats[4],
@@ -446,7 +448,7 @@ def stat_analysis(z, N, M, C1, B, sample_type, out_pre):
     np.savetxt(out_pre + '_stat.txt', stats, fmt='%s')
     print('')
     print('------------ Random Surface Parameters-----------------')
-    print('         N =', N, '  M = ', M, '  C1 = ', C1, '  H = ', round(0.5*B-1,2))
+    print('         N =', N, '  M = ', M, '  C1 = ', C1, '  H = ', round(0.5 * B - 1, 2))
     print('No. points = ', nu_points)
     print('Mean_Value = ', mean)
     print(' Stand_dev = ', stand)
@@ -477,7 +479,7 @@ def stat_sphere(r, C1, C2, out_pre):
     stats = ['Sphere', 'C1 = ' + stats[0], 'C2 = ' + stats[1], 'Mean_Value = ' + stats[2], 'Stand_dev = ' + stats[3],
              'RMS = ' + stats[4]]
 
-    np.savetxt(out_pre+'_stat.txt', stats, fmt='%s')
+    np.savetxt(out_pre + '_stat.txt', stats, fmt='%s')
 
     print("ave = {}".format(np.mean(r)))  # out
     print("Stand_dev = {}".format(np.std(C1 * C2 * r)))
@@ -542,9 +544,9 @@ def random_numbers(sfrN, sfrM):
     :returns: G and U matrices
     """
     m = 0 + 1 * np.random.randn(len(sfrM), len(sfrN))  # Gaussian distributed
-    n = -np.pi/2 + np.pi * np.random.rand(len(sfrM), len(sfrN))  # Uniform distributed
-    #np.savetxt('m.txt', m, fmt='%s')
-    #np.savetxt('n.txt', n, fmt='%s')
+    n = -np.pi / 2 + np.pi * np.random.rand(len(sfrM), len(sfrN))  # Uniform distributed
+    # np.savetxt('m.txt', m, fmt='%s')
+    # np.savetxt('n.txt', n, fmt='%s')
     return m, n
 
 
@@ -621,7 +623,7 @@ def node_surface(sample_type, vertices, nodenumber, points, faces):
         nodesurf = np.reshape(face, [int(l / 4), 4])
         return nodesurf
 
-    elif sample_type == 'wulff' or sample_type == 'cube' :
+    elif sample_type == 'wulff' or sample_type == 'cube':
         nodesurf = []
         for F in faces:
             L = []
@@ -699,13 +701,14 @@ def rough_matrix_sphere(nbPoint, B, thetaa, phii, vert_phi_theta, C1, RMS, r):
     for degree in range(N_s, N_e + 1, 1):  # EQUATION
         print("degree: {}".format(degree))
         _r_amplitude = 0 + 1 * np.random.randn(nbPoint)
-        _r_phase = -np.pi/2 + np.pi * np.random.rand(nbPoint)
+        _r_phase = -np.pi / 2 + np.pi * np.random.rand(nbPoint)
         mod = degree ** (-B / 2)
         for i, [theta, phi] in enumerate(vert_phi_theta):
             _phase = sp.sph_harm(0, degree, thetaa - theta, phii - phi).real
             _phase = 2 * _phase / _phase.ptp()
             r += _r_amplitude[i] * mod * np.cos(_phase + _r_phase)
     return r
+
 
 def coord_cart_sphere(C1, C2, r, vertices, t, z, y, x):
     """
@@ -812,10 +815,12 @@ def write_stl(filename, vertices, face_list):
         f.write('endsolid Created by Gmsh')
     return
 
+
 def rms_calc(Z):
     Z = np.asarray(Z)
     Z = Z.flatten()
-    return(np.sqrt(np.sum(Z*Z)/len(Z)))
+    return (np.sqrt(np.sum(Z * Z) / len(Z)))
+
 
 def random_surf2(sample_type, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, RMS, out_pre):
     """
@@ -851,11 +856,11 @@ def random_surf2(sample_type, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, RMS, out_pr
     # ax.view_init(90, -90)
     # plt.axis('off')
     # plt.show()
-    if type(C1) == str :
+    if type(C1) == str:
         RMS_i = rms_calc(Z)
         C1 = RMS / RMS_i
         Z = C1 * Z
-    else :
+    else:
         Z = C1 * Z
     stat_analysis(Z, N, M, C1, B, sample_type, out_pre)
     return Z
@@ -880,7 +885,7 @@ def make_rough(type_sample, z, nodesurf, vertices, angles):
     """
     min_dz = abs(z.min())
     if type_sample == 'box' or type_sample == 'grain':
-        for i in range(len(z)) :
+        for i in range(len(z)):
             dz = z[i] + min_dz
             node = nodesurf[i]
             index = node[3]
@@ -897,9 +902,9 @@ def make_rough(type_sample, z, nodesurf, vertices, angles):
             vertices[poss, 1] = vertices[poss, 1] + dz * np.sin(thetaa)
     elif type_sample == 'poly':
         k = 0
-        for i in range (np.shape(z)[0]) :
-            for j in range (np.shape(z)[1]) :
-                dz = z[i,j] + min_dz
+        for i in range(np.shape(z)[0]):
+            for j in range(np.shape(z)[1]):
+                dz = z[i, j] + min_dz
                 node = nodesurf[k]
                 index = int(node[3])
                 thetaa = theta(node[0], node[1])
@@ -1035,7 +1040,8 @@ def node_corner(nodesurf):
     node_corner = np.where(counts >= 3)[0]
     return (node_edge, node_corner)
 
-def make_rough_wulff(vertices, B, C1, RMS, N, M, nodesurf, node_edge, node_corner, list_n) :
+
+def make_rough_wulff(vertices, B, C1, RMS, N, M, nodesurf, node_edge, node_corner, list_n):
     """
     Applies roughness on the sample in the case of a Wulff Shaped NP.
 
@@ -1064,15 +1070,15 @@ def make_rough_wulff(vertices, B, C1, RMS, N, M, nodesurf, node_edge, node_corne
         n1 = np.array(list_n[k])
         surf_rot = rot(surf, n1)
         surf_norm = normalize(surf_rot)
-        xv = surf_norm[:,0]
-        yv = surf_norm[:,1]
+        xv = surf_norm[:, 0]
+        yv = surf_norm[:, 1]
         m, n = random_numbers(sfrN, sfrM)
         if type(C1) == str:
             z = rdnsurf(m, n, B, xv, yv, sfrM, sfrN)
-            C1 = RMS/rms_calc(z)
-            z = C1*z
-        else :
-            z = C1*rdnsurf(m, n, B, xv, yv, sfrM, sfrN)
+            C1 = RMS / rms_calc(z)
+            z = C1 * z
+        else:
+            z = C1 * rdnsurf(m, n, B, xv, yv, sfrM, sfrN)
         for i in range(len(surf)):
             p = surf[i]
             index = p[3]
@@ -1086,7 +1092,8 @@ def make_rough_wulff(vertices, B, C1, RMS, N, M, nodesurf, node_edge, node_corne
             vertices[poss, 0] = vertices[poss, 0] + delta_z * n1[0]
             vertices[poss, 1] = vertices[poss, 1] + delta_z * n1[1]
             vertices[poss, 2] = vertices[poss, 2] + delta_z * n1[2]
-    return(vertices)
+    return (vertices)
+
 
 def rot(surf, n1):
     """
@@ -1109,12 +1116,13 @@ def rot(surf, n1):
     surf_rot = []
     for p in surf:
         point = p[:3]
-        point_rot = np.dot(R,point)
+        point_rot = np.dot(R, point)
         surf_rot.append([point_rot[0], point_rot[1], point_rot[2], p[3]])
     surf_rot = np.asarray(surf_rot)
-    return(surf_rot)
+    return (surf_rot)
 
-def rot_matrix(n, theta) :
+
+def rot_matrix(n, theta):
     """
     Generates the rotation matrix. Initial orientation is n, and the angle of rotation is theta. Final orientation is the z-axis.
 
@@ -1137,9 +1145,10 @@ def rot_matrix(n, theta) :
     R32 = n[1] * n[2] * (1 - c) + n[0] * s
     R33 = n[2] * n[2] * (1 - c) + c
     R = np.array([[R11, R12, R13], [R21, R22, R23], [R31, R32, R33]])
-    return(R)
+    return (R)
 
-def normalize(surf) :
+
+def normalize(surf):
     """
     Normalizes the coordinates of points composing the surface.
 
@@ -1151,7 +1160,7 @@ def normalize(surf) :
     X = surf[:, 0]
     Y = surf[:, 1]
     Z = surf[:, 2]
-    T = surf[:,3]
+    T = surf[:, 3]
     x_max = np.max(abs(X))
     y_max = np.max(abs(Y))
     Xf = (X / x_max + 1) / 2
@@ -1159,7 +1168,8 @@ def normalize(surf) :
     Zf = 0 * Z
     surf_norm = [[Xf[i], Yf[i], Zf[i], T[i]] for i in range(len(Xf))]
     surf_norm = np.asarray(surf_norm)
-    return(surf_norm)
+    return (surf_norm)
+
 
 def cube_faces(length):
     """
@@ -1170,23 +1180,24 @@ def cube_faces(length):
 
     :return: Points and faces of the cube
     """
-    obj_points = [[0,0,0],
-                 [length, 0, 0],
-                 [0,length, 0],
-                 [length, length, 0],
-                 [0,0,length],
-                 [length, 0, length],
-                 [0,length,length],
-                 [length,length,length]]
-    obj_faces = [[1,2,3,4],
-                 [1,2,5,6],
-                 [2,4,6,8],
-                 [4,8,3,7],
-                 [1,5,3,7],
-                 [5,6,7,8]]
+    obj_points = [[0, 0, 0],
+                  [length, 0, 0],
+                  [0, length, 0],
+                  [length, length, 0],
+                  [0, 0, length],
+                  [length, 0, length],
+                  [0, length, length],
+                  [length, length, length]]
+    obj_faces = [[1, 2, 3, 4],
+                 [1, 2, 5, 6],
+                 [2, 4, 6, 8],
+                 [4, 8, 3, 7],
+                 [1, 5, 3, 7],
+                 [5, 6, 7, 8]]
     obj_faces = np.asarray(obj_faces)
     obj_points = np.asarray(obj_points)
     return obj_points, obj_faces
+
 
 def rotate_obj_wulff(obj_points, orien_x, orien_z):
     """
@@ -1204,24 +1215,94 @@ def rotate_obj_wulff(obj_points, orien_x, orien_z):
     if n[0] == 0 and n[1] == 0 and n[2] == 0:
         n = n2
     n = n / np.linalg.norm(n)
-    theta = np.arccos(np.dot(orien_z, n2)/(np.linalg.norm(orien_z)*np.linalg.norm(n2)))
+    theta = np.arccos(np.dot(orien_z, n2) / (np.linalg.norm(orien_z) * np.linalg.norm(n2)))
     R = rot_matrix(n, theta)
     surf_rot = []
     for p in obj_points:
-        point_rot = np.dot(R,p)
+        point_rot = np.dot(R, p)
         surf_rot.append([point_rot[0], point_rot[1], point_rot[2]])
     surf_rot = np.asarray(surf_rot)
     x_axis = np.array([1, 0, 0])
-    x_rot = np.dot(R,x_axis)
-    theta_x = np.arccos(np.dot(x_rot, orien_x)/(np.linalg.norm(x_rot)*np.linalg.norm(orien_x)))
-    R_x = np.array([[np.cos(theta_x), -1*np.sin(theta_x), 0], [np.sin(theta_x), np.cos(theta_x), 0], [0,0,1]])
+    x_rot = np.dot(R, x_axis)
+    theta_x = np.arccos(np.dot(x_rot, orien_x) / (np.linalg.norm(x_rot) * np.linalg.norm(orien_x)))
+    R_x = np.array([[np.cos(theta_x), -1 * np.sin(theta_x), 0], [np.sin(theta_x), np.cos(theta_x), 0], [0, 0, 1]])
     points_f = []
     for p in surf_rot:
-        rot_f = np.dot(R_x,p)
+        rot_f = np.dot(R_x, p)
         points_f.append([rot_f[0], rot_f[1], rot_f[2]])
     obj_points_f = np.asarray(points_f)
     # fig = plt.figure(figsize=(4, 4))
     # ax = fig.add_subplot(111, projection='3d')
     # ax.scatter(obj_points_f[:,0], obj_points_f[:,1], obj_points_f[:,2])
     # plt.show()
-    return(obj_points_f)
+    return (obj_points_f)
+
+
+####################################################################
+####################### SURFACE ANALYSIS ###########################
+####################################################################
+
+def rough(x, y, H, C1, M, N):
+    z = np.zeros(np.shape(x))
+    listM = np.linspace(-M, M, 2 * M + 1)
+    listN = np.linspace(-N, N, 2 * N + 1)
+    k = 0
+    for m in listM:
+        for n in listN:
+            if m == 0 and n == 0:
+                pass
+            else:
+                mod = (m * m + n * n) ** (-1 * (1 + H))
+                G = np.random.randn()
+                U = -np.pi / 2 + np.pi * np.random.rand()
+                zadd = C1 * G * mod * np.cos(2 * np.pi * (m * x + n * y) + U)
+                z = z + zadd
+            k += 1
+    return (z)
+
+
+def sigma(z):
+    Z = z.flatten()
+    l = np.mean(Z)
+    return (round(np.sqrt(np.sum(np.power(Z - l, 2)) / len(Z)), 3))
+
+
+def RMS(z):
+    Z = z.flatten()
+    return (round(np.sqrt(np.sum(Z * Z) / len(Z)), 3))
+
+
+def sk(z):
+    Z = z.flatten()
+    l = np.mean(Z)
+    return (round((1 / (sigma(z) ** 3 * len(Z))) * np.sum(np.power(Z - l, 3)), 3))
+
+
+def Kurto(z):
+    Z = z.flatten()
+    l = np.mean(Z)
+    return (round((1 / (sigma(z) ** 4 * len(Z))) * np.sum(np.power(Z - l, 4)), 3))
+
+
+def rescale(D, scale):
+    D = (D - np.min(D))
+    D = D / np.max(D)
+    lower = scale[0]
+    upper = scale[1]
+    Df = [lower + (upper - lower) * x for x in D]
+    return (np.asarray(Df))
+
+
+def lim_value(Y, k):
+    Yf = []
+    for y in Y:
+        if y >= k:
+            y = y - 1
+        Yf.append(y)
+    return (np.asarray(Yf))
+
+
+def rescaleRMS(Z, RMS_f):
+    RMS_i = RMS(Z)
+    C = np.sqrt(RMS_f ** 2 / RMS_i ** 2)
+    return (C * Z)
