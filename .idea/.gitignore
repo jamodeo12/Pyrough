@@ -5,3 +5,4 @@
 ./*.lmp
 ./*.obj
 ./*_stat.txt
+./*.csv
