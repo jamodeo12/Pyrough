@@ -705,6 +705,7 @@ def rough_matrix_sphere(nbPoint, B, thetaa, phii, vert_phi_theta, C1, RMS, r):
         mod = degree ** (-B / 2)
         for i, [theta, phi] in enumerate(vert_phi_theta):
             _phase = sp.sph_harm(0, degree, thetaa - theta, phii - phi).real
+            print(_phase[0])
             _phase = 2 * _phase / _phase.ptp()
             r += _r_amplitude[i] * mod * np.cos(_phase + _r_phase)
     return r
@@ -941,6 +942,7 @@ def base(radius, nfaces):
     """
     points = []
     theta_list = np.linspace(0, 2 * np.pi, nfaces + 1)
+    theta_list -= 0.5*(theta_list[1]-theta_list[0])
     angles = []
     for theta in theta_list[:-1]:
         points.append([radius * np.cos(theta), radius * np.sin(theta)])

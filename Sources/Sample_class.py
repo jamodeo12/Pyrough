@@ -155,7 +155,7 @@ class Sample(object):
                                       radius,
                                       ns,
                                       raw_stl,
-                                      out_pre
+                                      out_pre,
                                       )
             return (vertices, stl)
 
@@ -452,7 +452,7 @@ def make_poly(type_sample,
               radius,
               ns,
               raw_stl,
-              out_pre
+              out_pre,
               ):
     """
     Creates an stl file of a faceted wire
