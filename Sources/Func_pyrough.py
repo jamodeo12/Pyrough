@@ -959,6 +959,7 @@ def base(radius, nfaces):
             the = the + 2 * np.pi
         angles.append(the)
     angles = np.asarray(angles)
+    print(angles)
     return points, angles
 
 
