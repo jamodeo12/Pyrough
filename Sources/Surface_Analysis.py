@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from Sources import Func_pyrough as func
+import Func_pyrough as func
 from scipy import stats
 import cv2
 import sys
