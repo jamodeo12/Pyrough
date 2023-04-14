@@ -509,7 +509,7 @@ def make_poly(type_sample,
 
     vertices = vertices[:,
                :3]  # gets rid of the index column because stl file generator takes only a matrix with 3 columns
-
+    vertices = fp.align_poly(vertices, angles)
     fp.stl_file(vertices, faces, out_pre)  # creates an stl file of the box with roughness on the surface
 
     return (vertices, out_pre + '.stl')

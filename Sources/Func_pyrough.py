@@ -908,20 +908,19 @@ def make_rough(type_sample, z, nodesurf, vertices, angles):
                 dz = z[i, j] + min_dz
                 node = nodesurf[k]
                 index = int(node[3])
-                thetaa = theta(node[0], node[1])
+                thetaa = np.arctan2(node[1], node[0])
                 if thetaa < 0:
                     thetaa = thetaa + 2 * np.pi
-                theta_min = abs((angles - thetaa))
-                indexi = np.where(abs(theta_min - np.amin(theta_min)) <= 0.001)
-                possi = indexi[0]
+                theta_min = np.abs(np.array(angles) - thetaa)
+                possi = np.where(abs(theta_min - np.amin(theta_min)) <= 0.01)[0]
                 if len(possi) > 1:
-                    angle = thetaa
+                    angle = 0.5*(angles[int(possi[0])]+angles[int(possi[1])])
                     dz = 0.5 * dz
-                else:
-                    angle = angles[possi[0]]
-                if thetaa == 0:
+                elif thetaa == 0:
                     angle = 0
                     dz = 0.5 * dz
+                else:
+                    angle = angles[int(possi)]
                 poss = int(np.where(vertices[:, 3] == index)[0])
                 vertices[poss, 0] = vertices[poss, 0] + dz * np.cos(angle)
                 vertices[poss, 1] = vertices[poss, 1] + dz * np.sin(angle)
@@ -942,7 +941,9 @@ def base(radius, nfaces):
     """
     points = []
     theta_list = np.linspace(0, 2 * np.pi, nfaces + 1)
-    theta_list -= 0.5*(theta_list[1]-theta_list[0])
+    for i in range(len(theta_list)) :
+        if theta_list[i] < 0 :
+            theta_list[i] += 2*np.pi
     angles = []
     for theta in theta_list[:-1]:
         points.append([radius * np.cos(theta), radius * np.sin(theta)])
@@ -959,7 +960,6 @@ def base(radius, nfaces):
             the = the + 2 * np.pi
         angles.append(the)
     angles = np.asarray(angles)
-    print(angles)
     return points, angles
 
 
@@ -1309,3 +1309,9 @@ def rescaleRMS(Z, RMS_f):
     RMS_i = RMS(Z)
     C = np.sqrt(RMS_f ** 2 / RMS_i ** 2)
     return (C * Z)
+
+def align_poly(vertices, angles):
+    theta = angles[0]
+    R = np.array([[np.cos(theta), -np.sin(theta), 0], [np.sin(theta), np.cos(theta), 0],[0, 0, 1]])
+    rotated_points = np.dot(vertices, R)
+    return(rotated_points)
