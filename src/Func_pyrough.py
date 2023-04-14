@@ -16,8 +16,6 @@ import pygmsh
 import meshio
 import numpy as np
 import sys
-import matplotlib.pyplot as plt
-from matplotlib import cm
 import math
 import scipy.special as sp
 from wulffpack import SingleCrystal
