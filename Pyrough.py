@@ -14,14 +14,14 @@
 # lmp file if MD is desired.  
 # 
 # ---------------------------------------------------------------------------
-from Sources import Param_class
-from Sources import Sample_class
+from src import Param_class
+from src import Sample_class
 import os
 import sys, subprocess
 
 print('#######################################################################################')
 print('#                            Running Random Surface script                            #')
-print('#     Jonathan Amodeo & Javier Gonzalez & Jennifer Izaguirre & Hugo Iteney 2023       #')
+print('#                          Jonathan Amodeo & Hugo Iteney 2023                         #')
 print('#######################################################################################')
 
 # _____________________Removing previous data____________________
@@ -31,7 +31,7 @@ subprocess.call(['rm', 'sample_with_atoms.lmp'])
 
 # _____________________Main Code____________________
 if sys.argv[1] == '-surface' :
-    subprocess.call(['python', './Sources/Surface_Analysis.py', sys.argv[2], sys.argv[3], sys.argv[4]])
+    subprocess.call(['python', './src/Surface_Analysis.py', sys.argv[2], sys.argv[3], sys.argv[4]])
 else :
     Param_file = sys.argv[1]
     out_pre = os.path.basename(Param_file)[:-5]
