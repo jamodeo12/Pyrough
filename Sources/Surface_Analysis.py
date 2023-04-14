@@ -70,7 +70,8 @@ X = kvals
 Y = Abins
 
 sup = 0
-low = 125
+#low = 125
+low = len(X)
 m, b = np.polyfit(np.log(X[sup:low]), np.log(Y[sup:low]), 1)
 
 H = -0.5*m-1
@@ -81,8 +82,8 @@ ax2 = fig.add_subplot(1, 3, 2)
 ax2.loglog(X, Y)
 ax2.loglog(X, np.exp(b)*np.power(X,m), label = 'H = '+str(round(H,2)))
 ax2.legend()
-#ax2.set_xlabel("Spatial Frequency $k$ [m-1]")
-#ax2.set_ylabel("PSD $P(k)$")
+ax2.set_xlabel("Spatial Frequency $k$ [m-1]")
+ax2.set_ylabel("PSD $P(k)$")
 #plt.tight_layout()
 
 print("Construction of equivalent rough surface ...")
@@ -94,7 +95,7 @@ Z = func.rough(xv, yv, H, 1, 50,50)
 ax3 = fig.add_subplot(1, 3, 3, projection='3d')
 ax3.grid(False)
 ax3.axis('off')
-ax3.scatter3D(xv, yv, Z, c=Z, cmap='jet')
+ax3.scatter3D(xv, yv, Z, c=Z, cmap='jet', s = 1)
 ax3.view_init(90, -90)
 
 plt.show()

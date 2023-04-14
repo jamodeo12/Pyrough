@@ -1,11 +1,11 @@
 {"Poly": 
     {"Length": 200,
-    "N_Faces" : 4,
+    "N_Faces" : 6,
     "Radius": 30,
     "N": 30,
     "M": 30, 
-    "C1": 0.75,
-    "H": 0.95,
+    "RMS": 2,
+    "H": 0.5,
     "Number_segments": 50,
     "Raw_stl": "na"}, 
 
