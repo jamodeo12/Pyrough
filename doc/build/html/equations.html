@@ -50,10 +50,9 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Rough surface generation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#spatial-frequencies">Spatial frequencies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#elementary-waves">Elementary waves</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#associated-amplitudes">Associated Amplitudes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#periodicity">Periodicity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#self-affine-scaling">Self-affine scaling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#power-spectrum-density">Power spectrum density</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#construction-method">Construction method</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="functions.html">Package functions</a></li>
@@ -88,66 +87,57 @@
              
   <div class="section" id="rough-surface-generation">
 <h1>Rough surface generation<a class="headerlink" href="#rough-surface-generation" title="Permalink to this headline">¶</a></h1>
-<p>The characterization of a rough surface can be done with respect to its spatial frequency content. This can be transformed into a constructive method by using a sum of trigonometric functions similar to a Fourier series. Each term in such a sum represents a certain frequency of spatial oscillation.</p>
-<div class="section" id="spatial-frequencies">
-<h2>Spatial frequencies<a class="headerlink" href="#spatial-frequencies" title="Permalink to this headline">¶</a></h2>
-<p>The mathematical expression of oscillations over time is given by <span class="math">\(cos(2\pi f t)\)</span> with <span class="math">\(f\)</span> the time frenquency in Hz.
-In the case of spatial oscilations, we simply have to replace time variables by spatial ones:</p>
+<p>The characterization of a rough surface can be done with respect to its spatial frequency content.
+This can be transformed into a constructive method by using a sum of trigonometric functions similar to a Fourier series.
+Each term in such a sum represents a certain frequency of spatial oscillation.</p>
+<div class="section" id="self-affine-scaling">
+<h2>Self-affine scaling<a class="headerlink" href="#self-affine-scaling" title="Permalink to this headline">¶</a></h2>
+<p>A broad-spectrum of natural surfaces shows an intrinsically multi-scale roughness.
+This scaling phenomenon is known as self-affine that differs from the self-similar fractal geometry by the anisotropric character of the scaling transformation.
+The self-affine scaling transformation for a height distribution <span class="math">\(h(x,y)\)</span> can be resumed by,</p>
 <div class="math">
-\[cos(2 \pi \nu x)\]</div>
-<p>with <span class="math">\(\nu\)</span> the spatial frequency in <span class="math">\(m^{-1}\)</span>.</p>
-<p>In the case of 2D and Cartesian coordinates, we have:</p>
-<div class="math">
-\[cos(2 \pi ( \nu_x x + \nu_y y)) = cos(\vec{k}.\vec{x})\]</div>
-<p>where <span class="math">\(\vec{k} = (k_x,k_y) = (2\pi \nu_x,2\pi \nu_y)\)</span> is the wave vector representing the direction of the wave and <span class="math">\(\vec{x} = (x,y)\)</span> the position vector.</p>
+\[\lambda^{H}h(\frac{x}{\lambda}, \frac{y}{\lambda}) = h(x,y)\]</div>
+<p>where <span class="math">\(H\)</span> is the Hurst exponent and <span class="math">\(\lambda\)</span> is a scalar.</p>
 </div>
-<div class="section" id="elementary-waves">
-<h2>Elementary waves<a class="headerlink" href="#elementary-waves" title="Permalink to this headline">¶</a></h2>
-<p>A rough surface <span class="math">\(z(x,y)\)</span> is composed of several elementary waves:</p>
+<div class="section" id="power-spectrum-density">
+<h2>Power spectrum density<a class="headerlink" href="#power-spectrum-density" title="Permalink to this headline">¶</a></h2>
+<p>The characterization of surface roughness relies on the description of representative spatial frequencies.
+The 2D power spectral density (PSD) <span class="math">\(C^{2D}(\mathbf{q})\)</span> is used to analyze a surface across a range of wave vectors <span class="math">\(\mathbf{q} = (q_x , q_y )\)</span> and describes the contribution of the various spatial frequencies.
+It is expressed as the fast Fourier transform of the autocorrelation function <span class="math">\(\langle h(\mathbf{x})h(\mathbf{0})\rangle\)</span> (with <span class="math">\(\mathbf{x} = (x,y)\)</span>),</p>
 <div class="math">
-\[cos(\vec{k}.\vec{x} + \phi)\]</div>
-<p>where <span class="math">\(\phi\)</span> is a phase angle.</p>
-<p>Due to the relationship <span class="math">\(sin(\theta) = cos(\frac{\pi}{2} - \theta)\)</span>, there is no influence of using either sines or cosines.</p>
-<p>For a random surface construction, the phase angle <span class="math">\(\phi\)</span> can be any value in the interval <span class="math">\([0;\pi]\)</span> or <span class="math">\([-\frac{\pi}{2};\frac{\pi}{2}]\)</span>.
-It follows then a uniform random distribution in such an interval of length <span class="math">\(\pi\)</span>.
-It is important to notice that there may be end-point or wrap-around effects if we choose an interval with a size bigger than <span class="math">\(\pi\)</span>.
-This is due to the cosine function being its own mirror image in steps of <span class="math">\(\pi\)</span>, according to <span class="math">\(cos(\pi - \theta) = -cos(\theta)\)</span>.</p>
-<p>In order to include this formulation in computational simulations, a discrete set of spatial frequencies is needed : <span class="math">\(\nu_x = m\)</span> and <span class="math">\(\nu_y = n\)</span>, where <span class="math">\(m\)</span> and <span class="math">\(n\)</span> are integers.</p>
-<p>We define <span class="math">\(M\)</span> and <span class="math">\(N\)</span> as respective high-frequency cutoffs for <span class="math">\(m\)</span> and <span class="math">\(n\)</span> so that <span class="math">\(m \in ⟦-M;M⟧\)</span> and <span class="math">\(n \in ⟦-N;N⟧\)</span>. This means that the shortest wavelengths being represented are respectively <span class="math">\(\lambda_{x,min} = \frac{1}{M}\)</span> and <span class="math">\(\lambda_{y,min} = \frac{1}{N}\)</span> for <span class="math">\(x\)</span> and <span class="math">\(y\)</span> directions.</p>
-<p>A rough surface is then constituted of elementary waves of the form:</p>
+\[C^{2D}(\mathbf{q}) = \frac{1}{(2\pi)^2} \int \langle h(\mathbf{x})h(\mathbf{0}) \rangle e^{-i\mathbf{q}.\mathbf{x}} d\mathbf{x}\]</div>
+<p>In the case of self-affine scaling, the PSD has a power-law dependence on the spatial frequency such as,</p>
 <div class="math">
-\[cos( \vec{k_{m,n}}.\vec{x} + \phi) = cos(2\pi (mx + ny) + \phi)\]</div>
-<p>To get a method of synthesizing a surface with no preferred direction of oscillation, we let <span class="math">\(m\)</span> and <span class="math">\(n\)</span> take positive and negative values with equal probabilities</p>
+\[C^{2D}(\textbf{q}) \propto \textbf{q}^{-2-2H}\]</div>
+<p>where <span class="math">\(H\)</span> is related to the surface fractal dimension <span class="math">\(D_f\)</span> by the relation <span class="math">\(D_f = 3 − H\)</span>.</p>
 </div>
-<div class="section" id="associated-amplitudes">
-<h2>Associated Amplitudes<a class="headerlink" href="#associated-amplitudes" title="Permalink to this headline">¶</a></h2>
-<p>Each elementary wave has an associated amplitude so that each wave component has the form <span class="math">\(A_{m,n} cos( \vec{k_{m,n}}.\vec{x} + \phi)\)</span>.</p>
-<p>The final surface is a sum over the wave components:</p>
+<div class="section" id="construction-method">
+<h2>Construction method<a class="headerlink" href="#construction-method" title="Permalink to this headline">¶</a></h2>
+<p>In <em>Pyrough</em>, rough surfaces are modeled in the real space using a sum of trigonometric functions where each term of the sum represents the contribution of a spatial frequency.
+In cartesian coordinates, the mathematical expression of spatial oscillations is given by,</p>
 <div class="math">
-\[z(\vec{x}) = \sum_{m,n} A_{m,n} cos(\vec{k_{m,n}}.\vec{x} + \phi)\]</div>
-<p>In order to obtain a more realistic rough surface, two more contributions should be made :</p>
-<blockquote>
-<div><ul class="simple">
-<li>Since <span class="math">\(\phi\)</span> can take any value in an interval of length <span class="math">\(\pi\)</span> with the same probability, <span class="math">\(\phi = U(m,n)\)</span> where <span class="math">\(U\)</span> states for a random function with a uniform distribution.</li>
-<li>Autocorrelation is implemented through <span class="math">\(A_{m,n}\)</span> which follows a Gaussian law. A Gaussian, or normal, distribution is chosen to get a smooth but random variation in amplitudes with no limit on the magnitude. Autocorrelation is important to modulate the Gaussian distribution and get credible roughness. It avoids or limits the presence of too rough peaks and valleys. Therefore, <span class="math">\(A_{m,n} = G(m,n).(m^2 + n^2)^{-\frac{b}{2}}\)</span> where <span class="math">\(G\)</span> states for a random function with a Gaussian distribution and <span class="math">\((m^2 + n^2)^{-\frac{b}{2}}\)</span> is the autocorrelation function.</li>
-</ul>
-</div></blockquote>
-<p>To sum up, we can represent rough surfaces by the final equation:</p>
+\[cos(\mathbf{q}.\mathbf{x} + \phi) = cos[2\pi(\nu_x x + \nu_y y) + \phi]\]</div>
+<p>where <span class="math">\(\nu_x\)</span> and <span class="math">\(\nu_y\)</span> are the the spatial frequencies along <span class="math">\(\vec{u_x}\)</span> and <span class="math">\(\vec{u_y}\)</span> directions respectively and <span class="math">\(\phi\)</span> is the phase.</p>
+<p>A discrete set of spatial frequencies <span class="math">\(\nu_x = a\)</span> and <span class="math">\(\nu_y =  b\)</span> (where <span class="math">\(a\)</span> and <span class="math">\(b\)</span> are integers) is used to rationalize the range of investigated frequencies.
+<span class="math">\(A\)</span> and <span class="math">\(B\)</span> are defined as the respective high-frequency cutoffs for <span class="math">\(a\)</span> and <span class="math">\(b\)</span> so that <span class="math">\(a \in [-A;A]\)</span> and <span class="math">\(b \in [-B;B]\)</span>.
+Thus, the shortest wavelengths are <span class="math">\(\lambda_{x,min} = \frac{1}{A}\)</span> and <span class="math">\(\lambda_{y,min} = \frac{1}{B}\)</span> along <span class="math">\(\vec{u_x}\)</span> and <span class="math">\(\vec{u_y}\)</span> directions, respectively.
+<span class="math">\(a\)</span> and <span class="math">\(b\)</span> can be positive or negative to ensure oscillations in both directions.
+A rough surface <span class="math">\(h(x,y)\)</span> can be described by a sum of elementary waves as,</p>
 <div class="math">
-\[z(x,y) = C_1 \sum^{M}_{m = -M} \sum^{N}_{n = -N} G(m,n).(m^2 + n^2)^{-\frac{b}{2}} cos[2 \pi (mx + ny) + U(m,n)]\]</div>
-<p>Where <span class="math">\(C_1\)</span> is a normalization factor and <span class="math">\(b\)</span> is the spectral exponent that parameterizes how fast the high frequencies are attenuated.</p>
+\[h(x,y) = \sum_{a=-A}^{A}  \sum_{b=-B}^{B} \alpha_{a,b}cos[2\pi(a x + b y) + \phi]\]</div>
+<p>where <span class="math">\(\alpha_{a,b}\)</span> is the associated amplitude to each elementary wave.</p>
+<p>Two more contributions are made in order to allow <em>Pyrough</em> to generate self-affine rough surfaces that are randomly perturbed.
+First, the phase is randomly perturbed using <span class="math">\(\phi = U(a,b)\)</span> where <span class="math">\(U\)</span> states for a uniform distribution on an interval of length <span class="math">\(\pi\)</span>.
+Also, random perturbations and self-affine aspects are implemented within <span class="math">\(\alpha_{a,b}\)</span>.
+One can for example choose <span class="math">\(\alpha_{a,b}\)</span> as a zero-centered Gaussian distribution to get a smooth but random variation in amplitudes without constraining the magnitude i.e., <span class="math">\(\alpha_{a,b} = G(a,b){(a^2+b^2)}^{-(1+H)}\)</span> where <span class="math">\(G\)</span> states for a reduced centered normal law and <span class="math">\({(a^2+b^2)}^{-(1+H)}\)</span> traduces the self-affine aspect of the surface.
+Finally, the construction of a randomly perturbed self-affine surface can be modeled as,</p>
+<div class="math">
+\[h(x,y) = C_1\sum_{a=-A}^{A} \sum_{b=-B}^{B} G(a,b) (a^2+b^2)^{-(1+H)} cos[2\pi(a x + b y) + U(a,b) ]\]</div>
+<p>in which H allows to monitor the roughness degree and <span class="math">\(C_1\)</span> is a normalization factor introduced to fit the surface heights to the sample dimensions.</p>
 <div class="figure align-center" id="id1">
-<img alt="_images/Influence_of_b.png" src="_images/Influence_of_b.png" />
-<p class="caption"><span class="caption-text">Surfaces generated on the square <span class="math">\([0,1]×[0,1]\)</span> by superposing 50 frequencies with spectral exponents <span class="math">\(b = 1.5\)</span>, <span class="math">\(b = 1.8\)</span>, <span class="math">\(b = 2\)</span> and <span class="math">\(b = 2.2\)</span>, clockwise from the top-left image.</span></p>
+<a class="reference internal image-reference" href="_images/H_influence.png"><img alt="_images/H_influence.png" src="_images/H_influence.png" style="width: 472.5px; height: 809.0px;" /></a>
+<p class="caption"><span class="caption-text">Random numerical self-affine rough surfaces for various Hurst exponents. a) H=-0.4, b) H=-0.1, c) H=0.3, d) H=1.0, e) PSD of the various <em>h</em> profiles. For all calculations, A=50, B=50 and h(x,y) values are normalized between 1 and -1.</span></p>
 </div>
-</div>
-<div class="section" id="periodicity">
-<h2>Periodicity<a class="headerlink" href="#periodicity" title="Permalink to this headline">¶</a></h2>
-<p>Due to its definition, the function <span class="math">\(z(x,y)\)</span> is periodic:</p>
-<div class="math">
-\[z(x+1,y) = C_1 \sum^{M}_{m = -M} \sum^{N}_{n = -N} G(m,n).(m^2 + n^2)^{-\frac{b}{2}} cos[2 \pi (mx + ny) + U(m,n) + 2m\pi] = z(x,y)\]</div>
-<p>The same demonstration for <span class="math">\(z(x,y+1)\)</span> justifies the periodicity of the function on the interval <span class="math">\([0;1]×[0;1]\)</span>.
-The surface is generated over a rectangle <span class="math">\([a; a + 1]×[b; b + 1]\)</span> or smaller in order to avoid spatial periodicity and pattern repetitions.</p>
 </div>
 </div>
 
