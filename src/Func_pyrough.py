@@ -1238,12 +1238,45 @@ def rotate_obj_wulff(obj_points, orien_x, orien_z):
     # plt.show()
     return (obj_points_f)
 
+def align_poly(vertices, angles):
+    """
+    Aligns the first facet with x-axis
+
+    :param vertices: List of nodes
+    :type vertices: array
+    :param angles: List of angles
+    :type angles: array
+
+    :return: Rotated nodes
+    """
+    theta = angles[0]
+    R = np.array([[np.cos(theta), -np.sin(theta), 0], [np.sin(theta), np.cos(theta), 0], [0, 0, 1]])
+    rotated_points = np.dot(vertices, R)
+    return (rotated_points)
 
 ####################################################################
 ####################### SURFACE ANALYSIS ###########################
 ####################################################################
 
 def rough(x, y, H, C1, M, N):
+    """
+    Generates a rough surface
+
+    :param x: List of x coordinates
+    :type x: array
+    :param y: List of y coordinates
+    :type y: array
+    :param H: Hurst exponent
+    :type H: float
+    :param C1: Normalization factor
+    :type C1: float
+    :param M: Scaling cartesian position
+    :type M: int
+    :param N: Scaling cartesian position
+    :type N: int
+
+    :return: Height matrix
+    """
     z = np.zeros(np.shape(x))
     listM = np.linspace(-M, M, 2 * M + 1)
     listN = np.linspace(-N, N, 2 * N + 1)
@@ -1263,29 +1296,58 @@ def rough(x, y, H, C1, M, N):
 
 
 def sigma(z):
+    """
+    Calculates the standard deviation of a height distribution
+
+    :param z: height matrix
+    :type z: array
+
+    :return: Standard deviation
+    """
     Z = z.flatten()
     l = np.mean(Z)
     return (round(np.sqrt(np.sum(np.power(Z - l, 2)) / len(Z)), 3))
 
 
-def RMS(z):
-    Z = z.flatten()
-    return (round(np.sqrt(np.sum(Z * Z) / len(Z)), 3))
-
-
 def sk(z):
+    """
+    Calculates the skewness of a height distribution
+
+    :param z: height matrix
+    :type z: array
+
+    :return: Skewness
+    """
     Z = z.flatten()
     l = np.mean(Z)
     return (round((1 / (sigma(z) ** 3 * len(Z))) * np.sum(np.power(Z - l, 3)), 3))
 
 
 def Kurto(z):
+    """
+    Calculates the kurtosis of a height distribution
+
+    :param z: height matrix
+    :type z: array
+
+    :return: Kurtosis
+    """
     Z = z.flatten()
     l = np.mean(Z)
     return (round((1 / (sigma(z) ** 4 * len(Z))) * np.sum(np.power(Z - l, 4)), 3))
 
 
 def rescale(D, scale):
+    """
+    Rescales the height distribution between zmin and zmax
+
+    :param D: Height matrix
+    :type D: array
+    :param scale: zmin and zmax
+    :type scale: list
+
+    :return: Rescaled matrix
+    """
     D = (D - np.min(D))
     D = D / np.max(D)
     lower = scale[0]
@@ -1293,23 +1355,3 @@ def rescale(D, scale):
     Df = [lower + (upper - lower) * x for x in D]
     return (np.asarray(Df))
 
-
-def lim_value(Y, k):
-    Yf = []
-    for y in Y:
-        if y >= k:
-            y = y - 1
-        Yf.append(y)
-    return (np.asarray(Yf))
-
-
-def rescaleRMS(Z, RMS_f):
-    RMS_i = RMS(Z)
-    C = np.sqrt(RMS_f ** 2 / RMS_i ** 2)
-    return (C * Z)
-
-def align_poly(vertices, angles):
-    theta = angles[0]
-    R = np.array([[np.cos(theta), -np.sin(theta), 0], [np.sin(theta), np.cos(theta), 0],[0, 0, 1]])
-    rotated_points = np.dot(vertices, R)
-    return(rotated_points)

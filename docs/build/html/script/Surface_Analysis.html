@@ -52,7 +52,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../equations.html">Rough surface generation</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../functions.html">Package functions</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="Pyrough.html">Pyrough module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Sample_class.html">Sample_class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Sample_class.html">Sample_class module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Param_class.html">Param_class module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Func_pyrough.html">Func_pyrough module</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Surface_Analysis module</a></li>
@@ -107,7 +107,7 @@
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Mean line : &#39;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="mi">2</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Deviation : &#39;</span><span class="p">,</span> <span class="n">func</span><span class="o">.</span><span class="n">sigma</span><span class="p">(</span><span class="n">D</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;RMS : &#39;</span><span class="p">,</span> <span class="n">func</span><span class="o">.</span><span class="n">RMS</span><span class="p">(</span><span class="n">D</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;RMS : &#39;</span><span class="p">,</span> <span class="n">func</span><span class="o">.</span><span class="n">rms_calc</span><span class="p">(</span><span class="n">D</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Skewness : &#39;</span><span class="p">,</span> <span class="n">func</span><span class="o">.</span><span class="n">sk</span><span class="p">(</span><span class="n">D</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Kurtosis : &#39;</span><span class="p">,</span> <span class="n">func</span><span class="o">.</span><span class="n">Kurto</span><span class="p">(</span><span class="n">D</span><span class="p">))</span>
 
