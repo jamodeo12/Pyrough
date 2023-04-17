@@ -15,7 +15,7 @@ D = func.rescale(D, scale)
 
 print('Mean line : ', round(np.mean(D),2))
 print('Deviation : ', func.sigma(D))
-print('RMS : ', func.RMS(D))
+print('RMS : ', func.rms_calc(D))
 print('Skewness : ', func.sk(D))
 print('Kurtosis : ', func.Kurto(D))
 
