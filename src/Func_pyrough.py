@@ -816,6 +816,14 @@ def write_stl(filename, vertices, face_list):
 
 
 def rms_calc(Z):
+    """
+    Calculates the RMS of a height distribution
+
+    :param z: height matrix
+    :type z: array
+
+    :return: RMS
+    """
     Z = np.asarray(Z)
     Z = Z.flatten()
     return (np.sqrt(np.sum(Z * Z) / len(Z)))
