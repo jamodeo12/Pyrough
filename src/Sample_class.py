@@ -658,6 +658,45 @@ def make_atom_grain(STL,
                     orien_z2,
                     vertices,
                     out_pre):
+    """
+    Creates grain.lmp which is an atomic position file.
+    This requires the stl of the box object that already has surface roughness applied to it.
+    It adds then atoms of material1 in it and fills the rest of the box with atoms of material2.
+
+    :param STL: The stl file with an object that has surface roughness applied to it
+    :type STL: str
+    :param lattice_structure1: The lattice structure of the cristal 1
+    :type lattice_structure1: str
+    :param lattice_parameter1: The lattice parameter of the cristal 1 in Angstrom
+    :type lattice_parameter1: float
+    :param material1: The chemical symbol of the desired element 1
+    :type material1: str
+    :param orien_x1: The orientation of the cristal 1 in the x direction
+    :type orien_x1: list
+    :param orien_y1: The orientation of the cristal 1 in the y direction
+    :type orien_y1: list
+    :param orien_z1: The orientation of the cristal 1 in the z direction
+    :type orien_z1: list
+    :param lattice_structure2: The lattice structure of the cristal 2
+    :type lattice_structure2: str
+    :param lattice_parameter2: The lattice parameter of the cristal 2 in Angstrom
+    :type lattice_parameter2: float
+    :param material2: The chemical symbol of the desired element 2
+    :type material2: str
+    :param orien_x2: The orientation of the cristal 2 in the x direction
+    :type orien_x2: list
+    :param orien_y2: The orientation of the cristal 2 in the y direction
+    :type orien_y2: list
+    :param orien_z2: The orientation of the cristal 2 in the z direction
+    :type orien_z2: list
+    :param vertices: List of nodes
+    :type vertices: array
+    :param out_pre: prefix for output file
+    :type out_pre: str
+
+    :return:
+    """
+
     dim_x = max(vertices[:, 0]) - min(vertices[:, 0])
     dim_y = max(vertices[:, 1]) - min(vertices[:, 1])
     dim_z = max(vertices[:, 2]) - min(vertices[:, 2])

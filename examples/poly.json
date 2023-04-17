@@ -1,7 +1,7 @@
 {"Poly": 
-    {"Length": 200,
+    {"Length": 300,
     "N_Faces" : 6,
-    "Radius": 30,
+    "Radius": 50,
     "N": 30,
     "M": 30, 
     "RMS": 2,
