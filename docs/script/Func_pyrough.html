@@ -52,7 +52,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../equations.html">Rough surface generation</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../functions.html">Package functions</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="Pyrough.html">Pyrough module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Sample_class.html">Sample_class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Sample_class.html">Sample_class module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Param_class.html">Param_class module</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Func_pyrough module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Surface_Analysis.html">Surface_Analysis module</a></li>
@@ -93,17 +93,39 @@
 <dl class="function">
 <dt id="Func_pyrough.Kurto">
 <code class="descclassname">Func_pyrough.</code><code class="descname">Kurto</code><span class="sig-paren">(</span><em>z</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.Kurto" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="Func_pyrough.RMS">
-<code class="descclassname">Func_pyrough.</code><code class="descname">RMS</code><span class="sig-paren">(</span><em>z</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.RMS" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Calculates the kurtosis of a height distribution</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>z</strong> (<em>array</em>) – height matrix</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Kurtosis</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="function">
 <dt id="Func_pyrough.align_poly">
 <code class="descclassname">Func_pyrough.</code><code class="descname">align_poly</code><span class="sig-paren">(</span><em>vertices</em>, <em>angles</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.align_poly" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Aligns the first facet with x-axis</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>vertices</strong> (<em>array</em>) – List of nodes</li>
+<li><strong>angles</strong> (<em>array</em>) – List of angles</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Rotated nodes</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="function">
 <dt id="Func_pyrough.base">
@@ -336,11 +358,6 @@
 </tbody>
 </table>
 </dd></dl>
-
-<dl class="function">
-<dt id="Func_pyrough.lim_value">
-<code class="descclassname">Func_pyrough.</code><code class="descname">lim_value</code><span class="sig-paren">(</span><em>Y</em>, <em>k</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.lim_value" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 <dl class="function">
 <dt id="Func_pyrough.make_obj">
@@ -693,12 +710,23 @@
 <dl class="function">
 <dt id="Func_pyrough.rescale">
 <code class="descclassname">Func_pyrough.</code><code class="descname">rescale</code><span class="sig-paren">(</span><em>D</em>, <em>scale</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.rescale" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="Func_pyrough.rescaleRMS">
-<code class="descclassname">Func_pyrough.</code><code class="descname">rescaleRMS</code><span class="sig-paren">(</span><em>Z</em>, <em>RMS_f</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.rescaleRMS" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Rescales the height distribution between zmin and zmax</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>D</strong> (<em>array</em>) – Height matrix</li>
+<li><strong>scale</strong> (<em>list</em>) – zmin and zmax</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Rescaled matrix</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="function">
 <dt id="Func_pyrough.rho">
@@ -792,7 +820,27 @@
 <dl class="function">
 <dt id="Func_pyrough.rough">
 <code class="descclassname">Func_pyrough.</code><code class="descname">rough</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>H</em>, <em>C1</em>, <em>M</em>, <em>N</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.rough" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Generates a rough surface</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> (<em>array</em>) – List of x coordinates</li>
+<li><strong>y</strong> (<em>array</em>) – List of y coordinates</li>
+<li><strong>H</strong> (<em>float</em>) – Hurst exponent</li>
+<li><strong>C1</strong> (<em>float</em>) – Normalization factor</li>
+<li><strong>M</strong> (<em>int</em>) – Scaling cartesian position</li>
+<li><strong>N</strong> (<em>int</em>) – Scaling cartesian position</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Height matrix</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="function">
 <dt id="Func_pyrough.rough_matrix_sphere">
@@ -823,12 +871,34 @@
 <dl class="function">
 <dt id="Func_pyrough.sigma">
 <code class="descclassname">Func_pyrough.</code><code class="descname">sigma</code><span class="sig-paren">(</span><em>z</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.sigma" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Calculates the standard deviation of a height distribution</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>z</strong> (<em>array</em>) – height matrix</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Standard deviation</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="function">
 <dt id="Func_pyrough.sk">
 <code class="descclassname">Func_pyrough.</code><code class="descname">sk</code><span class="sig-paren">(</span><em>z</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.sk" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Calculates the skewness of a height distribution</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>z</strong> (<em>array</em>) – height matrix</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Skewness</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="function">
 <dt id="Func_pyrough.sphere">
