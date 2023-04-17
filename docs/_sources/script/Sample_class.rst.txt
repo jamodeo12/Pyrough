@@ -1,4 +1,4 @@
-Sample\_class
+Sample\_class module
 ====================
 
 .. automodule:: Sample_class
