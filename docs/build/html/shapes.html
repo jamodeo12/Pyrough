@@ -56,8 +56,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#sphere">Sphere</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#wire">Wire</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#faceted-wire">Faceted wire</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#cube">Cube</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#wulff-shaped-faceted-nanoparticle">Wulff-shaped faceted nanoparticle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cube">Cube</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="biblio.html">Bibliography</a></li>
@@ -93,6 +93,9 @@
 <p>In this chapter, the strategy for applying roughness to simple shapes is explained.</p>
 <div class="section" id="box">
 <h2>Box<a class="headerlink" href="#box" title="Permalink to this headline">¶</a></h2>
+<p>A box of dimensions <em>width</em>, <em>length</em> and <em>height</em> is first constructed.
+Surface nodes are the ones at the maximum height of the pristine sample mesh.
+The roughening procedure consists in displacing each surface node along the <em>z</em>-axis according to <em>h(x,y)</em>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;Box&quot;</span><span class="p">:</span>
     <span class="p">{</span><span class="s2">&quot;H&quot;</span><span class="p">:</span> <span class="mf">0.45</span><span class="p">,</span>
     <span class="s2">&quot;Height&quot;</span><span class="p">:</span> <span class="mf">50.0</span><span class="p">,</span>
@@ -121,6 +124,7 @@
 </div>
 <div class="section" id="sphere">
 <h2>Sphere<a class="headerlink" href="#sphere" title="Permalink to this headline">¶</a></h2>
+<p>Surface roughness is applied to each surface node of the sphere by summing spherical harmonics.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;Sphere&quot;</span><span class="p">:</span> 
     <span class="p">{</span><span class="s2">&quot;Number_segments&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> 
     <span class="s2">&quot;C1&quot;</span><span class="p">:</span> <span class="mi">10000</span><span class="p">,</span>
@@ -147,6 +151,9 @@
 </div>
 <div class="section" id="wire">
 <h2>Wire<a class="headerlink" href="#wire" title="Permalink to this headline">¶</a></h2>
+<p>A cylinder of radius <em>radius</em> and length <em>length</em> is constructed.
+Surface nodes are those positioned on the external radius <em>r</em> of the cylinder.
+Thus, each surface node from the wire mesh is moved along <em>r</em>-axis by its corresponding displacement vector from the generated rough surface.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;Wire&quot;</span><span class="p">:</span> 
     <span class="p">{</span><span class="s2">&quot;Length&quot;</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span> 
     <span class="s2">&quot;Radius&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> 
@@ -174,6 +181,8 @@
 </div>
 <div class="section" id="faceted-wire">
 <h2>Faceted wire<a class="headerlink" href="#faceted-wire" title="Permalink to this headline">¶</a></h2>
+<p>The initial mesh is constructed from centered regular polygon base with <em>nfaces</em> sides and of length <em>length</em>.
+Surface nodes are here translated along the facet normal <span class="math">\(\vec{n}\)</span> they belong to.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;Poly&quot;</span><span class="p">:</span> 
     <span class="p">{</span><span class="s2">&quot;Length&quot;</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span>
     <span class="s2">&quot;N_Faces&quot;</span> <span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
@@ -200,33 +209,11 @@
 </pre></div>
 </div>
 </div>
-<div class="section" id="cube">
-<h2>Cube<a class="headerlink" href="#cube" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;Cube&quot;</span><span class="p">:</span>
-    <span class="p">{</span><span class="s2">&quot;H&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="s2">&quot;RMS&quot;</span><span class="p">:</span> <span class="mf">1.5</span><span class="p">,</span>
-    <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
-    <span class="s2">&quot;M&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
-    <span class="s2">&quot;Length&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
-    <span class="s2">&quot;Raw_stl&quot;</span><span class="p">:</span> <span class="s2">&quot;na&quot;</span><span class="p">},</span>
-
-<span class="s2">&quot;Output&quot;</span><span class="p">:</span>
-    <span class="p">{</span><span class="s2">&quot;ATOM_lmp&quot;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> 
-    <span class="s2">&quot;FEM_stl&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
-
-<span class="s2">&quot;ATOM_Param&quot;</span><span class="p">:</span> 
-    <span class="p">{</span><span class="s2">&quot;Lattice_parameter&quot;</span><span class="p">:</span> <span class="mf">4.07</span><span class="p">,</span> 
-    <span class="s2">&quot;Material&quot;</span><span class="p">:</span> <span class="s2">&quot;Au&quot;</span><span class="p">,</span> 
-    <span class="s2">&quot;Orien_z&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> 
-    <span class="s2">&quot;Orien_y&quot;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="p">,</span> 
-    <span class="s2">&quot;Orien_x&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> 
-    <span class="s2">&quot;Lattice_structure&quot;</span><span class="p">:</span> <span class="s2">&quot;fcc&quot;</span><span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</div>
 <div class="section" id="wulff-shaped-faceted-nanoparticle">
 <h2>Wulff-shaped faceted nanoparticle<a class="headerlink" href="#wulff-shaped-faceted-nanoparticle" title="Permalink to this headline">¶</a></h2>
+<p>One rough surface per facet is generated in this case.
+Each node is translated along its facet normal <span class="math">\(\vec{n}\)</span> using <em>h(x,y)</em> to build the rough surface.
+The process is repeated for each facet of the sample.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;Wulff&quot;</span><span class="p">:</span>
     <span class="p">{</span><span class="s2">&quot;H&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
     <span class="s2">&quot;C1&quot;</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span>
@@ -247,6 +234,33 @@
     <span class="s2">&quot;Orien_x&quot;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> 
     <span class="s2">&quot;Orien_y&quot;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> 
     <span class="s2">&quot;Orien_z&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> 
+    <span class="s2">&quot;Lattice_structure&quot;</span><span class="p">:</span> <span class="s2">&quot;fcc&quot;</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="cube">
+<h2>Cube<a class="headerlink" href="#cube" title="Permalink to this headline">¶</a></h2>
+<p>A pristine cube of edge length <em>length</em> is generated.
+Surface roughness is applied in the same way as in the case of wulff shapes.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;Cube&quot;</span><span class="p">:</span>
+    <span class="p">{</span><span class="s2">&quot;H&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="s2">&quot;RMS&quot;</span><span class="p">:</span> <span class="mf">1.5</span><span class="p">,</span>
+    <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
+    <span class="s2">&quot;M&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
+    <span class="s2">&quot;Length&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+    <span class="s2">&quot;Raw_stl&quot;</span><span class="p">:</span> <span class="s2">&quot;na&quot;</span><span class="p">},</span>
+
+<span class="s2">&quot;Output&quot;</span><span class="p">:</span>
+    <span class="p">{</span><span class="s2">&quot;ATOM_lmp&quot;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> 
+    <span class="s2">&quot;FEM_stl&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+
+<span class="s2">&quot;ATOM_Param&quot;</span><span class="p">:</span> 
+    <span class="p">{</span><span class="s2">&quot;Lattice_parameter&quot;</span><span class="p">:</span> <span class="mf">4.07</span><span class="p">,</span> 
+    <span class="s2">&quot;Material&quot;</span><span class="p">:</span> <span class="s2">&quot;Au&quot;</span><span class="p">,</span> 
+    <span class="s2">&quot;Orien_z&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> 
+    <span class="s2">&quot;Orien_y&quot;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="p">,</span> 
+    <span class="s2">&quot;Orien_x&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> 
     <span class="s2">&quot;Lattice_structure&quot;</span><span class="p">:</span> <span class="s2">&quot;fcc&quot;</span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
