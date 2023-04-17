@@ -163,7 +163,36 @@ In continuation will add that a separate files will be stored if they want to re
 <dl class="function">
 <dt id="Sample_class.make_atom_grain">
 <code class="descclassname">Sample_class.</code><code class="descname">make_atom_grain</code><span class="sig-paren">(</span><em>STL</em>, <em>lattice_structure1</em>, <em>lattice_parameter1</em>, <em>material1</em>, <em>orien_x1</em>, <em>orien_y1</em>, <em>orien_z1</em>, <em>lattice_structure2</em>, <em>lattice_parameter2</em>, <em>material2</em>, <em>orien_x2</em>, <em>orien_y2</em>, <em>orien_z2</em>, <em>vertices</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Sample_class.make_atom_grain" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Generates an atomic positions file for the grain object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>STL</strong> (<em>str</em>) – The stl file with an object that has surface roughness applied to it</li>
+<li><strong>lattice_structure1</strong> (<em>str</em>) – The lattice structure of the cristal 1</li>
+<li><strong>lattice_parameter1</strong> (<em>float</em>) – The lattice parameter of the cristal 1 in Angstrom</li>
+<li><strong>material1</strong> (<em>str</em>) – The chemical symbol of the desired element 1</li>
+<li><strong>orien_x1</strong> (<em>list</em>) – The orientation of the cristal 1 in the x direction</li>
+<li><strong>orien_y1</strong> (<em>list</em>) – The orientation of the cristal 1 in the y direction</li>
+<li><strong>orien_z1</strong> (<em>list</em>) – The orientation of the cristal 1 in the z direction</li>
+<li><strong>lattice_structure2</strong> (<em>str</em>) – The lattice structure of the cristal 2</li>
+<li><strong>lattice_parameter2</strong> (<em>float</em>) – The lattice parameter of the cristal 2 in Angstrom</li>
+<li><strong>material2</strong> (<em>str</em>) – The chemical symbol of the desired element 2</li>
+<li><strong>orien_x2</strong> (<em>list</em>) – The orientation of the cristal 2 in the x direction</li>
+<li><strong>orien_y2</strong> (<em>list</em>) – The orientation of the cristal 2 in the y direction</li>
+<li><strong>orien_z2</strong> (<em>list</em>) – The orientation of the cristal 2 in the z direction</li>
+<li><strong>vertices</strong> (<em>array</em>) – List of nodes</li>
+<li><strong>out_pre</strong> (<em>str</em>) – Prefix of output file</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="function">
 <dt id="Sample_class.make_box">
