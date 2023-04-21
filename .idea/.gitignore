@@ -6,3 +6,5 @@
 ./*.obj
 ./*_stat.txt
 ./*.csv
+./examples/*.png
+./docs/build
