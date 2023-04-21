@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Pyrough - a tool for rough samples constructions
+Pyrough - a tool to build 3D samples with rough surfaces for atomistic and finite-element simulations 
 ===================================================
 
 **Pyrough** is a Python code generating 3D objects with the ability to manage surface height distribution of isotropic and Gaussian random surfaces by using classical roughness theory.

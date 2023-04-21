@@ -1,29 +1,20 @@
 <!DOCTYPE html>
-<html class="writer-html4" lang="en" >
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Generation of rough shapes &mdash; Pyrough  documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <title>Generation of rough shapes &mdash; Pyrough  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-      <script>
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'./',
-              VERSION:'',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -36,7 +27,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> Pyrough<img src="_static/Logo.png" class="logo" alt="Logo"/>
+            <a href="index.html" class="icon icon-home"> Pyrough
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -46,7 +37,7 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption"><span class="caption-text">Contents</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="equations.html">Rough surface generation</a></li>
@@ -77,8 +68,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Generation of rough shapes</li>
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">Generation of rough shapes</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/shapes.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -88,15 +79,15 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="generation-of-rough-shapes">
-<h1>Generation of rough shapes<a class="headerlink" href="#generation-of-rough-shapes" title="Permalink to this headline">¶</a></h1>
+  <section id="generation-of-rough-shapes">
+<h1>Generation of rough shapes<a class="headerlink" href="#generation-of-rough-shapes" title="Permalink to this heading"></a></h1>
 <p>In this chapter, the strategy for applying roughness to simple shapes is explained.</p>
-<div class="section" id="box">
-<h2>Box<a class="headerlink" href="#box" title="Permalink to this headline">¶</a></h2>
+<section id="box">
+<h2>Box<a class="headerlink" href="#box" title="Permalink to this heading"></a></h2>
 <p>A box of dimensions <em>width</em>, <em>length</em> and <em>height</em> is first constructed.
 Surface nodes are the ones at the maximum height of the pristine sample mesh.
 The roughening procedure consists in displacing each surface node along the <em>z</em>-axis according to <em>h(x,y)</em>.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;Box&quot;</span><span class="p">:</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;Box&quot;</span><span class="p">:</span>
     <span class="p">{</span><span class="s2">&quot;H&quot;</span><span class="p">:</span> <span class="mf">0.45</span><span class="p">,</span>
     <span class="s2">&quot;Height&quot;</span><span class="p">:</span> <span class="mf">50.0</span><span class="p">,</span>
     <span class="s2">&quot;Width&quot;</span><span class="p">:</span> <span class="mf">151.0</span><span class="p">,</span>
@@ -121,11 +112,11 @@ The roughening procedure consists in displacing each surface node along the <em>
 <span class="p">}</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="sphere">
-<h2>Sphere<a class="headerlink" href="#sphere" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="sphere">
+<h2>Sphere<a class="headerlink" href="#sphere" title="Permalink to this heading"></a></h2>
 <p>Surface roughness is applied to each surface node of the sphere by summing spherical harmonics.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;Sphere&quot;</span><span class="p">:</span> 
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;Sphere&quot;</span><span class="p">:</span> 
     <span class="p">{</span><span class="s2">&quot;Number_segments&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> 
     <span class="s2">&quot;C1&quot;</span><span class="p">:</span> <span class="mi">10000</span><span class="p">,</span>
     <span class="s2">&quot;H&quot;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span>
@@ -148,13 +139,13 @@ The roughening procedure consists in displacing each surface node along the <em>
 <span class="p">}</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="wire">
-<h2>Wire<a class="headerlink" href="#wire" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="wire">
+<h2>Wire<a class="headerlink" href="#wire" title="Permalink to this heading"></a></h2>
 <p>A cylinder of radius <em>radius</em> and length <em>length</em> is constructed.
 Surface nodes are those positioned on the external radius <em>r</em> of the cylinder.
 Thus, each surface node from the wire mesh is moved along <em>r</em>-axis by its corresponding displacement vector from the generated rough surface.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;Wire&quot;</span><span class="p">:</span> 
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;Wire&quot;</span><span class="p">:</span> 
     <span class="p">{</span><span class="s2">&quot;Length&quot;</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span> 
     <span class="s2">&quot;Radius&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> 
     <span class="s2">&quot;C1&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
@@ -178,12 +169,12 @@ Thus, each surface node from the wire mesh is moved along <em>r</em>-axis by its
 <span class="p">}</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="faceted-wire">
-<h2>Faceted wire<a class="headerlink" href="#faceted-wire" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="faceted-wire">
+<h2>Faceted wire<a class="headerlink" href="#faceted-wire" title="Permalink to this heading"></a></h2>
 <p>The initial mesh is constructed from centered regular polygon base with <em>nfaces</em> sides and of length <em>length</em>.
-Surface nodes are here translated along the facet normal <span class="math">\(\vec{n}\)</span> they belong to.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;Poly&quot;</span><span class="p">:</span> 
+Surface nodes are here translated along the facet normal <span class="math notranslate nohighlight">\(\vec{n}\)</span> they belong to.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;Poly&quot;</span><span class="p">:</span> 
     <span class="p">{</span><span class="s2">&quot;Length&quot;</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span>
     <span class="s2">&quot;N_Faces&quot;</span> <span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
     <span class="s2">&quot;Radius&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
@@ -208,13 +199,13 @@ Surface nodes are here translated along the facet normal <span class="math">\(\v
 <span class="p">}</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="wulff-shaped-faceted-nanoparticle">
-<h2>Wulff-shaped faceted nanoparticle<a class="headerlink" href="#wulff-shaped-faceted-nanoparticle" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="wulff-shaped-faceted-nanoparticle">
+<h2>Wulff-shaped faceted nanoparticle<a class="headerlink" href="#wulff-shaped-faceted-nanoparticle" title="Permalink to this heading"></a></h2>
 <p>One rough surface per facet is generated in this case.
-Each node is translated along its facet normal <span class="math">\(\vec{n}\)</span> using <em>h(x,y)</em> to build the rough surface.
+Each node is translated along its facet normal <span class="math notranslate nohighlight">\(\vec{n}\)</span> using <em>h(x,y)</em> to build the rough surface.
 The process is repeated for each facet of the sample.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;Wulff&quot;</span><span class="p">:</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;Wulff&quot;</span><span class="p">:</span>
     <span class="p">{</span><span class="s2">&quot;H&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
     <span class="s2">&quot;C1&quot;</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span>
     <span class="s2">&quot;n_atoms&quot;</span><span class="p">:</span> <span class="mi">50000</span><span class="p">,</span> 
@@ -238,12 +229,12 @@ The process is repeated for each facet of the sample.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="cube">
-<h2>Cube<a class="headerlink" href="#cube" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="cube">
+<h2>Cube<a class="headerlink" href="#cube" title="Permalink to this heading"></a></h2>
 <p>A pristine cube of edge length <em>length</em> is generated.
 Surface roughness is applied in the same way as in the case of wulff shapes.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;Cube&quot;</span><span class="p">:</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;Cube&quot;</span><span class="p">:</span>
     <span class="p">{</span><span class="s2">&quot;H&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
     <span class="s2">&quot;RMS&quot;</span><span class="p">:</span> <span class="mf">1.5</span><span class="p">,</span>
     <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
@@ -265,8 +256,8 @@ Surface roughness is applied in the same way as in the case of wulff shapes.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
