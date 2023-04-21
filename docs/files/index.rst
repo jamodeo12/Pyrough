@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 Pyrough - a tool to build 3D samples with rough surfaces for atomistic and finite-element simulations 
-===================================================
+=====================================================================================================
 
 **Pyrough** is a Python code generating 3D objects with the ability to manage surface height distribution of isotropic and Gaussian random surfaces by using classical roughness theory.
 **Pyrough** constructs both classical mesh samples (.msh, .stl, etc.) compatible with most FEM programs as well as atomistic structures (.lmp, .xyz, .cfg, etc.) for further molecular dynamics studies. 
