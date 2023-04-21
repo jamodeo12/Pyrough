@@ -1,29 +1,20 @@
 <!DOCTYPE html>
-<html class="writer-html4" lang="en" >
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rough surface generation &mdash; Pyrough  documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <title>Rough surface generation &mdash; Pyrough  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-      <script>
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'./',
-              VERSION:'',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -36,7 +27,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> Pyrough<img src="_static/Logo.png" class="logo" alt="Logo"/>
+            <a href="index.html" class="icon icon-home"> Pyrough
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -46,7 +37,7 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption"><span class="caption-text">Contents</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Rough surface generation</a><ul>
@@ -74,8 +65,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Rough surface generation</li>
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">Rough surface generation</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/equations.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -85,61 +76,63 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="rough-surface-generation">
-<h1>Rough surface generation<a class="headerlink" href="#rough-surface-generation" title="Permalink to this headline">¶</a></h1>
+  <section id="rough-surface-generation">
+<h1>Rough surface generation<a class="headerlink" href="#rough-surface-generation" title="Permalink to this heading"></a></h1>
 <p>The characterization of a rough surface can be done with respect to its spatial frequency content.
 This can be transformed into a constructive method by using a sum of trigonometric functions similar to a Fourier series.
 Each term in such a sum represents a certain frequency of spatial oscillation.</p>
-<div class="section" id="self-affine-scaling">
-<h2>Self-affine scaling<a class="headerlink" href="#self-affine-scaling" title="Permalink to this headline">¶</a></h2>
+<section id="self-affine-scaling">
+<h2>Self-affine scaling<a class="headerlink" href="#self-affine-scaling" title="Permalink to this heading"></a></h2>
 <p>A broad-spectrum of natural surfaces shows an intrinsically multi-scale roughness.
 This scaling phenomenon is known as self-affine that differs from the self-similar fractal geometry by the anisotropric character of the scaling transformation.
-The self-affine scaling transformation for a height distribution <span class="math">\(h(x,y)\)</span> can be resumed by,</p>
-<div class="math">
+The self-affine scaling transformation for a height distribution <span class="math notranslate nohighlight">\(h(x,y)\)</span> can be resumed by,</p>
+<div class="math notranslate nohighlight">
 \[\lambda^{H}h(\frac{x}{\lambda}, \frac{y}{\lambda}) = h(x,y)\]</div>
-<p>where <span class="math">\(H\)</span> is the Hurst exponent and <span class="math">\(\lambda\)</span> is a scalar.</p>
-</div>
-<div class="section" id="power-spectrum-density">
-<h2>Power spectrum density<a class="headerlink" href="#power-spectrum-density" title="Permalink to this headline">¶</a></h2>
+<p>where <span class="math notranslate nohighlight">\(H\)</span> is the Hurst exponent and <span class="math notranslate nohighlight">\(\lambda\)</span> is a scalar.</p>
+</section>
+<section id="power-spectrum-density">
+<h2>Power spectrum density<a class="headerlink" href="#power-spectrum-density" title="Permalink to this heading"></a></h2>
 <p>The characterization of surface roughness relies on the description of representative spatial frequencies.
-The 2D power spectral density (PSD) <span class="math">\(C^{2D}(\mathbf{q})\)</span> is used to analyze a surface across a range of wave vectors <span class="math">\(\mathbf{q} = (q_x , q_y )\)</span> and describes the contribution of the various spatial frequencies.
-It is expressed as the fast Fourier transform of the autocorrelation function <span class="math">\(\langle h(\mathbf{x})h(\mathbf{0})\rangle\)</span> (with <span class="math">\(\mathbf{x} = (x,y)\)</span>),</p>
-<div class="math">
+The 2D power spectral density (PSD) <span class="math notranslate nohighlight">\(C^{2D}(\mathbf{q})\)</span> is used to analyze a surface across a range of wave vectors <span class="math notranslate nohighlight">\(\mathbf{q} = (q_x , q_y )\)</span> and describes the contribution of the various spatial frequencies.
+It is expressed as the fast Fourier transform of the autocorrelation function <span class="math notranslate nohighlight">\(\langle h(\mathbf{x})h(\mathbf{0})\rangle\)</span> (with <span class="math notranslate nohighlight">\(\mathbf{x} = (x,y)\)</span>),</p>
+<div class="math notranslate nohighlight">
 \[C^{2D}(\mathbf{q}) = \frac{1}{(2\pi)^2} \int \langle h(\mathbf{x})h(\mathbf{0}) \rangle e^{-i\mathbf{q}.\mathbf{x}} d\mathbf{x}\]</div>
 <p>In the case of self-affine scaling, the PSD has a power-law dependence on the spatial frequency such as,</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[C^{2D}(\textbf{q}) \propto \textbf{q}^{-2-2H}\]</div>
-<p>where <span class="math">\(H\)</span> is related to the surface fractal dimension <span class="math">\(D_f\)</span> by the relation <span class="math">\(D_f = 3 − H\)</span>.</p>
-</div>
-<div class="section" id="construction-method">
-<h2>Construction method<a class="headerlink" href="#construction-method" title="Permalink to this headline">¶</a></h2>
+<p>where <span class="math notranslate nohighlight">\(H\)</span> is related to the surface fractal dimension <span class="math notranslate nohighlight">\(D_f\)</span> by the relation <span class="math notranslate nohighlight">\(D_f = 3 − H\)</span>.</p>
+</section>
+<section id="construction-method">
+<h2>Construction method<a class="headerlink" href="#construction-method" title="Permalink to this heading"></a></h2>
 <p>In <em>Pyrough</em>, rough surfaces are modeled in the real space using a sum of trigonometric functions where each term of the sum represents the contribution of a spatial frequency.
 In cartesian coordinates, the mathematical expression of spatial oscillations is given by,</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[cos(\mathbf{q}.\mathbf{x} + \phi) = cos[2\pi(\nu_x x + \nu_y y) + \phi]\]</div>
-<p>where <span class="math">\(\nu_x\)</span> and <span class="math">\(\nu_y\)</span> are the the spatial frequencies along <span class="math">\(\vec{u_x}\)</span> and <span class="math">\(\vec{u_y}\)</span> directions respectively and <span class="math">\(\phi\)</span> is the phase.</p>
-<p>A discrete set of spatial frequencies <span class="math">\(\nu_x = a\)</span> and <span class="math">\(\nu_y =  b\)</span> (where <span class="math">\(a\)</span> and <span class="math">\(b\)</span> are integers) is used to rationalize the range of investigated frequencies.
-<span class="math">\(A\)</span> and <span class="math">\(B\)</span> are defined as the respective high-frequency cutoffs for <span class="math">\(a\)</span> and <span class="math">\(b\)</span> so that <span class="math">\(a \in [-A;A]\)</span> and <span class="math">\(b \in [-B;B]\)</span>.
-Thus, the shortest wavelengths are <span class="math">\(\lambda_{x,min} = \frac{1}{A}\)</span> and <span class="math">\(\lambda_{y,min} = \frac{1}{B}\)</span> along <span class="math">\(\vec{u_x}\)</span> and <span class="math">\(\vec{u_y}\)</span> directions, respectively.
-<span class="math">\(a\)</span> and <span class="math">\(b\)</span> can be positive or negative to ensure oscillations in both directions.
-A rough surface <span class="math">\(h(x,y)\)</span> can be described by a sum of elementary waves as,</p>
-<div class="math">
+<p>where <span class="math notranslate nohighlight">\(\nu_x\)</span> and <span class="math notranslate nohighlight">\(\nu_y\)</span> are the the spatial frequencies along <span class="math notranslate nohighlight">\(\vec{u_x}\)</span> and <span class="math notranslate nohighlight">\(\vec{u_y}\)</span> directions respectively and <span class="math notranslate nohighlight">\(\phi\)</span> is the phase.</p>
+<p>A discrete set of spatial frequencies <span class="math notranslate nohighlight">\(\nu_x = a\)</span> and <span class="math notranslate nohighlight">\(\nu_y =  b\)</span> (where <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> are integers) is used to rationalize the range of investigated frequencies.
+<span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> are defined as the respective high-frequency cutoffs for <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> so that <span class="math notranslate nohighlight">\(a \in [-A;A]\)</span> and <span class="math notranslate nohighlight">\(b \in [-B;B]\)</span>.
+Thus, the shortest wavelengths are <span class="math notranslate nohighlight">\(\lambda_{x,min} = \frac{1}{A}\)</span> and <span class="math notranslate nohighlight">\(\lambda_{y,min} = \frac{1}{B}\)</span> along <span class="math notranslate nohighlight">\(\vec{u_x}\)</span> and <span class="math notranslate nohighlight">\(\vec{u_y}\)</span> directions, respectively.
+<span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> can be positive or negative to ensure oscillations in both directions.
+A rough surface <span class="math notranslate nohighlight">\(h(x,y)\)</span> can be described by a sum of elementary waves as,</p>
+<div class="math notranslate nohighlight">
 \[h(x,y) = \sum_{a=-A}^{A}  \sum_{b=-B}^{B} \alpha_{a,b}cos[2\pi(a x + b y) + \phi]\]</div>
-<p>where <span class="math">\(\alpha_{a,b}\)</span> is the associated amplitude to each elementary wave.</p>
+<p>where <span class="math notranslate nohighlight">\(\alpha_{a,b}\)</span> is the associated amplitude to each elementary wave.</p>
 <p>Two more contributions are made in order to allow <em>Pyrough</em> to generate self-affine rough surfaces that are randomly perturbed.
-First, the phase is randomly perturbed using <span class="math">\(\phi = U(a,b)\)</span> where <span class="math">\(U\)</span> states for a uniform distribution on an interval of length <span class="math">\(\pi\)</span>.
-Also, random perturbations and self-affine aspects are implemented within <span class="math">\(\alpha_{a,b}\)</span>.
-One can for example choose <span class="math">\(\alpha_{a,b}\)</span> as a zero-centered Gaussian distribution to get a smooth but random variation in amplitudes without constraining the magnitude i.e., <span class="math">\(\alpha_{a,b} = G(a,b){(a^2+b^2)}^{-(1+H)}\)</span> where <span class="math">\(G\)</span> states for a reduced centered normal law and <span class="math">\({(a^2+b^2)}^{-(1+H)}\)</span> traduces the self-affine aspect of the surface.
+First, the phase is randomly perturbed using <span class="math notranslate nohighlight">\(\phi = U(a,b)\)</span> where <span class="math notranslate nohighlight">\(U\)</span> states for a uniform distribution on an interval of length <span class="math notranslate nohighlight">\(\pi\)</span>.
+Also, random perturbations and self-affine aspects are implemented within <span class="math notranslate nohighlight">\(\alpha_{a,b}\)</span>.
+One can for example choose <span class="math notranslate nohighlight">\(\alpha_{a,b}\)</span> as a zero-centered Gaussian distribution to get a smooth but random variation in amplitudes without constraining the magnitude i.e., <span class="math notranslate nohighlight">\(\alpha_{a,b} = G(a,b){(a^2+b^2)}^{-(1+H)}\)</span> where <span class="math notranslate nohighlight">\(G\)</span> states for a reduced centered normal law and <span class="math notranslate nohighlight">\({(a^2+b^2)}^{-(1+H)}\)</span> traduces the self-affine aspect of the surface.
 Finally, the construction of a randomly perturbed self-affine surface can be modeled as,</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[h(x,y) = C_1\sum_{a=-A}^{A} \sum_{b=-B}^{B} G(a,b) (a^2+b^2)^{-(1+H)} cos[2\pi(a x + b y) + U(a,b) ]\]</div>
-<p>in which H allows to monitor the roughness degree and <span class="math">\(C_1\)</span> is a normalization factor introduced to fit the surface heights to the sample dimensions.</p>
-<div class="figure align-center" id="id1">
+<p>in which H allows to monitor the roughness degree and <span class="math notranslate nohighlight">\(C_1\)</span> is a normalization factor introduced to fit the surface heights to the sample dimensions.</p>
+<figure class="align-center" id="id1">
 <a class="reference internal image-reference" href="_images/H_influence.png"><img alt="_images/H_influence.png" src="_images/H_influence.png" style="width: 472.5px; height: 809.0px;" /></a>
-<p class="caption"><span class="caption-text">Random numerical self-affine rough surfaces for various Hurst exponents. a) H=-0.4, b) H=-0.1, c) H=0.3, d) H=1.0, e) PSD of the various <em>h</em> profiles. For all calculations, A=50, B=50 and h(x,y) values are normalized between 1 and -1.</span></p>
-</div>
-</div>
-</div>
+<figcaption>
+<p><span class="caption-text">Random numerical self-affine rough surfaces for various Hurst exponents. a) H=-0.4, b) H=-0.1, c) H=0.3, d) H=1.0, e) PSD of the various <em>h</em> profiles. For all calculations, A=50, B=50 and h(x,y) values are normalized between 1 and -1.</span><a class="headerlink" href="#id1" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+</section>
 
 
            </div>
