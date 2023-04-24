@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pyrough module &mdash; Pyrough  documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+      <script>
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../',
+              VERSION:'',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Sample_class module" href="Sample_class.html" />
+    <link rel="prev" title="Package functions" href="../functions.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Pyrough<img src="../_static/Logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../equations.html">Rough surface generation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../functions.html">Package functions</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Pyrough module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Sample_class.html">Sample_class module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Param_class.html">Param_class module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Func_pyrough.html">Func_pyrough module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Surface_Analysis.html">Surface_Analysis module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../shapes.html">Generation of rough shapes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../biblio.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../credits.html">Credits</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Pyrough</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../functions.html">Package functions</a> &raquo;</li>
+      <li>Pyrough module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/script/Pyrough.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="pyrough-module">
+<h1>Pyrough module<a class="headerlink" href="#pyrough-module" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># </span>
+<span class="c1"># Title: Main code pyrough</span>
+<span class="c1">#</span>
+<span class="c1"># Authors: Jonathan Amodeo, Javier Gonzalez, Jennifer Izaguirre, Christophe Le Bourlot &amp; Hugo Iteney</span>
+<span class="c1">#</span>
+<span class="c1"># Date: June 01, 2022</span>
+<span class="c1">#</span>
+<span class="c1"># Pyrough is a code used to provide the user with either FEM or MD files of various objects that have had random surface roughness applied to it.</span>
+<span class="c1"># The objects included in this code are nanowire , slab, sphere. In the main code the user must provide what type of </span>
+<span class="c1"># object thy desired. Based on this the code will read the parameters from the json file provided and return an stl if FEM is desired or</span>
+<span class="c1"># lmp file if MD is desired.  </span>
+<span class="c1"># </span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="kn">from</span> <span class="nn">src</span> <span class="kn">import</span> <span class="n">Param_class</span>
+<span class="kn">from</span> <span class="nn">src</span> <span class="kn">import</span> <span class="n">Sample_class</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">subprocess</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;#######################################################################################&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;#                            Running Random Surface script                            #&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;#                          Jonathan Amodeo &amp; Hugo Iteney 2023                         #&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;#######################################################################################&#39;</span><span class="p">)</span>
+
+<span class="c1"># _____________________Removing previous data____________________</span>
+
+<span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="s1">&#39;rm&#39;</span><span class="p">,</span> <span class="s1">&#39;material_supercell.lmp&#39;</span><span class="p">])</span>
+<span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="s1">&#39;rm&#39;</span><span class="p">,</span> <span class="s1">&#39;sample_with_atoms.lmp&#39;</span><span class="p">])</span>
+
+<span class="c1"># _____________________Main Code____________________</span>
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;-surface&#39;</span> <span class="p">:</span>
+    <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="s1">&#39;python&#39;</span><span class="p">,</span> <span class="s1">&#39;./src/Surface_Analysis.py&#39;</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">4</span><span class="p">]])</span>
+<span class="k">else</span> <span class="p">:</span>
+    <span class="n">Param_file</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">out_pre</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">Param_file</span><span class="p">)[:</span><span class="o">-</span><span class="mi">5</span><span class="p">]</span>
+
+    <span class="n">param</span> <span class="o">=</span> <span class="n">Param_class</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">Param_file</span><span class="p">)</span>
+
+    <span class="c1"># -----------------------second task calling the nanowire into the sample to get an stl</span>
+
+    <span class="c1"># SAMPLE IS THE PATH GUIDE TO CALLING THE CLASS TO CREATE THE STL FILE</span>
+
+    <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">type_S</span> <span class="o">==</span> <span class="s1">&#39;grain&#39;</span> <span class="p">:</span>
+        <span class="n">vertices</span><span class="p">,</span> <span class="n">FEM_stl</span> <span class="o">=</span> <span class="n">Sample_class</span><span class="o">.</span><span class="n">make_box</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">type_S</span><span class="p">,</span>
+                                                  <span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">param</span><span class="o">.</span><span class="n">H</span><span class="p">),</span>
+                                                  <span class="n">param</span><span class="o">.</span><span class="n">C1</span><span class="p">,</span>
+                                                  <span class="n">param</span><span class="o">.</span><span class="n">RMS</span><span class="p">,</span>
+                                                  <span class="n">param</span><span class="o">.</span><span class="n">N</span><span class="p">,</span>
+                                                  <span class="n">param</span><span class="o">.</span><span class="n">M</span><span class="p">,</span>
+                                                  <span class="n">param</span><span class="o">.</span><span class="n">length</span><span class="p">,</span>
+                                                  <span class="n">param</span><span class="o">.</span><span class="n">height</span><span class="p">,</span>
+                                                  <span class="n">param</span><span class="o">.</span><span class="n">width</span><span class="p">,</span>
+                                                  <span class="n">param</span><span class="o">.</span><span class="n">ns</span><span class="p">,</span>
+                                                  <span class="n">param</span><span class="o">.</span><span class="n">raw_stl</span><span class="p">,</span>
+                                                  <span class="n">out_pre</span><span class="p">)</span>
+        <span class="n">Sample_class</span><span class="o">.</span><span class="n">make_atom_grain</span><span class="p">(</span><span class="n">FEM_stl</span><span class="p">,</span>
+                             <span class="n">param</span><span class="o">.</span><span class="n">lattice_structure1</span><span class="p">,</span>
+                             <span class="n">param</span><span class="o">.</span><span class="n">lattice_parameter1</span><span class="p">,</span>
+                             <span class="n">param</span><span class="o">.</span><span class="n">material1</span><span class="p">,</span>
+                             <span class="n">param</span><span class="o">.</span><span class="n">orien_x1</span><span class="p">,</span>
+                             <span class="n">param</span><span class="o">.</span><span class="n">orien_y1</span><span class="p">,</span>
+                             <span class="n">param</span><span class="o">.</span><span class="n">orien_z1</span><span class="p">,</span>
+                             <span class="n">param</span><span class="o">.</span><span class="n">lattice_structure2</span><span class="p">,</span>
+                             <span class="n">param</span><span class="o">.</span><span class="n">lattice_parameter2</span><span class="p">,</span>
+                             <span class="n">param</span><span class="o">.</span><span class="n">material2</span><span class="p">,</span>
+                             <span class="n">param</span><span class="o">.</span><span class="n">orien_x2</span><span class="p">,</span>
+                             <span class="n">param</span><span class="o">.</span><span class="n">orien_y2</span><span class="p">,</span>
+                             <span class="n">param</span><span class="o">.</span><span class="n">orien_z2</span><span class="p">,</span>
+                             <span class="n">vertices</span><span class="p">,</span>
+                             <span class="n">out_pre</span><span class="p">)</span>
+            <span class="c1"># call make it md to create atomsk file</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;JOB DONE!&#39;</span> <span class="o">+</span> <span class="s1">&#39;  File name: &#39;</span> <span class="o">+</span> <span class="n">out_pre</span> <span class="o">+</span> <span class="s1">&#39;.lmp&#39;</span><span class="p">)</span>
+
+    <span class="k">else</span> <span class="p">:</span>
+        <span class="n">sample</span> <span class="o">=</span> <span class="n">Sample_class</span><span class="o">.</span><span class="n">Sample</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">type_S</span><span class="p">)</span>  <span class="c1"># THIS CLASS CALLING REAUIRES A SAMPLE WITH A DESIRED OBJECT NAME AS AN INPUT</span>
+
+        <span class="n">vertices</span><span class="p">,</span> <span class="n">FEM_stl</span> <span class="o">=</span> <span class="n">sample</span><span class="o">.</span><span class="n">make_stl</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">type_S</span><span class="p">,</span>
+                                            <span class="n">param</span><span class="o">.</span><span class="n">H</span><span class="p">,</span>
+                                            <span class="n">param</span><span class="o">.</span><span class="n">C1</span><span class="p">,</span>
+                                            <span class="n">param</span><span class="o">.</span><span class="n">RMS</span><span class="p">,</span>
+                                            <span class="n">param</span><span class="o">.</span><span class="n">N</span><span class="p">,</span>
+                                            <span class="n">param</span><span class="o">.</span><span class="n">M</span><span class="p">,</span>
+                                            <span class="n">param</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span>
+                                            <span class="n">param</span><span class="o">.</span><span class="n">length</span><span class="p">,</span>
+                                            <span class="n">param</span><span class="o">.</span><span class="n">height</span><span class="p">,</span>
+                                            <span class="n">param</span><span class="o">.</span><span class="n">width</span><span class="p">,</span>
+                                            <span class="n">param</span><span class="o">.</span><span class="n">ns</span><span class="p">,</span>
+                                            <span class="n">param</span><span class="o">.</span><span class="n">raw_stl</span><span class="p">,</span>
+                                            <span class="n">param</span><span class="o">.</span><span class="n">nfaces</span><span class="p">,</span>
+                                            <span class="n">param</span><span class="o">.</span><span class="n">surfaces</span><span class="p">,</span>
+                                            <span class="n">param</span><span class="o">.</span><span class="n">energies</span><span class="p">,</span>
+                                            <span class="n">param</span><span class="o">.</span><span class="n">n_at</span><span class="p">,</span>
+                                            <span class="n">param</span><span class="o">.</span><span class="n">lattice_structure</span><span class="p">,</span>
+                                            <span class="n">param</span><span class="o">.</span><span class="n">lattice_parameter</span><span class="p">,</span>
+                                            <span class="n">param</span><span class="o">.</span><span class="n">material</span><span class="p">,</span>
+                                            <span class="n">param</span><span class="o">.</span><span class="n">orien_x</span><span class="p">,</span>
+                                            <span class="n">param</span><span class="o">.</span><span class="n">orien_y</span><span class="p">,</span>
+                                            <span class="n">param</span><span class="o">.</span><span class="n">orien_z</span><span class="p">,</span>
+                                            <span class="n">out_pre</span><span class="p">)</span>
+        <span class="c1"># Calling the sample class function of MAKE it which returns an stl file of the object desired.</span>
+        <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">Param_file</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;ATOM_lmp&#39;</span><span class="p">:</span>
+            <span class="n">sample</span><span class="o">.</span><span class="n">make_atom</span><span class="p">(</span><span class="n">FEM_stl</span><span class="p">,</span>
+                             <span class="n">param</span><span class="o">.</span><span class="n">lattice_structure</span><span class="p">,</span>
+                             <span class="n">param</span><span class="o">.</span><span class="n">lattice_parameter</span><span class="p">,</span>
+                             <span class="n">param</span><span class="o">.</span><span class="n">material</span><span class="p">,</span>
+                             <span class="n">param</span><span class="o">.</span><span class="n">orien_x</span><span class="p">,</span>
+                             <span class="n">param</span><span class="o">.</span><span class="n">orien_y</span><span class="p">,</span>
+                             <span class="n">param</span><span class="o">.</span><span class="n">orien_z</span><span class="p">,</span>
+                             <span class="n">vertices</span><span class="p">,</span>
+                             <span class="n">out_pre</span><span class="p">)</span>
+            <span class="c1"># call make it md to create atomsk file</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;JOB DONE!&#39;</span> <span class="o">+</span> <span class="s1">&#39;  File name: &#39;</span> <span class="o">+</span> <span class="n">out_pre</span> <span class="o">+</span> <span class="s1">&#39;.lmp&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;JOB DONE!&#39;</span> <span class="o">+</span> <span class="s1">&#39;  File name: &#39;</span> <span class="o">+</span> <span class="n">FEM_stl</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../functions.html" class="btn btn-neutral float-left" title="Package functions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Sample_class.html" class="btn btn-neutral float-right" title="Sample_class module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Hugo Iteney, Javier-Antonio Gonzalez Joa, Christophe Le Bourlot, Thomas Cornelius, Olivier Thomas and Jonathan Amodeo.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

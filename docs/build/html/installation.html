@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Installation &mdash; Pyrough  documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+      <script>
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Rough surface generation" href="equations.html" />
+    <link rel="prev" title="Pyrough - a tool to build 3D samples with rough surfaces for atomistic and finite-element simulations" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Pyrough<img src="_static/Logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#required-python-packages">Required Python packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#additionnal-requirement">Additionnal requirement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#download-the-code">Download the code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-pyrough">Run Pyrough</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="equations.html">Rough surface generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="functions.html">Package functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shapes.html">Generation of rough shapes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="biblio.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="credits.html">Credits</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Pyrough</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Installation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/installation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="required-python-packages">
+<h2>Required Python packages<a class="headerlink" href="#required-python-packages" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="https://numpy.org/doc/stable/index.html">NumPy</a></li>
+<li><a class="reference external" href="https://pypi.org/project/pygmsh/">pygmsh</a></li>
+<li><a class="reference external" href="https://pypi.org/project/meshio/">meshio</a></li>
+<li><a class="reference external" href="https://wiki.fysik.dtu.dk/ase/index.html">ase</a></li>
+<li><a class="reference external" href="https://wulffpack.materialsmodeling.org/">WulffPack</a></li>
+</ul>
+</div>
+<div class="section" id="additionnal-requirement">
+<h2>Additionnal requirement<a class="headerlink" href="#additionnal-requirement" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="https://atomsk.univ-lille.fr/fr/">Atomsk</a></li>
+</ul>
+</div>
+<div class="section" id="download-the-code">
+<h2>Download the code<a class="headerlink" href="#download-the-code" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">git</span><span class="nd">@github</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="n">jamodeo12</span><span class="o">/</span><span class="n">Pyrough</span><span class="o">.</span><span class="n">git</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="run-pyrough">
+<h2>Run Pyrough<a class="headerlink" href="#run-pyrough" title="Permalink to this headline">¶</a></h2>
+<p>This command line will enable to run Pyrough for the generation of 3D rough shape:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">Pyrough</span><span class="o">.</span><span class="n">py</span> <span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">the</span><span class="o">/</span><span class="n">file</span><span class="o">/</span><span class="n">input_file</span><span class="o">.</span><span class="n">json</span>
+</pre></div>
+</div>
+<p>Tu run the surface analysis process, simply add the <em>-surface</em> option, then the surface to analyse and the heights interval:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">Pyrough</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">surface</span> <span class="n">Surf</span><span class="o">.</span><span class="n">png</span> <span class="n">zmin</span> <span class="n">zmax</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Pyrough - a tool to build 3D samples with rough surfaces for atomistic and finite-element simulations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="equations.html" class="btn btn-neutral float-right" title="Rough surface generation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Hugo Iteney, Javier-Antonio Gonzalez Joa, Christophe Le Bourlot, Thomas Cornelius, Olivier Thomas and Jonathan Amodeo.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
