@@ -161,6 +161,7 @@
 <li><strong>length</strong> (<em>float</em>) – Length of the desired box</li>
 <li><strong>height</strong> (<em>float</em>) – Height of the desired box</li>
 <li><strong>ns</strong> (<em>int</em>) – Number of segments</li>
+<li><strong>out_pre</strong> (<em>str</em>) – Prefix for output files</li>
 </ul>
 </td>
 </tr>
@@ -254,9 +255,14 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>length</strong> (<em>float</em>) – Length of the desired box</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>length</strong> (<em>float</em>) – Length of the desired box</li>
+<li><strong>out_pre</strong> (<em>str</em>) – Prefix for output files</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">List of points and faces</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">List of points and faces</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -306,6 +312,7 @@
 <li><strong>l</strong> (<em>float</em>) – Length of the desired nanowire</li>
 <li><strong>r</strong> (<em>float</em>) – Radius of the nanowire</li>
 <li><strong>ns</strong> (<em>int</em>) – The number of segments desired on the nanowire</li>
+<li><strong>out_pre</strong> (<em>str</em>) – Prefix for output files</li>
 </ul>
 </td>
 </tr>
@@ -424,7 +431,9 @@
 <li><strong>vertices</strong> (<em>array</em>) – Nodes of the sample</li>
 <li><strong>B</strong> (<em>float</em>) – The degree of the roughness</li>
 <li><strong>C1</strong> (<em>float</em>) – Roughness normalization factor</li>
+<li><strong>RMS</strong> (<em>float</em>) – Root Mean Square</li>
 <li><strong>N</strong> (<em>int</em>) – Scaling cartesian position</li>
+<li><strong>M</strong> (<em>int</em>) – Scaling cartesian position</li>
 <li><strong>nodesurf</strong> (<em>array</em>) – List of surface nodes</li>
 <li><strong>node_edge</strong> (<em>array</em>) – List of nodes located on edges</li>
 <li><strong>node_corner</strong> (<em>array</em>) – List of nodes located on corners</li>
@@ -432,7 +441,7 @@
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Rough sample</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Rough Wulff sample</p>
 </td>
 </tr>
 </tbody>
@@ -479,16 +488,24 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>sample_type</strong> (<em>str</em>) – The name of the sample</li>
 <li><strong>vertices</strong> (<em>array</em>) – List of nodes</li>
 <li><strong>nodenumber</strong> (<em>array</em>) – Number of the corresponding node</li>
-<li><strong>height</strong> (<em>float</em>) – Height of the sample</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Surface nodes</p>
-</td>
+</tbody>
+</table>
+<p>:param points : Polygon shape (Faceted wire case)
+:type points: array
+:param faces: Facets list (Wulff case)
+type faces: array</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Surface nodes</td>
 </tr>
 </tbody>
 </table>
@@ -542,6 +559,7 @@
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>length</strong> (<em>float</em>) – Length of the wire</li>
 <li><strong>points</strong> (<em>array</em>) – Base points of the wire</li>
+<li><strong>out_pre</strong> (<em>str</em>) – Prefix of output files</li>
 </ul>
 </td>
 </tr>
@@ -598,16 +616,19 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>type_sample</strong> (<em>str</em>) – The type of the sample</li>
+<li><strong>sample_type</strong> (<em>str</em>) – The type of the sample</li>
 <li><strong>m</strong> (<em>array</em>) – Wavenumbers</li>
 <li><strong>n</strong> (<em>array</em>) – Wavenumbers</li>
 <li><strong>N</strong> (<em>int</em>) – Scaling cartesian position</li>
+<li><strong>M</strong> (<em>int</em>) – Scaling cartesian position</li>
 <li><strong>B</strong> (<em>float</em>) – The degree of the roughness</li>
 <li><strong>xv</strong> (<em>array</em>) – Unique x coordinate values from the objects vertices</li>
 <li><strong>yv</strong> (<em>array</em>) – Unique y coordinate values from the objects vertices</li>
 <li><strong>sfrN</strong> (<em>array</em>) – Vector for the N decomposition</li>
 <li><strong>sfrM</strong> (<em>array</em>) – Vector for the M decomposition</li>
 <li><strong>C1</strong> (<em>float</em>) – Roughness normalization factor</li>
+<li><strong>RMS</strong> (<em>float</em>) – Root Mean Square</li>
+<li><strong>out_pre</strong> (<em>str</em>) – Prefix of output files</li>
 </ul>
 </td>
 </tr>
@@ -661,6 +682,7 @@
 <li><strong>radius</strong> (<em>float</em>) – Radius of the wire/sphere</li>
 <li><strong>ns</strong> (<em>int</em>) – The number of segments desired</li>
 <li><strong>points</strong> (<em>array</em>) – List of points constituting the base (in case of faceted wire)</li>
+<li><strong>out_pre</strong> (<em>str</em>) – Prefix of output files</li>
 </ul>
 </td>
 </tr>
@@ -683,6 +705,7 @@
 <li><strong>raw_stl</strong> (<em>str</em>) – Name of the input stl file</li>
 <li><strong>obj_points</strong> (<em>list</em>) – List of points from OBJ file</li>
 <li><strong>obj_faces</strong> (<em>list</em>) – List of faces from OBJ file</li>
+<li><strong>out_pre</strong> (<em>str</em>) – Prefix of output files</li>
 </ul>
 </td>
 </tr>
@@ -868,6 +891,7 @@
 <li><strong>phii</strong> (<em>array</em>) – Arctan2 of vector norms and z coordinates</li>
 <li><strong>vert_phi_theta</strong> (<em>array</em>) – Array filled with two elements that are the angles corresponding to the position of the node on the sphere.</li>
 <li><strong>C1</strong> (<em>float</em>) – Roughness normalization factor</li>
+<li><strong>RMS</strong> (<em>float</em>) – Root Mean Square</li>
 <li><strong>r</strong> (<em>int</em>) – Roughness height matrix</li>
 </ul>
 </td>
@@ -922,6 +946,7 @@
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>r</strong> (<em>float</em>) – Radius of the desired sphere</li>
 <li><strong>ns</strong> (<em>int</em>) – The number of segments desired on the sphere</li>
+<li><strong>out_pre</strong> (<em>str</em>) – Prefix of output files</li>
 </ul>
 </td>
 </tr>
@@ -947,6 +972,7 @@
 <li><strong>C1</strong> (<em>float</em>) – Roughness normalization factor</li>
 <li><strong>B</strong> (<em>float</em>) – The degree the roughness is dependent on</li>
 <li><strong>sample_type</strong> (<em>str</em>) – The name of the sample</li>
+<li><strong>out_pre</strong> (<em>str</em>) – Prefix of output files</li>
 </ul>
 </td>
 </tr>
@@ -966,6 +992,7 @@
 <li><strong>r</strong> (<em>float</em>) – Roughness height matrix</li>
 <li><strong>C1</strong> (<em>float</em>) – Roughness normalization factor</li>
 <li><strong>C2</strong> (<em>float</em>) – Roughness normalization factor constant for sphere</li>
+<li><strong>out_pre</strong> (<em>str</em>) – Prefix of output files</li>
 </ul>
 </td>
 </tr>
@@ -984,7 +1011,7 @@
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>vertices</strong> (<em>array</em>) – The coordinates obtained from the mesh</li>
 <li><strong>faces</strong> – The faces of the triangles generated from the mesh</li>
-<li><strong>sample_type</strong> (<em>str</em>) – Name of the sample</li>
+<li><strong>out_pre</strong> (<em>str</em>) – Prefix of the output files</li>
 </ul>
 </td>
 </tr>

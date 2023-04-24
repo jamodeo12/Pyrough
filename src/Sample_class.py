@@ -90,6 +90,14 @@ class Sample(object):
         :type lattice_parameter: float
         :param material: Type of material
         :type material: str
+        :param orien_x: Orientation along x-axis
+        :type orien_x: list
+        :param orien_y: Orientation along y-axis
+        :type orien_y: list
+        :param orien_z: Orientation along z-axis
+        :type orien_z: list
+        :param out_pre: Prefix of the ouput files
+        :type out_pre: str
 
         :returns: List of nodes and stl file name
         """
@@ -225,6 +233,8 @@ class Sample(object):
         :type orien_z: list
         :param vertices: List of nodes
         :type vertices: array
+        :param out_pre: Prefix of the output files
+        :type out_pre: str
         """
         dim_x = max(vertices[:, 0]) - min(vertices[:, 0])
         dim_y = max(vertices[:, 1]) - min(vertices[:, 1])
@@ -277,6 +287,8 @@ def make_wire(type_sample,
     :type ns: int
     :param raw_stl: Name of the input stl file
     :type raw_stl: str
+    :param out_pre: Prefix of the ouput files
+    :type out_pre: str
 
     :return: List of nodes and STL file name
     """
@@ -350,6 +362,8 @@ def make_box(type_sample,
     :type ns: int
     :param raw_stl: Name of the input stl file
     :type raw_stl: str
+    :param out_pre: Prefix of the ouput files
+    :type out_pre: str
 
     :return: List of nodes and STL file name
     """
@@ -405,6 +419,8 @@ def make_sphere(type_sample,
     :type ns: int
     :param raw_stl: Name of the input stl file
     :type raw_stl: str
+    :param out_pre: Prefix of the ouput files
+    :type out_pre: str
 
     :return: List of nodes and STL file name
     """
@@ -472,6 +488,8 @@ def make_poly(type_sample,
     :type ns: int
     :param raw_stl: Name of the input stl file
     :type raw_stl: str
+    :param out_pre: Prefix of the ouput files
+    :type out_pre: str
 
     :return: List of nodes and STL file name
     """
@@ -622,6 +640,8 @@ def make_cube(type_sample,
     :type ns: int
     :param raw_stl: Name of the input stl file
     :type raw_stl: str
+    :param out_pre: Prefix of the ouput files
+    :type out_pre: str
 
     :return: List of nodes and STL file name
     """
