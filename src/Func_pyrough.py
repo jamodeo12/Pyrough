@@ -1393,4 +1393,3 @@ def rescale(D, scale):
     upper = scale[1]
     Df = [lower + (upper - lower) * x for x in D]
     return (np.asarray(Df))
-
