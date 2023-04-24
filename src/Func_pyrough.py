@@ -102,6 +102,8 @@ def cylinder(l, r, ns, out_pre):
     :type r: float
     :param ns: The number of segments desired on the nanowire 
     :type ns: int
+    :param out_pre: Prefix for output files
+    :type out_pre: str
 
     :returns: List of points and faces
     """
@@ -133,6 +135,8 @@ def box(width, length, height, ns, out_pre):
     :type height: float
     :param ns: Number of segments
     :type ns: int
+    :param out_pre: Prefix for output files
+    :type out_pre: str
 
     :return: List of points and faces
     """
@@ -155,7 +159,8 @@ def sphere(r, ns, out_pre):
     :type r: float
     :param ns: The number of segments desired on the sphere
     :type ns: int
-
+    :param out_pre: Prefix of output files
+    :type out_pre: str
 
     :returns: List of points and faces
     """
@@ -178,6 +183,8 @@ def poly(length, points, out_pre):
     :type length: float
     :param points: Base points of the wire
     :type points: array
+    :param out_pre: Prefix of output files
+    :type out_pre: str
 
     :returns: List of points and faces
     """
@@ -224,6 +231,8 @@ def cube(length, out_pre):
 
     :param length: Length of the desired box
     :type length: float
+    :param out_pre: Prefix for output files
+    :type out_pre: str
 
     :return: List of points and faces
     """
@@ -308,6 +317,8 @@ def read_stl(sample_type, raw_stl, width, length, height, radius, ns, points, ou
     :type ns: int
     :param points: List of points constituting the base (in case of faceted wire)
     :type points: array
+    :param out_pre: Prefix of output files
+    :type out_pre: str
 
     :return: List of points and faces
     """
@@ -340,6 +351,8 @@ def read_stl_wulff(raw_stl, obj_points, obj_faces, out_pre):
     :type obj_points: list
     :param obj_faces: List of faces from OBJ file
     :type obj_faces: list
+    :param out_pre: Prefix of output files
+    :type out_pre: str
 
     :returns: List of points and faces
     """
@@ -359,8 +372,8 @@ def stl_file(vertices, faces, out_pre):
     :type vertices: array
     :param faces: The faces of the triangles generated from the mesh
     :type vertices: array
-    :param sample_type: Name of the sample 
-    :type sample_type: str
+    :param out_pre: Prefix of the output files
+    :type out_pre: str
     """
     write_stl(out_pre + '.stl', vertices, np.array(faces))
     return
@@ -426,6 +439,9 @@ def stat_analysis(z, N, M, C1, B, sample_type, out_pre):
     :type B: float
     :param sample_type: The name of the sample 
     :type sample_type: str
+    :param out_pre: Prefix of output files
+    :type out_pre: str
+
     """
     # z_an = np.reshape(z, -1)
     z_an = z.flatten()
@@ -467,6 +483,8 @@ def stat_sphere(r, C1, C2, out_pre):
     :type C1: float
     :param C2: Roughness normalization factor constant for sphere
     :type C2: float
+    :param out_pre: Prefix of output files
+    :type out_pre: str
     """
     mean = np.mean(r)
     stand = np.std(C1 * C2 * r)
@@ -572,8 +590,10 @@ def node_surface(sample_type, vertices, nodenumber, points, faces):
     :type vertices: array
     :param nodenumber: Number of the corresponding node
     :type nodenumber: array
-    :param height: Height of the sample
-    :type height: float
+    :param points : Polygon shape (Faceted wire case)
+    :type points: array
+    :param faces: Facets list (Wulff case)
+    type faces: array
 
     :return: Surface nodes
     """
@@ -689,6 +709,8 @@ def rough_matrix_sphere(nbPoint, B, thetaa, phii, vert_phi_theta, C1, RMS, r):
     :type vert_phi_theta: array
     :param C1: Roughness normalization factor
     :type C1: float
+    :param RMS: Root Mean Square
+    :type RMS: float
     :param r: Roughness height matrix
     :type r: int
 
@@ -703,7 +725,6 @@ def rough_matrix_sphere(nbPoint, B, thetaa, phii, vert_phi_theta, C1, RMS, r):
         mod = degree ** (-B / 2)
         for i, [theta, phi] in enumerate(vert_phi_theta):
             _phase = sp.sph_harm(0, degree, thetaa - theta, phii - phi).real
-            print(_phase[0])
             _phase = 2 * _phase / _phase.ptp()
             r += _r_amplitude[i] * mod * np.cos(_phase + _r_phase)
     return r
@@ -833,14 +854,16 @@ def random_surf2(sample_type, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, RMS, out_pr
     """
     Returns an array with the Z values representing the surface roughness.
 
-    :param type_sample: The type of the sample
-    :type type_sample: str
+    :param sample_type: The type of the sample
+    :type sample_type: str
     :param m: Wavenumbers
     :type m: array
     :param n: Wavenumbers
     :type n: array
     :param N: Scaling cartesian position
     :type N: int
+    :param M: Scaling cartesian position
+    :type M: int
     :param B: The degree of the roughness
     :type B: float
     :param xv: Unique x coordinate values from the objects vertices
@@ -853,6 +876,10 @@ def random_surf2(sample_type, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, RMS, out_pr
     :type sfrM: array
     :param C1: Roughness normalization factor
     :type C1: float
+    :param RMS: Root Mean Square
+    :type RMS: float
+    :param out_pre: Prefix of output files
+    :type out_pre: str
 
     :return: Surface roughness
     """
@@ -1060,8 +1087,12 @@ def make_rough_wulff(vertices, B, C1, RMS, N, M, nodesurf, node_edge, node_corne
     :type B: float
     :param C1: Roughness normalization factor
     :type C1: float
+    :param RMS: Root Mean Square
+    :type RMS: float
     :param N: Scaling cartesian position
     :type N: int
+    :param M: Scaling cartesian position
+    :type M: int
     :param nodesurf: List of surface nodes
     :type nodesurf: array
     :param node_edge: List of nodes located on edges
@@ -1071,7 +1102,7 @@ def make_rough_wulff(vertices, B, C1, RMS, N, M, nodesurf, node_edge, node_corne
     :param list_n: List of face's normals
     :type list_n: list
 
-    :return: Rough sample
+    :return: Rough Wulff sample
     """
     sfrN, sfrM = vectors(N, M)
     for k in range(len(nodesurf)):
