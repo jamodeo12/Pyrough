@@ -29,7 +29,8 @@ subprocess.call(['rm', 'sample_with_atoms.lmp'])
 
 # _____________________Main Code____________________
 if sys.argv[1] == '-surface' :
-    subprocess.call(['python', './src/Surface_Analysis.py', sys.argv[2], sys.argv[3], sys.argv[4]])
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    subprocess.call(['python', current_dir+'/src/Surface_Analysis.py', sys.argv[2], sys.argv[3], sys.argv[4]])
 else :
     Param_file = sys.argv[1]
     out_pre = os.path.basename(Param_file)[:-5]
