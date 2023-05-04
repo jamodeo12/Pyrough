@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Func_pyrough module &mdash; Pyrough  documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+      <script>
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../',
+              VERSION:'',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Surface_Analysis module" href="Surface_Analysis.html" />
+    <link rel="prev" title="Param_class module" href="Param_class.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Pyrough<img src="../_static/Logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../equations.html">Rough surface generation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../functions.html">Package functions</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Pyrough.html">Pyrough module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Sample_class.html">Sample_class module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Param_class.html">Param_class module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Func_pyrough module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Surface_Analysis.html">Surface_Analysis module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../shapes.html">Generation of rough shapes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../biblio.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../credits.html">Credits</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Pyrough</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../functions.html">Package functions</a> &raquo;</li>
+      <li>Func_pyrough module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/script/Func_pyrough.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="module-Func_pyrough">
+<span id="func-pyrough-module"></span><h1>Func_pyrough module<a class="headerlink" href="#module-Func_pyrough" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="Func_pyrough.Kurto">
+<code class="descclassname">Func_pyrough.</code><code class="descname">Kurto</code><span class="sig-paren">(</span><em>z</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.Kurto" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the kurtosis of a height distribution</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>z</strong> (<em>array</em>) – height matrix</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Kurtosis</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.align_poly">
+<code class="descclassname">Func_pyrough.</code><code class="descname">align_poly</code><span class="sig-paren">(</span><em>vertices</em>, <em>angles</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.align_poly" title="Permalink to this definition">¶</a></dt>
+<dd><p>Aligns the first facet with x-axis</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>vertices</strong> (<em>array</em>) – List of nodes</li>
+<li><strong>angles</strong> (<em>array</em>) – List of angles</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Rotated nodes</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.base">
+<code class="descclassname">Func_pyrough.</code><code class="descname">base</code><span class="sig-paren">(</span><em>radius</em>, <em>nfaces</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.base" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates the base of the faceted wire from radius and number of faces.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>radius</strong> (<em>float</em>) – Radius of the wire</li>
+<li><strong>nfaces</strong> (<em>int</em>) – Number of faces</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Points forming the base of the wire and angles associated to each face</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.box">
+<code class="descclassname">Func_pyrough.</code><code class="descname">box</code><span class="sig-paren">(</span><em>width</em>, <em>length</em>, <em>height</em>, <em>ns</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.box" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a box mesh.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>width</strong> (<em>float</em>) – Width of the desired box</li>
+<li><strong>length</strong> (<em>float</em>) – Length of the desired box</li>
+<li><strong>height</strong> (<em>float</em>) – Height of the desired box</li>
+<li><strong>ns</strong> (<em>int</em>) – Number of segments</li>
+<li><strong>out_pre</strong> (<em>str</em>) – Prefix for output files</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">List of points and faces</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.cart2cyl">
+<code class="descclassname">Func_pyrough.</code><code class="descname">cart2cyl</code><span class="sig-paren">(</span><em>matrix</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.cart2cyl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates cylindrical coordinates from cartesian ones.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>matrix</strong> (<em>array</em>) – List of cartesian coordinates</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Cylindrical coordinates</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.concatenate_list_data">
+<code class="descclassname">Func_pyrough.</code><code class="descname">concatenate_list_data</code><span class="sig-paren">(</span><em>a_list</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.concatenate_list_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combines the elements of a list into one element in the form of a string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>a_list</strong> (<em>list</em>) – List with elements of type int</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.coord_cart_sphere">
+<code class="descclassname">Func_pyrough.</code><code class="descname">coord_cart_sphere</code><span class="sig-paren">(</span><em>C1</em>, <em>C2</em>, <em>r</em>, <em>vertices</em>, <em>t</em>, <em>z</em>, <em>y</em>, <em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.coord_cart_sphere" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new matrix with x, y, z in cartesian coordinates</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>C1</strong> (<em>float</em>) – Roughness normalization factor</li>
+<li><strong>C2</strong> (<em>float</em>) – Roughness normalization factor constant for sphere</li>
+<li><strong>r</strong> (<em>int</em>) – Roughness height matrix</li>
+<li><strong>vertices</strong> (<em>array</em>) – List of nodes</li>
+<li><strong>t</strong> (<em>array</em>) – x y z coordinates</li>
+<li><strong>z</strong> (<em>array</em>) – z coordinates</li>
+<li><strong>y</strong> (<em>array</em>) – y coordinates</li>
+<li><strong>x</strong> (<em>array</em>) – x coordinates</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Cartesian coordinates</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.coord_sphere">
+<code class="descclassname">Func_pyrough.</code><code class="descname">coord_sphere</code><span class="sig-paren">(</span><em>vertices</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.coord_sphere" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a matrix with the columns that correspond to the coordinates of either x, y, z and t which contains x y z coordinates in an array</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>vertices</strong> (<em>array</em>) – List of nodes</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Coordinates</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.cube">
+<code class="descclassname">Func_pyrough.</code><code class="descname">cube</code><span class="sig-paren">(</span><em>length</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.cube" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a cube mesh.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>length</strong> (<em>float</em>) – Length of the desired box</li>
+<li><strong>out_pre</strong> (<em>str</em>) – Prefix for output files</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">List of points and faces</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.cube_faces">
+<code class="descclassname">Func_pyrough.</code><code class="descname">cube_faces</code><span class="sig-paren">(</span><em>length</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.cube_faces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates the points and faces of a cube</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>length</strong> (<em>float</em>) – Size of the cube</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Points and faces of the cube</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.cyl2cart">
+<code class="descclassname">Func_pyrough.</code><code class="descname">cyl2cart</code><span class="sig-paren">(</span><em>matrix</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.cyl2cart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates cartesian coordinates from cylindrical ones.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>matrix</strong> (<em>array</em>) – List of cylindrical coordinates</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Cartesian coordinates</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.cylinder">
+<code class="descclassname">Func_pyrough.</code><code class="descname">cylinder</code><span class="sig-paren">(</span><em>l</em>, <em>r</em>, <em>ns</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.cylinder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a cylindrical mesh.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>l</strong> (<em>float</em>) – Length of the desired nanowire</li>
+<li><strong>r</strong> (<em>float</em>) – Radius of the nanowire</li>
+<li><strong>ns</strong> (<em>int</em>) – The number of segments desired on the nanowire</li>
+<li><strong>out_pre</strong> (<em>str</em>) – Prefix for output files</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">List of points and faces</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.duplicate">
+<code class="descclassname">Func_pyrough.</code><code class="descname">duplicate</code><span class="sig-paren">(</span><em>l</em>, <em>orien</em>, <em>lattice_par</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.duplicate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes in a length and an cristal orientation to calculate the duplication factor for atomsk.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>l</strong> (<em>int</em>) – Length of one of the sides of the object</li>
+<li><strong>orien</strong> (<em>list</em>) – Crystal orientaion</li>
+<li><strong>lattice_par</strong> (<em>float</em>) – Lattice parameter</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Duplication factor and string of orientations</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.faces_normals">
+<code class="descclassname">Func_pyrough.</code><code class="descname">faces_normals</code><span class="sig-paren">(</span><em>obj_points</em>, <em>obj_faces</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.faces_normals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates each face’s normals.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>obj_points</strong> (<em>array</em>) – List of points</li>
+<li><strong>obj_faces</strong> (<em>array</em>) – List of faces</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">List of normals</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.make_obj">
+<code class="descclassname">Func_pyrough.</code><code class="descname">make_obj</code><span class="sig-paren">(</span><em>surfaces</em>, <em>energies</em>, <em>n_at</em>, <em>lattice_structure</em>, <em>lattice_parameter</em>, <em>material</em>, <em>orien_x</em>, <em>orien_y</em>, <em>orien_z</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.make_obj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an OBJ file of a faceted NP. Stores the points and faces from this file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>surfaces</strong> (<em>list</em>) – List of surfaces for Wulff theory</li>
+<li><strong>energies</strong> (<em>list</em>) – List of energies associated to surfaces for Wulff theory</li>
+<li><strong>n_at</strong> (<em>int</em>) – Number of atoms</li>
+<li><strong>lattice_structure</strong> (<em>str</em>) – Atomic structure of the sample</li>
+<li><strong>lattice_parameter</strong> (<em>float</em>) – Lattice parameter</li>
+<li><strong>material</strong> (<em>str</em>) – Type of atom</li>
+<li><strong>orien_x</strong> (<em>list</em>) – Orientation along x-axis</li>
+<li><strong>orien_y</strong> (<em>list</em>) – Orientation along y-axis</li>
+<li><strong>orien_z</strong> (<em>list</em>) – Orientation along z-axis</li>
+<li><strong>out_pre</strong> (<em>str</em>) – Prefix for output files</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">List of points and faces of OBJ file</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.make_rough">
+<code class="descclassname">Func_pyrough.</code><code class="descname">make_rough</code><span class="sig-paren">(</span><em>type_sample</em>, <em>z</em>, <em>nodesurf</em>, <em>vertices</em>, <em>angles</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.make_rough" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies roughness on the sample.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>type_sample</strong> (<em>str</em>) – The type of the sample</li>
+<li><strong>z</strong> (<em>array</em>) – Surface roughness to apply on the sample</li>
+<li><strong>nodesurf</strong> (<em>array</em>) – List of nodes to be moved</li>
+<li><strong>vertices</strong> (<em>array</em>) – Nodes of the sample</li>
+<li><strong>angles</strong> (<em>array</em>) – List of angles to be followed by roughness (Only in the case of a faceted wire)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Rough sample</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.make_rough_wulff">
+<code class="descclassname">Func_pyrough.</code><code class="descname">make_rough_wulff</code><span class="sig-paren">(</span><em>vertices</em>, <em>B</em>, <em>C1</em>, <em>RMS</em>, <em>N</em>, <em>M</em>, <em>nodesurf</em>, <em>node_edge</em>, <em>node_corner</em>, <em>list_n</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.make_rough_wulff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies roughness on the sample in the case of a Wulff Shaped NP.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>vertices</strong> (<em>array</em>) – Nodes of the sample</li>
+<li><strong>B</strong> (<em>float</em>) – The degree of the roughness</li>
+<li><strong>C1</strong> (<em>float</em>) – Roughness normalization factor</li>
+<li><strong>RMS</strong> (<em>float</em>) – Root Mean Square</li>
+<li><strong>N</strong> (<em>int</em>) – Scaling cartesian position</li>
+<li><strong>M</strong> (<em>int</em>) – Scaling cartesian position</li>
+<li><strong>nodesurf</strong> (<em>array</em>) – List of surface nodes</li>
+<li><strong>node_edge</strong> (<em>array</em>) – List of nodes located on edges</li>
+<li><strong>node_corner</strong> (<em>array</em>) – List of nodes located on corners</li>
+<li><strong>list_n</strong> (<em>list</em>) – List of face’s normals</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Rough Wulff sample</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.node_corner">
+<code class="descclassname">Func_pyrough.</code><code class="descname">node_corner</code><span class="sig-paren">(</span><em>nodesurf</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.node_corner" title="Permalink to this definition">¶</a></dt>
+<dd><p>From surface nodes, finds all nodes located on edges and corners.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nodesurf</strong> (<em>array</em>) – List of surface nodes</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">List of nodes located on edges and list of nodes located on corners</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.node_indexing">
+<code class="descclassname">Func_pyrough.</code><code class="descname">node_indexing</code><span class="sig-paren">(</span><em>vertices</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.node_indexing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a column that has an assigned index number for each row in vertices and also the nodenumbers which is an array file from 0 - length of the vertices</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>vertices</strong> (<em>array</em>) – Vector for the points</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Numbered vertices and raw numbers column.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.node_surface">
+<code class="descclassname">Func_pyrough.</code><code class="descname">node_surface</code><span class="sig-paren">(</span><em>sample_type</em>, <em>vertices</em>, <em>nodenumber</em>, <em>points</em>, <em>faces</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.node_surface" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds the nodes at the surface of the object. These nodes will have the surface roughness applied to it.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sample_type</strong> (<em>str</em>) – The name of the sample</li>
+<li><strong>vertices</strong> (<em>array</em>) – List of nodes</li>
+<li><strong>nodenumber</strong> (<em>array</em>) – Number of the corresponding node</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>:param points : Polygon shape (Faceted wire case)
+:type points: array
+:param faces: Facets list (Wulff case)
+type faces: array</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Surface nodes</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.normalize">
+<code class="descclassname">Func_pyrough.</code><code class="descname">normalize</code><span class="sig-paren">(</span><em>surf</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.normalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalizes the coordinates of points composing the surface.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>surf</strong> (<em>array</em>) – List of nodes of the surface</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Normalized surface</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.phi">
+<code class="descclassname">Func_pyrough.</code><code class="descname">phi</code><span class="sig-paren">(</span><em>t</em>, <em>z</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.phi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the arctan2 of an array filled with vector norms and an array filled with z coordinates which are the same size.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>t</strong> (<em>array</em>) – Coordinates x y in a list</li>
+<li><strong>z</strong> (<em>array</em>) – Z coordinates</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">An array of angles in radians</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.poly">
+<code class="descclassname">Func_pyrough.</code><code class="descname">poly</code><span class="sig-paren">(</span><em>length</em>, <em>points</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.poly" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a faceted wire mesh.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>length</strong> (<em>float</em>) – Length of the wire</li>
+<li><strong>points</strong> (<em>array</em>) – Base points of the wire</li>
+<li><strong>out_pre</strong> (<em>str</em>) – Prefix of output files</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">List of points and faces</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.radius">
+<code class="descclassname">Func_pyrough.</code><code class="descname">radius</code><span class="sig-paren">(</span><em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.radius" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the vector norm for the axis 1 of the values in the given array.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>v</strong> (<em>array</em>) – The vertices of the sphere</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A vector norm</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.random_numbers">
+<code class="descclassname">Func_pyrough.</code><code class="descname">random_numbers</code><span class="sig-paren">(</span><em>sfrN</em>, <em>sfrM</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.random_numbers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates the G and U matrices for the mathematical formulation of rough surfaces.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>sfrN</strong> (<em>array</em>) – Vector for the N decomposition</li>
+<li><strong>sfrM</strong> (<em>array</em>) – Vector for the M decomposition</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">G and U matrices</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.random_surf2">
+<code class="descclassname">Func_pyrough.</code><code class="descname">random_surf2</code><span class="sig-paren">(</span><em>sample_type</em>, <em>m</em>, <em>n</em>, <em>N</em>, <em>M</em>, <em>B</em>, <em>xv</em>, <em>yv</em>, <em>sfrM</em>, <em>sfrN</em>, <em>C1</em>, <em>RMS</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.random_surf2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an array with the Z values representing the surface roughness.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>sample_type</strong> (<em>str</em>) – The type of the sample</li>
+<li><strong>m</strong> (<em>array</em>) – Wavenumbers</li>
+<li><strong>n</strong> (<em>array</em>) – Wavenumbers</li>
+<li><strong>N</strong> (<em>int</em>) – Scaling cartesian position</li>
+<li><strong>M</strong> (<em>int</em>) – Scaling cartesian position</li>
+<li><strong>B</strong> (<em>float</em>) – The degree of the roughness</li>
+<li><strong>xv</strong> (<em>array</em>) – Unique x coordinate values from the objects vertices</li>
+<li><strong>yv</strong> (<em>array</em>) – Unique y coordinate values from the objects vertices</li>
+<li><strong>sfrN</strong> (<em>array</em>) – Vector for the N decomposition</li>
+<li><strong>sfrM</strong> (<em>array</em>) – Vector for the M decomposition</li>
+<li><strong>C1</strong> (<em>float</em>) – Roughness normalization factor</li>
+<li><strong>RMS</strong> (<em>float</em>) – Root Mean Square</li>
+<li><strong>out_pre</strong> (<em>str</em>) – Prefix of output files</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Surface roughness</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.rdnsurf">
+<code class="descclassname">Func_pyrough.</code><code class="descname">rdnsurf</code><span class="sig-paren">(</span><em>m</em>, <em>n</em>, <em>B</em>, <em>xv</em>, <em>yv</em>, <em>sfrM</em>, <em>sfrN</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.rdnsurf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates random surface roughness that will replace the previous z values in the vertices matrix.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>m</strong> (<em>array</em>) – Wavenumber</li>
+<li><strong>n</strong> (<em>array</em>) – Wavenumber</li>
+<li><strong>B</strong> (<em>float</em>) – The degree the roughness is dependent on</li>
+<li><strong>xv</strong> (<em>array</em>) – Unique x coordinate values from the objects vertices</li>
+<li><strong>yv</strong> (<em>array</em>) – Unique y coordinate values from the objects vertices</li>
+<li><strong>sfrM</strong> (<em>array</em>) – Matrix of random numbers that range from 1 to 2N</li>
+<li><strong>sfrN</strong> (<em>array</em>) – Matrix of random numbers that range from 1 to 2N</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Roughness height matrix</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.read_stl">
+<code class="descclassname">Func_pyrough.</code><code class="descname">read_stl</code><span class="sig-paren">(</span><em>sample_type</em>, <em>raw_stl</em>, <em>width</em>, <em>length</em>, <em>height</em>, <em>radius</em>, <em>ns</em>, <em>points</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.read_stl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads an input stl file or creates a new one if no input</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>sample_type</strong> (<em>str</em>) – Name of the sample</li>
+<li><strong>raw_stl</strong> (<em>str</em>) – Name of the input stl file</li>
+<li><strong>width</strong> (<em>float</em>) – Width of the box</li>
+<li><strong>length</strong> (<em>float</em>) – Length of the box/wire</li>
+<li><strong>height</strong> (<em>float</em>) – Height of the box</li>
+<li><strong>radius</strong> (<em>float</em>) – Radius of the wire/sphere</li>
+<li><strong>ns</strong> (<em>int</em>) – The number of segments desired</li>
+<li><strong>points</strong> (<em>array</em>) – List of points constituting the base (in case of faceted wire)</li>
+<li><strong>out_pre</strong> (<em>str</em>) – Prefix of output files</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">List of points and faces</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.read_stl_wulff">
+<code class="descclassname">Func_pyrough.</code><code class="descname">read_stl_wulff</code><span class="sig-paren">(</span><em>raw_stl</em>, <em>obj_points</em>, <em>obj_faces</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.read_stl_wulff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads an input stl file or creates a new one if no input. Wulff case.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>raw_stl</strong> (<em>str</em>) – Name of the input stl file</li>
+<li><strong>obj_points</strong> (<em>list</em>) – List of points from OBJ file</li>
+<li><strong>obj_faces</strong> (<em>list</em>) – List of faces from OBJ file</li>
+<li><strong>out_pre</strong> (<em>str</em>) – Prefix of output files</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">List of points and faces</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.rebox">
+<code class="descclassname">Func_pyrough.</code><code class="descname">rebox</code><span class="sig-paren">(</span><em>file_lmp</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.rebox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fits the box dimensions with the sample. Also centers the sample.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>file_lmp</strong> (<em>str</em>) – .lmp file containing the atom positions</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.rescale">
+<code class="descclassname">Func_pyrough.</code><code class="descname">rescale</code><span class="sig-paren">(</span><em>D</em>, <em>scale</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.rescale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rescales the height distribution between zmin and zmax</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>D</strong> (<em>array</em>) – Height matrix</li>
+<li><strong>scale</strong> (<em>list</em>) – zmin and zmax</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Rescaled matrix</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.rho">
+<code class="descclassname">Func_pyrough.</code><code class="descname">rho</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.rho" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Pythagorean theorem equation is used to obtain a value for a side of a triangle.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> (<em>int</em>) – Represents the length of a side in the triangle</li>
+<li><strong>y</strong> (<em>int</em>) – Represents the length of a side in the triangle</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The length of hypotenuse</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.rms_calc">
+<code class="descclassname">Func_pyrough.</code><code class="descname">rms_calc</code><span class="sig-paren">(</span><em>Z</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.rms_calc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the RMS of a height distribution</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>z</strong> (<em>array</em>) – height matrix</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">RMS</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.rot">
+<code class="descclassname">Func_pyrough.</code><code class="descname">rot</code><span class="sig-paren">(</span><em>surf</em>, <em>n1</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.rot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotates a surface oriented along n1 axis in order to be oriented along z-axis.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>surf</strong> (<em>array</em>) – List of nodes from the surface</li>
+<li><strong>n1</strong> (<em>array</em>) – Surface normal</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Rotated surface</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.rot_matrix">
+<code class="descclassname">Func_pyrough.</code><code class="descname">rot_matrix</code><span class="sig-paren">(</span><em>n</em>, <em>theta</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.rot_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates the rotation matrix. Initial orientation is n, and the angle of rotation is theta. Final orientation is the z-axis.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>n</strong> (<em>list</em>) – Initial orientation</li>
+<li><strong>theta</strong> (<em>float</em>) – Rotation angle</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Rotation matrix</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.rotate_obj_wulff">
+<code class="descclassname">Func_pyrough.</code><code class="descname">rotate_obj_wulff</code><span class="sig-paren">(</span><em>obj_points</em>, <em>orien_x</em>, <em>orien_z</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.rotate_obj_wulff" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>obj_points</strong> (<em>array</em>) – Points describing the facets of the wulff-shape</li>
+<li><strong>orien_x</strong> (<em>list</em>) – Orientation along x-axis</li>
+<li><strong>orien_z</strong> (<em>list</em>) – Orientation along z-axis</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Points respecting the desired orientation</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.rough">
+<code class="descclassname">Func_pyrough.</code><code class="descname">rough</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>H</em>, <em>C1</em>, <em>M</em>, <em>N</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.rough" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a rough surface</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> (<em>array</em>) – List of x coordinates</li>
+<li><strong>y</strong> (<em>array</em>) – List of y coordinates</li>
+<li><strong>H</strong> (<em>float</em>) – Hurst exponent</li>
+<li><strong>C1</strong> (<em>float</em>) – Normalization factor</li>
+<li><strong>M</strong> (<em>int</em>) – Scaling cartesian position</li>
+<li><strong>N</strong> (<em>int</em>) – Scaling cartesian position</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Height matrix</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.rough_matrix_sphere">
+<code class="descclassname">Func_pyrough.</code><code class="descname">rough_matrix_sphere</code><span class="sig-paren">(</span><em>nbPoint</em>, <em>B</em>, <em>thetaa</em>, <em>phii</em>, <em>vert_phi_theta</em>, <em>C1</em>, <em>RMS</em>, <em>r</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.rough_matrix_sphere" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates the displacement values of the nodes on the surface of the sphere</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>nbPoint</strong> (<em>int</em>) – Number of points on the sphere</li>
+<li><strong>B</strong> (<em>float</em>) – The degree the roughness is dependent on</li>
+<li><strong>thetaa</strong> (<em>array</em>) – Arctan2 of x and y coordinates</li>
+<li><strong>phii</strong> (<em>array</em>) – Arctan2 of vector norms and z coordinates</li>
+<li><strong>vert_phi_theta</strong> (<em>array</em>) – Array filled with two elements that are the angles corresponding to the position of the node on the sphere.</li>
+<li><strong>C1</strong> (<em>float</em>) – Roughness normalization factor</li>
+<li><strong>RMS</strong> (<em>float</em>) – Root Mean Square</li>
+<li><strong>r</strong> (<em>int</em>) – Roughness height matrix</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Rough matrix</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.sigma">
+<code class="descclassname">Func_pyrough.</code><code class="descname">sigma</code><span class="sig-paren">(</span><em>z</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.sigma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the standard deviation of a height distribution</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>z</strong> (<em>array</em>) – height matrix</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Standard deviation</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.sk">
+<code class="descclassname">Func_pyrough.</code><code class="descname">sk</code><span class="sig-paren">(</span><em>z</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.sk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the skewness of a height distribution</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>z</strong> (<em>array</em>) – height matrix</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Skewness</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.sphere">
+<code class="descclassname">Func_pyrough.</code><code class="descname">sphere</code><span class="sig-paren">(</span><em>r</em>, <em>ns</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.sphere" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a sphere mesh.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>r</strong> (<em>float</em>) – Radius of the desired sphere</li>
+<li><strong>ns</strong> (<em>int</em>) – The number of segments desired on the sphere</li>
+<li><strong>out_pre</strong> (<em>str</em>) – Prefix of output files</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">List of points and faces</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.stat_analysis">
+<code class="descclassname">Func_pyrough.</code><code class="descname">stat_analysis</code><span class="sig-paren">(</span><em>z</em>, <em>N</em>, <em>M</em>, <em>C1</em>, <em>B</em>, <em>sample_type</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.stat_analysis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays the statistical analysis of the surface roughness generator</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>z</strong> (<em>float</em>) – Roughness height matrix</li>
+<li><strong>N</strong> (<em>int</em>) – Scaling cartesian position</li>
+<li><strong>M</strong> (<em>int</em>) – Scaling cartesian position</li>
+<li><strong>C1</strong> (<em>float</em>) – Roughness normalization factor</li>
+<li><strong>B</strong> (<em>float</em>) – The degree the roughness is dependent on</li>
+<li><strong>sample_type</strong> (<em>str</em>) – The name of the sample</li>
+<li><strong>out_pre</strong> (<em>str</em>) – Prefix of output files</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.stat_sphere">
+<code class="descclassname">Func_pyrough.</code><code class="descname">stat_sphere</code><span class="sig-paren">(</span><em>r</em>, <em>C1</em>, <em>C2</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.stat_sphere" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays the statistical analysis of the surface roughness generator with regards to the sphere.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>r</strong> (<em>float</em>) – Roughness height matrix</li>
+<li><strong>C1</strong> (<em>float</em>) – Roughness normalization factor</li>
+<li><strong>C2</strong> (<em>float</em>) – Roughness normalization factor constant for sphere</li>
+<li><strong>out_pre</strong> (<em>str</em>) – Prefix of output files</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.stl_file">
+<code class="descclassname">Func_pyrough.</code><code class="descname">stl_file</code><span class="sig-paren">(</span><em>vertices</em>, <em>faces</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.stl_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an stl file from the vertices and faces of the desired object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>vertices</strong> (<em>array</em>) – The coordinates obtained from the mesh</li>
+<li><strong>faces</strong> – The faces of the triangles generated from the mesh</li>
+<li><strong>out_pre</strong> (<em>str</em>) – Prefix of the output files</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.theta">
+<code class="descclassname">Func_pyrough.</code><code class="descname">theta</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.theta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the arctan2 of two given arrays whose size are the same.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> (<em>array</em>) – x coordinates</li>
+<li><strong>y</strong> (<em>array</em>) – y coordinates</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">An array of angles in radians</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.vectors">
+<code class="descclassname">Func_pyrough.</code><code class="descname">vectors</code><span class="sig-paren">(</span><em>N</em>, <em>M</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.vectors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates vector of integers between -N and N. Same for M</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>N</strong> (<em>int</em>) – Scaling cartesian position</li>
+<li><strong>M</strong> (<em>int</em>) – Scaling cartesian position</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Vectors</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.vertex_tp">
+<code class="descclassname">Func_pyrough.</code><code class="descname">vertex_tp</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>t</em>, <em>z</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.vertex_tp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an array filled with two elements that are the angles corresponding to the position of the node on the sphere.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> (<em>array</em>) – X coordinates</li>
+<li><strong>y</strong> (<em>array</em>) – Y coordinates</li>
+<li><strong>t</strong> (<em>array</em>) – x &amp; y coordinates stored in a list</li>
+<li><strong>z</strong> (<em>array</em>) – Z coordinates</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">An array with angles as elements</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.write_stl">
+<code class="descclassname">Func_pyrough.</code><code class="descname">write_stl</code><span class="sig-paren">(</span><em>filename</em>, <em>vertices</em>, <em>face_list</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.write_stl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an STL file from faces and vertices.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filename</strong> (<em>str</em>) – name of the STL file</li>
+<li><strong>vertices</strong> (<em>array</em>) – list of vertices</li>
+<li><strong>face_list</strong> (<em>array</em>) – list of faces</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.wulff">
+<code class="descclassname">Func_pyrough.</code><code class="descname">wulff</code><span class="sig-paren">(</span><em>obj_points</em>, <em>obj_faces</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.wulff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a Wulff-Shaped NP mesh</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>obj_points</strong> (<em>list</em>) – Corners of the NP (from OBJ file)</li>
+<li><strong>obj_faces</strong> (<em>list</em>) – Faces of the NP (from OBJ file)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">List of points and faces</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Param_class.html" class="btn btn-neutral float-left" title="Param_class module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Surface_Analysis.html" class="btn btn-neutral float-right" title="Surface_Analysis module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Hugo Iteney, Javier-Antonio Gonzalez Joa, Christophe Le Bourlot, Thomas Cornelius, Olivier Thomas and Jonathan Amodeo.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
