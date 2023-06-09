@@ -545,7 +545,7 @@ def duplicate(l, orien, lattice_par):
     end_orien = [(concatenate_list_data(orien))]
     x = '[' + "".join([str(i) for i in end_orien]) + ']'
     dup = str(dup)
-    return 0, dup, x
+    return 0.5*distance, dup, x
 
 
 def random_numbers(sfrN, sfrM):
@@ -1401,6 +1401,8 @@ def box_perio(file_lmp, dis):
     lines[5] = '{} {} {} {}\n'.format(data_x[0], str(float(data_x[1])+dis[0]), data_x[2], data_x[3])
     data_y = lines[6].split( )
     lines[6] = '{} {} {} {}\n'.format(data_y[0], str(float(data_y[1])+dis[1]), data_y[2], data_y[3])
+    data_z = lines[7].split( )
+    lines[7] = '{} {} {} {}\n'.format(data_z[0], str(float(data_z[1])+dis[2]), data_z[2], data_z[3])
     fint.close()
     fend = open(file_lmp, "w")
     fend.writelines(lines)
