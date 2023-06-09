@@ -254,7 +254,7 @@ class Sample(object):
         subprocess.call(['rm', 'material_supercell.lmp'])
         fp.rebox(out_pre + '.lmp')
         if type_sample == 'box':
-            fp.box_perio(out_pre + '.lmp', [dis_x,dis_y])
+            fp.box_perio(out_pre + '.lmp', [dis_x,dis_y, dis_z])
 
 
 def make_wire(type_sample,
