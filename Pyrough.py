@@ -100,7 +100,8 @@ else :
                                             out_pre)
         # Calling the sample class function of MAKE it which returns an stl file of the object desired.
         if param.output(Param_file) == 'ATOM_lmp':
-            sample.make_atom(FEM_stl,
+            sample.make_atom(param.type_S,
+                             FEM_stl,
                              param.lattice_structure,
                              param.lattice_parameter,
                              param.material,

@@ -521,7 +521,7 @@ def concatenate_list_data(a_list):
 def duplicate(l, orien, lattice_par):
     """
     Takes in a length and an cristal orientation to calculate the duplication factor for atomsk.
-    
+
     :param l: Length of one of the sides of the object
     :type l: int
     :param orien: Crystal orientaion
@@ -538,14 +538,14 @@ def duplicate(l, orien, lattice_par):
     Total = sum(storage)
     if Total == 6 or Total == 2:
         distance = (lattice_par * (math.sqrt(Total))) / 2
-        duplicate = math.ceil(l / distance)
+        dup = math.ceil(l / distance)
     else:
         distance = (lattice_par * (math.sqrt(Total)))
-        duplicate = math.ceil(l / distance)
+        dup = math.ceil(l / distance)
     end_orien = [(concatenate_list_data(orien))]
     x = '[' + "".join([str(i) for i in end_orien]) + ']'
-    duplicate = str(duplicate)
-    return duplicate, x
+    dup = str(dup)
+    return 0, dup, x
 
 
 def random_numbers(sfrN, sfrM):
@@ -1393,3 +1393,15 @@ def rescale(D, scale):
     upper = scale[1]
     Df = [lower + (upper - lower) * x for x in D]
     return (np.asarray(Df))
+
+def box_perio(file_lmp, dis):
+    fint = open(file_lmp, "r")
+    lines = fint.readlines()
+    data_x = lines[5].split( )
+    lines[5] = '{} {} {} {}\n'.format(data_x[0], str(float(data_x[1])+dis[0]), data_x[2], data_x[3])
+    data_y = lines[6].split( )
+    lines[6] = '{} {} {} {}\n'.format(data_y[0], str(float(data_y[1])+dis[1]), data_y[2], data_y[3])
+    fint.close()
+    fend = open(file_lmp, "w")
+    fend.writelines(lines)
+    fend.close()
