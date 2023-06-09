@@ -203,6 +203,7 @@ class Sample(object):
             return (vertices, stl)
 
     def make_atom(self,
+                  type_sample,
                   STL,
                   lattice_str,
                   lattice_par,
@@ -239,9 +240,9 @@ class Sample(object):
         dim_x = max(vertices[:, 0]) - min(vertices[:, 0])
         dim_y = max(vertices[:, 1]) - min(vertices[:, 1])
         dim_z = max(vertices[:, 2]) - min(vertices[:, 2])
-        dup_x, orien_x = fp.duplicate(dim_x, orien_x, lattice_par)
-        dup_y, orien_y = fp.duplicate(dim_y, orien_y, lattice_par)
-        dup_z, orien_z = fp.duplicate(dim_z, orien_z, lattice_par)
+        dis_x, dup_x, orien_x = fp.duplicate(dim_x, orien_x, lattice_par)
+        dis_y, dup_y, orien_y = fp.duplicate(dim_y, orien_y, lattice_par)
+        dis_z, dup_z, orien_z = fp.duplicate(dim_z, orien_z, lattice_par)
 
         lattice_par = str(lattice_par)
 
@@ -252,6 +253,8 @@ class Sample(object):
              'select', out_pre + '.lmp'])
         subprocess.call(['rm', 'material_supercell.lmp'])
         fp.rebox(out_pre + '.lmp')
+        if type_sample == 'box':
+            fp.box_perio(out_pre + '.lmp', [dis_x,dis_y])
 
 
 def make_wire(type_sample,
