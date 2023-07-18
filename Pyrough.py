@@ -97,9 +97,10 @@ else :
                                             param.orien_x,
                                             param.orien_y,
                                             param.orien_z,
-                                            out_pre)
+                                            out_pre,
+                                            param.ext_fem)
         # Calling the sample class function of MAKE it which returns an stl file of the object desired.
-        if param.output(Param_file) == 'ATOM_lmp':
+        if param.output(Param_file) == 'ATOM':
             sample.make_atom(param.type_S,
                              FEM_stl,
                              param.lattice_structure,
@@ -109,8 +110,9 @@ else :
                              param.orien_y,
                              param.orien_z,
                              vertices,
-                             out_pre)
+                             out_pre,
+                             param.ext_ato)
             # call make it md to create atomsk file
-            print('JOB DONE!' + '  File name: ' + out_pre + '.lmp')
+            print('JOB DONE!' + '  File name: ' + out_pre + '.' + str(param.ext_ato[0]))
         else:
             print('JOB DONE!' + '  File name: ' + FEM_stl)
