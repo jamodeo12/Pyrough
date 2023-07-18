@@ -47,7 +47,8 @@ class Sample(object):
                  orien_x,
                  orien_y,
                  orien_z,
-                 out_pre
+                 out_pre,
+                 ext_fem
                  ):
         """
         Creates an stl file based on the parameters chosen by the user.
@@ -112,7 +113,8 @@ class Sample(object):
                                       length,
                                       ns,
                                       raw_stl,
-                                      out_pre
+                                      out_pre,
+                                      ext_fem
                                       )
 
             return (vertices, stl)
@@ -129,7 +131,8 @@ class Sample(object):
                                      width,
                                      ns,
                                      raw_stl,
-                                     out_pre
+                                     out_pre,
+                                     ext_fem
                                      )
 
             return (vertices, stl)
@@ -143,7 +146,8 @@ class Sample(object):
                                         radius,
                                         ns,
                                         raw_stl,
-                                        out_pre
+                                        out_pre,
+                                        ext_fem
                                         )
 
             return (vertices, stl)
@@ -161,6 +165,7 @@ class Sample(object):
                                       ns,
                                       raw_stl,
                                       out_pre,
+                                      ext_fem
                                       )
             return (vertices, stl)
 
@@ -182,7 +187,8 @@ class Sample(object):
                                        orien_x,
                                        orien_y,
                                        orien_z,
-                                       out_pre
+                                       out_pre,
+                                       ext_fem
                                        )
 
             return (vertices, stl)
@@ -197,7 +203,8 @@ class Sample(object):
                                       length,
                                       ns,
                                       raw_stl,
-                                      out_pre
+                                      out_pre,
+                                      ext_fem
                                       )
 
             return (vertices, stl)
@@ -212,7 +219,8 @@ class Sample(object):
                   orien_y,
                   orien_z,
                   vertices,
-                  out_pre
+                  out_pre,
+                  ext_ato
                   ):
 
         """
@@ -250,7 +258,7 @@ class Sample(object):
                          '-duplicate', dup_x, dup_y, dup_z, 'material_supercell.lmp'])
         subprocess.call(
             ['atomsk', 'material_supercell.lmp', '-select', 'stl', 'center', STL, '-select', 'invert', '-rmatom',
-             'select', out_pre + '.lmp'])
+             'select', out_pre + '.' + str(ext_ato[0]), ' '.join(ext_ato[1:])])
         subprocess.call(['rm', 'material_supercell.lmp'])
         fp.rebox(out_pre + '.lmp')
         if type_sample == 'box':
@@ -267,7 +275,8 @@ def make_wire(type_sample,
               length,
               ns,
               raw_stl,
-              out_pre
+              out_pre,
+              ext_fem
               ):
     """
     Creates an stl file of a rough wire
@@ -326,6 +335,7 @@ def make_wire(type_sample,
                :3]  # gets ride of the index column because stl file generator takes only a matrix with 3 columns
 
     fp.stl_file(vertices, faces, out_pre)  # creates an stl file of the cylinder with roughness on the surface
+    fp.refine(out_pre+'.stl', ext_fem)
     return (vertices, out_pre + '.stl')  # returns the stl file name
 
 
@@ -340,7 +350,8 @@ def make_box(type_sample,
              width,
              ns,
              raw_stl,
-             out_pre
+             out_pre,
+             ext_fem
              ):
     """
     Creates an stl file of a rough box
@@ -392,6 +403,7 @@ def make_box(type_sample,
                :3]  # gets rid of the index column because stl file generator takes only a matrix with 3 columns
 
     fp.stl_file(vertices, faces, out_pre)  # creates an stl file of the box with roughness on the surface
+    fp.refine(out_pre+'.stl', ext_fem)
     return (vertices, out_pre + '.stl')  # returns the stl file name
 
 
@@ -403,7 +415,8 @@ def make_sphere(type_sample,
                 radius,
                 ns,
                 raw_stl,
-                out_pre
+                out_pre,
+                ext_fem
                 ):
     """
     Creates an stl file of a rough sphere
@@ -453,6 +466,7 @@ def make_sphere(type_sample,
     new_vertex = fp.coord_cart_sphere(C1, C2, r, vertices, t, z, y, x)  # creates a new matrix with x, y, z in cartesian coordinates
 
     fp.stl_file(new_vertex, faces, out_pre)  # creates an stl file of the sphere with roughness on the surface
+    fp.refine(out_pre+'.stl', ext_fem)
 
     return (vertices, out_pre + '.stl')  # returns the stl file name
 
@@ -469,6 +483,7 @@ def make_poly(type_sample,
               ns,
               raw_stl,
               out_pre,
+              ext_fem
               ):
     """
     Creates an stl file of a faceted wire
@@ -529,7 +544,7 @@ def make_poly(type_sample,
                :3]  # gets rid of the index column because stl file generator takes only a matrix with 3 columns
     vertices = fp.align_poly(vertices, angles)
     fp.stl_file(vertices, faces, out_pre)  # creates an stl file of the box with roughness on the surface
-
+    fp.refine(out_pre+'.stl', ext_fem)
     return (vertices, out_pre + '.stl')
 
 #test
@@ -550,7 +565,8 @@ def make_wulff(type_sample,
                orien_x,
                orien_y,
                orien_z,
-               out_pre
+               out_pre,
+               ext_fem
                ):
     """
     Creates an stl file of a Wulff-shaped NP
@@ -609,7 +625,7 @@ def make_wulff(type_sample,
     vertices = vertices[:, :3]
 
     fp.stl_file(vertices, faces, out_pre)
-
+    fp.refine(out_pre+'.stl', ext_fem)
     return (vertices, out_pre + '.stl')
 
 
@@ -622,7 +638,8 @@ def make_cube(type_sample,
               length,
               ns,
               raw_stl,
-              out_pre
+              out_pre,
+              ext_fem
               ):
     """
     Creates an stl file of a cubic NP
@@ -663,7 +680,7 @@ def make_cube(type_sample,
     vertices = vertices[:, :3]
 
     fp.stl_file(vertices, faces, out_pre)
-
+    fp.refine(out_pre+'.stl', ext_fem)
     return (vertices, out_pre + '.stl')
 
 def make_atom_grain(STL,

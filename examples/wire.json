@@ -8,9 +8,11 @@
     "Number_segments": 50,
     "Raw_stl": "na"}, 
 
-"Output": 
-    {"ATOM_lmp": 1, 
-    "FEM_stl": 0}, 
+"Output":
+    {"ATOM":0,
+    "ATOM_ext": ["lmp", "xyz"],
+    "FEM": 1,
+    "FEM_ext": ["stl", "obj"]},
 
 "ATOM_Param": 
     {"Lattice_parameter": 4.07,

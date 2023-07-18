@@ -10,8 +10,10 @@
     "Raw_stl": "na"},
 
 "Output":
-    {"ATOM_lmp":1, 
-    "FEM_stl": 0},
+    {"ATOM":1,
+    "ATOM_ext": ["lmp", "xyz"],
+    "FEM": 1,
+    "FEM_ext": ["stl", "obj"]},
 
 "ATOM_Param": 
     {"Lattice_parameter": 4.07,

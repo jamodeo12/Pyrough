@@ -20,6 +20,7 @@ import math
 import scipy.special as sp
 from wulffpack import SingleCrystal
 from ase.build import bulk
+from pathlib import Path
 
 np.set_printoptions(threshold=sys.maxsize)
 
@@ -113,8 +114,8 @@ def cylinder(l, r, ns, out_pre):
     for theta in theta_list:
         points.append([r * np.cos(theta), r * np.sin(theta)])
     with pygmsh.geo.Geometry() as geom:
-        poly = geom.add_polygon(points, mesh_size=4)
-        geom.extrude(poly, [0, 0, l], num_layers=50)
+        poly = geom.add_polygon(points, mesh_size=3)
+        geom.extrude(poly, [0, 0, l], num_layers=75)
         mesh = geom.generate_mesh()
     vertices = mesh.points
     faces = mesh.get_cells_type('triangle')
@@ -337,7 +338,8 @@ def read_stl(sample_type, raw_stl, width, length, height, radius, ns, points, ou
             vertices, faces = cube(length, out_pre)
     else:
         mesh = meshio.read(raw_stl)
-        vertices, faces = mesh.points, mesh.cells["triangle"]
+        vertices, faces = mesh.points, mesh.cells
+        faces = faces[0][1]
     return (vertices, faces)
 
 
@@ -1407,3 +1409,19 @@ def box_perio(file_lmp, dis):
     fend = open(file_lmp, "w")
     fend.writelines(lines)
     fend.close()
+
+def refine(stl, ext):
+    print('====== > Refining the Mesh')
+    filee = Path(stl).stem
+    mesh = meshio.read(stl)
+    vertices, faces = mesh.points, mesh.cells
+    faces = faces[0][1]
+    with pygmsh.geo.Geometry() as geom:
+        for f in faces:
+            poly = geom.add_polygon([vertices[f[0]], vertices[f[1]], vertices[f[2]]], mesh_size=3)
+        mesh = geom.generate_mesh()
+        vertices = mesh.points
+        faces = mesh.get_cells_type('triangle')
+    # ext = ['obj', 'stl', 'inp', 'vtk']
+    for e in ext:
+        meshio.write_points_cells(filee+'.'+e, vertices, {"triangle": faces})

@@ -1,6 +1,6 @@
 {"Wulff":
     {"H": 0.75,
-    "RMS": 0,
+    "RMS": 1,
     "n_atoms": 277389,
     "N": 30,
     "M": 30,
@@ -9,8 +9,10 @@
     "Raw_stl": "na"},
 
 "Output":
-    {"ATOM_lmp":1,
-    "FEM_stl": 0},
+    {"ATOM":1,
+    "ATOM_ext": ["lmp", "xyz"],
+    "FEM": 1,
+    "FEM_ext": ["stl", "obj"]},
 
 "ATOM_Param":
     {"Lattice_parameter": 4.07,
