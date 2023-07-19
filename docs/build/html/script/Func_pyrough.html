@@ -173,6 +173,11 @@
 </dd></dl>
 
 <dl class="function">
+<dt id="Func_pyrough.box_perio">
+<code class="descclassname">Func_pyrough.</code><code class="descname">box_perio</code><span class="sig-paren">(</span><em>file_lmp</em>, <em>dis</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.box_perio" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
 <dt id="Func_pyrough.cart2cyl">
 <code class="descclassname">Func_pyrough.</code><code class="descname">cart2cyl</code><span class="sig-paren">(</span><em>matrix</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.cart2cyl" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates cylindrical coordinates from cartesian ones.</p>
@@ -725,6 +730,26 @@ type faces: array</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>file_lmp</strong> (<em>str</em>) – .lmp file containing the atom positions</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.refine">
+<code class="descclassname">Func_pyrough.</code><code class="descname">refine</code><span class="sig-paren">(</span><em>stl</em>, <em>ext</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.refine" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>stl</strong> (<em>str</em>) – Mesh file to be refined</li>
+<li><strong>ext</strong> (<em>str</em>) – Output formats for the generation of the new mesh</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
 </tr>
 </tbody>
 </table>

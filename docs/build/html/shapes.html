@@ -108,8 +108,10 @@ The roughening procedure consists in displacing each surface node along the <em>
     <span class="s2">&quot;Raw_stl&quot;</span><span class="p">:</span> <span class="s2">&quot;na&quot;</span><span class="p">},</span>
 
 <span class="s2">&quot;Output&quot;</span><span class="p">:</span>
-    <span class="p">{</span><span class="s2">&quot;ATOM_lmp&quot;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> 
-    <span class="s2">&quot;FEM_stl&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;ATOM&quot;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;ATOM_ext&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;lmp&quot;</span><span class="p">,</span> <span class="s2">&quot;xyz&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;FEM&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;FEM_ext&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;stl&quot;</span><span class="p">,</span> <span class="s2">&quot;obj&quot;</span><span class="p">]},</span>
 
 <span class="s2">&quot;ATOM_Param&quot;</span><span class="p">:</span> 
     <span class="p">{</span><span class="s2">&quot;Lattice_parameter&quot;</span><span class="p">:</span> <span class="mf">4.07</span><span class="p">,</span>
@@ -135,8 +137,10 @@ The roughening procedure consists in displacing each surface node along the <em>
     <span class="s2">&quot;Raw_stl&quot;</span><span class="p">:</span> <span class="s2">&quot;na&quot;</span><span class="p">},</span>
 
 <span class="s2">&quot;Output&quot;</span><span class="p">:</span>
-    <span class="p">{</span><span class="s2">&quot;ATOM_lmp&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="s2">&quot;FEM_stl&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;ATOM&quot;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;ATOM_ext&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;lmp&quot;</span><span class="p">,</span> <span class="s2">&quot;xyz&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;FEM&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;FEM_ext&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;stl&quot;</span><span class="p">,</span> <span class="s2">&quot;obj&quot;</span><span class="p">]},</span>
 
 <span class="s2">&quot;ATOM_Param&quot;</span><span class="p">:</span>
     <span class="p">{</span><span class="s2">&quot;Lattice_parameter&quot;</span><span class="p">:</span> <span class="mf">3.615</span><span class="p">,</span>
@@ -164,9 +168,11 @@ Thus, each surface node from the wire mesh is moved along <em>r</em>-axis by its
     <span class="s2">&quot;Number_segments&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
     <span class="s2">&quot;Raw_stl&quot;</span><span class="p">:</span> <span class="s2">&quot;na&quot;</span><span class="p">},</span> 
 
-<span class="s2">&quot;Output&quot;</span><span class="p">:</span> 
-    <span class="p">{</span><span class="s2">&quot;ATOM_lmp&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> 
-    <span class="s2">&quot;FEM_stl&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span> 
+<span class="s2">&quot;Output&quot;</span><span class="p">:</span>
+    <span class="p">{</span><span class="s2">&quot;ATOM&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+    <span class="s2">&quot;ATOM_ext&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;lmp&quot;</span><span class="p">,</span> <span class="s2">&quot;xyz&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;FEM&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;FEM_ext&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;stl&quot;</span><span class="p">,</span> <span class="s2">&quot;obj&quot;</span><span class="p">]},</span>
 
 <span class="s2">&quot;ATOM_Param&quot;</span><span class="p">:</span> 
     <span class="p">{</span><span class="s2">&quot;Lattice_parameter&quot;</span><span class="p">:</span> <span class="mf">4.07</span><span class="p">,</span>
@@ -194,9 +200,11 @@ Surface nodes are here translated along the facet normal <span class="math">\(\v
     <span class="s2">&quot;Number_segments&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
     <span class="s2">&quot;Raw_stl&quot;</span><span class="p">:</span> <span class="s2">&quot;na&quot;</span><span class="p">},</span> 
 
-<span class="s2">&quot;Output&quot;</span><span class="p">:</span> 
-    <span class="p">{</span><span class="s2">&quot;ATOM_lmp&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> 
-    <span class="s2">&quot;FEM_stl&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span> 
+<span class="s2">&quot;Output&quot;</span><span class="p">:</span>
+    <span class="p">{</span><span class="s2">&quot;ATOM&quot;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;ATOM_ext&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;lmp&quot;</span><span class="p">,</span> <span class="s2">&quot;xyz&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;FEM&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;FEM_ext&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;stl&quot;</span><span class="p">,</span> <span class="s2">&quot;obj&quot;</span><span class="p">]},</span>
 
 <span class="s2">&quot;ATOM_Param&quot;</span><span class="p">:</span> 
     <span class="p">{</span><span class="s2">&quot;Lattice_parameter&quot;</span><span class="p">:</span> <span class="mf">4.07</span><span class="p">,</span>
@@ -215,9 +223,9 @@ Surface nodes are here translated along the facet normal <span class="math">\(\v
 Each node is translated along its facet normal <span class="math">\(\vec{n}\)</span> using <em>h(x,y)</em> to build the rough surface.
 The process is repeated for each facet of the sample.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;Wulff&quot;</span><span class="p">:</span>
-    <span class="p">{</span><span class="s2">&quot;H&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
-    <span class="s2">&quot;C1&quot;</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span>
-    <span class="s2">&quot;n_atoms&quot;</span><span class="p">:</span> <span class="mi">50000</span><span class="p">,</span> 
+    <span class="p">{</span><span class="s2">&quot;H&quot;</span><span class="p">:</span> <span class="mf">0.75</span><span class="p">,</span>
+    <span class="s2">&quot;RMS&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;n_atoms&quot;</span><span class="p">:</span> <span class="mi">277389</span><span class="p">,</span>
     <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
     <span class="s2">&quot;M&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
     <span class="s2">&quot;Surfaces&quot;</span><span class="p">:</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]],</span>
@@ -225,15 +233,17 @@ The process is repeated for each facet of the sample.</p>
     <span class="s2">&quot;Raw_stl&quot;</span><span class="p">:</span> <span class="s2">&quot;na&quot;</span><span class="p">},</span>
 
 <span class="s2">&quot;Output&quot;</span><span class="p">:</span>
-    <span class="p">{</span><span class="s2">&quot;ATOM_lmp&quot;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> 
-    <span class="s2">&quot;FEM_stl&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;ATOM&quot;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;ATOM_ext&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;lmp&quot;</span><span class="p">,</span> <span class="s2">&quot;xyz&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;FEM&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;FEM_ext&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;stl&quot;</span><span class="p">,</span> <span class="s2">&quot;obj&quot;</span><span class="p">]},</span>
 
-<span class="s2">&quot;ATOM_Param&quot;</span><span class="p">:</span> 
-    <span class="p">{</span><span class="s2">&quot;Lattice_parameter&quot;</span><span class="p">:</span> <span class="mf">4.07</span><span class="p">,</span> 
-    <span class="s2">&quot;Material&quot;</span><span class="p">:</span> <span class="s2">&quot;Au&quot;</span><span class="p">,</span> 
-    <span class="s2">&quot;Orien_x&quot;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> 
-    <span class="s2">&quot;Orien_y&quot;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> 
-    <span class="s2">&quot;Orien_z&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> 
+<span class="s2">&quot;ATOM_Param&quot;</span><span class="p">:</span>
+    <span class="p">{</span><span class="s2">&quot;Lattice_parameter&quot;</span><span class="p">:</span> <span class="mf">4.07</span><span class="p">,</span>
+    <span class="s2">&quot;Material&quot;</span><span class="p">:</span> <span class="s2">&quot;Au&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Orien_x&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+    <span class="s2">&quot;Orien_y&quot;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+    <span class="s2">&quot;Orien_z&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
     <span class="s2">&quot;Lattice_structure&quot;</span><span class="p">:</span> <span class="s2">&quot;fcc&quot;</span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
@@ -252,8 +262,10 @@ Surface roughness is applied in the same way as in the case of wulff shapes.</p>
     <span class="s2">&quot;Raw_stl&quot;</span><span class="p">:</span> <span class="s2">&quot;na&quot;</span><span class="p">},</span>
 
 <span class="s2">&quot;Output&quot;</span><span class="p">:</span>
-    <span class="p">{</span><span class="s2">&quot;ATOM_lmp&quot;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> 
-    <span class="s2">&quot;FEM_stl&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;ATOM&quot;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;ATOM_ext&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;lmp&quot;</span><span class="p">,</span> <span class="s2">&quot;xyz&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;FEM&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;FEM_ext&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;stl&quot;</span><span class="p">,</span> <span class="s2">&quot;obj&quot;</span><span class="p">,</span> <span class="s2">&quot;vtk&quot;</span><span class="p">]},</span>
 
 <span class="s2">&quot;ATOM_Param&quot;</span><span class="p">:</span> 
     <span class="p">{</span><span class="s2">&quot;Lattice_parameter&quot;</span><span class="p">:</span> <span class="mf">4.07</span><span class="p">,</span> 

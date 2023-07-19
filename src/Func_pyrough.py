@@ -1411,6 +1411,15 @@ def box_perio(file_lmp, dis):
     fend.close()
 
 def refine(stl, ext):
+    """
+
+    :param stl: Mesh file to be refined
+    :type stl: str
+    :param ext: Output formats for the generation of the new mesh
+    :type ext: str
+
+    :return:
+    """
     print('====== > Refining the Mesh')
     filee = Path(stl).stem
     mesh = meshio.read(stl)
