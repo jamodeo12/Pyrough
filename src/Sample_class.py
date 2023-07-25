@@ -17,6 +17,7 @@
 from src import Func_pyrough as fp
 import numpy as np
 import subprocess
+import matplotlib.pyplot as plt
 
 # np.set_printoptions(threshold=sys.maxsize)
 
@@ -312,6 +313,7 @@ def make_wire(type_sample,
 
     nodesurf = fp.node_surface(type_sample, vertices, nodenumber, 0,
                                0)  # nodes at the surface of the object. These nodes will have the surface roughness applied to it.
+    index = [int(i) for i in nodesurf.T[3]]
 
     cy_nodesurf = np.array(
         [fp.rho(nodesurf[:, 0], nodesurf[:, 1]), fp.theta(nodesurf[:, 0], nodesurf[:, 1]), nodesurf[:, 2],
@@ -335,7 +337,7 @@ def make_wire(type_sample,
                :3]  # gets ride of the index column because stl file generator takes only a matrix with 3 columns
 
     fp.stl_file(vertices, faces, out_pre)  # creates an stl file of the cylinder with roughness on the surface
-    fp.refine(out_pre+'.stl', ext_fem)
+    fp.refine(out_pre+'.stl', ext_fem, vertices[index])
     return (vertices, out_pre + '.stl')  # returns the stl file name
 
 
@@ -399,11 +401,12 @@ def make_box(type_sample,
     z = fp.random_surf2(type_sample, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, RMS, out_pre)  # Returns an array with the Z values that will replace the previous z vlaues in the vertices array these represent the rougness on the surface
     vertices = fp.make_rough(type_sample, z, nodesurf, vertices, 0)
 
+    index = [int(i) for i in nodesurf.T[3]]
     vertices = vertices[:,
                :3]  # gets rid of the index column because stl file generator takes only a matrix with 3 columns
 
     fp.stl_file(vertices, faces, out_pre)  # creates an stl file of the box with roughness on the surface
-    fp.refine(out_pre+'.stl', ext_fem)
+    fp.refine(out_pre+'.stl', ext_fem, vertices[index])
     return (vertices, out_pre + '.stl')  # returns the stl file name
 
 
@@ -466,7 +469,7 @@ def make_sphere(type_sample,
     new_vertex = fp.coord_cart_sphere(C1, C2, r, vertices, t, z, y, x)  # creates a new matrix with x, y, z in cartesian coordinates
 
     fp.stl_file(new_vertex, faces, out_pre)  # creates an stl file of the sphere with roughness on the surface
-    fp.refine(out_pre+'.stl', ext_fem)
+    fp.refine_bis(out_pre+'.stl', ext_fem)
 
     return (vertices, out_pre + '.stl')  # returns the stl file name
 
@@ -521,7 +524,7 @@ def make_poly(type_sample,
 
     nodesurf = fp.node_surface(type_sample, vertices, nodenumber, points,
                                0)  # nodes at the surface of the object. These nodes will have the surface roughness applied to it.
-
+    index = [int(i) for i in nodesurf.T[3]]
     cy_nodesurf = fp.cart2cyl(nodesurf)
     sorted_cy_nodesurf = cy_nodesurf[np.lexsort((cy_nodesurf[:, 1], cy_nodesurf[:, 2]))]
     nodesurf = fp.cyl2cart(sorted_cy_nodesurf)
@@ -544,7 +547,7 @@ def make_poly(type_sample,
                :3]  # gets rid of the index column because stl file generator takes only a matrix with 3 columns
     vertices = fp.align_poly(vertices, angles)
     fp.stl_file(vertices, faces, out_pre)  # creates an stl file of the box with roughness on the surface
-    fp.refine(out_pre+'.stl', ext_fem)
+    fp.refine(out_pre+'.stl', ext_fem, vertices[index])
     return (vertices, out_pre + '.stl')
 
 #test
@@ -618,6 +621,8 @@ def make_wulff(type_sample,
         vertices)  # creates a column that has an assigned index number for each row in vertices; returns vertices with the addtion of this new column and also returns the nodenumbers which is an array fille from 0 - length of the vertices
 
     nodesurf = fp.node_surface(type_sample, vertices, nodenumber, obj_points, obj_faces)
+    L = []
+
     node_edge, node_corner = fp.node_corner(nodesurf)
 
     vertices = fp.make_rough_wulff(vertices, B, C1, RMS, N, M, nodesurf, node_edge, node_corner, list_n)
@@ -625,7 +630,7 @@ def make_wulff(type_sample,
     vertices = vertices[:, :3]
 
     fp.stl_file(vertices, faces, out_pre)
-    fp.refine(out_pre+'.stl', ext_fem)
+    fp.refine_bis(out_pre+'.stl', ext_fem)
     return (vertices, out_pre + '.stl')
 
 
@@ -680,7 +685,7 @@ def make_cube(type_sample,
     vertices = vertices[:, :3]
 
     fp.stl_file(vertices, faces, out_pre)
-    fp.refine(out_pre+'.stl', ext_fem)
+    fp.refine_bis(out_pre+'.stl', ext_fem)
     return (vertices, out_pre + '.stl')
 
 def make_atom_grain(STL,
