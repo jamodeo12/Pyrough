@@ -1410,13 +1410,49 @@ def box_perio(file_lmp, dis):
     fend.writelines(lines)
     fend.close()
 
-def refine(stl, ext):
+def refine(stl, ext, nodesurf):
     """
+    Refine the mesh of the rough generated object (box, wire, poly)
 
     :param stl: Mesh file to be refined
     :type stl: str
     :param ext: Output formats for the generation of the new mesh
     :type ext: str
+    :param nodesurf : List of surface nodes
+    :type nodesurf : array
+
+    :return:
+    """
+    print('====== > Refining the Mesh')
+    filee = Path(stl).stem
+    mesh = meshio.read(stl)
+    vertices, faces = mesh.points, mesh.cells
+    faces = faces[0][1]
+    nodesurf =[list(i) for i in nodesurf]
+    with pygmsh.geo.Geometry() as geom:
+        for f in faces:
+            if any(list == vertices[f[0]].tolist() for list in nodesurf) or any(list == vertices[f[1]].tolist() for list in nodesurf) or any(list == vertices[f[2]].tolist() for list in nodesurf) :
+                poly = geom.add_polygon([list(vertices[f[0]]), list(vertices[f[1]]), list(vertices[f[2]])], mesh_size = 3)
+            else :
+                poly = geom.add_polygon([vertices[f[0]], vertices[f[1]], vertices[f[2]]], mesh_size=500)
+        mesh = geom.generate_mesh()
+        vertices = mesh.points
+        faces = mesh.get_cells_type('triangle')
+    # ext = ['obj', 'stl', 'inp', 'vtk']
+    for e in ext:
+        meshio.write_points_cells(filee+'.'+e, vertices, {"triangle": faces})
+    return()
+
+def refine_bis(stl, ext):
+    """
+    Refine the mesh of the rough generated object (sphere, wulff, cube)
+
+    :param stl: Mesh file to be refined
+    :type stl: str
+    :param ext: Output formats for the generation of the new mesh
+    :type ext: str
+    :param nodesurf : List of surface nodes
+    :type nodesurf : array
 
     :return:
     """
@@ -1427,10 +1463,10 @@ def refine(stl, ext):
     faces = faces[0][1]
     with pygmsh.geo.Geometry() as geom:
         for f in faces:
-            poly = geom.add_polygon([vertices[f[0]], vertices[f[1]], vertices[f[2]]], mesh_size=3)
+            poly = geom.add_polygon([list(vertices[f[0]]), list(vertices[f[1]]), list(vertices[f[2]])], mesh_size = 3)
         mesh = geom.generate_mesh()
         vertices = mesh.points
         faces = mesh.get_cells_type('triangle')
-    # ext = ['obj', 'stl', 'inp', 'vtk']
     for e in ext:
         meshio.write_points_cells(filee+'.'+e, vertices, {"triangle": faces})
+    return()
