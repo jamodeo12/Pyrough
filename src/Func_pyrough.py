@@ -93,89 +93,195 @@ def theta(x, y):
     """
     return np.arctan2(y, x)
 
-
 def cylinder(l, r, ns, out_pre):
-    """
-    Creates a cylindrical mesh.
-    
-    :param l: Length of the desired nanowire 
-    :type l: float
-    :param r: Radius of the nanowire 
-    :type r: float
-    :param ns: The number of segments desired on the nanowire 
-    :type ns: int
-    :param out_pre: Prefix for output files
-    :type out_pre: str
-
-    :returns: List of points and faces
-    """
     print('====== > Creating the Mesh')
-    points = []
-    theta_list = np.linspace(0, 2 * np.pi, 50)
-    for theta in theta_list:
-        points.append([r * np.cos(theta), r * np.sin(theta)])
-    with pygmsh.geo.Geometry() as geom:
-        poly = geom.add_polygon(points, mesh_size=ns)
-        geom.extrude(poly, [0, 0, l], num_layers=75)
-        mesh = geom.generate_mesh()
-    vertices = mesh.points
-    faces = mesh.get_cells_type('triangle')
-    write_stl('Raw_' + out_pre + '.stl', vertices, faces)
+    # Initialize Gmsh
+    gmsh.initialize()
+    gmsh.option.setNumber("General.Terminal", 0)
+    # Create a new model
+    gmsh.model.add("Cylinder")
+    # Add points to define the bottom circle
+    center = gmsh.model.geo.addPoint(0, 0, 0)
+    p1 = gmsh.model.geo.addPoint(r, 0, 0)
+    p2 = gmsh.model.geo.addPoint(0, r, 0)
+    p3 = gmsh.model.geo.addPoint(-r, 0, 0)
+    p4 = gmsh.model.geo.addPoint(0, -r, 0)
+    # Create circle arcs
+    arc1 = gmsh.model.geo.addCircleArc(p1, center, p2)
+    arc2 = gmsh.model.geo.addCircleArc(p2, center, p3)
+    arc3 = gmsh.model.geo.addCircleArc(p3, center, p4)
+    arc4 = gmsh.model.geo.addCircleArc(p4, center, p1)
+    # Create bottom plane surface (disk)
+    loop = gmsh.model.geo.addCurveLoop([arc1, arc2, arc3, arc4])
+    disk = gmsh.model.geo.addPlaneSurface([loop])
+    # Extrude the disk to get the cylinder
+    gmsh.model.geo.extrude([(2, disk)], 0, 0, l)
+    # Set a constant mesh size
+    f = gmsh.model.mesh.field.add("MathEval")
+    gmsh.model.mesh.field.setString(f, "F", str(ns))
+    # Set the meshing field as the background field
+    gmsh.model.mesh.field.setAsBackgroundMesh(f)
+    # Synchronize to process the defined geometry
+    gmsh.model.geo.synchronize()
+    # Mesh the cylinder (this uses default meshing options)
+    gmsh.model.mesh.generate(2)  # 3 means 3D mesh
+    # Save the mesh to a file
+    gmsh.write('Raw_' + out_pre + '.stl')
+    # Extract node information
+    node_tags, node_coords, _ = gmsh.model.mesh.getNodes()
+    # Extract 2D surface element types and connectivity
+    element_types, element_tags, element_nodes = gmsh.model.mesh.getElements(dim=2)
+    gmsh.finalize()
+    # Reshape the node coordinates into a more user-friendly format
+    vertices = node_coords.reshape(-1, 3)
+    # Find the triangles from the extracted elements
+    triangle_idx = np.where(element_types == 2)[0][0]  # 2 corresponds to triangles
+    faces = element_nodes[triangle_idx].reshape(-1, 3)-1
     print('====== > Done creating the Mesh')
     return (vertices, faces)
-
 
 def box(width, length, height, ns, out_pre):
-    """
-    Creates a box mesh.
-
-    :param width: Width of the desired box
-    :type width: float
-    :param length: Length of the desired box
-    :type length: float
-    :param height: Height of the desired box
-    :type height: float
-    :param ns: Number of segments
-    :type ns: int
-    :param out_pre: Prefix for output files
-    :type out_pre: str
-
-    :return: List of points and faces
-    """
     print('====== > Creating the Mesh')
-    with pygmsh.geo.Geometry() as geom:
-        geom.add_box(0, length, 0, width, 0, height, mesh_size=ns)
-        mesh = geom.generate_mesh()
-    vertices = mesh.points
-    faces = mesh.get_cells_type('triangle')
-    mesh.write('Raw_' + out_pre + '.stl')
+    # Initialize Gmsh
+    gmsh.initialize()
+    # Silence Gmsh's output
+    gmsh.option.setNumber("General.Terminal", 0)
+    # Create a new model
+    gmsh.model.add("Box")
+    # Define the box's vertices
+    p1 = gmsh.model.geo.addPoint(0, 0, 0)
+    p2 = gmsh.model.geo.addPoint(length, 0, 0)
+    p3 = gmsh.model.geo.addPoint(length, width, 0)
+    p4 = gmsh.model.geo.addPoint(0, width, 0)
+    p5 = gmsh.model.geo.addPoint(0, 0, height)
+    p6 = gmsh.model.geo.addPoint(length, 0, height)
+    p7 = gmsh.model.geo.addPoint(length, width, height)
+    p8 = gmsh.model.geo.addPoint(0, width, height)
+    # Connect the points to form the edges
+    lines = [
+        gmsh.model.geo.addLine(p1, p2),
+        gmsh.model.geo.addLine(p2, p3),
+        gmsh.model.geo.addLine(p3, p4),
+        gmsh.model.geo.addLine(p4, p1),
+        gmsh.model.geo.addLine(p5, p6),
+        gmsh.model.geo.addLine(p6, p7),
+        gmsh.model.geo.addLine(p7, p8),
+        gmsh.model.geo.addLine(p8, p5),
+        gmsh.model.geo.addLine(p1, p5),
+        gmsh.model.geo.addLine(p2, p6),
+        gmsh.model.geo.addLine(p3, p7),
+        gmsh.model.geo.addLine(p4, p8),
+    ]
+    # Connect the edges to form the faces
+    faces = [
+        gmsh.model.geo.addPlaneSurface([gmsh.model.geo.addCurveLoop([lines[0], lines[1], lines[2], lines[3]])]),
+        gmsh.model.geo.addPlaneSurface([gmsh.model.geo.addCurveLoop([lines[4], lines[5], lines[6], lines[7]])]),
+        gmsh.model.geo.addPlaneSurface([gmsh.model.geo.addCurveLoop([lines[0], lines[9], -lines[4], -lines[8]])]),
+        gmsh.model.geo.addPlaneSurface([gmsh.model.geo.addCurveLoop([-lines[2], lines[10], lines[6], -lines[11]])]),
+        gmsh.model.geo.addPlaneSurface([gmsh.model.geo.addCurveLoop([lines[1], lines[10], -lines[5], -lines[9]])]),
+        gmsh.model.geo.addPlaneSurface([gmsh.model.geo.addCurveLoop([-lines[3], lines[11], lines[7], -lines[8]])]),
+    ]
+    # Define a uniform mesh size
+    f = gmsh.model.mesh.field.add("MathEval")
+    gmsh.model.mesh.field.setString(f, "F", str(ns))
+    gmsh.model.mesh.field.setAsBackgroundMesh(f)
+    # Synchronize the model
+    gmsh.model.geo.synchronize()
+    # Generate the 3D mesh
+    gmsh.model.mesh.generate(2)
+    # Save the mesh to a file
+    gmsh.write('Raw_' + out_pre + '.stl')
+    # Extract node information
+    node_tags, node_coords, _ = gmsh.model.mesh.getNodes()
+    # Extract 2D surface element types and connectivity
+    element_types, element_tags, element_nodes = gmsh.model.mesh.getElements(dim=2)
+    gmsh.finalize()
+    # Reshape the node coordinates into a more user-friendly format
+    vertices = node_coords.reshape(-1, 3)
+    # Find the triangles from the extracted elements
+    triangle_idx = np.where(element_types == 2)[0][0]  # 2 corresponds to triangles
+    faces = element_nodes[triangle_idx].reshape(-1, 3)-1
+    print('====== > Done creating the Mesh')
+    return(vertices, faces)
+
+def sphere(r, ns, out_pre):
+    print('====== > Creating the Mesh')
+    gmsh.initialize()
+    gmsh.option.setNumber("General.Terminal", 0)  # Turn off verbose output
+    gmsh.model.add("sphere")
+    # Create the sphere
+    gmsh.model.occ.addSphere(0, 0, 0, r)
+    gmsh.model.occ.synchronize()
+    # Set the mesh size
+    gmsh.option.setNumber("Mesh.MeshSizeMin", ns)
+    gmsh.option.setNumber("Mesh.MeshSizeMax", ns)
+    # Generate 2D mesh
+    gmsh.model.mesh.generate(2)
+    # Save the mesh to a file
+    gmsh.write('Raw_' + out_pre + '.stl')
+    # Extract node information
+    node_tags, node_coords, _ = gmsh.model.mesh.getNodes()
+    # Extract 2D surface element types and connectivity
+    element_types, element_tags, element_nodes = gmsh.model.mesh.getElements(dim=2)
+    gmsh.finalize()
+    # Reshape the node coordinates into a more user-friendly format
+    vertices = node_coords.reshape(-1, 3)
+    # Find the triangles from the extracted elements
+    triangle_idx = np.where(element_types == 2)[0][0]  # 2 corresponds to triangles
+    faces = element_nodes[triangle_idx].reshape(-1, 3)-1
     print('====== > Done creating the Mesh')
     return (vertices, faces)
 
-
-def sphere(r, ns, out_pre):
+def poly2(length, points, ns, out_pre):
     """
-    Creates a sphere mesh.
+    Creates a faceted wire mesh.
 
-    :param r: Radius of the desired sphere
-    :type r: float
-    :param ns: The number of segments desired on the sphere
-    :type ns: int
+    :param length: Length of the wire
+    :type length: float
+    :param points: Base points of the wire
+    :type points: array
     :param out_pre: Prefix of output files
     :type out_pre: str
 
     :returns: List of points and faces
     """
     print('====== > Creating the Mesh')
-    with pygmsh.geo.Geometry() as geom:
-        poly = geom.add_ball([0.0, 0.0, 0.0], r, mesh_size=ns)
-        mesh = geom.generate_mesh()
-    vertices = mesh.points
-    faces = mesh.get_cells_type('triangle')
-    write_stl('Raw_' + out_pre + '.stl', vertices, faces)
+    gmsh.initialize()
+    gmsh.option.setNumber("General.Terminal", 0)
+    gmsh.model.add("Wire")
+
+    # Calculate the number of layers and adjust meshSize
+    num_layers = round(length / ns)
+    adjusted_meshSize = length/ num_layers
+
+    # Define the base points
+    point_tags = [gmsh.model.geo.addPoint(x, y, 0, adjusted_meshSize) for x, y in points]
+
+    # Connect the points to form the faceted base
+    line_tags = [gmsh.model.geo.addLine(point_tags[i], point_tags[(i + 1) % len(point_tags)]) for i in range(len(point_tags))]
+
+    # Close the loop and create a plane surface
+    loop_tag = gmsh.model.geo.addCurveLoop(line_tags)
+    surface_tag = gmsh.model.geo.addPlaneSurface([loop_tag])
+
+    # Extrude the base surface to create the wire
+    out_dim_tags = gmsh.model.geo.extrude([(2, surface_tag)], 0, 0, length)
+
+    gmsh.model.geo.synchronize()
+    gmsh.model.mesh.generate(2)
+    gmsh.write('Raw_' + out_pre + '.stl')
+    # Extract node information
+    node_tags, node_coords, _ = gmsh.model.mesh.getNodes()
+    # Extract 2D surface element types and connectivity
+    element_types, element_tags, element_nodes = gmsh.model.mesh.getElements(dim=2)
+    gmsh.finalize()
+    # Reshape the node coordinates into a more user-friendly format
+    vertices = node_coords.reshape(-1, 3)
+    # Find the triangles from the extracted elements
+    triangle_idx = np.where(element_types == 2)[0][0]  # 2 corresponds to triangles
+    faces = element_nodes[triangle_idx].reshape(-1, 3)-1
     print('====== > Done creating the Mesh')
     return (vertices, faces)
-
 
 def poly(length, points, ns, out_pre):
     """
@@ -201,53 +307,89 @@ def poly(length, points, ns, out_pre):
     print('====== > Done creating the Mesh')
     return (vertices, faces)
 
-
-def wulff(obj_points, obj_faces, ns, out_pre):
-    """
-    Creates a Wulff-Shaped NP mesh
-
-    :param obj_points: Corners of the NP (from OBJ file)
-    :type obj_points: list
-    :param obj_faces: Faces of the NP (from OBJ file)
-    :type obj_faces: list
-
-    :returns: List of points and faces
-    """
-    with pygmsh.geo.Geometry() as geom:
-        for polygone in obj_faces:
-            list_points = []
-            for i in polygone:
-                list_points.append(obj_points[int(i - 1)])
-            list_points = np.asarray(list_points)
-            geom.add_polygon(list_points, mesh_size=ns)
-        mesh = geom.generate_mesh()
-        vertices = mesh.points
-        faces = mesh.get_cells_type('triangle')
-    write_stl('Raw_' + out_pre + '.stl', vertices, faces)
-    return (vertices, faces)
-
+def wulff(points, faces, ns, out_pre):
+    print('====== > Creating the Mesh')
+    # Initialize the Gmsh API
+    gmsh.initialize()
+    gmsh.option.setNumber("General.Terminal", 0)
+    gmsh.model.add("MeshFromPointsAndFaces")
+    # Add points to the model
+    point_tags = [gmsh.model.geo.addPoint(p[0], p[1], p[2], ns) for p in points]
+    # Create surfaces from faces:
+    for face in faces:
+        line_loops = []
+        for i in range(len(face)):
+            start_point = point_tags[int(face[i]) - 1]
+            end_point = point_tags[int(face[(i + 1) % len(face)]) - 1]
+            line = gmsh.model.geo.addLine(start_point, end_point)
+            line_loops.append(line)
+        # Remove the explicit tag to let Gmsh assign it automatically
+        loop = gmsh.model.geo.addCurveLoop(line_loops)
+        gmsh.model.geo.addPlaneSurface([loop])
+    # Synchronize the data from Python to Gmsh
+    gmsh.model.geo.synchronize()
+    # Mesh the surface
+    gmsh.model.mesh.generate(2)
+    # Save the mesh as STL
+    gmsh.write('Raw_' + out_pre + '.stl')
+    # Extract node information
+    node_tags, node_coords, _ = gmsh.model.mesh.getNodes()
+    # Extract 2D surface element types and connectivity
+    element_types, element_tags, element_nodes = gmsh.model.mesh.getElements(dim=2)
+    gmsh.finalize()
+    # Reshape the node coordinates into a more user-friendly format
+    vertices = node_coords.reshape(-1, 3)
+    # Find the triangles from the extracted elements
+    triangle_idx = np.where(element_types == 2)[0][0]  # 2 corresponds to triangles
+    faces = element_nodes[triangle_idx].reshape(-1, 3)-1
+    print('====== > Done creating the Mesh')
+    return(vertices, faces)
 
 def cube(length, ns, out_pre):
-    """
-    Creates a cube mesh.
-
-    :param length: Length of the desired box
-    :type length: float
-    :param out_pre: Prefix for output files
-    :type out_pre: str
-
-    :return: List of points and faces
-    """
     print('====== > Creating the Mesh')
-    with pygmsh.geo.Geometry() as geom:
-        geom.add_box(0, length, 0, length, 0, length, mesh_size=ns)
-        mesh = geom.generate_mesh()
-    vertices = mesh.points
-    faces = mesh.get_cells_type('triangle')
-    mesh.write('Raw_' + out_pre + '.stl')
+    # Initialize Gmsh
+    gmsh.initialize()
+    # Silence Gmsh's output
+    gmsh.option.setNumber("General.Terminal", 0)
+    # Create a new model
+    gmsh.model.add("Cube")
+    # Add points for the base square
+    p1 = gmsh.model.geo.addPoint(0, 0, 0)
+    p2 = gmsh.model.geo.addPoint(length, 0, 0)
+    p3 = gmsh.model.geo.addPoint(length, length, 0)
+    p4 = gmsh.model.geo.addPoint(0, length, 0)
+    # Connect the points to form the base square
+    l1 = gmsh.model.geo.addLine(p1, p2)
+    l2 = gmsh.model.geo.addLine(p2, p3)
+    l3 = gmsh.model.geo.addLine(p3, p4)
+    l4 = gmsh.model.geo.addLine(p4, p1)
+    # Create a surface from the base square
+    base_loop = gmsh.model.geo.addCurveLoop([l1, l2, l3, l4])
+    base_surface = gmsh.model.geo.addPlaneSurface([base_loop])
+    # Extrude the base surface to get the cube
+    gmsh.model.geo.extrude([(2, base_surface)], 0, 0, length)
+    # Define a uniform mesh size
+    f = gmsh.model.mesh.field.add("MathEval")
+    gmsh.model.mesh.field.setString(f, "F", str(ns))
+    gmsh.model.mesh.field.setAsBackgroundMesh(f)
+    # Synchronize the model
+    gmsh.model.geo.synchronize()
+    # Generate the 3D mesh
+    gmsh.model.mesh.generate(2)
+    # Save the mesh to a file
+    gmsh.write('Raw_' + out_pre + '.stl')
+    # Extract node information
+    node_tags, node_coords, _ = gmsh.model.mesh.getNodes()
+    # Extract 2D surface element types and connectivity
+    element_types, element_tags, element_nodes = gmsh.model.mesh.getElements(dim=2)
+    gmsh.finalize()
+    # Reshape the node coordinates into a more user-friendly format
+    vertices = node_coords.reshape(-1, 3)
+    # Find the triangles from the extracted elements
+    triangle_idx = np.where(element_types == 2)[0][0]  # 2 corresponds to triangles
+    faces = element_nodes[triangle_idx].reshape(-1, 3)-1
     print('====== > Done creating the Mesh')
     return (vertices, faces)
-
 
 def make_obj(surfaces, energies, n_at, lattice_structure, lattice_parameter, material, orien_x, orien_y, orien_z,
              out_pre):
@@ -318,7 +460,7 @@ def read_stl(sample_type, raw_stl, width, length, height, radius, ns, points, ou
     :param ns: The number of segments desired
     :type ns: int
     :param points: List of points constituting the base (in case of faceted wire)
-    :type points: array
+    :type points: list
     :param out_pre: Prefix of output files
     :type out_pre: str
 
@@ -642,7 +784,7 @@ def node_surface(sample_type, vertices, nodenumber, points, faces):
                         face = np.append(face, verti, axis=0)
         l = len(face)
         nodesurf = np.reshape(face, [int(l / 4), 4])
-        return nodesurf
+        return np.array(remove_duplicates_2d_ordered(nodesurf))
 
     elif sample_type == 'wulff' or sample_type == 'cube':
         nodesurf = []
@@ -663,6 +805,16 @@ def node_surface(sample_type, vertices, nodenumber, points, faces):
             nodesurf.append(L)
         return nodesurf
 
+def remove_duplicates_2d_ordered(data):
+    seen = set()
+    result = []
+    for item in data:
+        # Convert inner list to tuple and check if it's in the seen set
+        t_item = tuple(item)
+        if t_item not in seen:
+            result.append(item)
+            seen.add(t_item)
+    return result
 
 def vectors(N, M):
     """
@@ -1469,7 +1621,7 @@ def refine_bis(stl, ext, n_mesh):
         mesh = geom.generate_mesh()
         vertices = mesh.points
         faces = mesh.get_cells_type('triangle')
-    meshio.write_points_cells(filee + '.stl', vertices, {"triangle": faces})
+    meshio.write_points_cells('Refined_' + filee + '.stl', vertices, {"triangle": faces})
     # for e in ext:
     #     meshio.write_points_cells(filee+'.'+e, vertices, {"triangle": faces})
     return()
