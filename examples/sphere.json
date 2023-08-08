@@ -1,5 +1,6 @@
 {"Sphere": 
-    {"Number_segments": 5, 
+    {"Mesh_size": 5,
+    "Refine_factor": 0.5,
     "C1": 10000,
     "H": 0.3,
     "Radius": 75,
@@ -11,7 +12,7 @@
     {"ATOM":1,
     "ATOM_ext": ["lmp", "xyz"],
     "FEM": 1,
-    "FEM_ext": ["stl", "obj"]},
+    "FEM_ext": ["stl", "msh"]},
 
 "ATOM_Param":
     {"Lattice_parameter": 3.615,

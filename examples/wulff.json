@@ -6,13 +6,15 @@
     "M": 30,
     "Surfaces": [[1,0,0], [1,1,0], [1,1,1]],
     "Energies": [1296.53414304361, 1531.21487518984, 1196.42896317992],
+    "Mesh_size": 5,
+    "Refine_factor": 0.5,
     "Raw_stl": "na"},
 
 "Output":
     {"ATOM":1,
     "ATOM_ext": ["lmp", "xyz"],
     "FEM": 1,
-    "FEM_ext": ["stl", "obj"]},
+    "FEM_ext": ["stl", "msh"]},
 
 "ATOM_Param":
     {"Lattice_parameter": 4.07,
