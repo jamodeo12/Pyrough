@@ -269,8 +269,6 @@ class Sample(object):
              'select', out_pre + '.' + str(ext_ato[0]), ' '.join(ext_ato[1:])])
         subprocess.call(['rm', 'material_supercell.lmp'])
         fp.rebox(out_pre + '.lmp')
-        if type_sample == 'box':
-            fp.box_perio(out_pre + '.lmp', [dis_x,dis_y, dis_z])
 
 
 def make_wire(type_sample,
@@ -347,7 +345,7 @@ def make_wire(type_sample,
     fp.stl_file(vertices, faces, out_pre)  # creates an stl file of the cylinder with roughness on the surface
     # fp.refine(out_pre+'.stl', ext_fem, vertices[index])
     fp.refine_bis(out_pre + '.stl', ext_fem, alpha*ns)
-    fp.mesh3D(out_pre+'.stl', ext_fem)
+    fp.mesh3D('Refined_'+out_pre+'.stl', ext_fem)
     return (vertices, out_pre + '.stl')  # returns the stl file name
 
 
@@ -419,7 +417,7 @@ def make_box(type_sample,
     fp.stl_file(vertices, faces, out_pre)  # creates an stl file of the box with roughness on the surface
     # fp.refine(out_pre+'.stl', ext_fem, vertices[index])
     fp.refine_bis(out_pre + '.stl', ext_fem, alpha*ns)
-    fp.mesh3D(out_pre+'.stl', ext_fem)
+    fp.mesh3D('Refined_'+out_pre+'.stl', ext_fem)
     return (vertices, out_pre + '.stl')  # returns the stl file name
 
 
@@ -484,7 +482,7 @@ def make_sphere(type_sample,
 
     fp.stl_file(new_vertex, faces, out_pre)  # creates an stl file of the sphere with roughness on the surface
     fp.refine_bis(out_pre+'.stl', ext_fem, alpha*ns)
-    fp.mesh3D(out_pre+'.stl', ext_fem)
+    fp.mesh3D('Refined_'+out_pre+'.stl', ext_fem)
     return (vertices, out_pre + '.stl')  # returns the stl file name
 
 
@@ -537,8 +535,8 @@ def make_poly(type_sample,
     vertices, nodenumber = fp.node_indexing(
         vertices)  # creates a column that has an assigned index number for each row in vertices; returns vertices with the addtion of this new column and also returns the nodenumbers which is an array fille from 0 - length of the vertices
 
-    nodesurf = fp.node_surface(type_sample, vertices, nodenumber, points,
-                               0)  # nodes at the surface of the object. These nodes will have the surface roughness applied to it.
+    nodesurf = fp.node_surface(type_sample, vertices, nodenumber, points,0)  # nodes at the surface of the object. These nodes will have the surface roughness applied to it.
+
     index = [int(i) for i in nodesurf.T[3]]
     cy_nodesurf = fp.cart2cyl(nodesurf)
     sorted_cy_nodesurf = cy_nodesurf[np.lexsort((cy_nodesurf[:, 1], cy_nodesurf[:, 2]))]
@@ -563,7 +561,7 @@ def make_poly(type_sample,
     fp.stl_file(vertices, faces, out_pre)  # creates an stl file of the box with roughness on the surface
     # fp.refine(out_pre+'.stl', ext_fem, vertices[index])
     fp.refine_bis(out_pre + '.stl', ext_fem, alpha*ns)
-    fp.mesh3D(out_pre+'.stl', ext_fem)
+    fp.mesh3D('Refined_'+out_pre+'.stl', ext_fem)
     return (vertices, out_pre + '.stl')
 
 #test
@@ -629,16 +627,15 @@ def make_wulff(type_sample,
     :return: List of nodes and STL file name
     """
     obj_points, obj_faces = fp.make_obj(surfaces, energies, n_at, lattice_structure, lattice_parameter, material, orien_x, orien_y, orien_z, out_pre)
-    subprocess.call(['rm', out_pre + '.obj'])
     vertices, faces = fp.read_stl_wulff(raw_stl, obj_points, obj_faces, ns,
                                         out_pre)  # reads if the user has inputted a stl file or if the mesh needs to me generated and returnes the faces and the vertices of the stl file
+    subprocess.call(['rm', out_pre + '.obj'])
     list_n = fp.faces_normals(obj_points, obj_faces)
 
     vertices, nodenumber = fp.node_indexing(
         vertices)  # creates a column that has an assigned index number for each row in vertices; returns vertices with the addtion of this new column and also returns the nodenumbers which is an array fille from 0 - length of the vertices
 
     nodesurf = fp.node_surface(type_sample, vertices, nodenumber, obj_points, obj_faces)
-    L = []
 
     node_edge, node_corner = fp.node_corner(nodesurf)
 
@@ -648,7 +645,7 @@ def make_wulff(type_sample,
 
     fp.stl_file(vertices, faces, out_pre)
     fp.refine_bis(out_pre+'.stl', ext_fem, alpha*ns)
-    fp.mesh3D(out_pre+'.stl', ext_fem)
+    fp.mesh3D('Refined_'+out_pre+'.stl', ext_fem)
     return (vertices, out_pre + '.stl')
 
 
@@ -705,7 +702,7 @@ def make_cube(type_sample,
 
     fp.stl_file(vertices, faces, out_pre)
     fp.refine_bis(out_pre+'.stl', ext_fem, alpha*ns)
-    fp.mesh3D(out_pre+'.stl', ext_fem)
+    fp.mesh3D('Refined_'+out_pre+'.stl', ext_fem)
     return (vertices, out_pre + '.stl')
 
 def make_atom_grain(STL,
