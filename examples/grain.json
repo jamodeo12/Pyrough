@@ -3,7 +3,7 @@
     "Height": 60.0,
     "Width": 101.0,
     "Length": 101.0,
-    "Number_segments": 50,
+    "Mesh_size": 5,
     "RMS": 2.5,
     "N": 30,
     "M": 30,

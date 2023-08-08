@@ -48,7 +48,7 @@ class Parameter(object):
             self.height = read_param['Grain']['Height']
             self.length = read_param['Grain']['Length']
             self.width = read_param['Grain']['Width']
-            self.ns = read_param['Grain']['Number_segments']
+            self.ns = read_param['Grain']['Mesh size']
             self.raw_stl = read_param['Grain']['Raw_stl']
             self.lattice_structure1 = read_param['ATOM1_Param']['Lattice_structure']
             self.lattice_parameter1 = read_param['ATOM1_Param']['Lattice_parameter']
@@ -79,7 +79,8 @@ class Parameter(object):
                 self.M = read_param['Wire']['M']
                 self.length = read_param['Wire']['Length']
                 self.radius = read_param['Wire']['Radius']
-                self.ns = read_param['Wire']['Number_segments']
+                self.ns = read_param['Wire']['Mesh_size']
+                self.alpha = read_param['Wire']['Refine_factor']
                 self.height = 0
                 self.width = 0
                 self.raw_stl = read_param['Wire']['Raw_stl']
@@ -109,7 +110,8 @@ class Parameter(object):
                 self.height = read_param['Box']['Height']
                 self.length = read_param['Box']['Length']
                 self.width = read_param['Box']['Width']
-                self.ns = read_param['Box']['Number_segments']
+                self.ns = read_param['Box']['Mesh_size']
+                self.alpha = read_param['Box']['Refine_factor']
                 self.radius = 0
                 self.raw_stl = read_param['Box']['Raw_stl']
                 self.nfaces = 0
@@ -130,7 +132,8 @@ class Parameter(object):
                 self.C1 = read_param['Sphere']['C1']
                 self.RMS = ''
                 self.radius = read_param['Sphere']['Radius']
-                self.ns = read_param['Sphere']['Number_segments']
+                self.ns = read_param['Sphere']['Mesh_size']
+                self.alpha = read_param['Sphere']['Refine_factor']
                 self.height = 0
                 self.length = 0
                 self.width = 0
@@ -160,7 +163,8 @@ class Parameter(object):
                 self.length = read_param['Poly']['Length']
                 self.nfaces = read_param['Poly']['N_Faces']
                 self.radius = read_param['Poly']['Radius']
-                self.ns = read_param['Poly']['Number_segments']
+                self.ns = read_param['Poly']['Mesh_size']
+                self.alpha = read_param['Poly']['Refine_factor']
                 self.height = 0
                 self.width = 0
                 self.raw_stl = read_param['Poly']['Raw_stl']
@@ -191,7 +195,8 @@ class Parameter(object):
                 self.length = 0
                 self.nfaces = 0
                 self.radius = 0
-                self.ns = 0
+                self.ns = read_param['Wulff']['Mesh_size']
+                self.alpha = read_param['Wulff']['Refine_factor']
                 self.height = 0
                 self.width = 0
                 self.raw_stl = read_param['Wulff']['Raw_stl']
@@ -219,7 +224,8 @@ class Parameter(object):
                 self.length = read_param['Cube']['Length']
                 self.nfaces = 0
                 self.radius = 0
-                self.ns = 0
+                self.ns = read_param['Cube']['Mesh_size']
+                self.alpha = read_param['Cube']['Refine_factor']
                 self.height = read_param['Cube']['Length']
                 self.width = read_param['Cube']['Length']
                 self.raw_stl = read_param['Cube']['Raw_stl']

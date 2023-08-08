@@ -24,8 +24,8 @@ print('#########################################################################
 
 # _____________________Removing previous data____________________
 
-subprocess.call(['rm', 'material_supercell.lmp'])
-subprocess.call(['rm', 'sample_with_atoms.lmp'])
+# subprocess.call(['rm', 'material_supercell.lmp'])
+# subprocess.call(['rm', 'sample_with_atoms.lmp'])
 
 # _____________________Main Code____________________
 if sys.argv[1] == '-surface' :
@@ -86,6 +86,7 @@ else :
                                             param.height,
                                             param.width,
                                             param.ns,
+                                            param.alpha,
                                             param.raw_stl,
                                             param.nfaces,
                                             param.surfaces,

@@ -3,7 +3,8 @@
     "Height": 50.0,
     "Width": 151.0,
     "Length": 151.0,
-    "Number_segments": 50, 
+    "Mesh_size": 5,
+    "Refine_factor": 0.5,
     "RMS": 3,
     "N": 30,
     "M": 30,
@@ -13,7 +14,7 @@
     {"ATOM":1,
     "ATOM_ext": ["lmp", "xyz"],
     "FEM": 1,
-    "FEM_ext": ["stl", "obj"]},
+    "FEM_ext": ["stl", "msh"]},
 
 "ATOM_Param": 
     {"Lattice_parameter": 4.07,

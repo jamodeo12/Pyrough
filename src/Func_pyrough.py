@@ -21,6 +21,7 @@ import scipy.special as sp
 from wulffpack import SingleCrystal
 from ase.build import bulk
 from pathlib import Path
+import gmsh
 
 np.set_printoptions(threshold=sys.maxsize)
 
@@ -110,11 +111,11 @@ def cylinder(l, r, ns, out_pre):
     """
     print('====== > Creating the Mesh')
     points = []
-    theta_list = np.linspace(0, 2 * np.pi, ns)
+    theta_list = np.linspace(0, 2 * np.pi, 50)
     for theta in theta_list:
         points.append([r * np.cos(theta), r * np.sin(theta)])
     with pygmsh.geo.Geometry() as geom:
-        poly = geom.add_polygon(points, mesh_size=3)
+        poly = geom.add_polygon(points, mesh_size=ns)
         geom.extrude(poly, [0, 0, l], num_layers=75)
         mesh = geom.generate_mesh()
     vertices = mesh.points
@@ -143,7 +144,7 @@ def box(width, length, height, ns, out_pre):
     """
     print('====== > Creating the Mesh')
     with pygmsh.geo.Geometry() as geom:
-        geom.add_box(0, length, 0, width, 0, height, mesh_size=4)
+        geom.add_box(0, length, 0, width, 0, height, mesh_size=ns)
         mesh = geom.generate_mesh()
     vertices = mesh.points
     faces = mesh.get_cells_type('triangle')
@@ -167,7 +168,7 @@ def sphere(r, ns, out_pre):
     """
     print('====== > Creating the Mesh')
     with pygmsh.geo.Geometry() as geom:
-        poly = geom.add_ball([0.0, 0.0, 0.0], r, mesh_size=7)
+        poly = geom.add_ball([0.0, 0.0, 0.0], r, mesh_size=ns)
         mesh = geom.generate_mesh()
     vertices = mesh.points
     faces = mesh.get_cells_type('triangle')
@@ -176,7 +177,7 @@ def sphere(r, ns, out_pre):
     return (vertices, faces)
 
 
-def poly(length, points, out_pre):
+def poly(length, points, ns, out_pre):
     """
     Creates a faceted wire mesh.
 
@@ -191,7 +192,7 @@ def poly(length, points, out_pre):
     """
     print('====== > Creating the Mesh')
     with pygmsh.geo.Geometry() as geom:
-        poly = geom.add_polygon(points, mesh_size=3)
+        poly = geom.add_polygon(points, mesh_size=ns)
         geom.extrude(poly, [0.0, 0.0, length], num_layers=100)
         mesh = geom.generate_mesh()
     vertices = mesh.points
@@ -201,7 +202,7 @@ def poly(length, points, out_pre):
     return (vertices, faces)
 
 
-def wulff(obj_points, obj_faces, out_pre):
+def wulff(obj_points, obj_faces, ns, out_pre):
     """
     Creates a Wulff-Shaped NP mesh
 
@@ -218,7 +219,7 @@ def wulff(obj_points, obj_faces, out_pre):
             for i in polygone:
                 list_points.append(obj_points[int(i - 1)])
             list_points = np.asarray(list_points)
-            geom.add_polygon(list_points, mesh_size=3)
+            geom.add_polygon(list_points, mesh_size=ns)
         mesh = geom.generate_mesh()
         vertices = mesh.points
         faces = mesh.get_cells_type('triangle')
@@ -226,7 +227,7 @@ def wulff(obj_points, obj_faces, out_pre):
     return (vertices, faces)
 
 
-def cube(length, out_pre):
+def cube(length, ns, out_pre):
     """
     Creates a cube mesh.
 
@@ -239,7 +240,7 @@ def cube(length, out_pre):
     """
     print('====== > Creating the Mesh')
     with pygmsh.geo.Geometry() as geom:
-        geom.add_box(0, length, 0, length, 0, length, mesh_size=length / 30)
+        geom.add_box(0, length, 0, length, 0, length, mesh_size=ns)
         mesh = geom.generate_mesh()
     vertices = mesh.points
     faces = mesh.get_cells_type('triangle')
@@ -333,9 +334,9 @@ def read_stl(sample_type, raw_stl, width, length, height, radius, ns, points, ou
         elif sample_type == "sphere":
             vertices, faces = sphere(radius, ns, out_pre)
         elif sample_type == "poly":
-            vertices, faces = poly(length, points, out_pre)
+            vertices, faces = poly(length, points, ns, out_pre)
         elif sample_type == "cube":
-            vertices, faces = cube(length, out_pre)
+            vertices, faces = cube(length, ns, out_pre)
     else:
         mesh = meshio.read(raw_stl)
         vertices, faces = mesh.points, mesh.cells
@@ -343,7 +344,7 @@ def read_stl(sample_type, raw_stl, width, length, height, radius, ns, points, ou
     return (vertices, faces)
 
 
-def read_stl_wulff(raw_stl, obj_points, obj_faces, out_pre):
+def read_stl_wulff(raw_stl, obj_points, obj_faces, ns, out_pre):
     """
     Reads an input stl file or creates a new one if no input. Wulff case.
 
@@ -359,7 +360,7 @@ def read_stl_wulff(raw_stl, obj_points, obj_faces, out_pre):
     :returns: List of points and faces
     """
     if raw_stl == "na":
-        vertices, faces = wulff(obj_points, obj_faces, out_pre)
+        vertices, faces = wulff(obj_points, obj_faces, ns, out_pre)
     else:
         mesh = meshio.read(raw_stl)
         vertices, faces = mesh.vertices, mesh.faces
@@ -1426,9 +1427,11 @@ def refine(stl, ext, nodesurf):
     print('====== > Refining the Mesh')
     filee = Path(stl).stem
     mesh = meshio.read(stl)
-    vertices, faces = mesh.points, mesh.cells
-    faces = faces[0][1]
+    vertices, faces = mesh.points, mesh.get_cells_type('triangle')
+    # print(faces)
+    # faces = faces[0][1]
     nodesurf =[list(i) for i in nodesurf]
+    print(len(nodesurf), len(vertices))
     with pygmsh.geo.Geometry() as geom:
         for f in faces:
             if any(list == vertices[f[0]].tolist() for list in nodesurf) or any(list == vertices[f[1]].tolist() for list in nodesurf) or any(list == vertices[f[2]].tolist() for list in nodesurf) :
@@ -1438,12 +1441,11 @@ def refine(stl, ext, nodesurf):
         mesh = geom.generate_mesh()
         vertices = mesh.points
         faces = mesh.get_cells_type('triangle')
-    # ext = ['obj', 'stl', 'inp', 'vtk']
     for e in ext:
         meshio.write_points_cells(filee+'.'+e, vertices, {"triangle": faces})
     return()
 
-def refine_bis(stl, ext):
+def refine_bis(stl, ext, n_mesh):
     """
     Refine the mesh of the rough generated object (sphere, wulff, cube)
 
@@ -1463,10 +1465,45 @@ def refine_bis(stl, ext):
     faces = faces[0][1]
     with pygmsh.geo.Geometry() as geom:
         for f in faces:
-            poly = geom.add_polygon([list(vertices[f[0]]), list(vertices[f[1]]), list(vertices[f[2]])], mesh_size = 3)
+            poly = geom.add_polygon([list(vertices[f[0]]), list(vertices[f[1]]), list(vertices[f[2]])], mesh_size = n_mesh)
         mesh = geom.generate_mesh()
         vertices = mesh.points
         faces = mesh.get_cells_type('triangle')
-    for e in ext:
-        meshio.write_points_cells(filee+'.'+e, vertices, {"triangle": faces})
+    meshio.write_points_cells(filee + '.stl', vertices, {"triangle": faces})
+    # for e in ext:
+    #     meshio.write_points_cells(filee+'.'+e, vertices, {"triangle": faces})
+    return()
+
+def mesh3D(PATH, ext):
+    """
+    Generates a volumic mesh from the input stl mesh
+
+    :param PATH: Name of the stl file to be read
+    :type PATH: str
+    :param ext: Output formats for the generation of the new mesh
+    :type ext: str
+
+    :return:
+    """
+    print('====== > Generating the 3D Mesh')
+    filee = Path(PATH).stem
+    gmsh.initialize()
+    gmsh.option.setNumber("General.Terminal", 1)
+    gmsh.option.setNumber("Mesh.Algorithm3D", 1)
+    gmsh.option.setNumber("Mesh.CharacteristicLengthMin", 1)
+    gmsh.option.setNumber("Mesh.CharacteristicLengthMax", 2)
+    gmsh.option.setNumber("Mesh.Optimize", 1)
+    gmsh.option.setNumber("Mesh.QualityType", 2)
+    gmsh.option.setNumber("General.Verbosity", 0)
+    gmsh.merge(PATH)
+    n = gmsh.model.getDimension()
+    s = gmsh.model.getEntities(n)
+    l = gmsh.model.geo.addSurfaceLoop([s[i][1] for i in range(len(s))])
+    gmsh.model.geo.addVolume([l])
+    gmsh.model.geo.synchronize()
+
+    gmsh.model.mesh.generate(3)
+    for e in ext :
+        gmsh.write("New_" + filee + "." + e)
+    gmsh.finalize()
     return()
