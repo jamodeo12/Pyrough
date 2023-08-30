@@ -56,13 +56,6 @@ def rdnsurf(m, n, B, xv, yv, sfrM, sfrN):
             else:
                 mod = (sfrM[i] ** 2 + sfrN[j] ** 2) ** (-0.5 * B)
                 Z = Z + m[i][j] * mod * np.cos(2 * np.pi * (sfrM[i] * xv + sfrN[j] * yv) + n[i][j])
-    # fig = plt.figure()
-    # ax = plt.axes(projection='3d')
-    # ax.scatter3D(xv, yv, Z, 'gray')
-    # # ax.contour3D(xv, yv, Z, cmap=cm.coolwarm, linewidth=0)
-    # # ax.plot_surface(xv, yv, Z, rstride=1, cstride=1, cmap=cm.nipy_spectral, linewidth=0, antialiased=False)
-    # ax.view_init(elev=90, azim=-90)
-    # plt.show()
     return Z
 
 
@@ -232,78 +225,48 @@ def sphere(r, ns, out_pre):
     print('====== > Done creating the Mesh')
     return (vertices, faces)
 
-def poly2(length, points, ns, out_pre):
-    """
-    Creates a faceted wire mesh.
-
-    :param length: Length of the wire
-    :type length: float
-    :param points: Base points of the wire
-    :type points: array
-    :param out_pre: Prefix of output files
-    :type out_pre: str
-
-    :returns: List of points and faces
-    """
+def poly(length, base_points, ns, out_pre):
     print('====== > Creating the Mesh')
     gmsh.initialize()
+
+    gmsh.model.add("wire")
+
+    # Set verbosity to False
     gmsh.option.setNumber("General.Terminal", 0)
-    gmsh.model.add("Wire")
 
-    # Calculate the number of layers and adjust meshSize
-    num_layers = round(length / ns)
-    adjusted_meshSize = length/ num_layers
+    # Define the base points in gmsh
+    base_gmsh_points = []
+    for point in base_points:
+        base_gmsh_points.append(gmsh.model.geo.addPoint(point[0], point[1], 0, ns))
 
-    # Define the base points
-    point_tags = [gmsh.model.geo.addPoint(x, y, 0, adjusted_meshSize) for x, y in points]
+    # Create lines between base points
+    lines = []
+    for i in range(len(base_gmsh_points) - 1):
+        lines.append(gmsh.model.geo.addLine(base_gmsh_points[i], base_gmsh_points[i + 1]))
+    lines.append(gmsh.model.geo.addLine(base_gmsh_points[-1], base_gmsh_points[0]))
 
-    # Connect the points to form the faceted base
-    line_tags = [gmsh.model.geo.addLine(point_tags[i], point_tags[(i + 1) % len(point_tags)]) for i in range(len(point_tags))]
+    # Define the curve loop and surface
+    curve_loop = gmsh.model.geo.addCurveLoop(lines)
+    surface = gmsh.model.geo.addPlaneSurface([curve_loop])
 
-    # Close the loop and create a plane surface
-    loop_tag = gmsh.model.geo.addCurveLoop(line_tags)
-    surface_tag = gmsh.model.geo.addPlaneSurface([loop_tag])
+    # Extrude the surface to create the wire
+    gmsh.model.geo.extrude([(2, surface)], 0, 0, length, [length // ns])
 
-    # Extrude the base surface to create the wire
-    out_dim_tags = gmsh.model.geo.extrude([(2, surface_tag)], 0, 0, length)
-
+    # Synchronize and mesh the model
     gmsh.model.geo.synchronize()
     gmsh.model.mesh.generate(2)
-    gmsh.write('Raw_' + out_pre + '.stl')
     # Extract node information
     node_tags, node_coords, _ = gmsh.model.mesh.getNodes()
     # Extract 2D surface element types and connectivity
     element_types, element_tags, element_nodes = gmsh.model.mesh.getElements(dim=2)
+    # Save the mesh to a file
+    gmsh.write('Raw_' + out_pre + '.stl')
     gmsh.finalize()
     # Reshape the node coordinates into a more user-friendly format
     vertices = node_coords.reshape(-1, 3)
     # Find the triangles from the extracted elements
     triangle_idx = np.where(element_types == 2)[0][0]  # 2 corresponds to triangles
     faces = element_nodes[triangle_idx].reshape(-1, 3)-1
-    print('====== > Done creating the Mesh')
-    return (vertices, faces)
-
-def poly(length, points, ns, out_pre):
-    """
-    Creates a faceted wire mesh.
-
-    :param length: Length of the wire
-    :type length: float
-    :param points: Base points of the wire
-    :type points: array
-    :param out_pre: Prefix of output files
-    :type out_pre: str
-
-    :returns: List of points and faces
-    """
-    print('====== > Creating the Mesh')
-    with pygmsh.geo.Geometry() as geom:
-        poly = geom.add_polygon(points, mesh_size=ns)
-        geom.extrude(poly, [0.0, 0.0, length], num_layers=100)
-        mesh = geom.generate_mesh()
-    vertices = mesh.points
-    faces = mesh.get_cells_type('triangle')
-    mesh.write('Raw_' + out_pre + '.stl')
     print('====== > Done creating the Mesh')
     return (vertices, faces)
 
@@ -1039,12 +1002,6 @@ def random_surf2(sample_type, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, RMS, out_pr
     :return: Surface roughness
     """
     Z = rdnsurf(m, n, B, xv, yv, sfrM, sfrN)
-    # ax = plt.axes(projection='3d')
-    # color_map = plt.get_cmap('jet')
-    # ax.scatter3D(xv, yv, Z, c = Z, cmap = color_map)
-    # ax.view_init(90, -90)
-    # plt.axis('off')
-    # plt.show()
     if type(C1) == str:
         RMS_i = rms_calc(Z)
         C1 = RMS / RMS_i

@@ -319,7 +319,6 @@ def make_wire(type_sample,
 
     nodesurf = fp.node_surface(type_sample, vertices, nodenumber, 0,
                                0)  # nodes at the surface of the object. These nodes will have the surface roughness applied to it.
-    index = [int(i) for i in nodesurf.T[3]]
 
     cy_nodesurf = np.array(
         [fp.rho(nodesurf[:, 0], nodesurf[:, 1]), fp.theta(nodesurf[:, 0], nodesurf[:, 1]), nodesurf[:, 2],
@@ -536,8 +535,6 @@ def make_poly(type_sample,
         vertices)  # creates a column that has an assigned index number for each row in vertices; returns vertices with the addtion of this new column and also returns the nodenumbers which is an array fille from 0 - length of the vertices
 
     nodesurf = fp.node_surface(type_sample, vertices, nodenumber, points,0)  # nodes at the surface of the object. These nodes will have the surface roughness applied to it.
-
-    index = [int(i) for i in nodesurf.T[3]]
     cy_nodesurf = fp.cart2cyl(nodesurf)
     sorted_cy_nodesurf = cy_nodesurf[np.lexsort((cy_nodesurf[:, 1], cy_nodesurf[:, 2]))]
     nodesurf = fp.cyl2cart(sorted_cy_nodesurf)
@@ -546,6 +543,7 @@ def make_poly(type_sample,
     T = len(np.unique(sorted_cy_nodesurf[:, 2]))
     xv = np.linspace(0, 1, Z)
     yv = np.linspace(0, 1, T)
+
     xv, yv = np.meshgrid(xv, yv)
 
     sfrN, sfrM = fp.vectors(N, M)  # creating vectors for M and N
@@ -553,7 +551,6 @@ def make_poly(type_sample,
 
     z = fp.random_surf2(type_sample, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, RMS,
                         out_pre)  # Returns an array with the Z values that will replace the previous z vlaues in the vertices array these represent the rougness on the surface
-
     vertices = fp.make_rough(type_sample, z, nodesurf, vertices, angles)
 
     vertices = vertices[:,:3]  # gets rid of the index column because stl file generator takes only a matrix with 3 columns
