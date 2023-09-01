@@ -108,7 +108,7 @@ def cylinder(l, r, ns, out_pre):
     loop = gmsh.model.geo.addCurveLoop([arc1, arc2, arc3, arc4])
     disk = gmsh.model.geo.addPlaneSurface([loop])
     # Extrude the disk to get the cylinder
-    gmsh.model.geo.extrude([(2, disk)], 0, 0, l)
+    gmsh.model.geo.extrude([(2, disk)], 0, 0, l, [l//ns])
     # Set a constant mesh size
     f = gmsh.model.mesh.field.add("MathEval")
     gmsh.model.mesh.field.setString(f, "F", str(ns))
@@ -1231,6 +1231,7 @@ def make_rough_wulff(vertices, B, C1, RMS, N, M, nodesurf, node_edge, node_corne
             z = C1 * z
         else:
             z = C1 * rdnsurf(m, n, B, xv, yv, sfrM, sfrN)
+        z = z - np.min(z)
         for i in range(len(surf)):
             p = surf[i]
             index = p[3]
@@ -1520,40 +1521,6 @@ def box_perio(file_lmp, dis):
     fend.writelines(lines)
     fend.close()
 
-def refine(stl, ext, nodesurf):
-    """
-    Refine the mesh of the rough generated object (box, wire, poly)
-
-    :param stl: Mesh file to be refined
-    :type stl: str
-    :param ext: Output formats for the generation of the new mesh
-    :type ext: str
-    :param nodesurf : List of surface nodes
-    :type nodesurf : array
-
-    :return:
-    """
-    print('====== > Refining the Mesh')
-    filee = Path(stl).stem
-    mesh = meshio.read(stl)
-    vertices, faces = mesh.points, mesh.get_cells_type('triangle')
-    # print(faces)
-    # faces = faces[0][1]
-    nodesurf =[list(i) for i in nodesurf]
-    print(len(nodesurf), len(vertices))
-    with pygmsh.geo.Geometry() as geom:
-        for f in faces:
-            if any(list == vertices[f[0]].tolist() for list in nodesurf) or any(list == vertices[f[1]].tolist() for list in nodesurf) or any(list == vertices[f[2]].tolist() for list in nodesurf) :
-                poly = geom.add_polygon([list(vertices[f[0]]), list(vertices[f[1]]), list(vertices[f[2]])], mesh_size = 3)
-            else :
-                poly = geom.add_polygon([vertices[f[0]], vertices[f[1]], vertices[f[2]]], mesh_size=500)
-        mesh = geom.generate_mesh()
-        vertices = mesh.points
-        faces = mesh.get_cells_type('triangle')
-    for e in ext:
-        meshio.write_points_cells(filee+'.'+e, vertices, {"triangle": faces})
-    return()
-
 def refine_bis(stl, ext, n_mesh):
     """
     Refine the mesh of the rough generated object (sphere, wulff, cube)
@@ -1579,8 +1546,32 @@ def refine_bis(stl, ext, n_mesh):
         vertices = mesh.points
         faces = mesh.get_cells_type('triangle')
     meshio.write_points_cells('Refined_' + filee + '.stl', vertices, {"triangle": faces})
-    # for e in ext:
-    #     meshio.write_points_cells(filee+'.'+e, vertices, {"triangle": faces})
+    return()
+
+
+def refine_stl_mesh(input_filename, output_filename, factor):
+    print('====== > Refining the Mesh')
+    # Initialize the Gmsh API
+    gmsh.initialize()
+    gmsh.option.setNumber("General.Terminal", 0)
+
+    # Set up the model
+    gmsh.model.add("RefinedModel")
+
+    # Merge the STL file into the model
+    gmsh.merge(input_filename)
+
+    # Specify the desired mesh size
+    gmsh.model.mesh.refine()
+
+    # Mesh the model
+    gmsh.model.mesh.generate(2)  # This is for 2D, though an STL represents 2D surfaces in 3D space
+
+    # Save the mesh to a new STL file
+    gmsh.write(output_filename)
+
+    # De-initialize the Gmsh API
+    gmsh.finalize()
     return()
 
 def mesh3D(PATH, ext):
@@ -1611,7 +1602,7 @@ def mesh3D(PATH, ext):
     gmsh.model.geo.addVolume([l])
     gmsh.model.geo.synchronize()
 
-    gmsh.model.mesh.generate(3)
+    gmsh.model.mesh.generate(2)
     for e in ext :
         gmsh.write("New_" + filee + "." + e)
     gmsh.finalize()
