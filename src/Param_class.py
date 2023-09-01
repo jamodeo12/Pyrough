@@ -88,10 +88,8 @@ class Parameter(object):
                 self.surfaces = 0
                 self.energies = 0
                 self.n_at = 0
-                if read_param['Output']['FEM'] == 1:
-                    self.ext_fem = read_param['Output']['FEM_ext']
-                if read_param['Output']['ATOM'] == 1:
-                    self.ext_ato = read_param['Output']['ATOM_ext']
+                self.ext_fem = read_param['Output']['FEM']
+                self.ext_ato = read_param['Output']['ATOM']
 
 
             elif 'Box' in read_param:
@@ -118,10 +116,8 @@ class Parameter(object):
                 self.surfaces = 0
                 self.energies = 0
                 self.n_at = 0
-                if read_param['Output']['FEM'] == 1:
-                    self.ext_fem = read_param['Output']['FEM_ext']
-                if read_param['Output']['ATOM'] == 1:
-                    self.ext_ato = read_param['Output']['ATOM_ext']
+                self.ext_fem = read_param['Output']['FEM']
+                self.ext_ato = read_param['Output']['ATOM']
 
 
             elif 'Sphere' in read_param:
@@ -142,10 +138,8 @@ class Parameter(object):
                 self.surfaces = 0
                 self.energies = 0
                 self.n_at = 0
-                if read_param['Output']['FEM'] == 1:
-                    self.ext_fem = read_param['Output']['FEM_ext']
-                if read_param['Output']['ATOM'] == 1:
-                    self.ext_ato = read_param['Output']['ATOM_ext']
+                self.ext_fem = read_param['Output']['FEM']
+                self.ext_ato = read_param['Output']['ATOM']
 
             elif 'Poly' in read_param:
                 self.type_S = 'poly'
@@ -171,10 +165,8 @@ class Parameter(object):
                 self.surfaces = 0
                 self.energies = 0
                 self.n_at = 0
-                if read_param['Output']['FEM'] == 1:
-                    self.ext_fem = read_param['Output']['FEM_ext']
-                if read_param['Output']['ATOM'] == 1:
-                    self.ext_ato = read_param['Output']['ATOM_ext']
+                self.ext_fem = read_param['Output']['FEM']
+                self.ext_ato = read_param['Output']['ATOM']
 
             elif 'Wulff' in read_param:
                 self.type_S = 'wulff'
@@ -200,10 +192,8 @@ class Parameter(object):
                 self.height = 0
                 self.width = 0
                 self.raw_stl = read_param['Wulff']['Raw_stl']
-                if read_param['Output']['FEM'] == 1:
-                    self.ext_fem = read_param['Output']['FEM_ext']
-                if read_param['Output']['ATOM'] == 1:
-                    self.ext_ato = read_param['Output']['ATOM_ext']
+                self.ext_fem = read_param['Output']['FEM']
+                self.ext_ato = read_param['Output']['ATOM']
 
             elif 'Cube' in read_param:
                 self.type_S = 'cube'
@@ -229,10 +219,8 @@ class Parameter(object):
                 self.height = read_param['Cube']['Length']
                 self.width = read_param['Cube']['Length']
                 self.raw_stl = read_param['Cube']['Raw_stl']
-                if read_param['Output']['FEM'] == 1:
-                    self.ext_fem = read_param['Output']['FEM_ext']
-                if read_param['Output']['ATOM'] == 1:
-                    self.ext_ato = read_param['Output']['ATOM_ext']
+                self.ext_fem = read_param['Output']['FEM']
+                self.ext_ato = read_param['Output']['ATOM']
 
             # This loop is storing all the parameters from the json file and storing them, so they can be called in the
             # main code to fun the functions
@@ -256,7 +244,7 @@ class Parameter(object):
         #     return ('FEM')
         # creates a mesh
         # can call from the other functions and get the value of the parameters
-        if read_param['Output']['ATOM'] == 1:
+        if len(read_param['Output']['ATOM']) > 0:
             return ('ATOM')
         # create a mesh
         # then that file continues in the code
