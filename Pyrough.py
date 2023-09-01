@@ -18,7 +18,7 @@ import os
 import sys, subprocess
 
 print('#######################################################################################')
-print('#                            Running Random Surface script                            #')
+print('#                                       Pyrough                                       #')
 print('#                          Jonathan Amodeo & Hugo Iteney 2023                         #')
 print('#######################################################################################')
 
