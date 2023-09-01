@@ -240,15 +240,6 @@ class Parameter(object):
         """
         with open(json_file, 'r') as f:
             read_param = json.load(f)
-        # if read_param['Output']['FEM'] == 1:
-        #     return ('FEM')
-        # creates a mesh
-        # can call from the other functions and get the value of the parameters
         if len(read_param['Output']['ATOM']) > 0:
             return ('ATOM')
-        # create a mesh
-        # then that file continues in the code
-        # elif read_param['Output']['ATOM'] == 0:
-        #     pass
-        # elif read_param['Output']['FEM'] == 0:
-        #     pass
+

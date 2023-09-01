@@ -12,18 +12,16 @@
 # 
 # ---------------------------------------------------------------------------
 
-import pygmsh
-import meshio
 import numpy as np
-import sys
 import math
 import scipy.special as sp
 from wulffpack import SingleCrystal
 from ase.build import bulk
 from pathlib import Path
+import meshio
 import gmsh
 
-np.set_printoptions(threshold=sys.maxsize)
+#np.set_printoptions(threshold=sys.maxsize)
 
 
 def rdnsurf(m, n, B, xv, yv, sfrM, sfrN):
@@ -1603,7 +1601,11 @@ def mesh3D(PATH, ext):
     gmsh.model.geo.synchronize()
 
     gmsh.model.mesh.generate(2)
+
+    print('====== > FEM JOB DONE !')
+
     for e in ext :
         gmsh.write("New_" + filee + "." + e)
+        print('====== > File name: ' + filee + '.' + e)
     gmsh.finalize()
     return()

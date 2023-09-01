@@ -114,6 +114,9 @@ else :
                              out_pre,
                              param.ext_ato)
             # call make it md to create atomsk file
-            print('JOB DONE!' + '  File name: ' + out_pre + '.' + str(param.ext_ato[0]))
-        else:
-            print('JOB DONE!' + '  File name: ' + FEM_stl)
+            # print('JOB DONE!' + '  File name: ' + out_pre + '.' + str(param.ext_ato[0]))
+            print('====== > ATOM JOB DONE !')
+            for ext in param.ext_ato:
+                print('====== > File name: ' + out_pre + '.' + str(ext))
+        # else:
+            # print('JOB DONE!' + '  File name: ' + FEM_stl)

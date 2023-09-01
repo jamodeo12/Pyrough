@@ -17,9 +17,6 @@
 from src import Func_pyrough as fp
 import numpy as np
 import subprocess
-import matplotlib.pyplot as plt
-
-# np.set_printoptions(threshold=sys.maxsize)
 
 class Sample(object):
     def __init__(self, type_sample):
@@ -475,7 +472,7 @@ def make_sphere(type_sample,
 
     C2 = 1. / nbPoint / N / 2.
 
-    fp.stat_sphere(r, C1, C2, out_pre)  # prints the statistics of the sphere
+    #fp.stat_sphere(r, C1, C2, out_pre)  # prints the statistics of the sphere
 
     new_vertex = fp.coord_cart_sphere(C1, C2, r, vertices, t, z, y, x)  # creates a new matrix with x, y, z in cartesian coordinates
 
