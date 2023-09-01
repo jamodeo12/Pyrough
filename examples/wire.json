@@ -6,14 +6,12 @@
     "N": 30, 
     "M": 30, 
     "Mesh_size": 5,
-    "Refine_factor": 0.5,
+    "Refine_factor": 0.75,
     "Raw_stl": "na"}, 
 
 "Output":
-    {"ATOM":0,
-    "ATOM_ext": ["lmp", "xyz"],
-    "FEM": 1,
-    "FEM_ext": ["stl", "msh"]},
+    {"ATOM": ["lmp", "xyz"],
+    "FEM": ["stl", "msh"]},
 
 "ATOM_Param": 
     {"Lattice_parameter": 4.07,

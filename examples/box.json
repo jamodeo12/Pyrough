@@ -1,20 +1,18 @@
 {"Box":
-    {"H": 0.45,
+    {"H": 0.05,
     "Height": 50.0,
     "Width": 151.0,
     "Length": 151.0,
     "Mesh_size": 5,
-    "Refine_factor": 0.5,
-    "RMS": 3,
+    "Refine_factor": 0.7,
+    "RMS": 5,
     "N": 30,
     "M": 30,
     "Raw_stl": "na"},
 
 "Output":
-    {"ATOM":1,
-    "ATOM_ext": ["lmp", "xyz"],
-    "FEM": 1,
-    "FEM_ext": ["stl", "msh"]},
+    {"ATOM": ["lmp", "xyz"],
+    "FEM": ["stl", "msh"]},
 
 "ATOM_Param": 
     {"Lattice_parameter": 4.07,

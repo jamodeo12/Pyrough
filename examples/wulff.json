@@ -1,7 +1,7 @@
 {"Wulff":
     {"H": 0.75,
     "RMS": 1,
-    "n_atoms": 277389,
+    "n_atoms": 27738,
     "N": 30,
     "M": 30,
     "Surfaces": [[1,0,0], [1,1,0], [1,1,1]],
@@ -11,10 +11,8 @@
     "Raw_stl": "na"},
 
 "Output":
-    {"ATOM":1,
-    "ATOM_ext": ["lmp", "xyz"],
-    "FEM": 1,
-    "FEM_ext": ["stl", "msh"]},
+    {"ATOM": ["lmp", "xyz"],
+    "FEM": ["stl", "msh"]},
 
 "ATOM_Param":
     {"Lattice_parameter": 4.07,
