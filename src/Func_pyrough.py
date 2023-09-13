@@ -149,7 +149,7 @@ def cylinder(l, r, ns, out_pre):
     # Mesh the cylinder (this uses default meshing options)
     gmsh.model.mesh.generate(2)  # 3 means 3D mesh
     # Save the mesh to a file
-    gmsh.write('Raw_' + out_pre + '.stl')
+    # gmsh.write('Raw_' + out_pre + '.stl')
     # Extract node information
     node_tags, node_coords, _ = gmsh.model.mesh.getNodes()
     # Extract 2D surface element types and connectivity
@@ -214,7 +214,7 @@ def box(width, length, height, ns, out_pre):
     # Generate the 3D mesh
     gmsh.model.mesh.generate(2)
     # Save the mesh to a file
-    gmsh.write('Raw_' + out_pre + '.stl')
+    # gmsh.write('Raw_' + out_pre + '.stl')
     # Extract node information
     node_tags, node_coords, _ = gmsh.model.mesh.getNodes()
     # Extract 2D surface element types and connectivity
@@ -293,7 +293,7 @@ def poly(length, base_points, ns, out_pre):
     # Extract 2D surface element types and connectivity
     element_types, element_tags, element_nodes = gmsh.model.mesh.getElements(dim=2)
     # Save the mesh to a file
-    gmsh.write('Raw_' + out_pre + '.stl')
+    # gmsh.write('Raw_' + out_pre + '.stl')
     gmsh.finalize()
     # Reshape the node coordinates into a more user-friendly format
     vertices = node_coords.reshape(-1, 3)
@@ -328,7 +328,7 @@ def wulff(points, faces, ns, out_pre):
     # Mesh the surface
     gmsh.model.mesh.generate(2)
     # Save the mesh as STL
-    gmsh.write('Raw_' + out_pre + '.stl')
+    # gmsh.write('Raw_' + out_pre + '.stl')
     # Extract node information
     node_tags, node_coords, _ = gmsh.model.mesh.getNodes()
     # Extract 2D surface element types and connectivity
@@ -375,7 +375,7 @@ def cube(length, ns, out_pre):
     # Generate the 3D mesh
     gmsh.model.mesh.generate(2)
     # Save the mesh to a file
-    gmsh.write('Raw_' + out_pre + '.stl')
+    # gmsh.write('Raw_' + out_pre + '.stl')
     # Extract node information
     node_tags, node_coords, _ = gmsh.model.mesh.getNodes()
     # Extract 2D surface element types and connectivity

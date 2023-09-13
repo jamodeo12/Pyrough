@@ -104,7 +104,7 @@ else :
         for ext in param.ext_fem:
             print('====== > File name: ' + out_pre + '.' + str(ext))
         if 'stl' not in param.ext_fem :
-            print('====== > File name: ' + out_pre + '.' + str(ext))
+            print('====== > File name: ' + out_pre + '.stl')
         # Calling the sample class function of MAKE it which returns an stl file of the object desired.
         if param.output(Param_file) == 'ATOM':
             sample.make_atom(param.type_S,
