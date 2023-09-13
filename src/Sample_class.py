@@ -339,9 +339,7 @@ def make_wire(type_sample,
                :3]  # gets ride of the index column because stl file generator takes only a matrix with 3 columns
 
     fp.stl_file(vertices, faces, out_pre)  # creates an stl file of the cylinder with roughness on the surface
-    fp.refine_stl_mesh(out_pre + '.stl', 'Refined_'+out_pre+'.stl', alpha*ns)
-
-    fp.mesh3D('Refined_'+out_pre+'.stl', ext_fem)
+    fp.refine_3Dmesh(type_sample, out_pre, ns, alpha, ext_fem)
     return (vertices, out_pre + '.stl')  # returns the stl file name
 
 
@@ -406,14 +404,11 @@ def make_box(type_sample,
     z = fp.random_surf2(type_sample, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, RMS, out_pre)  # Returns an array with the Z values that will replace the previous z vlaues in the vertices array these represent the rougness on the surface
     vertices = fp.make_rough(type_sample, z, nodesurf, vertices, 0)
 
-    index = [int(i) for i in nodesurf.T[3]]
     vertices = vertices[:,
                :3]  # gets rid of the index column because stl file generator takes only a matrix with 3 columns
 
     fp.stl_file(vertices, faces, out_pre)  # creates an stl file of the box with roughness on the surface
-    fp.refine_stl_mesh(out_pre + '.stl', 'Refined_'+out_pre+'.stl', alpha*ns)
-
-    fp.mesh3D('Refined_'+out_pre+'.stl', ext_fem)
+    fp.refine_3Dmesh(type_sample, out_pre, ns, alpha, ext_fem)
     return (vertices, out_pre + '.stl')  # returns the stl file name
 
 
@@ -477,9 +472,7 @@ def make_sphere(type_sample,
     new_vertex = fp.coord_cart_sphere(C1, C2, r, vertices, t, z, y, x)  # creates a new matrix with x, y, z in cartesian coordinates
 
     fp.stl_file(new_vertex, faces, out_pre)  # creates an stl file of the sphere with roughness on the surface
-    fp.refine_stl_mesh(out_pre + '.stl', 'Refined_' + out_pre + '.stl', alpha * ns)
-
-    fp.mesh3D('Refined_'+out_pre+'.stl', ext_fem)
+    fp.refine_3Dmesh(type_sample, out_pre, ns, alpha, ext_fem)
     return (vertices, out_pre + '.stl')  # returns the stl file name
 
 
@@ -554,9 +547,7 @@ def make_poly(type_sample,
     vertices = vertices[:,:3]  # gets rid of the index column because stl file generator takes only a matrix with 3 columns
     vertices = fp.align_poly(vertices, angles)
     fp.stl_file(vertices, faces, out_pre)  # creates an stl file of the box with roughness on the surface
-    fp.refine_stl_mesh(out_pre + '.stl', 'Refined_'+out_pre+'.stl', alpha*ns)
-
-    fp.mesh3D('Refined_'+out_pre+'.stl', ext_fem)
+    fp.refine_3Dmesh(type_sample, out_pre, ns, alpha, ext_fem)
     return (vertices, out_pre + '.stl')
 
 #test
@@ -639,8 +630,7 @@ def make_wulff(type_sample,
     vertices = vertices[:, :3]
 
     fp.stl_file(vertices, faces, out_pre)
-    fp.refine_stl_mesh(out_pre + '.stl', 'Refined_' + out_pre + '.stl', alpha * ns)
-    fp.mesh3D('Refined_'+out_pre+'.stl', ext_fem)
+    fp.refine_3Dmesh(type_sample, out_pre, ns, alpha, ext_fem)
     return (vertices, out_pre + '.stl')
 
 
@@ -693,12 +683,12 @@ def make_cube(type_sample,
 
     vertices = fp.make_rough_wulff(vertices, B, C1, RMS, N, M, nodesurf, node_edge, node_corner, list_n)
 
-    vertices = vertices[:, :3]
+    vertices = fp.center_3d_dataset(vertices[:, :3])
 
     fp.stl_file(vertices, faces, out_pre)
-    fp.refine_stl_mesh(out_pre + '.stl', 'Refined_' + out_pre + '.stl', alpha * ns)
 
-    fp.mesh3D('Refined_'+out_pre+'.stl', ext_fem)
+    fp.refine_3Dmesh(type_sample, out_pre, ns, alpha, ext_fem)
+
     return (vertices, out_pre + '.stl')
 
 def make_atom_grain(STL,
