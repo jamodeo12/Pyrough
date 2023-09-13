@@ -17,7 +17,6 @@ import math
 import scipy.special as sp
 from wulffpack import SingleCrystal
 from ase.build import bulk
-from pathlib import Path
 import meshio
 import gmsh
 
