@@ -80,7 +80,10 @@ class Parameter(object):
                 self.length = read_param['Wire']['Length']
                 self.radius = read_param['Wire']['Radius']
                 self.ns = read_param['Wire']['Mesh_size']
-                self.alpha = read_param['Wire']['Refine_factor']
+                try:
+                    self.alpha = read_param['Wire']['Refine_factor']
+                except KeyError:
+                    self.alpha = 1
                 self.height = 0
                 self.width = 0
                 self.raw_stl = read_param['Wire']['Raw_stl']
@@ -109,7 +112,10 @@ class Parameter(object):
                 self.length = read_param['Box']['Length']
                 self.width = read_param['Box']['Width']
                 self.ns = read_param['Box']['Mesh_size']
-                self.alpha = read_param['Box']['Refine_factor']
+                try:
+                    self.alpha = read_param['Box']['Refine_factor']
+                except KeyError:
+                    self.alpha = 1
                 self.radius = 0
                 self.raw_stl = read_param['Box']['Raw_stl']
                 self.nfaces = 0
@@ -129,7 +135,10 @@ class Parameter(object):
                 self.RMS = ''
                 self.radius = read_param['Sphere']['Radius']
                 self.ns = read_param['Sphere']['Mesh_size']
-                self.alpha = read_param['Sphere']['Refine_factor']
+                try:
+                    self.alpha = read_param['Sphere']['Refine_factor']
+                except KeyError:
+                    self.alpha = 1
                 self.height = 0
                 self.length = 0
                 self.width = 0
@@ -158,7 +167,10 @@ class Parameter(object):
                 self.nfaces = read_param['Poly']['N_Faces']
                 self.radius = read_param['Poly']['Radius']
                 self.ns = read_param['Poly']['Mesh_size']
-                self.alpha = read_param['Poly']['Refine_factor']
+                try:
+                    self.alpha = read_param['Poly']['Refine_factor']
+                except KeyError:
+                    self.alpha = 1
                 self.height = 0
                 self.width = 0
                 self.raw_stl = read_param['Poly']['Raw_stl']
@@ -188,7 +200,10 @@ class Parameter(object):
                 self.nfaces = 0
                 self.radius = 0
                 self.ns = read_param['Wulff']['Mesh_size']
-                self.alpha = read_param['Wulff']['Refine_factor']
+                try:
+                    self.alpha = read_param['Wulff']['Refine_factor']
+                except KeyError:
+                    self.alpha = 1
                 self.height = 0
                 self.width = 0
                 self.raw_stl = read_param['Wulff']['Raw_stl']
@@ -215,7 +230,10 @@ class Parameter(object):
                 self.nfaces = 0
                 self.radius = 0
                 self.ns = read_param['Cube']['Mesh_size']
-                self.alpha = read_param['Cube']['Refine_factor']
+                try:
+                    self.alpha = read_param['Cube']['Refine_factor']
+                except KeyError:
+                    self.alpha = 1
                 self.height = read_param['Cube']['Length']
                 self.width = read_param['Cube']['Length']
                 self.raw_stl = read_param['Cube']['Raw_stl']
