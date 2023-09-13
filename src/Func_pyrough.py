@@ -46,7 +46,38 @@ def rdnsurf(m, n, B, xv, yv, sfrM, sfrN):
 
     :return: Roughness height matrix
     """
-    print('====== > Creating random surface....')
+    print('====== > Creating random rough surface....')
+    Z = 0.0
+    for i in range(len(sfrM)):
+        for j in range(len(sfrN)):
+            if sfrM[i] == 0 and sfrN[j] == 0:
+                continue
+            else:
+                mod = (sfrM[i] ** 2 + sfrN[j] ** 2) ** (-0.5 * B)
+                Z = Z + m[i][j] * mod * np.cos(2 * np.pi * (sfrM[i] * xv + sfrN[j] * yv) + n[i][j])
+    return Z
+
+def rdnsurf_2(m, n, B, xv, yv, sfrM, sfrN):
+    """
+    Generates random surface roughness that will replace the previous z values in the vertices matrix.
+
+    :type m: array
+    :param m: Wavenumber
+    :type n: array
+    :param n: Wavenumber
+    :type B: float
+    :param B: The degree the roughness is dependent on
+    :type xv: array
+    :param xv: Unique x coordinate values from the objects vertices
+    :type yv: array
+    :param yv: Unique y coordinate values from the objects vertices
+    :type sfrM: array
+    :param sfrM: Matrix of random numbers that range from 1 to 2N
+    :type sfrN: array
+    :param sfrN: Matrix of random numbers that range from 1 to 2N
+
+    :return: Roughness height matrix
+    """
     Z = 0.0
     for i in range(len(sfrM)):
         for j in range(len(sfrN)):
@@ -1255,6 +1286,12 @@ def make_rough_wulff(vertices, B, C1, RMS, N, M, nodesurf, node_edge, node_corne
     """
     sfrN, sfrM = vectors(N, M)
     for k in range(len(nodesurf)):
+        if k == 0:
+            print("====== > Creating random rough surface n° {}, ".format(k+1), end=' ', flush=True)
+        elif k == len(nodesurf)-1:
+            print("{}.".format(k+1))
+        else:
+            print("{}, ".format(k+1), end=' ', flush=True)
         surf = np.array(nodesurf[k])
         n1 = np.array(list_n[k])
         surf_rot = rot(surf, n1)
@@ -1263,11 +1300,11 @@ def make_rough_wulff(vertices, B, C1, RMS, N, M, nodesurf, node_edge, node_corne
         yv = surf_norm[:, 1]
         m, n = random_numbers(sfrN, sfrM)
         if type(C1) == str:
-            z = rdnsurf(m, n, B, xv, yv, sfrM, sfrN)
+            z = rdnsurf_2(m, n, B, xv, yv, sfrM, sfrN)
             C1 = RMS / rms_calc(z)
             z = C1 * z
         else:
-            z = C1 * rdnsurf(m, n, B, xv, yv, sfrM, sfrN)
+            z = C1 * rdnsurf_2(m, n, B, xv, yv, sfrM, sfrN)
         z = z + abs(np.min(z))
         for i in range(len(surf)):
             p = surf[i]
