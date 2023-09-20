@@ -1,3 +1,6 @@
+# usage : python Surface_Analysis.py 'image.png' size xmin xmax
+# image.png is the image to analyse, size is the lateral length of the picture and xmin and xmax are the height distribution limit values
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -6,88 +9,100 @@ from scipy import stats
 import cv2
 import sys
 
+def hann(image):
+    size = np.shape(image)
+    Lx = size[0]
+    Ly = size[1]
+    for x in range(Lx):
+        for y in range(Ly):
+            if (((x - 0.5 * Lx) ** 2 + (y - 0.5 * Ly) ** 2) < (0.5 * min(Lx, Ly)) ** 2):
+                w = (((3 * np.pi / 8) - (2 / np.pi)) ** (-0.5)) * (1 + np.cos(
+                    (2 * np.pi * np.sqrt((x - 0.5 * Lx) ** 2 + (y - 0.5 * Ly) ** 2)) / (min(Lx, Ly))))
+                image[x, y] = w * image[x, y]
+            else:
+                image[x, y] = 0
+    return (image)
+
+print("====== > Running surface analysis algorithm")
+
 fig = plt.figure()
 
-D = cv2.imread(sys.argv[1], 0)
+# Parameters
+D = cv2.imread(sys.argv[1], cv2.IMREAD_GRAYSCALE)
+size_init = float(sys.argv[2])
+zmax = float(sys.argv[2])
+zmin = float(sys.argv[3])
+npix = np.min(D.shape)
+size = size_init * (npix / np.max(D.shape))
 
-scale = [float(sys.argv[2]), float(sys.argv[3])]
-D = func.rescale(D, scale)
+# Square the pic
+D = D[0:npix, 0:npix] - np.mean(D)
+size_per_pixel = size / np.shape(D)[0]
 
-print('Mean line : ', round(np.mean(D), 2))
-print('Deviation : ', func.sigma(D))
-print('RMS : ', func.rms_calc(D))
-print('Skewness : ', func.sk(D))
-print('Kurtosis : ', func.Kurto(D))
+# Wavevectors range
+qmax = 2 * np.pi / size_per_pixel
+qmin = 2 * np.pi / (0.5 * size)
 
+# Show the image
 ax1 = fig.add_subplot(1, 3, 1)
 ax1.axis('off')
 ax1.imshow(D, cmap='gray')
 
-L = np.shape(D)[1]
-data = []
-for i in range(L):
-    data.append(D[i])
-data = np.asarray(data) / np.max(data)
+# Apply a Hanning window to the grayscale image, and rescale as a function of zmax and zmin
+image = hann(D)
+image = (image - np.min(image)) / (np.max(image) - np.min(image)) * (zmax - zmin) + zmin
 
-x = np.arange(0, int(np.size(data, 0)), 1)
-y = np.arange(0, int(np.size(data, 1)), 1)
+# print('Mean line : ', round(np.mean(D), 2))
+# print('Deviation : ', func.sigma(D))
+# print('RMS : ', func.rms_calc(D))
+# print('Skewness : ', func.sk(D))
+# print('Kurtosis : ', func.Kurto(D))
 
-z = data
-npix = data.shape[0]
+print("====== > Generation of the surface power spectrum ...")
 
-# taking the fourier transform
-fourier_image = np.fft.fft2(data)
-
-# Get power spectral density
+# Fourier transform and power spectral density
+fourier_image = np.fft.fftn(image)
 fourier_amplitudes = np.abs(fourier_image) ** 2
 
-# calculate sampling frequency fs (physical distance between pixels)
-fs = 1 / npix
-freq_shifted = fs / 2 * np.linspace(-1, 1, npix)
-freq = fs / 2 * np.linspace(0, 1, int(npix / 2))
-
-# constructing a wave vector array
-## Get frequencies corresponding to signal PSD
+# Frequencies correspondng to signal PSD
 kfreq = np.fft.fftfreq(npix) * npix
-
 kfreq2D = np.meshgrid(kfreq, kfreq)
-
 knrm = np.sqrt(kfreq2D[0] ** 2 + kfreq2D[1] ** 2)
-knrm = knrm.flatten()
 
+knrm = knrm.flatten()
 fourier_amplitudes = fourier_amplitudes.flatten()
 
-# creating the power spectrum
+# PSD generation
 kbins = np.arange(0.5, npix // 2 + 1, 1.)
 kvals = 0.5 * (kbins[1:] + kbins[:-1])
-
 Abins, _, _ = stats.binned_statistic(knrm, fourier_amplitudes,
                                      statistic="mean",
                                      bins=kbins)
 Abins *= np.pi * (kbins[1:] ** 2 - kbins[:-1] ** 2)
 
-X = kvals
-Y = Abins
+# Keep only the wavevectors range
+index = [i for i, v in enumerate(kvals) if ((v > qmax) or (v < qmin))]
+Abins[index] = 0
 
-sup = 0
-# low = 125
-low = len(X)
-m, b = np.polyfit(np.log(X[sup:low]), np.log(Y[sup:low]), 1)
+# Linear regression
+index_reg = np.where(Abins != 0)[0]
+low = np.min(index_reg) + 1
+sup = np.max(index_reg)
 
-H = -0.5 * m - 1
+m, b = np.polyfit(np.log(kvals[low:sup]), np.log(Abins[low:sup]), 1)
+H = -1 * (0.5 * m + 1)
+print("====== > H = "+str(round(H,2)))
 
-print("Plotting power spectrum of surface ...")
-# fig = plt.figure()
 ax2 = fig.add_subplot(1, 3, 2)
-ax2.loglog(X, Y)
-ax2.loglog(X, np.exp(b) * np.power(X, m), label='H = ' + str(round(H, 2)))
+ax2.loglog(kvals, Abins, color='r', linewidth=2.5, label="$PSD$")
+ax2.loglog(kvals[index_reg], np.exp(b) * np.power(kvals[index_reg], m), '--', color='k', linewidth=2.5,
+           label="$H = $" + str(round(H, 2)))
 ax2.legend()
-ax2.set_xlabel("Spatial Frequency $k$ [m-1]")
+ax2.set_xlabel("Spatial Frequency $k [m^{-1}]$")
 ax2.set_ylabel("PSD $P(k)$")
-# plt.tight_layout()
 
-print("Construction of equivalent rough surface ...")
-x = np.linspace(0, 1, 300)
+print("====== > Construction of equivalent rough surface ...")
+x = np.linspace(0, 1, 200)
 y = x
 xv, yv = np.meshgrid(x, y)
 Z = func.rough(xv, yv, H, 1, 50, 50)
