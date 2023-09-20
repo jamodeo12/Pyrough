@@ -23,7 +23,7 @@ def hann(image):
                 image[x, y] = 0
     return (image)
 
-print("====== > Running surface analysis algorithm")
+print("====== > Running surface analysis algorithm ...")
 
 fig = plt.figure()
 
@@ -117,3 +117,6 @@ plt.show()
 
 df = pd.DataFrame(Z)
 df.to_csv('Rough_data.csv')
+
+print("====== > Data saved in Rough_data.csv")
+
