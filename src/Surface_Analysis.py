@@ -98,8 +98,8 @@ ax2.loglog(kvals, Abins, color='r', linewidth=2.5, label="$PSD$")
 ax2.loglog(kvals[index_reg], np.exp(b) * np.power(kvals[index_reg], m), '--', color='k', linewidth=2.5,
            label="$H = $" + str(round(H, 2)))
 ax2.legend()
-ax2.set_xlabel("Spatial Frequency $k [m^{-1}]$")
-ax2.set_ylabel("PSD $P(k)$")
+ax2.set_xlabel("Wave vector $q \ [nm^{-1}]$")
+ax2.set_ylabel("PSD $C^{2D}(q) \ [nm^{4}]$")
 
 print("====== > Construction of equivalent rough surface ...")
 x = np.linspace(0, 1, 200)
