@@ -19,6 +19,7 @@ from wulffpack import SingleCrystal
 from ase.build import bulk
 import meshio
 import gmsh
+import matplotlib.pyplot as plt
 
 
 # np.set_printoptions(threshold=sys.maxsize)
@@ -47,6 +48,10 @@ def rdnsurf(m, n, B, xv, yv, sfrM, sfrN):
     """
     print('====== > Creating random rough surface....')
     Z = 0.0
+    # Zprime = 0.0
+    # Xprime = np.linspace(0,1,100)
+    # Yprime = Xprime
+    # XV, YV = np.meshgrid(Xprime, Yprime)
     for i in range(len(sfrM)):
         for j in range(len(sfrN)):
             if sfrM[i] == 0 and sfrN[j] == 0:
@@ -54,6 +59,15 @@ def rdnsurf(m, n, B, xv, yv, sfrM, sfrN):
             else:
                 mod = (sfrM[i] ** 2 + sfrN[j] ** 2) ** (-0.5 * B)
                 Z = Z + m[i][j] * mod * np.cos(2 * np.pi * (sfrM[i] * xv + sfrN[j] * yv) + n[i][j])
+                # Zprime = Zprime + m[i][j] * mod * np.cos(2 * np.pi * (sfrM[i] * XV + sfrN[j] * YV) + n[i][j])
+    # fig = plt.figure()
+    # ax2 = fig.add_subplot(projection='3d')
+    # ax2.grid(False)
+    # ax2.axis('off')
+    # ax2.scatter3D(XV, YV, Zprime, c=Zprime, cmap='jet')
+    # ax2.view_init(90, -90)
+    # plt.savefig('Num_surf.png')
+    # plt.show()
     return Z
 
 def rdnsurf_2(m, n, B, xv, yv, sfrM, sfrN):

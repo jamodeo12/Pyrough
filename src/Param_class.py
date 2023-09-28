@@ -64,29 +64,29 @@ class Parameter(object):
             self.orien_z2 = read_param['ATOM2_Param']['Orien_z']
 
         else :
-            if 'Wire' in read_param:
+            if 'cWire' in read_param:
                 self.type_S = 'wire'
-                self.H = read_param['Wire']['H']
+                self.H = read_param['cWire']['H']
                 try:
-                    self.C1 = read_param['Wire']['C1']
+                    self.C1 = read_param['cWire']['C1']
                 except KeyError:
                     self.C1 = ''
                 try:
-                    self.RMS = read_param['Wire']['RMS']
+                    self.RMS = read_param['cWire']['RMS']
                 except KeyError:
                     self.RMS = ''
-                self.N = read_param['Wire']['N']
-                self.M = read_param['Wire']['M']
-                self.length = read_param['Wire']['Length']
-                self.radius = read_param['Wire']['Radius']
-                self.ns = read_param['Wire']['Mesh_size']
+                self.N = read_param['cWire']['N']
+                self.M = read_param['cWire']['M']
+                self.length = read_param['cWire']['Length']
+                self.radius = read_param['cWire']['Radius']
+                self.ns = read_param['cWire']['Mesh_size']
                 try:
-                    self.alpha = read_param['Wire']['Refine_factor']
+                    self.alpha = read_param['cWire']['Refine_factor']
                 except KeyError:
                     self.alpha = 1
                 self.height = 0
                 self.width = 0
-                self.raw_stl = read_param['Wire']['Raw_stl']
+                self.raw_stl = read_param['cWire']['Raw_stl']
                 self.nfaces = 0
                 self.surfaces = 0
                 self.energies = 0
@@ -150,30 +150,30 @@ class Parameter(object):
                 self.ext_fem = read_param['Output']['FEM']
                 self.ext_ato = read_param['Output']['ATOM']
 
-            elif 'Poly' in read_param:
+            elif 'fWire' in read_param:
                 self.type_S = 'poly'
-                self.H = read_param['Poly']['H']
+                self.H = read_param['fWire']['H']
                 try:
-                    self.C1 = read_param['Poly']['C1']
+                    self.C1 = read_param['fWire']['C1']
                 except KeyError:
                     self.C1 = ''
                 try:
-                    self.RMS = read_param['Poly']['RMS']
+                    self.RMS = read_param['fWire']['RMS']
                 except KeyError:
                     self.RMS = ''
-                self.N = read_param['Poly']['N']
-                self.M = read_param['Poly']['M']
-                self.length = read_param['Poly']['Length']
-                self.nfaces = read_param['Poly']['N_Faces']
-                self.radius = read_param['Poly']['Radius']
-                self.ns = read_param['Poly']['Mesh_size']
+                self.N = read_param['fWire']['N']
+                self.M = read_param['fWire']['M']
+                self.length = read_param['fWire']['Length']
+                self.nfaces = read_param['fWire']['N_Faces']
+                self.radius = read_param['fWire']['Radius']
+                self.ns = read_param['fWire']['Mesh_size']
                 try:
-                    self.alpha = read_param['Poly']['Refine_factor']
+                    self.alpha = read_param['fWire']['Refine_factor']
                 except KeyError:
                     self.alpha = 1
                 self.height = 0
                 self.width = 0
-                self.raw_stl = read_param['Poly']['Raw_stl']
+                self.raw_stl = read_param['fWire']['Raw_stl']
                 self.surfaces = 0
                 self.energies = 0
                 self.n_at = 0
