@@ -4,14 +4,15 @@
     "Width": 101.0,
     "Length": 101.0,
     "Mesh_size": 5,
+    "Refine_factor": 0.7,
     "RMS": 2.5,
     "N": 30,
     "M": 30,
     "Raw_stl": "na"},
 
 "Output":
-    {"ATOM_lmp":1,
-    "FEM_stl": 0},
+    {"ATOM": ["lmp", "xyz"],
+    "FEM": ["stl", "msh"]},
 
 "ATOM1_Param":
     {"Lattice_parameter": 4.07,

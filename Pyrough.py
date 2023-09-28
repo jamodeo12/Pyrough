@@ -52,8 +52,11 @@ else :
                                                   param.height,
                                                   param.width,
                                                   param.ns,
+                                                  param.alpha,
                                                   param.raw_stl,
-                                                  out_pre)
+                                                  out_pre,
+                                                  param.ext_fem)
+
         Sample_class.make_atom_grain(FEM_stl,
                              param.lattice_structure1,
                              param.lattice_parameter1,
@@ -68,7 +71,8 @@ else :
                              param.orien_y2,
                              param.orien_z2,
                              vertices,
-                             out_pre)
+                             out_pre,
+                             param.ext_ato)
             # call make it md to create atomsk file
         print('JOB DONE!' + '  File name: ' + out_pre + '.lmp')
 

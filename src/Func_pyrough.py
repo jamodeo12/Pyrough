@@ -1600,7 +1600,7 @@ def refine_3Dmesh(type_sample, out_pre, ns, alpha, ext_fem):
     print('====== > Refining mesh for ' + type_sample + ' object')
     if 'stl' in ext_fem:
         ext_fem.remove('stl')
-    if type_sample == 'box':
+    if (type_sample == 'box') or (type_sample == 'grain'):
         refine_box(out_pre, ns, alpha, 45, ext_fem)
     elif type_sample == 'wire' or type_sample == 'poly':
         refine_wire(out_pre, ns, alpha, 0, ext_fem)
