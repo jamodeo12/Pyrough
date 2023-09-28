@@ -48,7 +48,11 @@ class Parameter(object):
             self.height = read_param['Grain']['Height']
             self.length = read_param['Grain']['Length']
             self.width = read_param['Grain']['Width']
-            self.ns = read_param['Grain']['Mesh size']
+            self.ns = read_param['Grain']['Mesh_size']
+            try:
+                self.alpha = read_param['Grain']['Refine_factor']
+            except KeyError:
+                self.alpha = 1
             self.raw_stl = read_param['Grain']['Raw_stl']
             self.lattice_structure1 = read_param['ATOM1_Param']['Lattice_structure']
             self.lattice_parameter1 = read_param['ATOM1_Param']['Lattice_parameter']
@@ -62,6 +66,8 @@ class Parameter(object):
             self.orien_x2 = read_param['ATOM2_Param']['Orien_x']
             self.orien_y2 = read_param['ATOM2_Param']['Orien_y']
             self.orien_z2 = read_param['ATOM2_Param']['Orien_z']
+            self.ext_fem = read_param['Output']['FEM']
+            self.ext_ato = read_param['Output']['ATOM']
 
         else :
             if 'cWire' in read_param:

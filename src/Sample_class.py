@@ -705,7 +705,8 @@ def make_atom_grain(STL,
                     orien_y2,
                     orien_z2,
                     vertices,
-                    out_pre):
+                    out_pre,
+                    ext_ato):
     """
     Generates an atomic positions file for the grain object.
 
@@ -745,12 +746,12 @@ def make_atom_grain(STL,
     dim_x = max(vertices[:, 0]) - min(vertices[:, 0])
     dim_y = max(vertices[:, 1]) - min(vertices[:, 1])
     dim_z = max(vertices[:, 2]) - min(vertices[:, 2])
-    dup_x1, orien_x1 = fp.duplicate(dim_x, orien_x1, lattice_parameter1)
-    dup_y1, orien_y1 = fp.duplicate(dim_y, orien_y1, lattice_parameter1)
-    dup_z1, orien_z1 = fp.duplicate(2*dim_z, orien_z1, lattice_parameter1)
-    dup_x2, orien_x2 = fp.duplicate(dim_x, orien_x2, lattice_parameter2)
-    dup_y2, orien_y2 = fp.duplicate(dim_y, orien_y2, lattice_parameter2)
-    dup_z2, orien_z2 = fp.duplicate(2*dim_z, orien_z2, lattice_parameter2)
+    dis_x1, dup_x1, orien_x1 = fp.duplicate(dim_x, orien_x1, lattice_parameter1)
+    dis_y1, dup_y1, orien_y1 = fp.duplicate(dim_y, orien_y1, lattice_parameter1)
+    dis_z1, dup_z1, orien_z1 = fp.duplicate(2*dim_z, orien_z1, lattice_parameter1)
+    dis_x2, dup_x2, orien_x2 = fp.duplicate(dim_x, orien_x2, lattice_parameter2)
+    dis_y2, dup_y2, orien_y2 = fp.duplicate(dim_y, orien_y2, lattice_parameter2)
+    dis_z2, dup_z2, orien_z2 = fp.duplicate(2*dim_z, orien_z2, lattice_parameter2)
 
     lattice_parameter1 = str(lattice_parameter1)
     lattice_parameter2 = str(lattice_parameter2)
@@ -763,7 +764,8 @@ def make_atom_grain(STL,
                      '-duplicate', dup_x2, dup_y2, dup_z2, 'mat2_supercell.atsk'])
     subprocess.call(['atomsk', 'mat2_supercell.atsk', '-select', 'stl', STL, '-select', 'invert', '-rmatom', 'select', 'mat2_out.atsk'])
 
-    subprocess.call(['atomsk', '--merge', '2', 'mat1_out.atsk', 'mat2_out.atsk', out_pre+'.lmp'])
+    for e in ext_ato:
+        subprocess.call(['atomsk', '--merge', '2', 'mat1_out.atsk', 'mat2_out.atsk', out_pre+'.'+e])
 
     subprocess.call(['rm', 'mat1_supercell.atsk', 'mat2_supercell.atsk', 'mat1_out.atsk', 'mat2_out.atsk'])
     #fp.rebox(out_pre + '.lmp')
