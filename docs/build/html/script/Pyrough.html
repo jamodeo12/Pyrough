@@ -110,14 +110,9 @@
 <span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">subprocess</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;#######################################################################################&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;#                            Running Random Surface script                            #&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;#                                       Pyrough                                       #&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;#                          Jonathan Amodeo &amp; Hugo Iteney 2023                         #&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;#######################################################################################&#39;</span><span class="p">)</span>
-
-<span class="c1"># _____________________Removing previous data____________________</span>
-
-<span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="s1">&#39;rm&#39;</span><span class="p">,</span> <span class="s1">&#39;material_supercell.lmp&#39;</span><span class="p">])</span>
-<span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="s1">&#39;rm&#39;</span><span class="p">,</span> <span class="s1">&#39;sample_with_atoms.lmp&#39;</span><span class="p">])</span>
 
 <span class="c1"># _____________________Main Code____________________</span>
 <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;-surface&#39;</span> <span class="p">:</span>
@@ -144,8 +139,11 @@
                                                   <span class="n">param</span><span class="o">.</span><span class="n">height</span><span class="p">,</span>
                                                   <span class="n">param</span><span class="o">.</span><span class="n">width</span><span class="p">,</span>
                                                   <span class="n">param</span><span class="o">.</span><span class="n">ns</span><span class="p">,</span>
+                                                  <span class="n">param</span><span class="o">.</span><span class="n">alpha</span><span class="p">,</span>
                                                   <span class="n">param</span><span class="o">.</span><span class="n">raw_stl</span><span class="p">,</span>
-                                                  <span class="n">out_pre</span><span class="p">)</span>
+                                                  <span class="n">out_pre</span><span class="p">,</span>
+                                                  <span class="n">param</span><span class="o">.</span><span class="n">ext_fem</span><span class="p">)</span>
+
         <span class="n">Sample_class</span><span class="o">.</span><span class="n">make_atom_grain</span><span class="p">(</span><span class="n">FEM_stl</span><span class="p">,</span>
                              <span class="n">param</span><span class="o">.</span><span class="n">lattice_structure1</span><span class="p">,</span>
                              <span class="n">param</span><span class="o">.</span><span class="n">lattice_parameter1</span><span class="p">,</span>
@@ -160,7 +158,8 @@
                              <span class="n">param</span><span class="o">.</span><span class="n">orien_y2</span><span class="p">,</span>
                              <span class="n">param</span><span class="o">.</span><span class="n">orien_z2</span><span class="p">,</span>
                              <span class="n">vertices</span><span class="p">,</span>
-                             <span class="n">out_pre</span><span class="p">)</span>
+                             <span class="n">out_pre</span><span class="p">,</span>
+                             <span class="n">param</span><span class="o">.</span><span class="n">ext_ato</span><span class="p">)</span>
             <span class="c1"># call make it md to create atomsk file</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;JOB DONE!&#39;</span> <span class="o">+</span> <span class="s1">&#39;  File name: &#39;</span> <span class="o">+</span> <span class="n">out_pre</span> <span class="o">+</span> <span class="s1">&#39;.lmp&#39;</span><span class="p">)</span>
 
@@ -178,6 +177,7 @@
                                             <span class="n">param</span><span class="o">.</span><span class="n">height</span><span class="p">,</span>
                                             <span class="n">param</span><span class="o">.</span><span class="n">width</span><span class="p">,</span>
                                             <span class="n">param</span><span class="o">.</span><span class="n">ns</span><span class="p">,</span>
+                                            <span class="n">param</span><span class="o">.</span><span class="n">alpha</span><span class="p">,</span>
                                             <span class="n">param</span><span class="o">.</span><span class="n">raw_stl</span><span class="p">,</span>
                                             <span class="n">param</span><span class="o">.</span><span class="n">nfaces</span><span class="p">,</span>
                                             <span class="n">param</span><span class="o">.</span><span class="n">surfaces</span><span class="p">,</span>
@@ -191,6 +191,11 @@
                                             <span class="n">param</span><span class="o">.</span><span class="n">orien_z</span><span class="p">,</span>
                                             <span class="n">out_pre</span><span class="p">,</span>
                                             <span class="n">param</span><span class="o">.</span><span class="n">ext_fem</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;====== &gt; FEM JOB DONE !&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="n">param</span><span class="o">.</span><span class="n">ext_fem</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;====== &gt; File name: &#39;</span> <span class="o">+</span> <span class="n">out_pre</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ext</span><span class="p">))</span>
+        <span class="k">if</span> <span class="s1">&#39;stl&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">param</span><span class="o">.</span><span class="n">ext_fem</span> <span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;====== &gt; File name: &#39;</span> <span class="o">+</span> <span class="n">out_pre</span> <span class="o">+</span> <span class="s1">&#39;.stl&#39;</span><span class="p">)</span>
         <span class="c1"># Calling the sample class function of MAKE it which returns an stl file of the object desired.</span>
         <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">Param_file</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;ATOM&#39;</span><span class="p">:</span>
             <span class="n">sample</span><span class="o">.</span><span class="n">make_atom</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">type_S</span><span class="p">,</span>
@@ -205,9 +210,12 @@
                              <span class="n">out_pre</span><span class="p">,</span>
                              <span class="n">param</span><span class="o">.</span><span class="n">ext_ato</span><span class="p">)</span>
             <span class="c1"># call make it md to create atomsk file</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;JOB DONE!&#39;</span> <span class="o">+</span> <span class="s1">&#39;  File name: &#39;</span> <span class="o">+</span> <span class="n">out_pre</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">ext_ato</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;JOB DONE!&#39;</span> <span class="o">+</span> <span class="s1">&#39;  File name: &#39;</span> <span class="o">+</span> <span class="n">FEM_stl</span><span class="p">)</span>
+            <span class="c1"># print(&#39;JOB DONE!&#39; + &#39;  File name: &#39; + out_pre + &#39;.&#39; + str(param.ext_ato[0]))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;====== &gt; ATOM JOB DONE !&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="n">param</span><span class="o">.</span><span class="n">ext_ato</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;====== &gt; File name: &#39;</span> <span class="o">+</span> <span class="n">out_pre</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ext</span><span class="p">))</span>
+        <span class="c1"># else:</span>
+            <span class="c1"># print(&#39;JOB DONE!&#39; + &#39;  File name: &#39; + FEM_stl)</span>
 </pre></div>
 </div>
 </div>
