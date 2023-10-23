@@ -151,31 +151,25 @@
 <dl class="function">
 <dt id="Func_pyrough.box">
 <code class="descclassname">Func_pyrough.</code><code class="descname">box</code><span class="sig-paren">(</span><em>width</em>, <em>length</em>, <em>height</em>, <em>ns</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.box" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a box mesh.</p>
-<table class="docutils field-list" frame="void" rules="none">
+<dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>width</strong> (<em>float</em>) – Width of the desired box</li>
-<li><strong>length</strong> (<em>float</em>) – Length of the desired box</li>
-<li><strong>height</strong> (<em>float</em>) – Height of the desired box</li>
-<li><strong>ns</strong> (<em>int</em>) – Number of segments</li>
-<li><strong>out_pre</strong> (<em>str</em>) – Prefix for output files</li>
+<li><strong>width</strong> (<em>float</em>) – Width of the box</li>
+<li><strong>length</strong> (<em>float</em>) – Length of the box</li>
+<li><strong>height</strong> (<em>float</em>) – Height of the box</li>
+<li><strong>ns</strong> (<em>float</em>) – Mesh size</li>
+<li><strong>out_pre</strong> (<em>str</em>) – Output file name if required</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">List of points and faces</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">vertices and faces of box mesh</p>
 </td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
-
-<dl class="function">
-<dt id="Func_pyrough.box_perio">
-<code class="descclassname">Func_pyrough.</code><code class="descname">box_perio</code><span class="sig-paren">(</span><em>file_lmp</em>, <em>dis</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.box_perio" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 <dl class="function">
 <dt id="Func_pyrough.cart2cyl">
@@ -188,6 +182,21 @@
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>matrix</strong> (<em>array</em>) – List of cartesian coordinates</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Cylindrical coordinates</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.center_3d_dataset">
+<code class="descclassname">Func_pyrough.</code><code class="descname">center_3d_dataset</code><span class="sig-paren">(</span><em>dataset</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.center_3d_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dataset</strong> (<em>array</em>) – Array of positions</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Centered position dataset</td>
 </tr>
 </tbody>
 </table>
@@ -254,19 +263,19 @@
 
 <dl class="function">
 <dt id="Func_pyrough.cube">
-<code class="descclassname">Func_pyrough.</code><code class="descname">cube</code><span class="sig-paren">(</span><em>length</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.cube" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a cube mesh.</p>
-<table class="docutils field-list" frame="void" rules="none">
+<code class="descclassname">Func_pyrough.</code><code class="descname">cube</code><span class="sig-paren">(</span><em>length</em>, <em>ns</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.cube" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>length</strong> (<em>float</em>) – Length of the desired box</li>
-<li><strong>out_pre</strong> (<em>str</em>) – Prefix for output files</li>
+<li><strong>length</strong> (<em>float</em>) – Length of the cube</li>
+<li><strong>ns</strong> (<em>float</em>) – Mesh size</li>
+<li><strong>out_pre</strong> (<em>str</em>) – Output file name if required</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">List of points and faces</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">vertices and faces of cube mesh</p>
 </td>
 </tr>
 </tbody>
@@ -308,20 +317,19 @@
 <dl class="function">
 <dt id="Func_pyrough.cylinder">
 <code class="descclassname">Func_pyrough.</code><code class="descname">cylinder</code><span class="sig-paren">(</span><em>l</em>, <em>r</em>, <em>ns</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.cylinder" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a cylindrical mesh.</p>
-<table class="docutils field-list" frame="void" rules="none">
+<dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>l</strong> (<em>float</em>) – Length of the desired nanowire</li>
-<li><strong>r</strong> (<em>float</em>) – Radius of the nanowire</li>
-<li><strong>ns</strong> (<em>int</em>) – The number of segments desired on the nanowire</li>
-<li><strong>out_pre</strong> (<em>str</em>) – Prefix for output files</li>
+<li><strong>l</strong> (<em>float</em>) – Length of the cylinder</li>
+<li><strong>r</strong> (<em>float</em>) – Radius of the cylinder</li>
+<li><strong>ns</strong> (<em>float</em>) – Mesh size</li>
+<li><strong>out_pre</strong> (<em>str</em>) – Output file name if required</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">List of points and faces</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">vertices and faces of cylinder mesh</p>
 </td>
 </tr>
 </tbody>
@@ -555,20 +563,20 @@ type faces: array</p>
 
 <dl class="function">
 <dt id="Func_pyrough.poly">
-<code class="descclassname">Func_pyrough.</code><code class="descname">poly</code><span class="sig-paren">(</span><em>length</em>, <em>points</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.poly" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a faceted wire mesh.</p>
-<table class="docutils field-list" frame="void" rules="none">
+<code class="descclassname">Func_pyrough.</code><code class="descname">poly</code><span class="sig-paren">(</span><em>length</em>, <em>base_points</em>, <em>ns</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.poly" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>length</strong> (<em>float</em>) – Length of the wire</li>
-<li><strong>points</strong> (<em>array</em>) – Base points of the wire</li>
-<li><strong>out_pre</strong> (<em>str</em>) – Prefix of output files</li>
+<li><strong>length</strong> (<em>float</em>) – Length of the faceted wire</li>
+<li><strong>base_points</strong> (<em>list</em>) – Shape of the base</li>
+<li><strong>ns</strong> (<em>float</em>) – Mesh size</li>
+<li><strong>out_pre</strong> (<em>str</em>) – Output file name if required</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">List of points and faces</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">vertices and faces of faceted wire mesh</p>
 </td>
 </tr>
 </tbody>
@@ -671,6 +679,32 @@ type faces: array</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="Func_pyrough.rdnsurf_2">
+<code class="descclassname">Func_pyrough.</code><code class="descname">rdnsurf_2</code><span class="sig-paren">(</span><em>m</em>, <em>n</em>, <em>B</em>, <em>xv</em>, <em>yv</em>, <em>sfrM</em>, <em>sfrN</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.rdnsurf_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates random surface roughness that will replace the previous z values in the vertices matrix.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>m</strong> (<em>array</em>) – Wavenumber</li>
+<li><strong>n</strong> (<em>array</em>) – Wavenumber</li>
+<li><strong>B</strong> (<em>float</em>) – The degree the roughness is dependent on</li>
+<li><strong>xv</strong> (<em>array</em>) – Unique x coordinate values from the objects vertices</li>
+<li><strong>yv</strong> (<em>array</em>) – Unique y coordinate values from the objects vertices</li>
+<li><strong>sfrM</strong> (<em>array</em>) – Matrix of random numbers that range from 1 to 2N</li>
+<li><strong>sfrN</strong> (<em>array</em>) – Matrix of random numbers that range from 1 to 2N</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Roughness height matrix</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="Func_pyrough.read_stl">
 <code class="descclassname">Func_pyrough.</code><code class="descname">read_stl</code><span class="sig-paren">(</span><em>sample_type</em>, <em>raw_stl</em>, <em>width</em>, <em>length</em>, <em>height</em>, <em>radius</em>, <em>ns</em>, <em>points</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.read_stl" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reads an input stl file or creates a new one if no input</p>
@@ -686,7 +720,7 @@ type faces: array</p>
 <li><strong>height</strong> (<em>float</em>) – Height of the box</li>
 <li><strong>radius</strong> (<em>float</em>) – Radius of the wire/sphere</li>
 <li><strong>ns</strong> (<em>int</em>) – The number of segments desired</li>
-<li><strong>points</strong> (<em>array</em>) – List of points constituting the base (in case of faceted wire)</li>
+<li><strong>points</strong> (<em>list</em>) – List of points constituting the base (in case of faceted wire)</li>
 <li><strong>out_pre</strong> (<em>str</em>) – Prefix of output files</li>
 </ul>
 </td>
@@ -700,7 +734,7 @@ type faces: array</p>
 
 <dl class="function">
 <dt id="Func_pyrough.read_stl_wulff">
-<code class="descclassname">Func_pyrough.</code><code class="descname">read_stl_wulff</code><span class="sig-paren">(</span><em>raw_stl</em>, <em>obj_points</em>, <em>obj_faces</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.read_stl_wulff" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Func_pyrough.</code><code class="descname">read_stl_wulff</code><span class="sig-paren">(</span><em>raw_stl</em>, <em>obj_points</em>, <em>obj_faces</em>, <em>ns</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.read_stl_wulff" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reads an input stl file or creates a new one if no input. Wulff case.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -710,6 +744,7 @@ type faces: array</p>
 <li><strong>raw_stl</strong> (<em>str</em>) – Name of the input stl file</li>
 <li><strong>obj_points</strong> (<em>list</em>) – List of points from OBJ file</li>
 <li><strong>obj_faces</strong> (<em>list</em>) – List of faces from OBJ file</li>
+<li><strong>ns</strong> (<em>float</em>) – Mesh size</li>
 <li><strong>out_pre</strong> (<em>str</em>) – Prefix of output files</li>
 </ul>
 </td>
@@ -731,25 +766,114 @@ type faces: array</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>file_lmp</strong> (<em>str</em>) – .lmp file containing the atom positions</td>
 </tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Reboxed position file</td>
+</tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="function">
-<dt id="Func_pyrough.refine">
-<code class="descclassname">Func_pyrough.</code><code class="descname">refine</code><span class="sig-paren">(</span><em>stl</em>, <em>ext</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.refine" title="Permalink to this definition">¶</a></dt>
+<dt id="Func_pyrough.refine_3Dmesh">
+<code class="descclassname">Func_pyrough.</code><code class="descname">refine_3Dmesh</code><span class="sig-paren">(</span><em>type_sample</em>, <em>out_pre</em>, <em>ns</em>, <em>alpha</em>, <em>ext_fem</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.refine_3Dmesh" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>stl</strong> (<em>str</em>) – Mesh file to be refined</li>
-<li><strong>ext</strong> (<em>str</em>) – Output formats for the generation of the new mesh</li>
+<li><strong>type_sample</strong> (<em>str</em>) – Type of object</li>
+<li><strong>out_pre</strong> (<em>str</em>) – Outfit file name</li>
+<li><strong>ns</strong> (<em>float</em>) – Mesh size</li>
+<li><strong>alpha</strong> (<em>float</em>) – Refine mesh factor</li>
+<li><strong>ext_fem</strong> (<em>list</em>) – FEM extensions list</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Refined 3D meshs for all required formats</p>
 </td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.refine_box">
+<code class="descclassname">Func_pyrough.</code><code class="descname">refine_box</code><span class="sig-paren">(</span><em>out_pre</em>, <em>ns</em>, <em>alpha</em>, <em>angle</em>, <em>ext_fem</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.refine_box" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>out_pre</strong> (<em>str</em>) – Outfit file name</li>
+<li><strong>ns</strong> (<em>float</em>) – Mesh size</li>
+<li><strong>alpha</strong> (<em>float</em>) – Refine mesh factor</li>
+<li><strong>angle</strong> (<em>float</em>) – Angle value for facets detection</li>
+<li><strong>ext_fem</strong> (<em>list</em>) – FEM extensions list</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Refined box mesh</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.refine_sphere">
+<code class="descclassname">Func_pyrough.</code><code class="descname">refine_sphere</code><span class="sig-paren">(</span><em>out_pre</em>, <em>ns</em>, <em>alpha</em>, <em>angle</em>, <em>ext_fem</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.refine_sphere" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>out_pre</strong> (<em>str</em>) – Outfit file name</li>
+<li><strong>ns</strong> (<em>float</em>) – Mesh size</li>
+<li><strong>alpha</strong> (<em>float</em>) – Refine mesh factor</li>
+<li><strong>angle</strong> (<em>float</em>) – Angle value for facets detection</li>
+<li><strong>ext_fem</strong> (<em>list</em>) – FEM extensions list</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Refined sphere mesh</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.refine_wire">
+<code class="descclassname">Func_pyrough.</code><code class="descname">refine_wire</code><span class="sig-paren">(</span><em>out_pre</em>, <em>ns</em>, <em>alpha</em>, <em>angle</em>, <em>ext_fem</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.refine_wire" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>out_pre</strong> (<em>str</em>) – Outfit file name</li>
+<li><strong>ns</strong> (<em>float</em>) – Mesh size</li>
+<li><strong>alpha</strong> (<em>float</em>) – Refine mesh factor</li>
+<li><strong>angle</strong> (<em>float</em>) – Angle value for facets detection</li>
+<li><strong>ext_fem</strong> (<em>list</em>) – FEM extensions list</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Refined wire mesh</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Func_pyrough.remove_duplicates_2d_ordered">
+<code class="descclassname">Func_pyrough.</code><code class="descname">remove_duplicates_2d_ordered</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.remove_duplicates_2d_ordered" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>list</em>) – Initial list</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">List with no duplicates</td>
 </tr>
 </tbody>
 </table>
@@ -929,6 +1053,30 @@ type faces: array</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="Func_pyrough.segment_intersects_plane">
+<code class="descclassname">Func_pyrough.</code><code class="descname">segment_intersects_plane</code><span class="sig-paren">(</span><em>S</em>, <em>P</em>, <em>a</em>, <em>b</em>, <em>c</em>, <em>d</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.segment_intersects_plane" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>S</strong> (<em>list</em>) – Point defining segment with the origin</li>
+<li><strong>P</strong> (<em>list</em>) – Plane normal</li>
+<li><strong>a</strong> (<em>float</em>) – Plane equation (ax + by + cz + d = 0)</li>
+<li><strong>b</strong> (<em>float</em>) – Plane equation (ax + by + cz + d = 0)</li>
+<li><strong>c</strong> (<em>float</em>) – Plane equation (ax + by + cz + d = 0)</li>
+<li><strong>d</strong> (<em>float</em>) – Plane equation (ax + by + cz + d = 0)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Boolean value for plane intersection or not</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="Func_pyrough.sigma">
 <code class="descclassname">Func_pyrough.</code><code class="descname">sigma</code><span class="sig-paren">(</span><em>z</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.sigma" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the standard deviation of a height distribution</p>
@@ -963,19 +1111,18 @@ type faces: array</p>
 <dl class="function">
 <dt id="Func_pyrough.sphere">
 <code class="descclassname">Func_pyrough.</code><code class="descname">sphere</code><span class="sig-paren">(</span><em>r</em>, <em>ns</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.sphere" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a sphere mesh.</p>
-<table class="docutils field-list" frame="void" rules="none">
+<dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>r</strong> (<em>float</em>) – Radius of the desired sphere</li>
-<li><strong>ns</strong> (<em>int</em>) – The number of segments desired on the sphere</li>
-<li><strong>out_pre</strong> (<em>str</em>) – Prefix of output files</li>
+<li><strong>r</strong> (<em>float</em>) – Radius of the sphere</li>
+<li><strong>ns</strong> (<em>float</em>) – Mesh size</li>
+<li><strong>out_pre</strong> (<em>str</em>) – Output file name if required</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">List of points and faces</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">vertices and faces of sphere mesh</p>
 </td>
 </tr>
 </tbody>
@@ -1130,19 +1277,20 @@ type faces: array</p>
 
 <dl class="function">
 <dt id="Func_pyrough.wulff">
-<code class="descclassname">Func_pyrough.</code><code class="descname">wulff</code><span class="sig-paren">(</span><em>obj_points</em>, <em>obj_faces</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.wulff" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a Wulff-Shaped NP mesh</p>
-<table class="docutils field-list" frame="void" rules="none">
+<code class="descclassname">Func_pyrough.</code><code class="descname">wulff</code><span class="sig-paren">(</span><em>points</em>, <em>faces</em>, <em>ns</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.wulff" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>obj_points</strong> (<em>list</em>) – Corners of the NP (from OBJ file)</li>
-<li><strong>obj_faces</strong> (<em>list</em>) – Faces of the NP (from OBJ file)</li>
+<li><strong>points</strong> (<em>list</em>) – Vertices of Wulff-shape</li>
+<li><strong>faces</strong> (<em>list</em>) – Facets of Wulff-shape</li>
+<li><strong>ns</strong> (<em>float</em>) – Mesh size</li>
+<li><strong>out_pre</strong> (<em>str</em>) – Output file name if required</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">List of points and faces</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">vertices and faces of Wulff mesh</p>
 </td>
 </tr>
 </tbody>
