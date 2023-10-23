@@ -22,11 +22,6 @@ print('#                                       Pyrough                          
 print('#                          Jonathan Amodeo & Hugo Iteney 2023                         #')
 print('#######################################################################################')
 
-# _____________________Removing previous data____________________
-
-# subprocess.call(['rm', 'material_supercell.lmp'])
-# subprocess.call(['rm', 'sample_with_atoms.lmp'])
-
 # _____________________Main Code____________________
 if sys.argv[1] == '-surface' :
     current_dir = os.path.dirname(os.path.abspath(__file__))

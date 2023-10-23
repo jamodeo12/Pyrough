@@ -58,10 +58,12 @@ class Sample(object):
 
         :param type_sample: Type of the sample
         :type type_sample: str
-        :param B: The degree the roughness is dependent on
-        :type B: float
+        :param H: Hurst exponent
+        :type H: float
         :param C1: Roughness normalization factor
         :type C1: float
+        :param RMS: RMS
+        :type RMS: float
         :param N: Length of the random numbers matrix
         :type N: int
         :param M: Length of the random numbers matrix
@@ -74,6 +76,10 @@ class Sample(object):
         :type height: float
         :param width: The width of the box
         :type width: float
+        :param ns: Mesh size
+        :type ns: float
+        :param alpha: Refine mesh factor
+        :type alpha: float
         :param raw_stl: Input STL file
         :type raw_stl: stl
         :param nfaces: Number of faces in the case of a faceted wire
@@ -98,6 +104,8 @@ class Sample(object):
         :type orien_z: list
         :param out_pre: Prefix of the ouput files
         :type out_pre: str
+        :param ext_fem: Output FEM formats list
+        :type ext_fem: list
 
         :returns: List of nodes and stl file name
         """
@@ -231,6 +239,8 @@ class Sample(object):
         """
         Creates sample_with_atoms.lmp which is an atomic position file. This requires the stl of the object that already has surface roughness applied to it. It adds then atoms in it.
 
+        :param type_sample: Sample type
+        :type type_sample: str
         :param STL: The stl file with an object that has surface roughness applied to it
         :type STL: str
         :param lattice_str: The lattice structure of the cristal
@@ -291,6 +301,8 @@ def make_wire(type_sample,
     :type B: float
     :param C1: Roughness normalization factor
     :type C1: float
+    :param RMS: RMS
+    :type RMS: float
     :param N: Scaling cartesian position
     :type N: int
     :param M: Scaling cartesian position
@@ -301,10 +313,14 @@ def make_wire(type_sample,
     :type length: float
     :param ns: The number of segments desired
     :type ns: int
+    :param alpha: Refine mesh factor
+    :type alpha: float
     :param raw_stl: Name of the input stl file
     :type raw_stl: str
     :param out_pre: Prefix of the ouput files
     :type out_pre: str
+    :param ext_fem: List of FEM extension files
+    :type ext_fem: list
 
     :return: List of nodes and STL file name
     """
@@ -367,6 +383,8 @@ def make_box(type_sample,
     :type B: float
     :param C1: Roughness normalization factor
     :type C1: float
+    :param RMS: RMS
+    :type RMS: float
     :param N: Scaling cartesian position
     :type N: int
     :param M: Scaling cartesian position
@@ -379,10 +397,14 @@ def make_box(type_sample,
     :type width: float
     :param ns: The number of segments desired
     :type ns: int
+    :param alpha: Refine mesh factor
+    :type alpha: float
     :param raw_stl: Name of the input stl file
     :type raw_stl: str
     :param out_pre: Prefix of the ouput files
     :type out_pre: str
+    :param ext_fem: List of FEM extension files
+    :type ext_fem: list
 
     :return: List of nodes and STL file name
     """
@@ -433,16 +455,22 @@ def make_sphere(type_sample,
     :type B: float
     :param C1: Roughness normalization factor
     :type C1: float
+    :param RMS: RMS
+    :type RMS: float
     :param N: Scaling cartesian position
     :type N: int
     :param radius: Radius of the sphere
     :type radius: float
     :param ns: The number of segments desired
     :type ns: int
+    :param alpha: Refine mesh factor
+    :type alpha: float
     :param raw_stl: Name of the input stl file
     :type raw_stl: str
     :param out_pre: Prefix of the ouput files
     :type out_pre: str
+    :param ext_fem: List of FEM extension files
+    :type ext_fem: list
 
     :return: List of nodes and STL file name
     """
@@ -500,8 +528,12 @@ def make_poly(type_sample,
     :type B: float
     :param C1: Roughness normalization factor
     :type C1: float
+    :param RMS: RMS
+    :type RMS: float
     :param N: Scaling cartesian position
     :type N: int
+    :param M: Scaling cartesian position
+    :type M: int
     :param length: Length of the wire
     :type length: float
     :param nfaces: Number of faces of the wire
@@ -510,10 +542,14 @@ def make_poly(type_sample,
     :type radius: float
     :param ns: The number of segments desired
     :type ns: int
+    :param alpha: Refine mesh factor
+    :type alpha: float
     :param raw_stl: Name of the input stl file
     :type raw_stl: str
     :param out_pre: Prefix of the ouput files
     :type out_pre: str
+    :param ext_fem: List of FEM extension files
+    :type ext_fem: list
 
     :return: List of nodes and STL file name
     """
@@ -581,6 +617,8 @@ def make_wulff(type_sample,
     :type B: float
     :param C1: Roughness normalization factor
     :type C1: float
+    :param RMS: RMS
+    :type RMS: float
     :param N: Scaling cartesian position
     :type N: int
     :param M: Scaling cartesian position
@@ -593,6 +631,8 @@ def make_wulff(type_sample,
     :type n_at: int
     :param ns: The number of segments desired
     :type ns: int
+    :param alpha: Refine mesh factor
+    :type alpha: float
     :param raw_stl: Name of the input stl file
     :type raw_stl: str
     :param lattice_structure: The lattice structure of the cristal
@@ -609,6 +649,8 @@ def make_wulff(type_sample,
     :type orien_z: list
     :param out_pre: Prefix for output files
     :type out_pre: str
+    :param ext_fem: List of FEM extension files
+    :type ext_fem: list
 
     :return: List of nodes and STL file name
     """
@@ -656,6 +698,8 @@ def make_cube(type_sample,
     :type B: float
     :param C1: Roughness normalization factor
     :type C1: float
+    :param RMS: RMS
+    :type RMS: float
     :param N: Scaling cartesian position
     :type N: int
     :param M: Scaling cartesian position
@@ -664,10 +708,14 @@ def make_cube(type_sample,
     :type length: float
     :param ns: The number of segments desired
     :type ns: int
+    :param alpha: Refine mesh factor
+    :type alpha: float
     :param raw_stl: Name of the input stl file
     :type raw_stl: str
     :param out_pre: Prefix of the ouput files
     :type out_pre: str
+    :param ext_fem: List of FEM extension files
+    :type ext_fem: list
 
     :return: List of nodes and STL file name
     """
@@ -740,6 +788,8 @@ def make_atom_grain(STL,
     :type vertices: array
     :param out_pre: Prefix of output file
     :type out_pre: str
+    :param ext_ato: Atomic position file format list
+    :type ext_ato: list
 
     :return:
     """

@@ -7,7 +7,7 @@
 # Date: June 01, 2022
 #
 # 
-# Func_pyrough are all the functions used in pyrough. These are required to excute the Pyroughs main code.
+# Func_pyrough are all the functions used in pyrough. These are required to execute the Pyrough main code.
 #  
 # 
 # ---------------------------------------------------------------------------
@@ -48,10 +48,6 @@ def rdnsurf(m, n, B, xv, yv, sfrM, sfrN):
     """
     print('====== > Creating random rough surface....')
     Z = 0.0
-    # Zprime = 0.0
-    # Xprime = np.linspace(0,1,100)
-    # Yprime = Xprime
-    # XV, YV = np.meshgrid(Xprime, Yprime)
     for i in range(len(sfrM)):
         for j in range(len(sfrN)):
             if sfrM[i] == 0 and sfrN[j] == 0:
@@ -59,15 +55,6 @@ def rdnsurf(m, n, B, xv, yv, sfrM, sfrN):
             else:
                 mod = (sfrM[i] ** 2 + sfrN[j] ** 2) ** (-0.5 * B)
                 Z = Z + m[i][j] * mod * np.cos(2 * np.pi * (sfrM[i] * xv + sfrN[j] * yv) + n[i][j])
-                # Zprime = Zprime + m[i][j] * mod * np.cos(2 * np.pi * (sfrM[i] * XV + sfrN[j] * YV) + n[i][j])
-    # fig = plt.figure()
-    # ax2 = fig.add_subplot(projection='3d')
-    # ax2.grid(False)
-    # ax2.axis('off')
-    # ax2.scatter3D(XV, YV, Zprime, c=Zprime, cmap='jet')
-    # ax2.view_init(90, -90)
-    # plt.savefig('Num_surf.png')
-    # plt.show()
     return Z
 
 def rdnsurf_2(m, n, B, xv, yv, sfrM, sfrN):
@@ -131,6 +118,19 @@ def theta(x, y):
 
 
 def cylinder(l, r, ns, out_pre):
+    """
+
+    :param l: Length of the cylinder
+    :type l: float
+    :param r: Radius of the cylinder
+    :type r: float
+    :param ns: Mesh size
+    :type ns: float
+    :param out_pre: Output file name if required
+    :type out_pre: str
+
+    :return: vertices and faces of cylinder mesh
+    """
     print('====== > Creating the Mesh')
     # Initialize Gmsh
     gmsh.initialize()
@@ -179,6 +179,21 @@ def cylinder(l, r, ns, out_pre):
 
 
 def box(width, length, height, ns, out_pre):
+    """
+
+    :param width: Width of the box
+    :type width: float
+    :param length: Length of the box
+    :type length: float
+    :param height: Height of the box
+    :type height: float
+    :param ns: Mesh size
+    :type ns: float
+    :param out_pre: Output file name if required
+    :type out_pre: str
+
+    :return: vertices and faces of box mesh
+    """
     print('====== > Creating the Mesh')
     # Initialize Gmsh
     gmsh.initialize()
@@ -244,6 +259,17 @@ def box(width, length, height, ns, out_pre):
 
 
 def sphere(r, ns, out_pre):
+    """
+
+    :param r: Radius of the sphere
+    :type r: float
+    :param ns: Mesh size
+    :type ns: float
+    :param out_pre: Output file name if required
+    :type out_pre: str
+
+    :return: vertices and faces of sphere mesh
+    """
     print('====== > Creating the Mesh')
     gmsh.initialize()
     gmsh.option.setNumber("General.Terminal", 0)  # Turn off verbose output
@@ -273,6 +299,19 @@ def sphere(r, ns, out_pre):
 
 
 def poly(length, base_points, ns, out_pre):
+    """
+
+    :param length: Length of the faceted wire
+    :type length: float
+    :param base_points: Shape of the base
+    :type base_points: list
+    :param ns: Mesh size
+    :type ns: float
+    :param out_pre: Output file name if required
+    :type out_pre: str
+
+    :return: vertices and faces of faceted wire mesh
+    """
     print('====== > Creating the Mesh')
     gmsh.initialize()
 
@@ -319,6 +358,19 @@ def poly(length, base_points, ns, out_pre):
 
 
 def wulff(points, faces, ns, out_pre):
+    """
+
+    :param points: Vertices of Wulff-shape
+    :type points: list
+    :param faces: Facets of Wulff-shape
+    :type faces: list
+    :param ns: Mesh size
+    :type ns: float
+    :param out_pre: Output file name if required
+    :type out_pre: str
+
+    :return: vertices and faces of Wulff mesh
+    """
     print('====== > Creating the Mesh')
     # Initialize the Gmsh API
     gmsh.initialize()
@@ -358,6 +410,17 @@ def wulff(points, faces, ns, out_pre):
 
 
 def cube(length, ns, out_pre):
+    """
+
+    :param length: Length of the cube
+    :type length: float
+    :param ns: Mesh size
+    :type ns: float
+    :param out_pre: Output file name if required
+    :type out_pre: str
+
+    :return: vertices and faces of cube mesh
+    """
     print('====== > Creating the Mesh')
     # Initialize Gmsh
     gmsh.initialize()
@@ -509,6 +572,8 @@ def read_stl_wulff(raw_stl, obj_points, obj_faces, ns, out_pre):
     :type obj_points: list
     :param obj_faces: List of faces from OBJ file
     :type obj_faces: list
+    :param ns: Mesh size
+    :type ns: float
     :param out_pre: Prefix of output files
     :type out_pre: str
 
@@ -820,6 +885,13 @@ def node_surface(sample_type, vertices, nodenumber, points, faces):
 
 
 def remove_duplicates_2d_ordered(data):
+    """
+
+    :param data: Initial list
+    :type data: list
+
+    :return: List with no duplicates
+    """
     seen = set()
     result = []
     for item in data:
@@ -942,6 +1014,8 @@ def rebox(file_lmp):
 
     :param file_lmp: .lmp file containing the atom positions
     :type file_lmp: str
+
+    :return: Reboxed position file
     """
     fint = open(file_lmp, "r")
     lines = fint.readlines()
@@ -1233,6 +1307,23 @@ def faces_normals(obj_points, obj_faces):
 
 
 def segment_intersects_plane(S, P, a, b, c, d):
+    """
+
+    :param S: Point defining segment with the origin
+    :type S: list
+    :param P: Plane normal
+    :type P: list
+    :param a: Plane equation (ax + by + cz + d = 0)
+    :type a: float
+    :param b: Plane equation (ax + by + cz + d = 0)
+    :type b: float
+    :param c: Plane equation (ax + by + cz + d = 0)
+    :type c: float
+    :param d: Plane equation (ax + by + cz + d = 0)
+    :type d: float
+
+    :return: Boolean value for plane intersection or not
+    """
     x1, y1, z1 = 0, 0, 0
     x2, y2, z2 = S[0], S[1], S[2]
     p1, p2, p3 = P[0], P[1], P[2]
@@ -1494,6 +1585,222 @@ def align_poly(vertices, angles):
     rotated_points = np.dot(vertices, R)
     return (rotated_points)
 
+def refine_3Dmesh(type_sample, out_pre, ns, alpha, ext_fem):
+    """
+
+    :param type_sample: Type of object
+    :type type_sample: str
+    :param out_pre: Outfit file name
+    :type out_pre: str
+    :param ns: Mesh size
+    :type ns: float
+    :param alpha: Refine mesh factor
+    :type alpha: float
+    :param ext_fem: FEM extensions list
+    :type ext_fem: list
+
+    :return: Refined 3D meshs for all required formats
+    """
+    print('====== > Refining mesh for ' + type_sample + ' object')
+    if 'stl' in ext_fem:
+        ext_fem.remove('stl')
+    if (type_sample == 'box') or (type_sample == 'grain'):
+        refine_box(out_pre, ns, alpha, 45, ext_fem)
+    elif type_sample == 'wire' or type_sample == 'poly':
+        refine_wire(out_pre, ns, alpha, 0, ext_fem)
+    elif type_sample == 'sphere':
+        refine_sphere(out_pre, ns, alpha, 0, ext_fem)
+    elif type_sample == 'wulff' or type_sample == 'cube':
+        refine_sphere(out_pre, ns, alpha, 45, ext_fem)
+    return ()
+
+
+def refine_box(out_pre, ns, alpha, angle, ext_fem):
+    """
+
+    :param out_pre: Outfit file name
+    :type out_pre: str
+    :param ns: Mesh size
+    :type ns: float
+    :param alpha: Refine mesh factor
+    :type alpha: float
+    :param angle: Angle value for facets detection
+    :type angle: float
+    :param ext_fem: FEM extensions list
+    :type ext_fem: list
+
+    :return: Refined box mesh
+    """
+    # Initialize Gmsh
+    gmsh.initialize()
+    gmsh.option.setNumber("General.Terminal", 0)
+    # Let's merge an STL mesh that we would like to remesh.
+    gmsh.merge(out_pre + '.stl')
+
+    # Force curves to be split on given angle:
+    curveAngle = 180
+    gmsh.model.mesh.classifySurfaces(angle * math.pi / 180., True, 0, curveAngle * math.pi / 180.)
+
+    gmsh.model.mesh.createGeometry()
+    s = gmsh.model.getEntities(2)
+    l = gmsh.model.geo.addSurfaceLoop([e[1] for e in s])
+    gmsh.model.geo.addVolume([l])
+    gmsh.model.geo.synchronize()
+
+    # Extract node information
+    node_tags, node_coords, node_param = gmsh.model.mesh.getNodes()
+    # Reshape the node coordinates into a more user-friendly format
+    vertices = node_coords.reshape(-1, 3)
+    # Variables
+    z_max = np.max(vertices.T[2])
+    z_min = np.min(vertices.T[2])
+    formula = f"{ns} + ({ns} - {alpha * ns})/({z_min} - {z_max}) * (z - {z_min})"
+    f = gmsh.model.mesh.field.add("MathEval")
+    gmsh.model.mesh.field.setString(f, "F", formula)
+    gmsh.model.mesh.field.setAsBackgroundMesh(f)
+
+    gmsh.model.mesh.generate(3)
+    gmsh.write(out_pre + '.stl')
+    for e in ext_fem:
+        gmsh.write(out_pre + '.' + e)
+    return ()
+
+
+def refine_wire(out_pre, ns, alpha, angle, ext_fem):
+    """
+
+    :param out_pre: Outfit file name
+    :type out_pre: str
+    :param ns: Mesh size
+    :type ns: float
+    :param alpha: Refine mesh factor
+    :type alpha: float
+    :param angle: Angle value for facets detection
+    :type angle: float
+    :param ext_fem: FEM extensions list
+    :type ext_fem: list
+
+    :return: Refined wire mesh
+    """
+    # Initialize Gmsh
+    gmsh.initialize()
+    gmsh.option.setNumber("General.Terminal", 0)
+    # Let's merge an STL mesh that we would like to remesh.
+    gmsh.merge(out_pre + '.stl')
+    # gmsh.fltk.run()
+    # Force curves to be split on given angle:
+    curveAngle = 180
+    gmsh.model.mesh.classifySurfaces(angle * math.pi / 180., True, 0, curveAngle * math.pi / 180.)
+
+    gmsh.model.mesh.createGeometry()
+
+    s = gmsh.model.getEntities(2)
+    l = gmsh.model.geo.addSurfaceLoop([e[1] for e in s])
+    gmsh.model.geo.addVolume([l])
+    gmsh.model.geo.synchronize()
+
+    # Extract node information
+    node_tags, node_coords, node_param = gmsh.model.mesh.getNodes()
+    # Reshape the node coordinates into a more user-friendly format
+    vertices = node_coords.reshape(-1, 3)
+
+    r_max = np.max(np.power(np.power(vertices.T[0], 2) + np.power(vertices.T[1], 2), 0.5))
+
+    gmsh.option.setNumber("Mesh.MeshSizeExtendFromBoundary", 0)
+    gmsh.option.setNumber("Mesh.MeshSizeFromPoints", 0)
+    gmsh.option.setNumber("Mesh.MeshSizeFromCurvature", 0)
+
+    formula = f"abs((({alpha * ns}-{ns})/{r_max})*sqrt(x*x + y*y) + {ns})"
+    f = gmsh.model.mesh.field.add("MathEval")
+    gmsh.model.mesh.field.setString(f, "F", formula)
+    gmsh.model.mesh.field.setAsBackgroundMesh(f)
+    gmsh.model.geo.synchronize()
+    gmsh.model.mesh.generate(3)
+    gmsh.write(out_pre + '.stl')
+    for e in ext_fem:
+        gmsh.write(out_pre + '.' + e)
+    return ()
+
+
+def refine_sphere(out_pre, ns, alpha, angle, ext_fem):
+    """
+
+    :param out_pre: Outfit file name
+    :type out_pre: str
+    :param ns: Mesh size
+    :type ns: float
+    :param alpha: Refine mesh factor
+    :type alpha: float
+    :param angle: Angle value for facets detection
+    :type angle: float
+    :param ext_fem: FEM extensions list
+    :type ext_fem: list
+
+    :return: Refined sphere mesh
+    """
+    # Initialize Gmsh
+    gmsh.initialize()
+    gmsh.option.setNumber("General.Terminal", 0)
+    # Let's merge an STL mesh that we would like to remesh.
+    gmsh.merge(out_pre + '.stl')
+
+    # Force curves to be split on given angle:
+    curveAngle = 180
+    gmsh.model.mesh.classifySurfaces(angle * math.pi / 180., True, 0, curveAngle * math.pi / 180.)
+
+    gmsh.model.mesh.createGeometry()
+
+    s = gmsh.model.getEntities(2)
+    l = gmsh.model.geo.addSurfaceLoop([e[1] for e in s])
+    gmsh.model.geo.addVolume([l])
+    gmsh.model.geo.synchronize()
+
+    # Extract node information
+    node_tags, node_coords, node_param = gmsh.model.mesh.getNodes()
+    # Reshape the node coordinates into a more user-friendly format
+    vertices = node_coords.reshape(-1, 3)
+
+    r_max = np.max(np.power(np.power(vertices.T[0], 2) + np.power(vertices.T[1], 2) + np.power(vertices.T[2], 2), 0.5))
+
+    # gmsh.option.setNumber("Mesh.MeshSizeExtendFromBoundary", 0)
+    # gmsh.option.setNumber("Mesh.MeshSizeFromPoints", 0)
+    # gmsh.option.setNumber("Mesh.MeshSizeFromCurvature", 0)
+
+    formula = f"abs((({alpha * ns}-{ns})/{r_max})*sqrt(x*x + y*y + z*z) + {ns})"
+    f = gmsh.model.mesh.field.add("MathEval")
+    gmsh.model.mesh.field.setString(f, "F", formula)
+    gmsh.model.mesh.field.setAsBackgroundMesh(f)
+    gmsh.model.geo.synchronize()
+    # gmsh.fltk.run()
+    gmsh.model.mesh.generate(3)
+    gmsh.write(out_pre + '.stl')
+    for e in ext_fem:
+        gmsh.write(out_pre + '.' + e)
+    return ()
+
+
+def center_3d_dataset(dataset):
+    """
+
+    :param dataset: Array of positions
+    :type dataset: array
+
+    :return: Centered position dataset
+    """
+    # Calculate the center of mass (centroid)
+    total_points = len(dataset)
+    sum_x = sum(point[0] for point in dataset)
+    sum_y = sum(point[1] for point in dataset)
+    sum_z = sum(point[2] for point in dataset)
+
+    center_x = sum_x / total_points
+    center_y = sum_y / total_points
+    center_z = sum_z / total_points
+
+    # Translate the dataset to the origin
+    centered_dataset = np.array([[point[0] - center_x, point[1] - center_y, point[2] - center_z] for point in dataset])
+
+    return centered_dataset
 
 ####################################################################
 ####################### SURFACE ANALYSIS ###########################
@@ -1595,152 +1902,3 @@ def rescale(D, scale):
     upper = scale[1]
     Df = [lower + (upper - lower) * x for x in D]
     return (np.asarray(Df))
-
-def refine_3Dmesh(type_sample, out_pre, ns, alpha, ext_fem):
-    print('====== > Refining mesh for ' + type_sample + ' object')
-    if 'stl' in ext_fem:
-        ext_fem.remove('stl')
-    if (type_sample == 'box') or (type_sample == 'grain'):
-        refine_box(out_pre, ns, alpha, 45, ext_fem)
-    elif type_sample == 'wire' or type_sample == 'poly':
-        refine_wire(out_pre, ns, alpha, 0, ext_fem)
-    elif type_sample == 'sphere':
-        refine_sphere(out_pre, ns, alpha, 0, ext_fem)
-    elif type_sample == 'wulff' or type_sample == 'cube':
-        refine_sphere(out_pre, ns, alpha, 45, ext_fem)
-    return ()
-
-def refine_box(out_pre, ns, alpha, angle, ext_fem):
-    # Initialize Gmsh
-    gmsh.initialize()
-    gmsh.option.setNumber("General.Terminal", 0)
-    # Let's merge an STL mesh that we would like to remesh.
-    gmsh.merge(out_pre + '.stl')
-
-    # Force curves to be split on given angle:
-    curveAngle = 180
-    gmsh.model.mesh.classifySurfaces(angle * math.pi / 180., True, 0, curveAngle * math.pi / 180.)
-
-    gmsh.model.mesh.createGeometry()
-    s = gmsh.model.getEntities(2)
-    l = gmsh.model.geo.addSurfaceLoop([e[1] for e in s])
-    gmsh.model.geo.addVolume([l])
-    gmsh.model.geo.synchronize()
-
-    # Extract node information
-    node_tags, node_coords, node_param = gmsh.model.mesh.getNodes()
-    # Reshape the node coordinates into a more user-friendly format
-    vertices = node_coords.reshape(-1, 3)
-    # Variables
-    z_max = np.max(vertices.T[2])
-    z_min = np.min(vertices.T[2])
-    formula = f"{ns} + ({ns} - {alpha * ns})/({z_min} - {z_max}) * (z - {z_min})"
-    f = gmsh.model.mesh.field.add("MathEval")
-    gmsh.model.mesh.field.setString(f, "F", formula)
-    gmsh.model.mesh.field.setAsBackgroundMesh(f)
-
-    gmsh.model.mesh.generate(3)
-    gmsh.write(out_pre + '.stl')
-    for e in ext_fem:
-        gmsh.write(out_pre + '.' + e)
-    return ()
-
-
-def refine_wire(out_pre, ns, alpha, angle, ext_fem):
-    # Initialize Gmsh
-    gmsh.initialize()
-    gmsh.option.setNumber("General.Terminal", 0)
-    # Let's merge an STL mesh that we would like to remesh.
-    gmsh.merge(out_pre + '.stl')
-    # gmsh.fltk.run()
-    # Force curves to be split on given angle:
-    curveAngle = 180
-    gmsh.model.mesh.classifySurfaces(angle * math.pi / 180., True, 0, curveAngle * math.pi / 180.)
-
-    gmsh.model.mesh.createGeometry()
-
-    s = gmsh.model.getEntities(2)
-    l = gmsh.model.geo.addSurfaceLoop([e[1] for e in s])
-    gmsh.model.geo.addVolume([l])
-    gmsh.model.geo.synchronize()
-
-    # Extract node information
-    node_tags, node_coords, node_param = gmsh.model.mesh.getNodes()
-    # Reshape the node coordinates into a more user-friendly format
-    vertices = node_coords.reshape(-1, 3)
-
-    r_max = np.max(np.power(np.power(vertices.T[0], 2) + np.power(vertices.T[1], 2), 0.5))
-
-    gmsh.option.setNumber("Mesh.MeshSizeExtendFromBoundary", 0)
-    gmsh.option.setNumber("Mesh.MeshSizeFromPoints", 0)
-    gmsh.option.setNumber("Mesh.MeshSizeFromCurvature", 0)
-
-    formula = f"abs((({alpha * ns}-{ns})/{r_max})*sqrt(x*x + y*y) + {ns})"
-    f = gmsh.model.mesh.field.add("MathEval")
-    gmsh.model.mesh.field.setString(f, "F", formula)
-    gmsh.model.mesh.field.setAsBackgroundMesh(f)
-    gmsh.model.geo.synchronize()
-    gmsh.model.mesh.generate(3)
-    gmsh.write(out_pre + '.stl')
-    for e in ext_fem:
-        gmsh.write(out_pre + '.' + e)
-    return ()
-
-
-def refine_sphere(out_pre, ns, alpha, angle, ext_fem):
-    # Initialize Gmsh
-    gmsh.initialize()
-    gmsh.option.setNumber("General.Terminal", 0)
-    # Let's merge an STL mesh that we would like to remesh.
-    gmsh.merge(out_pre + '.stl')
-
-    # Force curves to be split on given angle:
-    curveAngle = 180
-    gmsh.model.mesh.classifySurfaces(angle * math.pi / 180., True, 0, curveAngle * math.pi / 180.)
-
-    gmsh.model.mesh.createGeometry()
-
-    s = gmsh.model.getEntities(2)
-    l = gmsh.model.geo.addSurfaceLoop([e[1] for e in s])
-    gmsh.model.geo.addVolume([l])
-    gmsh.model.geo.synchronize()
-
-    # Extract node information
-    node_tags, node_coords, node_param = gmsh.model.mesh.getNodes()
-    # Reshape the node coordinates into a more user-friendly format
-    vertices = node_coords.reshape(-1, 3)
-
-    r_max = np.max(np.power(np.power(vertices.T[0], 2) + np.power(vertices.T[1], 2) + np.power(vertices.T[2], 2), 0.5))
-
-    # gmsh.option.setNumber("Mesh.MeshSizeExtendFromBoundary", 0)
-    # gmsh.option.setNumber("Mesh.MeshSizeFromPoints", 0)
-    # gmsh.option.setNumber("Mesh.MeshSizeFromCurvature", 0)
-
-    formula = f"abs((({alpha * ns}-{ns})/{r_max})*sqrt(x*x + y*y + z*z) + {ns})"
-    f = gmsh.model.mesh.field.add("MathEval")
-    gmsh.model.mesh.field.setString(f, "F", formula)
-    gmsh.model.mesh.field.setAsBackgroundMesh(f)
-    gmsh.model.geo.synchronize()
-    # gmsh.fltk.run()
-    gmsh.model.mesh.generate(3)
-    gmsh.write(out_pre + '.stl')
-    for e in ext_fem:
-        gmsh.write(out_pre + '.' + e)
-    return ()
-
-
-def center_3d_dataset(dataset):
-    # Calculate the center of mass (centroid)
-    total_points = len(dataset)
-    sum_x = sum(point[0] for point in dataset)
-    sum_y = sum(point[1] for point in dataset)
-    sum_z = sum(point[2] for point in dataset)
-
-    center_x = sum_x / total_points
-    center_y = sum_y / total_points
-    center_z = sum_z / total_points
-
-    # Translate the dataset to the origin
-    centered_dataset = np.array([[point[0] - center_x, point[1] - center_y, point[2] - center_z] for point in dataset])
-
-    return centered_dataset
