@@ -1099,7 +1099,6 @@ def rms_calc(Z):
     Z = Z.flatten()
     return (np.sqrt(np.sum(Z * Z) / len(Z)))
 
-
 def random_surf2(sample_type, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, RMS, out_pre):
     """
     Returns an array with the Z values representing the surface roughness.
@@ -1854,7 +1853,7 @@ def sigma(z):
     """
     Z = z.flatten()
     l = np.mean(Z)
-    return (round(np.sqrt(np.sum(np.power(Z - l, 2)) / len(Z)), 3))
+    return (np.sqrt(np.sum(np.power(Z - l, 2)) / len(Z)))
 
 
 def sk(z):
@@ -1868,7 +1867,7 @@ def sk(z):
     """
     Z = z.flatten()
     l = np.mean(Z)
-    return (round((1 / (sigma(z) ** 3 * len(Z))) * np.sum(np.power(Z - l, 3)), 3))
+    return ((1 / (sigma(z) ** 3 * len(Z))) * np.sum(np.power(Z - l, 3)))
 
 
 def Kurto(z):
@@ -1882,7 +1881,7 @@ def Kurto(z):
     """
     Z = z.flatten()
     l = np.mean(Z)
-    return (round((1 / (sigma(z) ** 4 * len(Z))) * np.sum(np.power(Z - l, 4)), 3))
+    return ((1 / (sigma(z) ** 4 * len(Z))) * np.sum(np.power(Z - l, 4)))
 
 
 def rescale(D, scale):

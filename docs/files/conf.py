@@ -54,7 +54,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'Pyrough'
-copyright = '2023, Hugo Iteney, Javier-Antonio Gonzalez Joa, Christophe Le Bourlot, Thomas Cornelius, Olivier Thomas and Jonathan Amodeo'
+copyright = '2023, Hugo Iteney and Jonathan Amodeo'
 author = 'Hugo Iteney, Javier-Antonio Gonzalez Joa, Christophe Le Bourlot, Thomas Cornelius, Olivier Thomas and Jonathan Amodeo'
 
 # The version info for the project you're documenting, acts as replacement for
