@@ -25,13 +25,11 @@ def hann(image):
 
 print("====== > Running surface analysis algorithm ...")
 
-fig = plt.figure()
-
 # Parameters
 D = cv2.imread(sys.argv[1], cv2.IMREAD_GRAYSCALE)
 size_init = float(sys.argv[2])
-zmax = float(sys.argv[2])
 zmin = float(sys.argv[3])
+zmax = float(sys.argv[4])
 npix = np.min(D.shape)
 size = size_init * (npix / np.max(D.shape))
 
@@ -39,24 +37,25 @@ size = size_init * (npix / np.max(D.shape))
 D = D[0:npix, 0:npix] - np.mean(D)
 size_per_pixel = size / np.shape(D)[0]
 
+print('Mean line : ', np.mean(D))
+print('Deviation : ', func.sigma(D))
+print('RMS : ', func.rms_calc(D))
+print('Skewness : ', func.sk(D))
+print('Kurtosis : ', func.Kurto(D))
+
 # Wavevectors range
 qmax = 2 * np.pi / size_per_pixel
 qmin = 2 * np.pi / (0.5 * size)
 
 # Show the image
-ax1 = fig.add_subplot(1, 3, 1)
+fig1 = plt.figure()
+ax1 = fig1.add_subplot()
 ax1.axis('off')
 ax1.imshow(D, cmap='gray')
 
 # Apply a Hanning window to the grayscale image, and rescale as a function of zmax and zmin
 image = hann(D)
 image = (image - np.min(image)) / (np.max(image) - np.min(image)) * (zmax - zmin) + zmin
-
-# print('Mean line : ', round(np.mean(D), 2))
-# print('Deviation : ', func.sigma(D))
-# print('RMS : ', func.rms_calc(D))
-# print('Skewness : ', func.sk(D))
-# print('Kurtosis : ', func.Kurto(D))
 
 print("====== > Generation of the surface power spectrum ...")
 
@@ -82,20 +81,19 @@ Abins *= np.pi * (kbins[1:] ** 2 - kbins[:-1] ** 2)
 
 # Keep only the wavevectors range
 index = [i for i, v in enumerate(kvals) if ((v > qmax) or (v < qmin))]
-Abins[index] = 0
+Abins = np.delete(Abins, index)
+kvals = np.delete(kvals, index)
 
-# Linear regression
-index_reg = np.where(Abins != 0)[0]
-low = np.min(index_reg) + 1
-sup = np.max(index_reg)
+print("Scanned spatial frequencies : ", kvals)
 
-m, b = np.polyfit(np.log(kvals[low:sup]), np.log(Abins[low:sup]), 1)
+m, b = np.polyfit(np.log(kvals), np.log(Abins), 1)
 H = -1 * (0.5 * m + 1)
 print("====== > H = "+str(round(H,2)))
 
-ax2 = fig.add_subplot(1, 3, 2)
+fig2 = plt.figure()
+ax2 = fig2.add_subplot()
 ax2.loglog(kvals, Abins, color='r', linewidth=2.5, label="$PSD$")
-ax2.loglog(kvals[index_reg], np.exp(b) * np.power(kvals[index_reg], m), '--', color='k', linewidth=2.5,
+ax2.loglog(kvals, np.exp(b) * np.power(kvals, m), '--', color='k', linewidth=2.5,
            label="$H = $" + str(round(H, 2)))
 ax2.legend()
 ax2.set_xlabel("Wave vector $q \ [nm^{-1}]$")
@@ -105,9 +103,10 @@ print("====== > Construction of equivalent rough surface ...")
 x = np.linspace(0, 1, 200)
 y = x
 xv, yv = np.meshgrid(x, y)
-Z = func.rough(xv, yv, H, 1, 50, 50)
+Z = func.rough(xv, yv, H, 1, int(np.max(kvals)), int(np.max(kvals)))
 
-ax3 = fig.add_subplot(1, 3, 3, projection='3d')
+fig3 = plt.figure()
+ax3 = fig3.add_subplot(projection='3d')
 ax3.grid(False)
 ax3.axis('off')
 ax3.scatter3D(xv, yv, Z, c=Z, cmap='jet', s=1)
