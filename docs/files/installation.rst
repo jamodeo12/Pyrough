@@ -35,4 +35,4 @@ Tu run the surface analysis process, simply add the *-surface* option, then the 
 
 .. code-block:: python
 
-	python Pyrough.py -surface Surf.png zmin zmax
+	python Pyrough.py -surface Surf.png size zmin zmax
