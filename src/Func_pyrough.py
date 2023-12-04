@@ -1805,7 +1805,7 @@ def center_3d_dataset(dataset):
 ####################### SURFACE ANALYSIS ###########################
 ####################################################################
 
-def rough(x, y, H, C1, M, N):
+def rough(x, y, H, RMS, M, N):
     """
     Generates a rough surface
 
@@ -1836,10 +1836,12 @@ def rough(x, y, H, C1, M, N):
                 mod = (m * m + n * n) ** (-1 * (1 + H))
                 G = np.random.randn()
                 U = -np.pi / 2 + np.pi * np.random.rand()
-                zadd = C1 * G * mod * np.cos(2 * np.pi * (m * x + n * y) + U)
+                zadd = G * mod * np.cos(2 * np.pi * (m * x + n * y) + U)
                 z = z + zadd
             k += 1
-    return (z)
+    RMS_i = rms_calc(z)
+    C1 = RMS / RMS_i
+    return (C1 * z)
 
 
 def sigma(z):

@@ -103,7 +103,7 @@ print("====== > Construction of equivalent rough surface ...")
 x = np.linspace(0, 1, 200)
 y = x
 xv, yv = np.meshgrid(x, y)
-Z = func.rough(xv, yv, H, 1, int(np.max(kvals)), int(np.max(kvals)))
+Z = func.rough(xv, yv, H, func.rms_calc(D), int(np.max(kvals)), int(np.max(kvals)))
 
 fig3 = plt.figure()
 ax3 = fig3.add_subplot(projection='3d')
