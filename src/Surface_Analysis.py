@@ -1,7 +1,6 @@
 # usage : python Surface_Analysis.py 'image.png' size xmin xmax
 # image.png is the image to analyse, size is the lateral length of the picture and xmin and xmax are the height distribution limit values
 
-import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import Func_pyrough as func
@@ -114,8 +113,7 @@ ax3.view_init(90, -90)
 
 plt.show()
 
-df = pd.DataFrame(Z)
-df.to_csv('Rough_data.csv')
+np.savetxt("Rough_data.csv", Z, delimiter=",")
 
 print("====== > Data saved in Rough_data.csv")
 
