@@ -36,11 +36,7 @@ size = size_init * (npix / np.max(D.shape))
 D = D[0:npix, 0:npix] - np.mean(D)
 size_per_pixel = size / np.shape(D)[0]
 
-print('Mean line : ', np.mean(func.rescale(D, [zmin, zmax])))
-print('Deviation : ', func.sigma(func.rescale(D, [zmin, zmax])))
 print('RMS : ', func.rms_calc(func.rescale(D, [zmin, zmax])))
-print('Skewness : ', func.sk(func.rescale(D, [zmin, zmax])))
-print('Kurtosis : ', func.Kurto(func.rescale(D, [zmin, zmax])))
 
 # Wavevectors range
 qmax = 2 * np.pi / size_per_pixel
