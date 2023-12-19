@@ -36,7 +36,7 @@ size = size_init * (npix / np.max(D.shape))
 D = D[0:npix, 0:npix] - np.mean(D)
 size_per_pixel = size / np.shape(D)[0]
 
-print('RMS : ', func.rms_calc(func.rescale(D, [zmin, zmax])))
+#print('RMS : ', func.rms_calc(func.rescale(D, [zmin, zmax])))
 
 # Wavevectors range
 qmax = 2 * np.pi / size_per_pixel
@@ -83,7 +83,12 @@ print("Scanned spatial frequencies : ", kvals)
 
 m, b = np.polyfit(np.log(kvals), np.log(Abins), 1)
 H = -1 * (0.5 * m + 1)
-print("====== > H = "+str(round(H,2)))
+#print("====== > H = "+str(round(H,2)))
+print("====== > Extraction of rough surface statistical parameters ...")
+print("RMS : {}".format(func.rms_calc(func.rescale(D, [zmin, zmax]))))
+print("H : {}".format(H))
+print("A : {}".format(kvals[-1]))
+print("B : {}".format(kvals[-1]))
 
 fig2 = plt.figure()
 ax2 = fig2.add_subplot()
