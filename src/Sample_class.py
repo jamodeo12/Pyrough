@@ -808,11 +808,19 @@ def make_atom_grain(STL,
 
     subprocess.call(['atomsk', '--create', lattice_structure1, lattice_parameter1, material1, 'orient', orien_x1, orien_y1, orien_z1,
                      '-duplicate', dup_x1, dup_y1, dup_z1, 'mat1_supercell.atsk'])
-    subprocess.call(['atomsk', 'mat1_supercell.atsk', '-select', 'stl', STL, '-rmatom', 'select', 'mat1_out.atsk'])
+    # subprocess.call(['atomsk', '--create', lattice_structure1, lattice_parameter1, material1, 'orient', orien_x1, orien_y1, orien_z1,
+    #                  '-duplicate', dup_x1, dup_y1, dup_z1, 'mat1_supercell.lmp'])
+
+    # subprocess.call(['atomsk', 'mat1_supercell.atsk', '-select', 'stl', STL, '-rmatom', 'select', 'mat1_out.atsk'])
+    # subprocess.call(['atomsk', 'mat1_supercell.lmp', '-select', 'stl', STL, '-rmatom', 'select', 'mat1_out.lmp'])
+    #
+    # subprocess.call(['ovito', 'mat1_out.lmp'])
 
     subprocess.call(['atomsk', '--create', lattice_structure2, lattice_parameter2, material2, 'orient', orien_x2, orien_y2, orien_z2,
                      '-duplicate', dup_x2, dup_y2, dup_z2, 'mat2_supercell.atsk'])
     subprocess.call(['atomsk', 'mat2_supercell.atsk', '-select', 'stl', STL, '-select', 'invert', '-rmatom', 'select', 'mat2_out.atsk'])
+
+    # Manage atoms coordinates to avoid inconsistent filling
 
     for e in ext_ato:
         subprocess.call(['atomsk', '--merge', '2', 'mat1_out.atsk', 'mat2_out.atsk', out_pre+'.'+e])
