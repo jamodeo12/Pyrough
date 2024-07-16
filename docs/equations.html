@@ -49,10 +49,7 @@
               <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Rough surface generation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#rough-surface-construction-method">Rough surface Construction method</a></li>
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Rough surface generation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="functions.html">Package functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="shapes.html">Generation of rough shapes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="biblio.html">Bibliography</a></li>
@@ -88,8 +85,6 @@
 <p>The characterization of a rough surface can be done with respect to its spatial frequency content.
 This can be transformed into a constructive method by using a sum of trigonometric functions similar to a Fourier series.
 Each term in such a sum represents a certain frequency of spatial oscillation.</p>
-<section id="rough-surface-construction-method">
-<h2>Rough surface Construction method<a class="headerlink" href="#rough-surface-construction-method" title="Link to this heading"></a></h2>
 <p>In <em>Pyrough</em>, rough surfaces are modeled in the real space using a sum of trigonometric functions where each term of the sum represents the contribution of a spatial frequency.
 In cartesian coordinates, the mathematical expression of spatial oscillations is given by,</p>
 <div class="math notranslate nohighlight">
@@ -106,11 +101,11 @@ A rough surface <span class="math notranslate nohighlight">\(h(x,y)\)</span> can
 <p>Two more contributions are made in order to allow <em>Pyrough</em> to generate  rough surfaces that are randomly perturbed.
 First, the phase is randomly perturbed using <span class="math notranslate nohighlight">\(\phi = U(a,b)\)</span> where <span class="math notranslate nohighlight">\(U\)</span> states for a uniform distribution on an interval of length <span class="math notranslate nohighlight">\(\pi\)</span>.
 Also, random perturbations and correlation aspects are implemented within <span class="math notranslate nohighlight">\(\alpha_{a,b}\)</span>.
-One can for example choose <span class="math notranslate nohighlight">\(\alpha_{a,b}\)</span> as a zero-centered Gaussian distribution to get a smooth but random variation in amplitudes without constraining the magnitude i.e., <span class="math notranslate nohighlight">\(\alpha_{a,b} = G(a,b){(a^2+b^2)}^{-(1+\eta)}\)</span> with <span class="math notranslate nohighlight">\(G\)</span> states for a reduced centered normal law and <span class="math notranslate nohighlight">\({(a^2+b^2)}^{-(1+\eta)}\)</span> expresses the power-law dependency of spatial frequencies involving :math: <cite>eta</cite>, a generalized roughness coefficient that scales with the Hurst coefficient :math: <cite>H</cite> (:math: <cite>etal=(H-1)/2</cite>).
+One can for example choose <span class="math notranslate nohighlight">\(\alpha_{a,b}\)</span> as a zero-centered Gaussian distribution to get a smooth but random variation in amplitudes without constraining the magnitude i.e., <span class="math notranslate nohighlight">\(\alpha_{a,b} = G(a,b){(a^2+b^2)}^{-(1+\eta)}\)</span> with <span class="math notranslate nohighlight">\(G\)</span> states for a reduced centered normal law and <span class="math notranslate nohighlight">\({(a^2+b^2)}^{-(1+\eta)}\)</span> expresses the power-law dependency of spatial frequencies involving <span class="math notranslate nohighlight">\(\eta\)</span>, a generalized roughness coefficient that scales with the Hurst coefficient <span class="math notranslate nohighlight">\(H\)</span> (<span class="math notranslate nohighlight">\(\etal=(H-1)/2\)</span>).
 Finally, the construction of a randomly perturbed surface can be modeled as,</p>
 <div class="math notranslate nohighlight">
 \[h(x,y) = C_1\sum_{a=-A}^{A} \sum_{b=-B}^{B} G(a,b) (a^2+b^2)^{-(1+\eta)} cos[2\pi(a x + b y) + U(a,b) ]\]</div>
-<p>in which eta allows to monitor the roughness degree i.e., self-affine surfaces for :math: <cite>-0.5&lt;eta&lt;0</cite> or non-stationnary ones for :math: <cite>eta&gt;0</cite>, and <span class="math notranslate nohighlight">\(C_1\)</span> is a normalization factor introduced to fit the surface heights to the sample dimensions.</p>
+<p>in which eta allows to monitor the roughness degree i.e., self-affine surfaces for <span class="math notranslate nohighlight">\(-0.5&lt;\eta&lt;0\)</span> or non-stationnary ones for <span class="math notranslate nohighlight">\(\eta&gt;0\)</span>, and <span class="math notranslate nohighlight">\(C_1\)</span> is a normalization factor introduced to fit the surface heights to the sample dimensions.</p>
 <figure class="align-center" id="id9">
 <a class="reference internal image-reference" href="_images/eta_influence.png"><img alt="_images/eta_influence.png" src="_images/eta_influence.png" style="width: 915.5px; height: 431.0px;" />
 </a>
@@ -120,7 +115,6 @@ Finally, the construction of a randomly perturbed surface can be modeled as,</p>
 </div>
 </figcaption>
 </figure>
-</section>
 </section>
 
 
