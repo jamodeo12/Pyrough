@@ -677,7 +677,7 @@ def stat_analysis(z, N, M, C1, B, sample_type, out_pre):
 
     stats = [N, M, C1, round(0.5 * B - 1, 2), nu_points, mean, stand, rms, skewness, kurtosis]
     stats = list(map(str, stats))
-    stats = [sample_type, 'N = ' + stats[0], 'M = ' + stats[1], 'C1 = ' + stats[2], 'H = ' + stats[3],
+    stats = [sample_type, 'N = ' + stats[0], 'M = ' + stats[1], 'C1 = ' + stats[2], 'eta = ' + stats[3],
              'No. points = ' + stats[4],
              'Mean_Value = ' + stats[5], 'Stand_dev = ' + stats[6], 'RMS = ' + stats[7], 'Skewness = ' + stats[8],
              'Kurtosis = ' + stats[9]]
@@ -685,7 +685,7 @@ def stat_analysis(z, N, M, C1, B, sample_type, out_pre):
     np.savetxt(out_pre + '_stat.txt', stats, fmt='%s')
     print('')
     print('------------ Random Surface Parameters-----------------')
-    print('         N =', N, '  M = ', M, '  C1 = ', C1, '  H = ', round(0.5 * B - 1, 2))
+    print('         N =', N, '  M = ', M, '  C1 = ', C1, '  eta = ', round(0.5 * B - 1, 2))
     print('No. points = ', nu_points)
     print('Mean_Value = ', mean)
     print(' Stand_dev = ', stand)
@@ -1805,7 +1805,7 @@ def center_3d_dataset(dataset):
 ####################### SURFACE ANALYSIS ###########################
 ####################################################################
 
-def rough(x, y, H, RMS, M, N):
+def rough(x, y, eta, RMS, M, N):
     """
     Generates a rough surface
 
@@ -1813,8 +1813,8 @@ def rough(x, y, H, RMS, M, N):
     :type x: array
     :param y: List of y coordinates
     :type y: array
-    :param H: Hurst exponent
-    :type H: float
+    :param eta: Roughness exponent
+    :type eta: float
     :param C1: Normalization factor
     :type C1: float
     :param M: Scaling cartesian position
@@ -1833,7 +1833,7 @@ def rough(x, y, H, RMS, M, N):
             if m == 0 and n == 0:
                 pass
             else:
-                mod = (m * m + n * n) ** (-1 * (1 + H))
+                mod = (m * m + n * n) ** (-1 * (1 + eta))
                 G = np.random.randn()
                 U = -np.pi / 2 + np.pi * np.random.rand()
                 zadd = G * mod * np.cos(2 * np.pi * (m * x + n * y) + U)

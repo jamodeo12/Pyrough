@@ -24,7 +24,7 @@ class Sample(object):
 
     def make_stl(self,
                  type_sample,
-                 H,
+                 eta,
                  C1,
                  RMS,
                  N,
@@ -58,8 +58,8 @@ class Sample(object):
 
         :param type_sample: Type of the sample
         :type type_sample: str
-        :param H: Hurst exponent
-        :type H: float
+        :param eta: Roughness exponent
+        :type eta: float
         :param C1: Roughness normalization factor
         :type C1: float
         :param RMS: RMS
@@ -111,7 +111,7 @@ class Sample(object):
         """
         if type_sample == 'wire':
             vertices, stl = make_wire(type_sample,
-                                      2*(1+H),
+                                      2*(1+eta),
                                       C1,
                                       RMS,
                                       N,
@@ -129,7 +129,7 @@ class Sample(object):
 
         elif type_sample == 'box':
             vertices, stl = make_box(type_sample,
-                                     2*(1+H),
+                                     2*(1+eta),
                                      C1,
                                      RMS,
                                      N,
@@ -148,7 +148,7 @@ class Sample(object):
 
         elif type_sample == 'sphere':
             vertices, stl = make_sphere(type_sample,
-                                        4*H,
+                                        4*eta,
                                         C1,
                                         RMS,
                                         N,
@@ -164,7 +164,7 @@ class Sample(object):
 
         elif type_sample == 'poly':
             vertices, stl = make_poly(type_sample,
-                                      2*(1+H),
+                                      2*(1+eta),
                                       C1,
                                       RMS,
                                       N,
@@ -182,7 +182,7 @@ class Sample(object):
 
         elif type_sample == 'wulff':
             vertices, stl = make_wulff(type_sample,
-                                       2*(1+H),
+                                       2*(1+eta),
                                        C1,
                                        RMS,
                                        N,
@@ -207,7 +207,7 @@ class Sample(object):
 
         elif type_sample == 'cube':
             vertices, stl = make_cube(type_sample,
-                                      2*(1+H),
+                                      2*(1+eta),
                                       C1,
                                       RMS,
                                       N,
