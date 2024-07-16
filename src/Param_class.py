@@ -36,7 +36,7 @@ class Parameter(object):
             self.type_S = 'grain'
             self.N = read_param['Grain']['N']
             self.M = read_param['Grain']['M']
-            self.H = read_param['Grain']['H']
+            self.eta = read_param['Grain']['eta']
             try:
                 self.C1 = read_param['Grain']['C1']
             except KeyError:
@@ -72,7 +72,7 @@ class Parameter(object):
         else :
             if 'cWire' in read_param:
                 self.type_S = 'wire'
-                self.H = read_param['cWire']['H']
+                self.eta = read_param['cWire']['eta']
                 try:
                     self.C1 = read_param['cWire']['C1']
                 except KeyError:
@@ -105,7 +105,7 @@ class Parameter(object):
                 self.type_S = 'box'
                 self.N = read_param['Box']['N']
                 self.M = read_param['Box']['M']
-                self.H = read_param['Box']['H']
+                self.eta = read_param['Box']['eta']
                 try:
                     self.C1 = read_param['Box']['C1']
                 except KeyError:
@@ -134,7 +134,7 @@ class Parameter(object):
 
             elif 'Sphere' in read_param:
                 self.type_S = 'sphere'
-                self.H = read_param['Sphere']['H']
+                self.eta = read_param['Sphere']['eta']
                 self.N = read_param['Sphere']['N']
                 self.M = read_param['Sphere']['M']
                 self.C1 = read_param['Sphere']['C1']
@@ -158,7 +158,7 @@ class Parameter(object):
 
             elif 'fWire' in read_param:
                 self.type_S = 'poly'
-                self.H = read_param['fWire']['H']
+                self.eta = read_param['fWire']['eta']
                 try:
                     self.C1 = read_param['fWire']['C1']
                 except KeyError:
@@ -188,7 +188,7 @@ class Parameter(object):
 
             elif 'Wulff' in read_param:
                 self.type_S = 'wulff'
-                self.H = read_param['Wulff']['H']
+                self.eta = read_param['Wulff']['eta']
                 try:
                     self.C1 = read_param['Wulff']['C1']
                 except KeyError:
@@ -218,7 +218,7 @@ class Parameter(object):
 
             elif 'Cube' in read_param:
                 self.type_S = 'cube'
-                self.H = read_param['Cube']['H']
+                self.eta = read_param['Cube']['eta']
                 try:
                     self.C1 = read_param['Cube']['C1']
                 except KeyError:
