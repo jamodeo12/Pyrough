@@ -50,6 +50,8 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Rough surface generation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#self-affine-scaling">Self-affine scaling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#power-spectrum-density">Power spectrum density</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#construction-method">Construction method</a></li>
 </ul>
 </li>
@@ -88,31 +90,29 @@
 <p>The characterization of a rough surface can be done with respect to its spatial frequency content.
 This can be transformed into a constructive method by using a sum of trigonometric functions similar to a Fourier series.
 Each term in such a sum represents a certain frequency of spatial oscillation.</p>
-<p># Self-affine scaling
-# ——————-</p>
-<p>#A broad-spectrum of natural surfaces shows an intrinsically multi-scale roughness.
-#This scaling phenomenon is known as self-affine that differs from the self-similar fractal geometry by the anisotropric character of the scaling transformation.
-#The self-affine scaling transformation for a height distribution <span class="math notranslate nohighlight">\(h(x,y)\)</span> can be resumed by,</p>
-<p>#.. math:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#       \lambda^{H}h(\frac{x}{\lambda}, \frac{y}{\lambda}) = h(x,y)</span>
-</pre></div>
-</div>
-<p>#where <span class="math notranslate nohighlight">\(H\)</span> is the Hurst exponent and <span class="math notranslate nohighlight">\(\lambda\)</span> is a scalar.</p>
-<p>#Power spectrum density
-#———————-</p>
-<p>#The characterization of surface roughness relies on the description of representative spatial frequencies.
-#The 2D power spectral density (PSD) <span class="math notranslate nohighlight">\(C^{2D}(\mathbf{q})\)</span> is used to analyze a surface across a range of wave vectors <span class="math notranslate nohighlight">\(\mathbf{q} = (q_x , q_y )\)</span> and describes the contribution of the various spatial frequencies.
-#It is expressed as the fast Fourier transform of the autocorrelation function <span class="math notranslate nohighlight">\(\langle h(\mathbf{x})h(\mathbf{0})\rangle\)</span> (with <span class="math notranslate nohighlight">\(\mathbf{x} = (x,y)\)</span>),</p>
-<p>#.. math:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#       C^{2D}(\mathbf{q}) = \frac{1}{(2\pi)^2} \int \langle h(\mathbf{x})h(\mathbf{0}) \rangle e^{-i\mathbf{q}.\mathbf{x}} d\mathbf{x}</span>
-</pre></div>
-</div>
-<p>#In the case of self-affine scaling, the PSD has a power-law dependence on the spatial frequency such as,</p>
-<p>#.. math:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#       C^{2D}(\textbf{q}) \propto \textbf{q}^{-2-2H}</span>
-</pre></div>
-</div>
-<p>#where <span class="math notranslate nohighlight">\(H\)</span> is related to the surface fractal dimension <span class="math notranslate nohighlight">\(D_f\)</span> by the relation <span class="math notranslate nohighlight">\(D_f = 3 − H\)</span>.</p>
+<p>&lt;!–</p>
+<section id="self-affine-scaling">
+<h2>Self-affine scaling<a class="headerlink" href="#self-affine-scaling" title="Link to this heading"></a></h2>
+<p>A broad-spectrum of natural surfaces shows an intrinsically multi-scale roughness.
+This scaling phenomenon is known as self-affine that differs from the self-similar fractal geometry by the anisotropric character of the scaling transformation.
+The self-affine scaling transformation for a height distribution <span class="math notranslate nohighlight">\(h(x,y)\)</span> can be resumed by,</p>
+<div class="math notranslate nohighlight">
+\[\lambda^{H}h(\frac{x}{\lambda}, \frac{y}{\lambda}) = h(x,y)\]</div>
+<p>where <span class="math notranslate nohighlight">\(H\)</span> is the Hurst exponent and <span class="math notranslate nohighlight">\(\lambda\)</span> is a scalar.</p>
+</section>
+<section id="power-spectrum-density">
+<h2>Power spectrum density<a class="headerlink" href="#power-spectrum-density" title="Link to this heading"></a></h2>
+<p>The characterization of surface roughness relies on the description of representative spatial frequencies.
+The 2D power spectral density (PSD) <span class="math notranslate nohighlight">\(C^{2D}(\mathbf{q})\)</span> is used to analyze a surface across a range of wave vectors <span class="math notranslate nohighlight">\(\mathbf{q} = (q_x , q_y )\)</span> and describes the contribution of the various spatial frequencies.
+It is expressed as the fast Fourier transform of the autocorrelation function <span class="math notranslate nohighlight">\(\langle h(\mathbf{x})h(\mathbf{0})\rangle\)</span> (with <span class="math notranslate nohighlight">\(\mathbf{x} = (x,y)\)</span>),</p>
+<div class="math notranslate nohighlight">
+\[C^{2D}(\mathbf{q}) = \frac{1}{(2\pi)^2} \int \langle h(\mathbf{x})h(\mathbf{0}) \rangle e^{-i\mathbf{q}.\mathbf{x}} d\mathbf{x}\]</div>
+<p>In the case of self-affine scaling, the PSD has a power-law dependence on the spatial frequency such as,</p>
+<div class="math notranslate nohighlight">
+\[C^{2D}(\textbf{q}) \propto \textbf{q}^{-2-2H}\]</div>
+<p>where <span class="math notranslate nohighlight">\(H\)</span> is related to the surface fractal dimension <span class="math notranslate nohighlight">\(D_f\)</span> by the relation <span class="math notranslate nohighlight">\(D_f = 3 − H\)</span>.</p>
+<p>–&gt;</p>
+</section>
 <section id="construction-method">
 <h2>Construction method<a class="headerlink" href="#construction-method" title="Link to this heading"></a></h2>
 <p>In <em>Pyrough</em>, rough surfaces are modeled in the real space using a sum of trigonometric functions where each term of the sum represents the contribution of a spatial frequency.
