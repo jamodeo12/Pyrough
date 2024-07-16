@@ -21,9 +21,7 @@
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Package functions" href="functions.html" />
-    <link rel="prev" title="Installation" href="installation.html" /> 
+    <link rel="search" title="Search" href="search.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -47,9 +45,9 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Rough surface generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="equations.html">Rough surface generation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="functions.html">Package functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="shapes.html">Generation of rough shapes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="biblio.html">Bibliography</a></li>
@@ -72,7 +70,7 @@
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">Rough surface generation</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/equations.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/equations.old_with_H.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -85,6 +83,29 @@
 <p>The characterization of a rough surface can be done with respect to its spatial frequency content.
 This can be transformed into a constructive method by using a sum of trigonometric functions similar to a Fourier series.
 Each term in such a sum represents a certain frequency of spatial oscillation.</p>
+<section id="self-affine-scaling">
+<h2>Self-affine scaling<a class="headerlink" href="#self-affine-scaling" title="Link to this heading"></a></h2>
+<p>A broad-spectrum of natural surfaces shows an intrinsically multi-scale roughness.
+This scaling phenomenon is known as self-affine that differs from the self-similar fractal geometry by the anisotropric character of the scaling transformation.
+The self-affine scaling transformation for a height distribution <span class="math notranslate nohighlight">\(h(x,y)\)</span> can be resumed by,</p>
+<div class="math notranslate nohighlight">
+\[\lambda^{H}h(\frac{x}{\lambda}, \frac{y}{\lambda}) = h(x,y)\]</div>
+<p>where <span class="math notranslate nohighlight">\(H\)</span> is the Hurst exponent and <span class="math notranslate nohighlight">\(\lambda\)</span> is a scalar.</p>
+</section>
+<section id="power-spectrum-density">
+<h2>Power spectrum density<a class="headerlink" href="#power-spectrum-density" title="Link to this heading"></a></h2>
+<p>The characterization of surface roughness relies on the description of representative spatial frequencies.
+The 2D power spectral density (PSD) <span class="math notranslate nohighlight">\(C^{2D}(\mathbf{q})\)</span> is used to analyze a surface across a range of wave vectors <span class="math notranslate nohighlight">\(\mathbf{q} = (q_x , q_y )\)</span> and describes the contribution of the various spatial frequencies.
+It is expressed as the fast Fourier transform of the autocorrelation function <span class="math notranslate nohighlight">\(\langle h(\mathbf{x})h(\mathbf{0})\rangle\)</span> (with <span class="math notranslate nohighlight">\(\mathbf{x} = (x,y)\)</span>),</p>
+<div class="math notranslate nohighlight">
+\[C^{2D}(\mathbf{q}) = \frac{1}{(2\pi)^2} \int \langle h(\mathbf{x})h(\mathbf{0}) \rangle e^{-i\mathbf{q}.\mathbf{x}} d\mathbf{x}\]</div>
+<p>In the case of self-affine scaling, the PSD has a power-law dependence on the spatial frequency such as,</p>
+<div class="math notranslate nohighlight">
+\[C^{2D}(\textbf{q}) \propto \textbf{q}^{-2-2H}\]</div>
+<p>where <span class="math notranslate nohighlight">\(H\)</span> is related to the surface fractal dimension <span class="math notranslate nohighlight">\(D_f\)</span> by the relation <span class="math notranslate nohighlight">\(D_f = 3 − H\)</span>.</p>
+</section>
+<section id="construction-method">
+<h2>Construction method<a class="headerlink" href="#construction-method" title="Link to this heading"></a></h2>
 <p>In <em>Pyrough</em>, rough surfaces are modeled in the real space using a sum of trigonometric functions where each term of the sum represents the contribution of a spatial frequency.
 In cartesian coordinates, the mathematical expression of spatial oscillations is given by,</p>
 <div class="math notranslate nohighlight">
@@ -101,13 +122,13 @@ A rough surface <span class="math notranslate nohighlight">\(h(x,y)\)</span> can
 <p>Two more contributions are made in order to allow <em>Pyrough</em> to generate  rough surfaces that are randomly perturbed.
 First, the phase is randomly perturbed using <span class="math notranslate nohighlight">\(\phi = U(a,b)\)</span> where <span class="math notranslate nohighlight">\(U\)</span> states for a uniform distribution on an interval of length <span class="math notranslate nohighlight">\(\pi\)</span>.
 Also, random perturbations and correlation aspects are implemented within <span class="math notranslate nohighlight">\(\alpha_{a,b}\)</span>.
-One can for example choose <span class="math notranslate nohighlight">\(\alpha_{a,b}\)</span> as a zero-centered Gaussian distribution to get a smooth but random variation in amplitudes without constraining the magnitude i.e., <span class="math notranslate nohighlight">\(\alpha_{a,b} = G(a,b){(a^2+b^2)}^{-(1+\eta)}\)</span> with <span class="math notranslate nohighlight">\(G\)</span> states for a reduced centered normal law and <span class="math notranslate nohighlight">\({(a^2+b^2)}^{-(1+\eta)}\)</span> expresses the power-law dependency of spatial frequencies involving <span class="math notranslate nohighlight">\(\eta\)</span>, a generalized roughness coefficient that scales with the Hurst coefficient <span class="math notranslate nohighlight">\(H\)</span> (<span class="math notranslate nohighlight">\(\eta = (H-1)/2\)</span>).
+One can for example choose <span class="math notranslate nohighlight">\(\alpha_{a,b}\)</span> as a zero-centered Gaussian distribution to get a smooth but random variation in amplitudes without constraining the magnitude i.e., <span class="math notranslate nohighlight">\(\alpha_{a,b} = G(a,b){(a^2+b^2)}^{-(1+\eta)}\)</span> with <span class="math notranslate nohighlight">\(G\)</span> states for a reduced centered normal law and <span class="math notranslate nohighlight">\({(a^2+b^2)}^{-(1+\eta)}\)</span> expresses the power-law dependency of spatial frequencies involving :math: <cite>eta</cite>, a generalized roughness coefficient that scales with the Hurst coefficient :math: <cite>H</cite> (:math: <cite>etal=(H-1)/2</cite>).
 Finally, the construction of a randomly perturbed surface can be modeled as,</p>
 <div class="math notranslate nohighlight">
 \[h(x,y) = C_1\sum_{a=-A}^{A} \sum_{b=-B}^{B} G(a,b) (a^2+b^2)^{-(1+\eta)} cos[2\pi(a x + b y) + U(a,b) ]\]</div>
-<p>in which eta allows to monitor the roughness degree i.e., self-affine surfaces for <span class="math notranslate nohighlight">\(-0.5&lt;\eta&lt;0\)</span> or non-stationnary ones for <span class="math notranslate nohighlight">\(\eta&gt;0\)</span>, and <span class="math notranslate nohighlight">\(C_1\)</span> is a normalization factor introduced to fit the surface heights to the sample dimensions.</p>
+<p>in which eta allows to monitor the roughness degree i.e., self-affine surfaces for :math: <cite>-0.5&lt;eta&lt;0</cite> or non-stationnary ones for :math: <cite>eta&gt;0</cite>, and <span class="math notranslate nohighlight">\(C_1\)</span> is a normalization factor introduced to fit the surface heights to the sample dimensions.</p>
 <figure class="align-center" id="id9">
-<a class="reference internal image-reference" href="_images/eta_influence.png"><img alt="_images/eta_influence.png" src="_images/eta_influence.png" style="width: 549.3px; height: 258.59999999999997px;" />
+<a class="reference internal image-reference" href="_images/eta_influence.png"><img alt="_images/eta_influence.png" src="_images/eta_influence.png" style="width: 915.5px; height: 431.0px;" />
 </a>
 <figcaption>
 <p><span class="caption-text">Rough surfaces computed using Pyrough for various roughness exponent :math: <cite>eta</cite> . a) <a href="#id1"><span class="problematic" id="id2">`</span></a>eta`=-0., b) <a href="#id3"><span class="problematic" id="id4">`</span></a>eta`=0.25, c) <a href="#id5"><span class="problematic" id="id6">`</span></a>eta`=0.5, d) <a href="#id7"><span class="problematic" id="id8">`</span></a>eta`=0.75, e) PSD of the various <em>h</em> profiles. For all calculations, A=50, B=50 and h(x,y) values are normalized between 1 and -1.</span><a class="headerlink" href="#id9" title="Link to this image"></a></p>
@@ -116,14 +137,12 @@ Finally, the construction of a randomly perturbed surface can be modeled as,</p>
 </figcaption>
 </figure>
 </section>
+</section>
 
 
            </div>
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="functions.html" class="btn btn-neutral float-right" title="Package functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+          <footer>
 
   <hr/>
 
