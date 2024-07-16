@@ -807,23 +807,23 @@ def make_atom_grain(STL,
     lattice_parameter2 = str(lattice_parameter2)
 
     subprocess.call(['atomsk', '--create', lattice_structure1, lattice_parameter1, material1, 'orient', orien_x1, orien_y1, orien_z1,
-                     '-duplicate', dup_x1, dup_y1, dup_z1, 'mat1_supercell.atsk'])
-    # subprocess.call(['atomsk', '--create', lattice_structure1, lattice_parameter1, material1, 'orient', orien_x1, orien_y1, orien_z1,
-    #                  '-duplicate', dup_x1, dup_y1, dup_z1, 'mat1_supercell.lmp'])
+                     '-duplicate', dup_x1, dup_y1, dup_z1, 'mat1_supercell.xyz'])
+    subprocess.call(['atomsk','mat1_supercell.xyz', '-shift', '0.001', '0.001', '0.001', 'mat1_supercell2.xyz'])
+    subprocess.call(['mv','mat1_supercell2.xyz','mat1_supercell.xyz'])
 
-    # subprocess.call(['atomsk', 'mat1_supercell.atsk', '-select', 'stl', STL, '-rmatom', 'select', 'mat1_out.atsk'])
-    # subprocess.call(['atomsk', 'mat1_supercell.lmp', '-select', 'stl', STL, '-rmatom', 'select', 'mat1_out.lmp'])
-    #
-    # subprocess.call(['ovito', 'mat1_out.lmp'])
+    subprocess.call(['atomsk', 'mat1_supercell.xyz', '-select', 'stl', STL, '-rmatom', 'select', 'mat1_out.xyz'])
 
     subprocess.call(['atomsk', '--create', lattice_structure2, lattice_parameter2, material2, 'orient', orien_x2, orien_y2, orien_z2,
-                     '-duplicate', dup_x2, dup_y2, dup_z2, 'mat2_supercell.atsk'])
-    subprocess.call(['atomsk', 'mat2_supercell.atsk', '-select', 'stl', STL, '-select', 'invert', '-rmatom', 'select', 'mat2_out.atsk'])
+                     '-duplicate', dup_x2, dup_y2, dup_z2, 'mat2_supercell.xyz'])
+
+    subprocess.call(['atomsk','mat2_supercell.xyz', '-shift', '0.001', '0.001', '0.001', 'mat2_supercell2.xyz'])
+    subprocess.call(['mv','mat2_supercell2.xyz','mat2_supercell.xyz'])
+    subprocess.call(['atomsk', 'mat2_supercell.xyz', '-select', 'stl', STL, '-select', 'invert', '-rmatom', 'select', 'mat2_out.xyz'])
 
     # Manage atoms coordinates to avoid inconsistent filling
+    subprocess.call(['atomsk', '--merge', '2', 'mat1_out.xyz', 'mat2_out.xyz', 'temp2.xyz'])
 
     for e in ext_ato:
-        subprocess.call(['atomsk', '--merge', '2', 'mat1_out.atsk', 'mat2_out.atsk', out_pre+'.'+e])
+        subprocess.call(['atomsk', 'temp2.xyz', out_pre+'.'+e])
 
-    subprocess.call(['rm', 'mat1_supercell.atsk', 'mat2_supercell.atsk', 'mat1_out.atsk', 'mat2_out.atsk'])
-    #fp.rebox(out_pre + '.lmp')
+    subprocess.call(['rm', 'mat1_supercell.xyz', 'mat2_supercell.xyz', 'mat1_out.xyz', 'mat2_out.xyz', 'temp.xyz', 'temp2.xyz'])
