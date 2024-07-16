@@ -2,7 +2,7 @@
     {"Mesh_size": 7,
     "Refine_factor": 0.5,
     "C1": 10000,
-    "H": 0.3,
+    "eta": 0.3,
     "Radius": 75,
     "N": 30,
     "M": 30,
