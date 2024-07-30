@@ -38,7 +38,7 @@ else :
 
     if param.type_S == 'grain' :
         vertices, FEM_stl = Sample_class.make_box(param.type_S,
-                                                  2*(1+param.H),
+                                                  2*(1+param.eta),
                                                   param.C1,
                                                   param.RMS,
                                                   param.N,
@@ -75,7 +75,7 @@ else :
         sample = Sample_class.Sample(param.type_S)  # THIS CLASS CALLING REAUIRES A SAMPLE WITH A DESIRED OBJECT NAME AS AN INPUT
 
         vertices, FEM_stl = sample.make_stl(param.type_S,
-                                            param.H,
+                                            param.eta,
                                             param.C1,
                                             param.RMS,
                                             param.N,
