@@ -82,11 +82,12 @@ kvals = np.delete(kvals, index)
 print("Scanned spatial frequencies : ", kvals)
 
 m, b = np.polyfit(np.log(kvals), np.log(Abins), 1)
-eta = -1 * (0.5 * m + 1)
+H = -1 * (0.5 * m + 1)
+eta = (H - 1)/2
 #print("====== > eta = "+str(round(eta,2)))
 print("====== > Extraction of rough surface statistical parameters ...")
 print("RMS : {}".format(func.rms_calc(func.rescale(D, [zmin, zmax]))))
-print("eta : {}".format(eta))
+print("eta : {}, H = {}".format(eta, H))
 print("A : {}".format(kvals[-1]))
 print("B : {}".format(kvals[-1]))
 
