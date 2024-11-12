@@ -18,7 +18,7 @@
 import json
 
 
-class Parameter(object):
+class Parameter:
     """
     This class is used to store the parameters desired by the user. It requires a JSON file to be
     able to function, as it reads directly from the file and stores the values in a variable.
@@ -26,7 +26,7 @@ class Parameter(object):
     """
 
     def __init__(self, json_file):
-        with open(json_file, "r") as json_file:
+        with open(json_file) as json_file:
             read_param = json.load(json_file)
 
         if "Grain" in read_param:
@@ -258,7 +258,7 @@ class Parameter(object):
         :param json_file: A json file that that has the parameters stored into it
         :type json_file: file
         """
-        with open(json_file, "r") as f:
+        with open(json_file) as f:
             read_param = json.load(f)
         if len(read_param["Output"]["ATOM"]) > 0:
             return "ATOM"

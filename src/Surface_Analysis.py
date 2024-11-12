@@ -91,10 +91,10 @@ m, b = np.polyfit(np.log(kvals), np.log(Abins), 1)
 H = -1 * (0.5 * m + 1)
 eta = (H - 1) / 2
 print("====== > Extraction of rough surface statistical parameters ...")
-print("RMS : {}".format(func.rms_calc(func.rescale(D, [zmin, zmax]))))
-print("eta : {}, H = {}".format(eta, H))
-print("A : {}".format(kvals[-1]))
-print("B : {}".format(kvals[-1]))
+print(f"RMS : {func.rms_calc(func.rescale(D, [zmin, zmax]))}")
+print(f"eta : {eta}, H = {H}")
+print(f"A : {kvals[-1]}")
+print(f"B : {kvals[-1]}")
 
 fig2 = plt.figure()
 ax2 = fig2.add_subplot()
@@ -108,8 +108,8 @@ ax2.loglog(
     label="$eta = $" + str(round(eta, 2)),
 )
 ax2.legend()
-ax2.set_xlabel("Wave vector $q \ [nm^{-1}]$")
-ax2.set_ylabel("PSD $C^{2D}(q) \ [nm^{4}]$")
+ax2.set_xlabel(r"Wave vector $q \ [nm^{-1}]$")
+ax2.set_ylabel(r"PSD $C^{2D}(q) \ [nm^{4}]$")
 
 print("====== > Construction of equivalent rough surface ...")
 x = np.linspace(0, 1, 200)

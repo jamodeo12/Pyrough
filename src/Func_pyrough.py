@@ -759,9 +759,9 @@ def stat_sphere(r, C1, C2, out_pre):
 
     np.savetxt(out_pre + "_stat.txt", stats, fmt="%s")
 
-    print("ave = {}".format(np.mean(r)))  # out
-    print("Stand_dev = {}".format(np.std(C1 * C2 * r)))
-    print("RMS = {}".format(np.sqrt(C1 * C2 * np.sum(r * r) / len(r))))
+    print(f"ave = {np.mean(r)}")  # out
+    print(f"Stand_dev = {np.std(C1 * C2 * r)}")
+    print(f"RMS = {np.sqrt(C1 * C2 * np.sum(r * r) / len(r))}")
     return
 
 
@@ -1011,11 +1011,11 @@ def rough_matrix_sphere(nbPoint, B, thetaa, phii, vert_phi_theta, C1, RMS, r):
     print("====== > Creating random rough surface")
     for degree in range(N_s, N_e + 1, 1):  # EQUATION
         if degree == N_s:
-            print("====== > Harmonic degree : {}, ".format(degree), end=" ", flush=True)
+            print(f"====== > Harmonic degree : {degree}, ", end=" ", flush=True)
         elif degree == N_e:
-            print("{}.".format(degree))
+            print(f"{degree}.")
         else:
-            print("{}, ".format(degree), end=" ", flush=True)
+            print(f"{degree}, ", end=" ", flush=True)
         _r_amplitude = 0 + 1 * np.random.randn(nbPoint)
         _r_phase = -np.pi / 2 + np.pi * np.random.rand(nbPoint)
         mod = degree ** (-B / 2)
@@ -1065,7 +1065,7 @@ def rebox(file_lmp):
 
     :return: Reboxed position file
     """
-    fint = open(file_lmp, "r")
+    fint = open(file_lmp)
     lines = fint.readlines()
     data = np.array([i.split() for i in lines[15 : len(lines) : 1]])
     listN = data[:, 0]
@@ -1087,11 +1087,11 @@ def rebox(file_lmp):
     compt = 0
     for i in range(0, len(lines), 1):
         if i == 5:
-            lines[i] = "{} {} xlo xhi\n".format(math.floor(min(listx_n)), math.ceil(max(listx_n)))
+            lines[i] = f"{math.floor(min(listx_n))} {math.ceil(max(listx_n))} xlo xhi\n"
         if i == 6:
-            lines[i] = "{} {} ylo yhi\n".format(math.floor(min(listy_n)), math.ceil(max(listy_n)))
+            lines[i] = f"{math.floor(min(listy_n))} {math.ceil(max(listy_n))} ylo yhi\n"
         if i == 7:
-            lines[i] = "{} {} zlo zhi\n".format(math.floor(min(listz_n)), math.ceil(max(listz_n)))
+            lines[i] = f"{math.floor(min(listz_n))} {math.ceil(max(listz_n))} zlo zhi\n"
         if i >= 15:
             lines[i] = "{} {} {} {} {}\n".format(
                 listN_int[compt],
@@ -1128,11 +1128,11 @@ def write_stl(filename, vertices, face_list):
             OA = [p1[0] - p2[0], p1[1] - p2[1], p1[2] - p2[2]]
             OB = [p1[0] - p3[0], p1[1] - p3[1], p1[2] - p3[2]]
             normal = np.cross(OA, OB)
-            f.write("facet normal {} {} {}\n".format(normal[0], normal[1], normal[2]))
+            f.write(f"facet normal {normal[0]} {normal[1]} {normal[2]}\n")
             f.write("  outer loop\n")
-            f.write("    vertex {} {} {}\n".format(p1[0], p1[1], p1[2]))
-            f.write("    vertex {} {} {}\n".format(p2[0], p2[1], p2[2]))
-            f.write("    vertex {} {} {}\n".format(p3[0], p3[1], p3[2]))
+            f.write(f"    vertex {p1[0]} {p1[1]} {p1[2]}\n")
+            f.write(f"    vertex {p2[0]} {p2[1]} {p2[2]}\n")
+            f.write(f"    vertex {p3[0]} {p3[1]} {p3[2]}\n")
             f.write("  endloop\n")
             f.write("endfacet\n")
         f.write("endsolid Created by Gmsh")
@@ -1453,14 +1453,14 @@ def make_rough_wulff(vertices, B, C1, RMS, N, M, nodesurf, node_edge, node_corne
     for k in range(len(nodesurf)):
         if k == 0:
             print(
-                "====== > Creating random rough surface n° {}, ".format(k + 1),
+                f"====== > Creating random rough surface n° {k + 1}, ",
                 end=" ",
                 flush=True,
             )
         elif k == len(nodesurf) - 1:
-            print("{}.".format(k + 1))
+            print(f"{k + 1}.")
         else:
-            print("{}, ".format(k + 1), end=" ", flush=True)
+            print(f"{k + 1}, ", end=" ", flush=True)
         surf = np.array(nodesurf[k])
         n1 = np.array(list_n[k])
         surf_rot = rot(surf, n1)
