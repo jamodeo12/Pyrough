@@ -112,7 +112,7 @@ def theta(x, y):
     return np.arctan2(y, x)
 
 
-def cylinder(length, r, ns, out_pre):
+def cylinder(length, r, ns):
     """
 
     :param length: Length of the cylinder
@@ -121,8 +121,6 @@ def cylinder(length, r, ns, out_pre):
     :type r: float
     :param ns: Mesh size
     :type ns: float
-    :param out_pre: Output file name if required
-    :type out_pre: str
 
     :return: vertices and faces of cylinder mesh
     """
@@ -172,9 +170,8 @@ def cylinder(length, r, ns, out_pre):
     return (vertices, faces)
 
 
-def box(width, length, height, ns, out_pre):
+def box(width, length, height, ns):
     """
-
     :param width: Width of the box
     :type width: float
     :param length: Length of the box
@@ -183,8 +180,6 @@ def box(width, length, height, ns, out_pre):
     :type height: float
     :param ns: Mesh size
     :type ns: float
-    :param out_pre: Output file name if required
-    :type out_pre: str
 
     :return: vertices and faces of box mesh
     """
@@ -263,15 +258,12 @@ def box(width, length, height, ns, out_pre):
     return (vertices, faces)
 
 
-def sphere(r, ns, out_pre):
+def sphere(r, ns):
     """
-
     :param r: Radius of the sphere
     :type r: float
     :param ns: Mesh size
     :type ns: float
-    :param out_pre: Output file name if required
-    :type out_pre: str
 
     :return: vertices and faces of sphere mesh
     """
@@ -302,17 +294,14 @@ def sphere(r, ns, out_pre):
     return (vertices, faces)
 
 
-def poly(length, base_points, ns, out_pre):
+def poly(length, base_points, ns):
     """
-
     :param length: Length of the faceted wire
     :type length: float
     :param base_points: Shape of the base
     :type base_points: list
     :param ns: Mesh size
     :type ns: float
-    :param out_pre: Output file name if required
-    :type out_pre: str
 
     :return: vertices and faces of faceted wire mesh
     """
@@ -360,17 +349,14 @@ def poly(length, base_points, ns, out_pre):
     return (vertices, faces)
 
 
-def wulff(points, faces, ns, out_pre):
+def wulff(points, faces, ns):
     """
-
     :param points: Vertices of Wulff-shape
     :type points: list
     :param faces: Facets of Wulff-shape
     :type faces: list
     :param ns: Mesh size
     :type ns: float
-    :param out_pre: Output file name if required
-    :type out_pre: str
 
     :return: vertices and faces of Wulff mesh
     """
@@ -411,15 +397,12 @@ def wulff(points, faces, ns, out_pre):
     return (vertices, faces)
 
 
-def cube(length, ns, out_pre):
+def cube(length, ns):
     """
-
     :param length: Length of the cube
     :type length: float
     :param ns: Mesh size
     :type ns: float
-    :param out_pre: Output file name if required
-    :type out_pre: str
 
     :return: vertices and faces of cube mesh
     """
@@ -476,7 +459,6 @@ def make_obj(
     lattice_parameter,
     material,
     orien_x,
-    orien_y,
     orien_z,
     out_pre,
 ):
@@ -528,7 +510,7 @@ def make_obj(
     return (obj_points_f, obj_faces)
 
 
-def read_stl(sample_type, raw_stl, width, length, height, radius, ns, points, out_pre):
+def read_stl(sample_type, raw_stl, width, length, height, radius, ns, points):
     """
     Reads an input stl file or creates a new one if no input
 
@@ -548,8 +530,6 @@ def read_stl(sample_type, raw_stl, width, length, height, radius, ns, points, ou
     :type ns: int
     :param points: List of points constituting the base (in case of faceted wire)
     :type points: list
-    :param out_pre: Prefix of output files
-    :type out_pre: str
 
     :return: List of points and faces
     """
@@ -557,15 +537,15 @@ def read_stl(sample_type, raw_stl, width, length, height, radius, ns, points, ou
     faces = []
     if raw_stl == "na":
         if sample_type == "box" or sample_type == "grain":
-            vertices, faces = box(width, length, height, ns, out_pre)
+            vertices, faces = box(width, length, height, ns)
         elif sample_type == "wire":
-            vertices, faces = cylinder(length, radius, ns, out_pre)
+            vertices, faces = cylinder(length, radius, ns)
         elif sample_type == "sphere":
-            vertices, faces = sphere(radius, ns, out_pre)
+            vertices, faces = sphere(radius, ns)
         elif sample_type == "poly":
-            vertices, faces = poly(length, points, ns, out_pre)
+            vertices, faces = poly(length, points, ns)
         elif sample_type == "cube":
-            vertices, faces = cube(length, ns, out_pre)
+            vertices, faces = cube(length, ns)
     else:
         mesh = meshio.read(raw_stl)
         vertices, faces = mesh.points, mesh.cells
@@ -573,7 +553,7 @@ def read_stl(sample_type, raw_stl, width, length, height, radius, ns, points, ou
     return (vertices, faces)
 
 
-def read_stl_wulff(raw_stl, obj_points, obj_faces, ns, out_pre):
+def read_stl_wulff(raw_stl, obj_points, obj_faces, ns):
     """
     Reads an input stl file or creates a new one if no input. Wulff case.
 
@@ -585,13 +565,11 @@ def read_stl_wulff(raw_stl, obj_points, obj_faces, ns, out_pre):
     :type obj_faces: list
     :param ns: Mesh size
     :type ns: float
-    :param out_pre: Prefix of output files
-    :type out_pre: str
 
     :returns: List of points and faces
     """
     if raw_stl == "na":
-        vertices, faces = wulff(obj_points, obj_faces, ns, out_pre)
+        vertices, faces = wulff(obj_points, obj_faces, ns)
     else:
         mesh = meshio.read(raw_stl)
         vertices, faces = mesh.vertices, mesh.faces
@@ -725,44 +703,6 @@ def stat_analysis(z, N, M, C1, B, sample_type, out_pre):
     print("  Skewness = ", skewness)
     print("  Kurtosis = ", kurtosis)
     print("--------------------------------------------------------")
-    return
-
-
-def stat_sphere(r, C1, C2, out_pre):
-    """
-    Displays the statistical analysis of the surface roughness generator with regards to the
-    sphere.
-
-    :param r: Roughness height matrix
-    :type r: float
-    :param C1: Roughness normalization factor
-    :type C1: float
-    :param C2: Roughness normalization factor constant for sphere
-    :type C2: float
-    :param out_pre: Prefix of output files
-    :type out_pre: str
-    """
-    mean = np.mean(r)
-    stand = np.std(C1 * C2 * r)
-    rms = np.sqrt(C1 * C2 * np.sum(r * r) / len(r))
-
-    stats = [C1, C2, mean, stand, rms]
-    stats = list(map(str, stats))
-    stats = [
-        "Sphere",
-        "C1 = " + stats[0],
-        "C2 = " + stats[1],
-        "Mean_Value = " + stats[2],
-        "Stand_dev = " + stats[3],
-        "RMS = " + stats[4],
-    ]
-
-    np.savetxt(out_pre + "_stat.txt", stats, fmt="%s")
-
-    print(f"ave = {np.mean(r)}")  # out
-    print(f"Stand_dev = {np.std(C1 * C2 * r)}")
-    print(f"RMS = {np.sqrt(C1 * C2 * np.sum(r * r) / len(r))}")
-    return
 
 
 def concatenate_list_data(a_list):
@@ -982,7 +922,7 @@ def coord_sphere(vertices):
     return (x, y, z, t)
 
 
-def rough_matrix_sphere(nbPoint, B, thetaa, phii, vert_phi_theta, C1, RMS, r):
+def rough_matrix_sphere(nbPoint, B, thetaa, phii, vert_phi_theta, r):
     """
     Creates the displacement values of the nodes on the surface of the sphere
 
@@ -997,10 +937,6 @@ def rough_matrix_sphere(nbPoint, B, thetaa, phii, vert_phi_theta, C1, RMS, r):
     :param vert_phi_theta: Array filled with two elements that are the angles corresponding to the
     position of the node on the sphere.
     :type vert_phi_theta: array
-    :param C1: Roughness normalization factor
-    :type C1: float
-    :param RMS: Root Mean Square
-    :type RMS: float
     :param r: Roughness height matrix
     :type r: int
 
@@ -1920,7 +1856,7 @@ def rough(x, y, eta, RMS, M, N):
     for m in listM:
         for n in listN:
             if m == 0 and n == 0:
-                pass
+                continue
             else:
                 mod = (m * m + n * n) ** (-1 * (1 + eta))
                 G = np.random.randn()
@@ -1931,48 +1867,6 @@ def rough(x, y, eta, RMS, M, N):
     RMS_i = rms_calc(z)
     C1 = RMS / RMS_i
     return C1 * z
-
-
-def sigma(z):
-    """
-    Calculates the standard deviation of a height distribution
-
-    :param z: height matrix
-    :type z: array
-
-    :return: Standard deviation
-    """
-    Z = z.flatten()
-    mean = np.mean(Z)
-    return np.sqrt(np.sum(np.power(Z - mean, 2)) / len(Z))
-
-
-def sk(z):
-    """
-    Calculates the skewness of a height distribution
-
-    :param z: height matrix
-    :type z: array
-
-    :return: Skewness
-    """
-    Z = z.flatten()
-    mean = np.mean(Z)
-    return (1 / (sigma(z) ** 3 * len(Z))) * np.sum(np.power(Z - mean, 3))
-
-
-def Kurto(z):
-    """
-    Calculates the kurtosis of a height distribution
-
-    :param z: height matrix
-    :type z: array
-
-    :return: Kurtosis
-    """
-    Z = z.flatten()
-    mean = np.mean(Z)
-    return (1 / (sigma(z) ** 4 * len(Z))) * np.sum(np.power(Z - mean, 4))
 
 
 def rescale(D, scale):

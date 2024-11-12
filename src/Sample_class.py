@@ -45,7 +45,6 @@ class Sample:
         lattice_parameter,
         material,
         orien_x,
-        orien_y,
         orien_z,
         out_pre,
         ext_fem,
@@ -100,8 +99,6 @@ class Sample:
         :type material: str
         :param orien_x: Orientation along x-axis
         :type orien_x: list
-        :param orien_y: Orientation along y-axis
-        :type orien_y: list
         :param orien_z: Orientation along z-axis
         :type orien_z: list
         :param out_pre: Prefix of the output files
@@ -155,7 +152,6 @@ class Sample:
                 type_sample,
                 4 * eta,
                 C1,
-                RMS,
                 N,
                 radius,
                 ns,
@@ -204,7 +200,6 @@ class Sample:
                 lattice_parameter,
                 material,
                 orien_x,
-                orien_y,
                 orien_z,
                 out_pre,
                 ext_fem,
@@ -232,7 +227,6 @@ class Sample:
 
     def make_atom(
         self,
-        type_sample,
         STL,
         lattice_str,
         lattice_par,
@@ -349,7 +343,7 @@ def make_wire(type_sample, B, C1, RMS, N, M, radius, length, ns, alpha, raw_stl,
 
     :return: List of nodes and STL file name
     """
-    vertices, faces = fp.read_stl(type_sample, raw_stl, 0, length, 0, radius, ns, 0, out_pre)
+    vertices, faces = fp.read_stl(type_sample, raw_stl, 0, length, 0, radius, ns, 0)
 
     # creates a column that has an assigned index number for each row in vertices; returns vertices
     # with the addition of this new column and also returns the nodenumbers which is an array file
@@ -443,7 +437,7 @@ def make_box(
 
     :return: List of nodes and STL file name
     """
-    vertices, faces = fp.read_stl(type_sample, raw_stl, width, length, height, 0, ns, 0, out_pre)
+    vertices, faces = fp.read_stl(type_sample, raw_stl, width, length, height, 0, ns, 0)
 
     # creates a column that has an assigned index number for each row in vertices; returns vertices
     # with the addition of this new column and also returns the nodenumbers which is an array
@@ -474,7 +468,7 @@ def make_box(
     return vertices, out_pre + ".stl"
 
 
-def make_sphere(type_sample, B, C1, RMS, N, radius, ns, alpha, raw_stl, out_pre, ext_fem):
+def make_sphere(type_sample, B, C1, N, radius, ns, alpha, raw_stl, out_pre, ext_fem):
     """
     Creates an stl file of a rough sphere
 
@@ -484,8 +478,6 @@ def make_sphere(type_sample, B, C1, RMS, N, radius, ns, alpha, raw_stl, out_pre,
     :type B: float
     :param C1: Roughness normalization factor
     :type C1: float
-    :param RMS: RMS
-    :type RMS: float
     :param N: Scaling cartesian position
     :type N: int
     :param radius: Radius of the sphere
@@ -503,7 +495,7 @@ def make_sphere(type_sample, B, C1, RMS, N, radius, ns, alpha, raw_stl, out_pre,
 
     :return: List of nodes and STL file name
     """
-    vertices, faces = fp.read_stl(type_sample, raw_stl, 0, 0, 0, radius, ns, 0, out_pre)
+    vertices, faces = fp.read_stl(type_sample, raw_stl, 0, 0, 0, radius, ns, 0)
     nbPoint = len(vertices)
 
     r = np.zeros(nbPoint)
@@ -514,7 +506,7 @@ def make_sphere(type_sample, B, C1, RMS, N, radius, ns, alpha, raw_stl, out_pre,
     phii = fp.phi(t, z)
 
     # creates the displacement values of the nodes on the surface of the sphere
-    r = fp.rough_matrix_sphere(nbPoint, B, thetaa, phii, vert_phi_theta, C1, RMS, r)
+    r = fp.rough_matrix_sphere(nbPoint, B, thetaa, phii, vert_phi_theta, r)
 
     # creates a new matrix with x, y, z in cartesian coordinates
     C2 = 1.0 / nbPoint / N / 2.0
@@ -578,7 +570,7 @@ def make_poly(
     """
     points, angles = fp.base(radius, nfaces)
 
-    vertices, faces = fp.read_stl(type_sample, raw_stl, 0, length, 0, radius, ns, points, out_pre)
+    vertices, faces = fp.read_stl(type_sample, raw_stl, 0, length, 0, radius, ns, points)
 
     # creates a column that has an assigned index number for each row in vertices; returns vertices
     # with the addition of this new column and also returns the nodenumbers which is an array
@@ -641,7 +633,6 @@ def make_wulff(
     lattice_parameter,
     material,
     orien_x,
-    orien_y,
     orien_z,
     out_pre,
     ext_fem,
@@ -681,8 +672,6 @@ def make_wulff(
     :type material: str
     :param orien_x: Orientation along x-axis
     :type orien_x: list
-    :param orien_y: Orientation along y-axis
-    :type orien_y: list
     :param orien_z: Orientation along z-axis
     :type orien_z: list
     :param out_pre: Prefix for output files
@@ -700,11 +689,10 @@ def make_wulff(
         lattice_parameter,
         material,
         orien_x,
-        orien_y,
         orien_z,
         out_pre,
     )
-    vertices, faces = fp.read_stl_wulff(raw_stl, obj_points, obj_faces, ns, out_pre)
+    vertices, faces = fp.read_stl_wulff(raw_stl, obj_points, obj_faces, ns)
     subprocess.call(["rm", out_pre + ".obj"])
     list_n = fp.faces_normals(obj_points, obj_faces)
 
@@ -763,7 +751,7 @@ def make_cube(type_sample, B, C1, RMS, N, M, length, ns, alpha, raw_stl, out_pre
     obj_points, obj_faces = fp.cube_faces(length)
     list_n = fp.faces_normals(obj_points, obj_faces)
 
-    vertices, faces = fp.read_stl(type_sample, raw_stl, 0, length, 0, 0, ns, 0, out_pre)
+    vertices, faces = fp.read_stl(type_sample, raw_stl, 0, length, 0, 0, ns, 0)
     vertices, nodenumber = fp.node_indexing(vertices)
 
     nodesurf = fp.node_surface(type_sample, vertices, nodenumber, obj_points, obj_faces)

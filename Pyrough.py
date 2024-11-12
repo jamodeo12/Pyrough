@@ -81,7 +81,7 @@ else:
         print("JOB DONE!" + "  File name: " + out_pre + ".lmp")
 
     else:
-        # THIS CLASS CALLING REAUIRES A SAMPLE WITH A DESIRED OBJECT NAME AS AN INPUT
+        # THIS CLASS CALLING REQUIRES A SAMPLE WITH A DESIRED OBJECT NAME AS AN INPUT
         sample = Sample_class.Sample(param.type_S)
 
         vertices, FEM_stl = sample.make_stl(
@@ -106,7 +106,6 @@ else:
             param.lattice_parameter,
             param.material,
             param.orien_x,
-            param.orien_y,
             param.orien_z,
             out_pre,
             param.ext_fem,
@@ -123,7 +122,6 @@ else:
         # of the object desired.
         if param.output(Param_file) == "ATOM":
             sample.make_atom(
-                param.type_S,
                 FEM_stl,
                 param.lattice_structure,
                 param.lattice_parameter,
