@@ -957,7 +957,7 @@ def rough_matrix_sphere(nbPoint, B, thetaa, phii, vert_phi_theta, r):
         mod = degree ** (-B / 2)
         for i, [theta, phi] in enumerate(vert_phi_theta):
             _phase = sp.sph_harm(0, degree, thetaa - theta, phii - phi).real
-            _phase = 2 * _phase / _phase.ptp()
+            _phase = 2 * _phase / np.ptp(_phase)
             r += _r_amplitude[i] * mod * np.cos(_phase + _r_phase)
     return r
 
