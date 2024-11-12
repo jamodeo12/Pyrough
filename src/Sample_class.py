@@ -1,60 +1,62 @@
 # ---------------------------------------------------------------------------
-# 
 # Title: SAMPLE CLASS
-#
-# Authors: Jonathan Amodeo, Javier Gonzalez, Jennifer Izaguirre, Christophe Le Bourlot & Hugo Iteney
-#
+# Authors: Jonathan Amodeo, Javier Gonzalez, Jennifer Izaguirre, Christophe Le Bourlot, Hugo Iteney
 # Date: June 01, 2022
 #
-# The SAMPLE_class is a class that obtains the desired object shape (nanowire,slab,sphere) 
+# The SAMPLE_class is a class that obtains the desired object shape (nanowire,slab,sphere)
 # and creates a desired file type. MAKE_STL creates an stl file of the shape, this
-# stl file is used for FEM. In this def the creation of the shape is based on user 
+# stl file is used for FEM. In this def the creation of the shape is based on user
 # desired parameters that were acquired through the PARAM_class.
-# The MAKE_ATOM creates a lmp file that is used for atomsk. It requires the stl made in the MAKE_STL def.
-# The parameters for the creation of a lmp file were based of the desired parameters requested by the user.
+# The MAKE_ATOM creates a lmp file that is used for atomsk. It requires the stl made in MAKE_STL.
+# The parameters for the creation of a lmp file are based on the parameters requested by the user.
 # ---------------------------------------------------------------------------
 
-from src import Func_pyrough as fp
-import numpy as np
 import subprocess
+
+import numpy as np
+
+from src import Func_pyrough as fp
+
 
 class Sample(object):
     def __init__(self, type_sample):
         self.sample = type_sample
 
-    def make_stl(self,
-                 type_sample,
-                 eta,
-                 C1,
-                 RMS,
-                 N,
-                 M,
-                 radius,
-                 length,
-                 height,
-                 width,
-                 ns,
-                 alpha,
-                 raw_stl,
-                 nfaces,
-                 surfaces,
-                 energies,
-                 n_at,
-                 lattice_structure,
-                 lattice_parameter,
-                 material,
-                 orien_x,
-                 orien_y,
-                 orien_z,
-                 out_pre,
-                 ext_fem
-                 ):
+    def make_stl(
+        self,
+        type_sample,
+        eta,
+        C1,
+        RMS,
+        N,
+        M,
+        radius,
+        length,
+        height,
+        width,
+        ns,
+        alpha,
+        raw_stl,
+        nfaces,
+        surfaces,
+        energies,
+        n_at,
+        lattice_structure,
+        lattice_parameter,
+        material,
+        orien_x,
+        orien_y,
+        orien_z,
+        out_pre,
+        ext_fem,
+    ):
         """
-        Creates an stl file based on the parameters chosen by the user.
-        Based on the type of sample entered, the code will sort through the options of type of samples and if true then the code under the type of sample will be executed.
-        The type of sample affects the type of stl file returned.
-        The code executed requires the parameters to create the object stl and to apply surface roughness onto the object. ...;
-        In continuation will add that a separate files will be stored if they want to redo the code.
+        Creates an stl file based on the parameters chosen by the user. Based on the type of sample
+        entered, the code will sort through the options of type of samples and if true then the
+        code under the type of sample will be executed. The type of sample affects the type of stl
+        file returned. The code executed requires the parameters to create the object stl and to
+        apply surface roughness onto the object. ...; In continuation will add that a separate
+        files will be stored if they want to redo the code.
 
         :param type_sample: Type of the sample
         :type type_sample: str
@@ -109,135 +111,142 @@ class Sample(object):
 
         :returns: List of nodes and stl file name
         """
-        if type_sample == 'wire':
-            vertices, stl = make_wire(type_sample,
-                                      2*(1+eta),
-                                      C1,
-                                      RMS,
-                                      N,
-                                      M,
-                                      radius,
-                                      length,
-                                      ns,
-                                      alpha,
-                                      raw_stl,
-                                      out_pre,
-                                      ext_fem
-                                      )
+        if type_sample == "wire":
+            vertices, stl = make_wire(
+                type_sample,
+                2 * (1 + eta),
+                C1,
+                RMS,
+                N,
+                M,
+                radius,
+                length,
+                ns,
+                alpha,
+                raw_stl,
+                out_pre,
+                ext_fem,
+            )
 
             return (vertices, stl)
 
-        elif type_sample == 'box':
-            vertices, stl = make_box(type_sample,
-                                     2*(1+eta),
-                                     C1,
-                                     RMS,
-                                     N,
-                                     M,
-                                     length,
-                                     height,
-                                     width,
-                                     ns,
-                                     alpha,
-                                     raw_stl,
-                                     out_pre,
-                                     ext_fem
-                                     )
+        elif type_sample == "box":
+            vertices, stl = make_box(
+                type_sample,
+                2 * (1 + eta),
+                C1,
+                RMS,
+                N,
+                M,
+                length,
+                height,
+                width,
+                ns,
+                alpha,
+                raw_stl,
+                out_pre,
+                ext_fem,
+            )
 
             return (vertices, stl)
 
-        elif type_sample == 'sphere':
-            vertices, stl = make_sphere(type_sample,
-                                        4*eta,
-                                        C1,
-                                        RMS,
-                                        N,
-                                        radius,
-                                        ns,
-                                        alpha,
-                                        raw_stl,
-                                        out_pre,
-                                        ext_fem
-                                        )
+        elif type_sample == "sphere":
+            vertices, stl = make_sphere(
+                type_sample,
+                4 * eta,
+                C1,
+                RMS,
+                N,
+                radius,
+                ns,
+                alpha,
+                raw_stl,
+                out_pre,
+                ext_fem,
+            )
 
             return (vertices, stl)
 
-        elif type_sample == 'poly':
-            vertices, stl = make_poly(type_sample,
-                                      2*(1+eta),
-                                      C1,
-                                      RMS,
-                                      N,
-                                      M,
-                                      length,
-                                      nfaces,
-                                      radius,
-                                      ns,
-                                      alpha,
-                                      raw_stl,
-                                      out_pre,
-                                      ext_fem
-                                      )
+        elif type_sample == "poly":
+            vertices, stl = make_poly(
+                type_sample,
+                2 * (1 + eta),
+                C1,
+                RMS,
+                N,
+                M,
+                length,
+                nfaces,
+                radius,
+                ns,
+                alpha,
+                raw_stl,
+                out_pre,
+                ext_fem,
+            )
             return (vertices, stl)
 
-        elif type_sample == 'wulff':
-            vertices, stl = make_wulff(type_sample,
-                                       2*(1+eta),
-                                       C1,
-                                       RMS,
-                                       N,
-                                       M,
-                                       surfaces,
-                                       energies,
-                                       n_at,
-                                       ns,
-                                       alpha,
-                                       raw_stl,
-                                       lattice_structure,
-                                       lattice_parameter,
-                                       material,
-                                       orien_x,
-                                       orien_y,
-                                       orien_z,
-                                       out_pre,
-                                       ext_fem
-                                       )
-
-            return (vertices, stl)
-
-        elif type_sample == 'cube':
-            vertices, stl = make_cube(type_sample,
-                                      2*(1+eta),
-                                      C1,
-                                      RMS,
-                                      N,
-                                      M,
-                                      length,
-                                      ns,
-                                      alpha,
-                                      raw_stl,
-                                      out_pre,
-                                      ext_fem
-                                      )
+        elif type_sample == "wulff":
+            vertices, stl = make_wulff(
+                type_sample,
+                2 * (1 + eta),
+                C1,
+                RMS,
+                N,
+                M,
+                surfaces,
+                energies,
+                n_at,
+                ns,
+                alpha,
+                raw_stl,
+                lattice_structure,
+                lattice_parameter,
+                material,
+                orien_x,
+                orien_y,
+                orien_z,
+                out_pre,
+                ext_fem,
+            )
 
             return (vertices, stl)
 
-    def make_atom(self,
-                  type_sample,
-                  STL,
-                  lattice_str,
-                  lattice_par,
-                  material,
-                  orien_x,
-                  orien_y,
-                  orien_z,
-                  vertices,
-                  out_pre,
-                  ext_ato
-                  ):
+        elif type_sample == "cube":
+            vertices, stl = make_cube(
+                type_sample,
+                2 * (1 + eta),
+                C1,
+                RMS,
+                N,
+                M,
+                length,
+                ns,
+                alpha,
+                raw_stl,
+                out_pre,
+                ext_fem,
+            )
 
+            return (vertices, stl)
+
+    def make_atom(
+        self,
+        type_sample,
+        STL,
+        lattice_str,
+        lattice_par,
+        material,
+        orien_x,
+        orien_y,
+        orien_z,
+        vertices,
+        out_pre,
+        ext_ato,
+    ):
         """
-        Creates sample_with_atoms.lmp which is an atomic position file. This requires the stl of the object that already has surface roughness applied to it. It adds then atoms in it.
+        Creates sample_with_atoms.lmp which is an atomic position file. This requires the stl of
+        the object that already has surface roughness applied to it. It adds then atoms in it.
 
         :param type_sample: Sample type
         :type type_sample: str
@@ -269,29 +278,45 @@ class Sample(object):
 
         lattice_par = str(lattice_par)
 
-        subprocess.call(['atomsk', '--create', lattice_str, lattice_par, material, 'orient', orien_x, orien_y, orien_z,
-                         '-duplicate', dup_x, dup_y, dup_z, 'material_supercell.lmp'])
         subprocess.call(
-            ['atomsk', 'material_supercell.lmp', '-select', 'stl', 'center', STL, '-select', 'invert', '-rmatom',
-             'select', out_pre + '.' + str(ext_ato[0]), ' '.join(ext_ato[1:])])
-        subprocess.call(['rm', 'material_supercell.lmp'])
-        fp.rebox(out_pre + '.lmp')
+            [
+                "atomsk",
+                "--create",
+                lattice_str,
+                lattice_par,
+                material,
+                "orient",
+                orien_x,
+                orien_y,
+                orien_z,
+                "-duplicate",
+                dup_x,
+                dup_y,
+                dup_z,
+                "material_supercell.lmp",
+            ]
+        )
+        subprocess.call(
+            [
+                "atomsk",
+                "material_supercell.lmp",
+                "-select",
+                "stl",
+                "center",
+                STL,
+                "-select",
+                "invert",
+                "-rmatom",
+                "select",
+                out_pre + "." + str(ext_ato[0]),
+                " ".join(ext_ato[1:]),
+            ]
+        )
+        subprocess.call(["rm", "material_supercell.lmp"])
+        fp.rebox(out_pre + ".lmp")
 
 
-def make_wire(type_sample,
-              B,
-              C1,
-              RMS,
-              N,
-              M,
-              radius,
-              length,
-              ns,
-              alpha,
-              raw_stl,
-              out_pre,
-              ext_fem
-              ):
+def make_wire(type_sample, B, C1, RMS, N, M, radius, length, ns, alpha, raw_stl, out_pre, ext_fem):
     """
     Creates an stl file of a rough wire
 
@@ -324,56 +349,66 @@ def make_wire(type_sample,
 
     :return: List of nodes and STL file name
     """
-    vertices, faces = fp.read_stl(type_sample, raw_stl, 0, length, 0, radius, ns, 0,
-                                  out_pre)  # reads if the user has inputted a stl file or if the mesh needs to me generated and returns the faces and the vertices of the stl file
+    vertices, faces = fp.read_stl(type_sample, raw_stl, 0, length, 0, radius, ns, 0, out_pre)
 
-    vertices, nodenumber = fp.node_indexing(
-        vertices)  # creates a column that has an assigned index number for each row in vertices; returns vertices with the addition of this new column and also returns the nodenumbers which is an array file from 0 - length of the vertices
+    # creates a column that has an assigned index number for each row in vertices; returns vertices
+    # with the addition of this new column and also returns the nodenumbers which is an array file
+    # from 0 - length of the vertices
+    vertices, nodenumber = fp.node_indexing(vertices)
 
-    nodesurf = fp.node_surface(type_sample, vertices, nodenumber, 0,
-                               0)  # nodes at the surface of the object. These nodes will have the surface roughness applied to it.
+    # nodes at the surface of the object. These nodes will have the surface roughness applied to it
+    nodesurf = fp.node_surface(type_sample, vertices, nodenumber, 0, 0)
 
+    # convert to cylindrics coordinates (Rho Theta Z nodenumb)
     cy_nodesurf = np.array(
-        [fp.rho(nodesurf[:, 0], nodesurf[:, 1]), fp.theta(nodesurf[:, 0], nodesurf[:, 1]), nodesurf[:, 2],
-         nodesurf[:, 3]]).T  # CONVERT TO CYLINDRICS COORDINATES (Rho Theta Z nodenumb)
+        [
+            fp.rho(nodesurf[:, 0], nodesurf[:, 1]),
+            fp.theta(nodesurf[:, 0], nodesurf[:, 1]),
+            nodesurf[:, 2],
+            nodesurf[:, 3],
+        ]
+    ).T
 
     cy_nodesurf = cy_nodesurf[np.lexsort((cy_nodesurf[:, 1], cy_nodesurf[:, 2]))]
 
-    # creating X and Y vector  (Connection matrix size) going to make one line code
+    # creating X and Y vector (Connection matrix size) going to make one line code
     xv = (cy_nodesurf[:, 1] / max(cy_nodesurf[:, 1]) + 1) / 2
     yv = (cy_nodesurf[:, 2] / max(cy_nodesurf[:, 2]) + 1) / 2
 
     sfrN, sfrM = fp.vectors(N, M)  # creating vectors for M and N
     m, n = fp.random_numbers(sfrN, sfrM)  # normal gaussian for the amplitude
 
-    z = fp.random_surf2(type_sample, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, RMS,
-                        out_pre)  # Returns an array with the Z values that will replace the previous z values in the vertices array these represent the rougness on the surface
-
+    # Returns an array with the Z values that will replace the previous z values in the vertices
+    # array these represent the rougness on the surface
+    z = fp.random_surf2(type_sample, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, RMS, out_pre)
     vertices = fp.make_rough(type_sample, z, cy_nodesurf, vertices, 0)
 
-    vertices = vertices[:,
-               :3]  # gets ride of the index column because stl file generator takes only a matrix with 3 columns
+    # gets ride of the index column because stl file generator takes only a matrix with 3 columns
+    vertices = vertices[:, :3]
 
-    fp.stl_file(vertices, faces, out_pre)  # creates an stl file of the cylinder with roughness on the surface
+    # creates an stl file of the cylinder with roughness on the surface
+    fp.stl_file(vertices, faces, out_pre)
     fp.refine_3Dmesh(type_sample, out_pre, ns, alpha, ext_fem)
-    return (vertices, out_pre + '.stl')  # returns the stl file name
+
+    return vertices, out_pre + ".stl"
 
 
-def make_box(type_sample,
-             B,
-             C1,
-             RMS,
-             N,
-             M,
-             length,
-             height,
-             width,
-             ns,
-             alpha,
-             raw_stl,
-             out_pre,
-             ext_fem
-             ):
+def make_box(
+    type_sample,
+    B,
+    C1,
+    RMS,
+    N,
+    M,
+    length,
+    height,
+    width,
+    ns,
+    alpha,
+    raw_stl,
+    out_pre,
+    ext_fem,
+):
     """
     Creates an stl file of a rough box
 
@@ -408,13 +443,15 @@ def make_box(type_sample,
 
     :return: List of nodes and STL file name
     """
-    vertices, faces = fp.read_stl(type_sample, raw_stl, width, length, height, 0, ns, 0,
-                                  out_pre)  # reads if the user has inputted a stl file or if the mesh needs to me generated and returns the faces and the vertices of the stl file
-    vertices, nodenumber = fp.node_indexing(
-        vertices)  # creates a column that has an assigned index number for each row in vertices; returns vertices with the addition of this new column and also returns the nodenumbers which is an array filled from 0 - length of the vertices
+    vertices, faces = fp.read_stl(type_sample, raw_stl, width, length, height, 0, ns, 0, out_pre)
 
-    nodesurf = fp.node_surface(type_sample, vertices, nodenumber, 0,
-                               0)  # nodes at the surface of the object. These nodes will have the surface roughness applied to it.
+    # creates a column that has an assigned index number for each row in vertices; returns vertices
+    # with the addition of this new column and also returns the nodenumbers which is an array
+    # filled from 0 - length of the vertices
+    vertices, nodenumber = fp.node_indexing(vertices)
+
+    # nodes at the surface of the object. These nodes will have the surface roughness applied to it
+    nodesurf = fp.node_surface(type_sample, vertices, nodenumber, 0, 0)
     nodesurf = nodesurf[np.lexsort((nodesurf[:, 0], nodesurf[:, 1]))]
 
     xv = nodesurf[:, 0] / max(nodesurf[:, 0])
@@ -423,29 +460,21 @@ def make_box(type_sample,
     sfrN, sfrM = fp.vectors(N, M)  # creating vectors for M and N
     m, n = fp.random_numbers(sfrN, sfrM)  # normal gaussian for the amplitude
 
-    z = fp.random_surf2(type_sample, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, RMS, out_pre)  # Returns an array with the Z values that will replace the previous z values in the vertices array these represent the rougness on the surface
+    # Returns an array with the Z values that will replace the previous z values in the vertices
+    # array these represent the rougness on the surface
+    z = fp.random_surf2(type_sample, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, RMS, out_pre)
     vertices = fp.make_rough(type_sample, z, nodesurf, vertices, 0)
 
-    vertices = vertices[:,
-               :3]  # gets rid of the index column because stl file generator takes only a matrix with 3 columns
+    # gets rid of the index column because stl file generator takes only a matrix with 3 columns
+    vertices = vertices[:, :3]
 
-    fp.stl_file(vertices, faces, out_pre)  # creates an stl file of the box with roughness on the surface
+    # creates an stl file of the box with roughness on the surface
+    fp.stl_file(vertices, faces, out_pre)
     fp.refine_3Dmesh(type_sample, out_pre, ns, alpha, ext_fem)
-    return (vertices, out_pre + '.stl')  # returns the stl file name
+    return vertices, out_pre + ".stl"
 
 
-def make_sphere(type_sample,
-                B,
-                C1,
-                RMS,
-                N,
-                radius,
-                ns,
-                alpha,
-                raw_stl,
-                out_pre,
-                ext_fem
-                ):
+def make_sphere(type_sample, B, C1, RMS, N, radius, ns, alpha, raw_stl, out_pre, ext_fem):
     """
     Creates an stl file of a rough sphere
 
@@ -474,51 +503,45 @@ def make_sphere(type_sample,
 
     :return: List of nodes and STL file name
     """
-    vertices, faces = fp.read_stl(type_sample, raw_stl, 0, 0, 0, radius, ns, 0,
-                                  out_pre)  # reads if the user has inputted a stl file or if the mesh needs to me generated and returns the faces and the vertices of the stl file
+    vertices, faces = fp.read_stl(type_sample, raw_stl, 0, 0, 0, radius, ns, 0, out_pre)
+    nbPoint = len(vertices)
 
-    nbPoint = len(vertices)  # Stores an int that represents the number of points on the sphere
+    r = np.zeros(nbPoint)
+    x, y, z, t = fp.coord_sphere(vertices)
+    vert_phi_theta = fp.vertex_tp(x, y, t, z)
 
-    r = np.zeros(
-        nbPoint)  # an array with only zeros, with the amount of zeros being equal to the number of points in the sphere
+    thetaa = fp.theta(y, x)
+    phii = fp.phi(t, z)
 
-    x, y, z, t = fp.coord_sphere(
-        vertices)  # Creates a matrix with the columns that correspond to the coordinates of either x, y, z and t which creates a matrix of the type
+    # creates the displacement values of the nodes on the surface of the sphere
+    r = fp.rough_matrix_sphere(nbPoint, B, thetaa, phii, vert_phi_theta, C1, RMS, r)
 
-    vert_phi_theta = fp.vertex_tp(x, y, t,
-                                  z)  # Creates an array filled with two elements that are the angles corresponding to the position of the node on the sphere.
+    # creates a new matrix with x, y, z in cartesian coordinates
+    C2 = 1.0 / nbPoint / N / 2.0
+    new_vertex = fp.coord_cart_sphere(C1, C2, r, vertices, t, z, y, x)
 
-    thetaa = fp.theta(y, x)  # Calculates the arctan2 of two given arrays whose size are the same.
-    phii = fp.phi(t, z)  # Calculates the arctan2 of an array filled with vector norms and an array filled with z coordinates which are the same size.
-
-    r = fp.rough_matrix_sphere(nbPoint, B, thetaa, phii, vert_phi_theta, C1, RMS, r)  # creates the displacement values of the nodes on the surface of the sphere
-
-    C2 = 1. / nbPoint / N / 2.
-
-    #fp.stat_sphere(r, C1, C2, out_pre)  # prints the statistics of the sphere
-
-    new_vertex = fp.coord_cart_sphere(C1, C2, r, vertices, t, z, y, x)  # creates a new matrix with x, y, z in cartesian coordinates
-
-    fp.stl_file(new_vertex, faces, out_pre)  # creates an stl file of the sphere with roughness on the surface
+    # creates an stl file of the sphere with roughness on the surface
+    fp.stl_file(new_vertex, faces, out_pre)
     fp.refine_3Dmesh(type_sample, out_pre, ns, alpha, ext_fem)
-    return (vertices, out_pre + '.stl')  # returns the stl file name
+    return vertices, out_pre + ".stl"
 
 
-def make_poly(type_sample,
-              B,
-              C1,
-              RMS,
-              N,
-              M,
-              length,
-              nfaces,
-              radius,
-              ns,
-              alpha,
-              raw_stl,
-              out_pre,
-              ext_fem
-              ):
+def make_poly(
+    type_sample,
+    B,
+    C1,
+    RMS,
+    N,
+    M,
+    length,
+    nfaces,
+    radius,
+    ns,
+    alpha,
+    raw_stl,
+    out_pre,
+    ext_fem,
+):
     """
     Creates an stl file of a faceted wire
 
@@ -555,13 +578,21 @@ def make_poly(type_sample,
     """
     points, angles = fp.base(radius, nfaces)
 
-    vertices, faces = fp.read_stl(type_sample, raw_stl, 0, length, 0, radius, ns, points,
-                                  out_pre)  # reads if the user has inputted a stl file or if the mesh needs to me generated and returns the faces and the vertices of the stl file
+    vertices, faces = fp.read_stl(type_sample, raw_stl, 0, length, 0, radius, ns, points, out_pre)
 
-    vertices, nodenumber = fp.node_indexing(
-        vertices)  # creates a column that has an assigned index number for each row in vertices; returns vertices with the addition of this new column and also returns the nodenumbers which is an array filled from 0 - length of the vertices
+    # creates a column that has an assigned index number for each row in vertices; returns vertices
+    # with the addition of this new column and also returns the nodenumbers which is an array
+    # filled from 0 - length of the vertices
+    vertices, nodenumber = fp.node_indexing(vertices)
 
-    nodesurf = fp.node_surface(type_sample, vertices, nodenumber, points,0)  # nodes at the surface of the object. These nodes will have the surface roughness applied to it.
+    # nodes at the surface of the object. These nodes will have the surface roughness applied to it
+    nodesurf = fp.node_surface(
+        type_sample,
+        vertices,
+        nodenumber,
+        points,
+        0,
+    )
     cy_nodesurf = fp.cart2cyl(nodesurf)
     sorted_cy_nodesurf = cy_nodesurf[np.lexsort((cy_nodesurf[:, 1], cy_nodesurf[:, 2]))]
     nodesurf = fp.cyl2cart(sorted_cy_nodesurf)
@@ -576,38 +607,45 @@ def make_poly(type_sample,
     sfrN, sfrM = fp.vectors(N, M)  # creating vectors for M and N
     m, n = fp.random_numbers(sfrN, sfrM)  # normal gaussian for the amplitude
 
-    z = fp.random_surf2(type_sample, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, RMS,
-                        out_pre)  # Returns an array with the Z values that will replace the previous z values in the vertices array these represent the rougness on the surface
+    # Returns an array with the Z values that will replace the previous z values in the vertices
+    # array these represent the rougness on the surface
+    z = fp.random_surf2(type_sample, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, RMS, out_pre)
     vertices = fp.make_rough(type_sample, z, nodesurf, vertices, angles)
 
-    vertices = vertices[:,:3]  # gets rid of the index column because stl file generator takes only a matrix with 3 columns
+    # gets rid of the index column because stl file generator takes only a matrix with 3 columns
+    vertices = vertices[:, :3]
     vertices = fp.align_poly(vertices, angles)
-    fp.stl_file(vertices, faces, out_pre)  # creates an stl file of the box with roughness on the surface
-    fp.refine_3Dmesh(type_sample, out_pre, ns, alpha, ext_fem)
-    return (vertices, out_pre + '.stl')
 
-#test
-def make_wulff(type_sample,
-               B,
-               C1,
-               RMS,
-               N,
-               M,
-               surfaces,
-               energies,
-               n_at,
-               ns,
-               alpha,
-               raw_stl,
-               lattice_structure,
-               lattice_parameter,
-               material,
-               orien_x,
-               orien_y,
-               orien_z,
-               out_pre,
-               ext_fem
-               ):
+    # creates an stl file of the box with roughness on the surface
+    fp.stl_file(vertices, faces, out_pre)
+    fp.refine_3Dmesh(type_sample, out_pre, ns, alpha, ext_fem)
+
+    return vertices, out_pre + ".stl"
+
+
+# test
+def make_wulff(
+    type_sample,
+    B,
+    C1,
+    RMS,
+    N,
+    M,
+    surfaces,
+    energies,
+    n_at,
+    ns,
+    alpha,
+    raw_stl,
+    lattice_structure,
+    lattice_parameter,
+    material,
+    orien_x,
+    orien_y,
+    orien_z,
+    out_pre,
+    ext_fem,
+):
     """
     Creates an stl file of a Wulff-shaped NP
 
@@ -654,41 +692,43 @@ def make_wulff(type_sample,
 
     :return: List of nodes and STL file name
     """
-    obj_points, obj_faces = fp.make_obj(surfaces, energies, n_at, lattice_structure, lattice_parameter, material, orien_x, orien_y, orien_z, out_pre)
-    vertices, faces = fp.read_stl_wulff(raw_stl, obj_points, obj_faces, ns,
-                                        out_pre)  # reads if the user has inputted a stl file or if the mesh needs to me generated and returns the faces and the vertices of the stl file
-    subprocess.call(['rm', out_pre + '.obj'])
+    obj_points, obj_faces = fp.make_obj(
+        surfaces,
+        energies,
+        n_at,
+        lattice_structure,
+        lattice_parameter,
+        material,
+        orien_x,
+        orien_y,
+        orien_z,
+        out_pre,
+    )
+    vertices, faces = fp.read_stl_wulff(raw_stl, obj_points, obj_faces, ns, out_pre)
+    subprocess.call(["rm", out_pre + ".obj"])
     list_n = fp.faces_normals(obj_points, obj_faces)
 
-    vertices, nodenumber = fp.node_indexing(
-        vertices)  # creates a column that has an assigned index number for each row in vertices; returns vertices with the addition of this new column and also returns the nodenumbers which is an array filled from 0 - length of the vertices
-
+    # creates a column that has an assigned index number for each row in vertices; returns vertices
+    # with the addition of this new column and also returns the nodenumbers which is an array
+    # filled from 0 - length of the vertices
+    vertices, nodenumber = fp.node_indexing(vertices)
     nodesurf = fp.node_surface(type_sample, vertices, nodenumber, obj_points, obj_faces)
 
     node_edge, node_corner = fp.node_corner(nodesurf)
 
-    vertices = fp.make_rough_wulff(vertices, B, C1, RMS, N, M, nodesurf, node_edge, node_corner, list_n)
+    vertices = fp.make_rough_wulff(
+        vertices, B, C1, RMS, N, M, nodesurf, node_edge, node_corner, list_n
+    )
 
     vertices = vertices[:, :3]
 
     fp.stl_file(vertices, faces, out_pre)
     fp.refine_3Dmesh(type_sample, out_pre, ns, alpha, ext_fem)
-    return (vertices, out_pre + '.stl')
+
+    return vertices, out_pre + ".stl"
 
 
-def make_cube(type_sample,
-              B,
-              C1,
-              RMS,
-              N,
-              M,
-              length,
-              ns,
-              alpha,
-              raw_stl,
-              out_pre,
-              ext_fem
-              ):
+def make_cube(type_sample, B, C1, RMS, N, M, length, ns, alpha, raw_stl, out_pre, ext_fem):
     """
     Creates an stl file of a cubic NP
 
@@ -729,7 +769,9 @@ def make_cube(type_sample,
     nodesurf = fp.node_surface(type_sample, vertices, nodenumber, obj_points, obj_faces)
     node_edge, node_corner = fp.node_corner(nodesurf)
 
-    vertices = fp.make_rough_wulff(vertices, B, C1, RMS, N, M, nodesurf, node_edge, node_corner, list_n)
+    vertices = fp.make_rough_wulff(
+        vertices, B, C1, RMS, N, M, nodesurf, node_edge, node_corner, list_n
+    )
 
     vertices = fp.center_3d_dataset(vertices[:, :3])
 
@@ -737,24 +779,27 @@ def make_cube(type_sample,
 
     fp.refine_3Dmesh(type_sample, out_pre, ns, alpha, ext_fem)
 
-    return (vertices, out_pre + '.stl')
+    return (vertices, out_pre + ".stl")
 
-def make_atom_grain(STL,
-                    lattice_structure1,
-                    lattice_parameter1,
-                    material1,
-                    orien_x1,
-                    orien_y1,
-                    orien_z1,
-                    lattice_structure2,
-                    lattice_parameter2,
-                    material2,
-                    orien_x2,
-                    orien_y2,
-                    orien_z2,
-                    vertices,
-                    out_pre,
-                    ext_ato):
+
+def make_atom_grain(
+    STL,
+    lattice_structure1,
+    lattice_parameter1,
+    material1,
+    orien_x1,
+    orien_y1,
+    orien_z1,
+    lattice_structure2,
+    lattice_parameter2,
+    material2,
+    orien_x2,
+    orien_y2,
+    orien_z2,
+    vertices,
+    out_pre,
+    ext_ato,
+):
     """
     Generates an atomic positions file for the grain object.
 
@@ -798,32 +843,118 @@ def make_atom_grain(STL,
     dim_z = max(vertices[:, 2]) - min(vertices[:, 2])
     dis_x1, dup_x1, orien_x1 = fp.duplicate(dim_x, orien_x1, lattice_parameter1)
     dis_y1, dup_y1, orien_y1 = fp.duplicate(dim_y, orien_y1, lattice_parameter1)
-    dis_z1, dup_z1, orien_z1 = fp.duplicate(2*dim_z, orien_z1, lattice_parameter1)
+    dis_z1, dup_z1, orien_z1 = fp.duplicate(2 * dim_z, orien_z1, lattice_parameter1)
     dis_x2, dup_x2, orien_x2 = fp.duplicate(dim_x, orien_x2, lattice_parameter2)
     dis_y2, dup_y2, orien_y2 = fp.duplicate(dim_y, orien_y2, lattice_parameter2)
-    dis_z2, dup_z2, orien_z2 = fp.duplicate(2*dim_z, orien_z2, lattice_parameter2)
+    dis_z2, dup_z2, orien_z2 = fp.duplicate(2 * dim_z, orien_z2, lattice_parameter2)
 
     lattice_parameter1 = str(lattice_parameter1)
     lattice_parameter2 = str(lattice_parameter2)
 
-    subprocess.call(['atomsk', '--create', lattice_structure1, lattice_parameter1, material1, 'orient', orien_x1, orien_y1, orien_z1,
-                     '-duplicate', dup_x1, dup_y1, dup_z1, 'mat1_supercell.xyz'])
-    subprocess.call(['atomsk','mat1_supercell.xyz', '-shift', '0.001', '0.001', '0.001', 'mat1_supercell2.xyz'])
-    subprocess.call(['mv','mat1_supercell2.xyz','mat1_supercell.xyz'])
+    subprocess.call(
+        [
+            "atomsk",
+            "--create",
+            lattice_structure1,
+            lattice_parameter1,
+            material1,
+            "orient",
+            orien_x1,
+            orien_y1,
+            orien_z1,
+            "-duplicate",
+            dup_x1,
+            dup_y1,
+            dup_z1,
+            "mat1_supercell.xyz",
+        ]
+    )
+    subprocess.call(
+        [
+            "atomsk",
+            "mat1_supercell.xyz",
+            "-shift",
+            "0.001",
+            "0.001",
+            "0.001",
+            "mat1_supercell2.xyz",
+        ]
+    )
+    subprocess.call(["mv", "mat1_supercell2.xyz", "mat1_supercell.xyz"])
 
-    subprocess.call(['atomsk', 'mat1_supercell.xyz', '-select', 'stl', STL, '-rmatom', 'select', 'mat1_out.xyz'])
+    subprocess.call(
+        [
+            "atomsk",
+            "mat1_supercell.xyz",
+            "-select",
+            "stl",
+            STL,
+            "-rmatom",
+            "select",
+            "mat1_out.xyz",
+        ]
+    )
 
-    subprocess.call(['atomsk', '--create', lattice_structure2, lattice_parameter2, material2, 'orient', orien_x2, orien_y2, orien_z2,
-                     '-duplicate', dup_x2, dup_y2, dup_z2, 'mat2_supercell.xyz'])
+    subprocess.call(
+        [
+            "atomsk",
+            "--create",
+            lattice_structure2,
+            lattice_parameter2,
+            material2,
+            "orient",
+            orien_x2,
+            orien_y2,
+            orien_z2,
+            "-duplicate",
+            dup_x2,
+            dup_y2,
+            dup_z2,
+            "mat2_supercell.xyz",
+        ]
+    )
 
-    subprocess.call(['atomsk','mat2_supercell.xyz', '-shift', '0.001', '0.001', '0.001', 'mat2_supercell2.xyz'])
-    subprocess.call(['mv','mat2_supercell2.xyz','mat2_supercell.xyz'])
-    subprocess.call(['atomsk', 'mat2_supercell.xyz', '-select', 'stl', STL, '-select', 'invert', '-rmatom', 'select', 'mat2_out.xyz'])
+    subprocess.call(
+        [
+            "atomsk",
+            "mat2_supercell.xyz",
+            "-shift",
+            "0.001",
+            "0.001",
+            "0.001",
+            "mat2_supercell2.xyz",
+        ]
+    )
+    subprocess.call(["mv", "mat2_supercell2.xyz", "mat2_supercell.xyz"])
+    subprocess.call(
+        [
+            "atomsk",
+            "mat2_supercell.xyz",
+            "-select",
+            "stl",
+            STL,
+            "-select",
+            "invert",
+            "-rmatom",
+            "select",
+            "mat2_out.xyz",
+        ]
+    )
 
     # Manage atoms coordinates to avoid inconsistent filling
-    subprocess.call(['atomsk', '--merge', '2', 'mat1_out.xyz', 'mat2_out.xyz', 'temp2.xyz'])
+    subprocess.call(["atomsk", "--merge", "2", "mat1_out.xyz", "mat2_out.xyz", "temp2.xyz"])
 
     for e in ext_ato:
-        subprocess.call(['atomsk', 'temp2.xyz', out_pre+'.'+e])
+        subprocess.call(["atomsk", "temp2.xyz", out_pre + "." + e])
 
-    subprocess.call(['rm', 'mat1_supercell.xyz', 'mat2_supercell.xyz', 'mat1_out.xyz', 'mat2_out.xyz', 'temp.xyz', 'temp2.xyz'])
+    subprocess.call(
+        [
+            "rm",
+            "mat1_supercell.xyz",
+            "mat2_supercell.xyz",
+            "mat1_out.xyz",
+            "mat2_out.xyz",
+            "temp.xyz",
+            "temp2.xyz",
+        ]
+    )
