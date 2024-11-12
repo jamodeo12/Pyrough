@@ -18,7 +18,7 @@ import numpy as np
 from src import Func_pyrough as fp
 
 
-class Sample(object):
+class Sample:
     def __init__(self, type_sample):
         self.sample = type_sample
 
