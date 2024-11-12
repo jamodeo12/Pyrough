@@ -23,7 +23,7 @@ import json
 
 class Parameter(object):
     """
-    This class is used to store the parameters desired by the user. It requires a JSON file to be able to funciton, as it reads directly from the file and stores the values in a variable.
+    This class is used to store the parameters desired by the user. It requires a JSON file to be able to function, as it reads directly from the file and stores the values in a variable.
     
     """
 
@@ -257,7 +257,7 @@ class Parameter(object):
 
     def output(self, json_file):
         """
-        This function obtains the desired file type of the user. Having the option to obtain an stl file or lmp file based on the decsion if MD or FEM is desired.
+        This function obtains the desired file type of the user. Having the option to obtain an stl file or lmp file based on the decision if MD or FEM is desired.
 
         :param json_file: A json file that that has the parameters stored into it
         :type json_file: file

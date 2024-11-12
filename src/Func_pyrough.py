@@ -505,12 +505,12 @@ def make_obj(surfaces, energies, n_at, lattice_structure, lattice_parameter, mat
         obj_faces = []
         for line in list_lines:
             if 'v' in line:
-                splited = line.split()[1:]
-                coord = [float(i) for i in splited]
+                splitted_line = line.split()[1:]
+                coord = [float(i) for i in splitted_line]
                 obj_points.append(coord)
             if 'f' in line:
-                splited = line.split()[1:]
-                coord = [float(i) for i in splited]
+                splitted_line = line.split()[1:]
+                coord = [float(i) for i in splitted_line]
                 obj_faces.append(coord)
     obj_points = np.asarray(obj_points)
     obj_points_f = rotate_obj_wulff(obj_points, orien_x, orien_z)
@@ -743,11 +743,11 @@ def concatenate_list_data(a_list):
 
 def duplicate(l, orien, lattice_par):
     """
-    Takes in a length and an cristal orientation to calculate the duplication factor for atomsk.
+    Takes in a length and an crystal orientation to calculate the duplication factor for atomsk.
 
     :param l: Length of one of the sides of the object
     :type l: int
-    :param orien: Crystal orientaion
+    :param orien: Crystal orientation
     :type orien: list
     :param lattice_par: Lattice parameter
     :type lattice_par: float

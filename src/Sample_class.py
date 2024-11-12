@@ -51,7 +51,7 @@ class Sample(object):
                  ):
         """
         Creates an stl file based on the parameters chosen by the user.
-        Based on the type of sample entered, the code will sort through the options of type of samples and if true then the code under the type of sample will be excuted.
+        Based on the type of sample entered, the code will sort through the options of type of samples and if true then the code under the type of sample will be executed.
         The type of sample affects the type of stl file returned.
         The code executed requires the parameters to create the object stl and to apply surface roughness onto the object. ...;
         In continuation will add that a separate files will be stored if they want to redo the code.
@@ -102,7 +102,7 @@ class Sample(object):
         :type orien_y: list
         :param orien_z: Orientation along z-axis
         :type orien_z: list
-        :param out_pre: Prefix of the ouput files
+        :param out_pre: Prefix of the output files
         :type out_pre: str
         :param ext_fem: Output FEM formats list
         :type ext_fem: list
@@ -243,17 +243,17 @@ class Sample(object):
         :type type_sample: str
         :param STL: The stl file with an object that has surface roughness applied to it
         :type STL: str
-        :param lattice_str: The lattice structure of the cristal
+        :param lattice_str: The lattice structure of the crystal
         :type lattice_str: str
-        :param lattice_par: The lattice parameter of the cristal in Angstrom
+        :param lattice_par: The lattice parameter of the crystal in Angstrom
         :type lattice_par: float
         :param material: The chemical symbol of the desired element
         :type material: str
-        :param orien_x: The orientation of the cristal in the x direction
+        :param orien_x: The orientation of the crystal in the x direction
         :type orien_x: list
-        :param orien_y: The orientation of the cristal in the y direction
+        :param orien_y: The orientation of the crystal in the y direction
         :type orien_y: list
-        :param orien_z: The orientation of the cristal in the z direction
+        :param orien_z: The orientation of the crystal in the z direction
         :type orien_z: list
         :param vertices: List of nodes
         :type vertices: array
@@ -317,7 +317,7 @@ def make_wire(type_sample,
     :type alpha: float
     :param raw_stl: Name of the input stl file
     :type raw_stl: str
-    :param out_pre: Prefix of the ouput files
+    :param out_pre: Prefix of the output files
     :type out_pre: str
     :param ext_fem: List of FEM extension files
     :type ext_fem: list
@@ -325,10 +325,10 @@ def make_wire(type_sample,
     :return: List of nodes and STL file name
     """
     vertices, faces = fp.read_stl(type_sample, raw_stl, 0, length, 0, radius, ns, 0,
-                                  out_pre)  # reads if the user has inputted a stl file or if the mesh needs to me generated and returnes the faces and the vertices of the stl file
+                                  out_pre)  # reads if the user has inputted a stl file or if the mesh needs to me generated and returns the faces and the vertices of the stl file
 
     vertices, nodenumber = fp.node_indexing(
-        vertices)  # creates a column that has an assigned index number for each row in vertices; returns vertices with the addtion of this new column and also returns the nodenumbers which is an array file from 0 - length of the vertices
+        vertices)  # creates a column that has an assigned index number for each row in vertices; returns vertices with the addition of this new column and also returns the nodenumbers which is an array file from 0 - length of the vertices
 
     nodesurf = fp.node_surface(type_sample, vertices, nodenumber, 0,
                                0)  # nodes at the surface of the object. These nodes will have the surface roughness applied to it.
@@ -347,7 +347,7 @@ def make_wire(type_sample,
     m, n = fp.random_numbers(sfrN, sfrM)  # normal gaussian for the amplitude
 
     z = fp.random_surf2(type_sample, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, RMS,
-                        out_pre)  # Returns an array with the Z values that will replace the previous z vlaues in the vertices array these represent the rougness on the surface
+                        out_pre)  # Returns an array with the Z values that will replace the previous z values in the vertices array these represent the rougness on the surface
 
     vertices = fp.make_rough(type_sample, z, cy_nodesurf, vertices, 0)
 
@@ -401,7 +401,7 @@ def make_box(type_sample,
     :type alpha: float
     :param raw_stl: Name of the input stl file
     :type raw_stl: str
-    :param out_pre: Prefix of the ouput files
+    :param out_pre: Prefix of the output files
     :type out_pre: str
     :param ext_fem: List of FEM extension files
     :type ext_fem: list
@@ -409,9 +409,9 @@ def make_box(type_sample,
     :return: List of nodes and STL file name
     """
     vertices, faces = fp.read_stl(type_sample, raw_stl, width, length, height, 0, ns, 0,
-                                  out_pre)  # reads if the user has inputted a stl file or if the mesh needs to me generated and returnes the faces and the vertices of the stl file
+                                  out_pre)  # reads if the user has inputted a stl file or if the mesh needs to me generated and returns the faces and the vertices of the stl file
     vertices, nodenumber = fp.node_indexing(
-        vertices)  # creates a column that has an assigned index number for each row in vertices; returns vertices with the addtion of this new column and also returns the nodenumbers which is an array fille from 0 - length of the vertices
+        vertices)  # creates a column that has an assigned index number for each row in vertices; returns vertices with the addition of this new column and also returns the nodenumbers which is an array filled from 0 - length of the vertices
 
     nodesurf = fp.node_surface(type_sample, vertices, nodenumber, 0,
                                0)  # nodes at the surface of the object. These nodes will have the surface roughness applied to it.
@@ -423,7 +423,7 @@ def make_box(type_sample,
     sfrN, sfrM = fp.vectors(N, M)  # creating vectors for M and N
     m, n = fp.random_numbers(sfrN, sfrM)  # normal gaussian for the amplitude
 
-    z = fp.random_surf2(type_sample, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, RMS, out_pre)  # Returns an array with the Z values that will replace the previous z vlaues in the vertices array these represent the rougness on the surface
+    z = fp.random_surf2(type_sample, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, RMS, out_pre)  # Returns an array with the Z values that will replace the previous z values in the vertices array these represent the rougness on the surface
     vertices = fp.make_rough(type_sample, z, nodesurf, vertices, 0)
 
     vertices = vertices[:,
@@ -467,7 +467,7 @@ def make_sphere(type_sample,
     :type alpha: float
     :param raw_stl: Name of the input stl file
     :type raw_stl: str
-    :param out_pre: Prefix of the ouput files
+    :param out_pre: Prefix of the output files
     :type out_pre: str
     :param ext_fem: List of FEM extension files
     :type ext_fem: list
@@ -475,21 +475,21 @@ def make_sphere(type_sample,
     :return: List of nodes and STL file name
     """
     vertices, faces = fp.read_stl(type_sample, raw_stl, 0, 0, 0, radius, ns, 0,
-                                  out_pre)  # reads if the user has inputted a stl file or if the mesh needs to me generated and returnes the faces and the vertices of the stl file
+                                  out_pre)  # reads if the user has inputted a stl file or if the mesh needs to me generated and returns the faces and the vertices of the stl file
 
-    nbPoint = len(vertices)  # Stores an int that repesents the number of points on the sphere
+    nbPoint = len(vertices)  # Stores an int that represents the number of points on the sphere
 
     r = np.zeros(
         nbPoint)  # an array with only zeros, with the amount of zeros being equal to the number of points in the sphere
 
     x, y, z, t = fp.coord_sphere(
-        vertices)  # Creats a matirx with the columns that correspond to the coordinates of either x, y, z and t which creates a matrix of the type
+        vertices)  # Creates a matrix with the columns that correspond to the coordinates of either x, y, z and t which creates a matrix of the type
 
     vert_phi_theta = fp.vertex_tp(x, y, t,
-                                  z)  # Creates an array filled with two elements that are the angles coresponding to the postion of the node on the sphere.
+                                  z)  # Creates an array filled with two elements that are the angles corresponding to the position of the node on the sphere.
 
     thetaa = fp.theta(y, x)  # Calculates the arctan2 of two given arrays whose size are the same.
-    phii = fp.phi(t, z)  # Calculates the arctan2 of an array filled with vector norms and an arrray filled with z cooridnates which are the same size.
+    phii = fp.phi(t, z)  # Calculates the arctan2 of an array filled with vector norms and an array filled with z coordinates which are the same size.
 
     r = fp.rough_matrix_sphere(nbPoint, B, thetaa, phii, vert_phi_theta, C1, RMS, r)  # creates the displacement values of the nodes on the surface of the sphere
 
@@ -546,7 +546,7 @@ def make_poly(type_sample,
     :type alpha: float
     :param raw_stl: Name of the input stl file
     :type raw_stl: str
-    :param out_pre: Prefix of the ouput files
+    :param out_pre: Prefix of the output files
     :type out_pre: str
     :param ext_fem: List of FEM extension files
     :type ext_fem: list
@@ -556,10 +556,10 @@ def make_poly(type_sample,
     points, angles = fp.base(radius, nfaces)
 
     vertices, faces = fp.read_stl(type_sample, raw_stl, 0, length, 0, radius, ns, points,
-                                  out_pre)  # reads if the user has inputted a stl file or if the mesh needs to me generated and returnes the faces and the vertices of the stl file
+                                  out_pre)  # reads if the user has inputted a stl file or if the mesh needs to me generated and returns the faces and the vertices of the stl file
 
     vertices, nodenumber = fp.node_indexing(
-        vertices)  # creates a column that has an assigned index number for each row in vertices; returns vertices with the addtion of this new column and also returns the nodenumbers which is an array fille from 0 - length of the vertices
+        vertices)  # creates a column that has an assigned index number for each row in vertices; returns vertices with the addition of this new column and also returns the nodenumbers which is an array filled from 0 - length of the vertices
 
     nodesurf = fp.node_surface(type_sample, vertices, nodenumber, points,0)  # nodes at the surface of the object. These nodes will have the surface roughness applied to it.
     cy_nodesurf = fp.cart2cyl(nodesurf)
@@ -577,7 +577,7 @@ def make_poly(type_sample,
     m, n = fp.random_numbers(sfrN, sfrM)  # normal gaussian for the amplitude
 
     z = fp.random_surf2(type_sample, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, RMS,
-                        out_pre)  # Returns an array with the Z values that will replace the previous z vlaues in the vertices array these represent the rougness on the surface
+                        out_pre)  # Returns an array with the Z values that will replace the previous z values in the vertices array these represent the rougness on the surface
     vertices = fp.make_rough(type_sample, z, nodesurf, vertices, angles)
 
     vertices = vertices[:,:3]  # gets rid of the index column because stl file generator takes only a matrix with 3 columns
@@ -635,9 +635,9 @@ def make_wulff(type_sample,
     :type alpha: float
     :param raw_stl: Name of the input stl file
     :type raw_stl: str
-    :param lattice_structure: The lattice structure of the cristal
+    :param lattice_structure: The lattice structure of the crystal
     :type lattice_structure: str
-    :param lattice_parameter: The lattice parameter of the cristal in Angstrom
+    :param lattice_parameter: The lattice parameter of the crystal in Angstrom
     :type lattice_parameter: float
     :param material: The chemical symbol of the desired element
     :type material: str
@@ -656,12 +656,12 @@ def make_wulff(type_sample,
     """
     obj_points, obj_faces = fp.make_obj(surfaces, energies, n_at, lattice_structure, lattice_parameter, material, orien_x, orien_y, orien_z, out_pre)
     vertices, faces = fp.read_stl_wulff(raw_stl, obj_points, obj_faces, ns,
-                                        out_pre)  # reads if the user has inputted a stl file or if the mesh needs to me generated and returnes the faces and the vertices of the stl file
+                                        out_pre)  # reads if the user has inputted a stl file or if the mesh needs to me generated and returns the faces and the vertices of the stl file
     subprocess.call(['rm', out_pre + '.obj'])
     list_n = fp.faces_normals(obj_points, obj_faces)
 
     vertices, nodenumber = fp.node_indexing(
-        vertices)  # creates a column that has an assigned index number for each row in vertices; returns vertices with the addtion of this new column and also returns the nodenumbers which is an array fille from 0 - length of the vertices
+        vertices)  # creates a column that has an assigned index number for each row in vertices; returns vertices with the addition of this new column and also returns the nodenumbers which is an array filled from 0 - length of the vertices
 
     nodesurf = fp.node_surface(type_sample, vertices, nodenumber, obj_points, obj_faces)
 
@@ -712,7 +712,7 @@ def make_cube(type_sample,
     :type alpha: float
     :param raw_stl: Name of the input stl file
     :type raw_stl: str
-    :param out_pre: Prefix of the ouput files
+    :param out_pre: Prefix of the output files
     :type out_pre: str
     :param ext_fem: List of FEM extension files
     :type ext_fem: list
@@ -760,29 +760,29 @@ def make_atom_grain(STL,
 
     :param STL: The stl file with an object that has surface roughness applied to it
     :type STL: str
-    :param lattice_structure1: The lattice structure of the cristal 1
+    :param lattice_structure1: The lattice structure of the crystal 1
     :type lattice_structure1: str
-    :param lattice_parameter1: The lattice parameter of the cristal 1 in Angstrom
+    :param lattice_parameter1: The lattice parameter of the crystal 1 in Angstrom
     :type lattice_parameter1: float
     :param material1: The chemical symbol of the desired element 1
     :type material1: str
-    :param orien_x1: The orientation of the cristal 1 in the x direction
+    :param orien_x1: The orientation of the crystal 1 in the x direction
     :type orien_x1: list
-    :param orien_y1: The orientation of the cristal 1 in the y direction
+    :param orien_y1: The orientation of the crystal 1 in the y direction
     :type orien_y1: list
-    :param orien_z1: The orientation of the cristal 1 in the z direction
+    :param orien_z1: The orientation of the crystal 1 in the z direction
     :type orien_z1: list
-    :param lattice_structure2: The lattice structure of the cristal 2
+    :param lattice_structure2: The lattice structure of the crystal 2
     :type lattice_structure2: str
-    :param lattice_parameter2: The lattice parameter of the cristal 2 in Angstrom
+    :param lattice_parameter2: The lattice parameter of the crystal 2 in Angstrom
     :type lattice_parameter2: float
     :param material2: The chemical symbol of the desired element 2
     :type material2: str
-    :param orien_x2: The orientation of the cristal 2 in the x direction
+    :param orien_x2: The orientation of the crystal 2 in the x direction
     :type orien_x2: list
-    :param orien_y2: The orientation of the cristal 2 in the y direction
+    :param orien_y2: The orientation of the crystal 2 in the y direction
     :type orien_y2: list
-    :param orien_z2: The orientation of the cristal 2 in the z direction
+    :param orien_z2: The orientation of the crystal 2 in the z direction
     :type orien_z2: list
     :param vertices: List of nodes
     :type vertices: array
