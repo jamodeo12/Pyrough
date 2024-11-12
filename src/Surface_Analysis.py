@@ -9,10 +9,69 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy import stats
 
-import Func_pyrough as func
+from Func_pyrough import rms_calc
 
 
-def hann(image):
+def rough(x, y, eta, RMS, M, N):
+    """
+    Generates a rough surface
+
+    :param x: List of x coordinates
+    :type x: array
+    :param y: List of y coordinates
+    :type y: array
+    :param eta: Roughness exponent
+    :type eta: float
+    :param C1: Normalization factor
+    :type C1: float
+    :param M: Scaling cartesian position
+    :type M: int
+    :param N: Scaling cartesian position
+    :type N: int
+
+    :return: Height matrix
+    """
+    z = np.zeros(np.shape(x))
+    listM = np.linspace(-M, M, 2 * M + 1)
+    listN = np.linspace(-N, N, 2 * N + 1)
+    k = 0
+    for m in listM:
+        for n in listN:
+            if m == 0 and n == 0:
+                continue
+            else:
+                mod = (m * m + n * n) ** (-1 * (1 + eta))
+                G = np.random.randn()
+                U = -np.pi / 2 + np.pi * np.random.rand()
+                zadd = G * mod * np.cos(2 * np.pi * (m * x + n * y) + U)
+                z = z + zadd
+            k += 1
+    RMS_i = rms_calc(z)
+    C1 = RMS / RMS_i
+    return C1 * z
+
+
+def rescale(D, scale):
+    """
+    Rescales the height distribution between zmin and zmax
+
+    :param D: Height matrix
+    :type D: array
+    :param scale: zmin and zmax
+    :type scale: list
+
+    :return: Rescaled matrix
+    """
+    D = D - np.min(D)
+    D = D / np.max(D)
+    lower = scale[0]
+    upper = scale[1]
+    Df = [lower + (upper - lower) * x for x in D]
+    return np.asarray(Df)
+
+
+
+def hanning_window(image):
     size = np.shape(image)
     Lx = size[0]
     Ly = size[1]
@@ -57,27 +116,24 @@ ax1.axis("off")
 ax1.imshow(D, cmap="gray")
 
 # Apply a Hanning window to the grayscale image, and rescale as a function of zmax and zmin
-image = hann(D)
+image = hanning_window(D)
 image = (image - np.min(image)) / (np.max(image) - np.min(image)) * (zmax - zmin) + zmin
 
-print("====== > Generation of the surface power spectrum ...")
-
 # Fourier transform and power spectral density
+print("====== > Generation of the surface power spectrum ...")
 fourier_image = np.fft.fftn(image)
 fourier_amplitudes = np.abs(fourier_image) ** 2
+fourier_amplitudes = fourier_amplitudes.flatten()
 
 # Frequencies correspondng to signal PSD
 kfreq = np.fft.fftfreq(npix) * npix
 kfreq2D = np.meshgrid(kfreq, kfreq)
-knrm = np.sqrt(kfreq2D[0] ** 2 + kfreq2D[1] ** 2)
-
-knrm = knrm.flatten()
-fourier_amplitudes = fourier_amplitudes.flatten()
+knrm = np.sqrt(kfreq2D[0] ** 2 + kfreq2D[1] ** 2).flatten()
 
 # PSD generation
 kbins = np.arange(0.5, npix // 2 + 1, 1.0)
 kvals = 0.5 * (kbins[1:] + kbins[:-1])
-Abins, _, _ = stats.binned_statistic(knrm, fourier_amplitudes, statistic="mean", bins=kbins)
+Abins, _, _ = stats.binned_statistic(knrm, fourier_amplitudes, statistic="mean", bins=kbins) # type: ignore
 Abins *= np.pi * (kbins[1:] ** 2 - kbins[:-1] ** 2)
 
 # Keep only the wavevectors range
@@ -91,7 +147,7 @@ m, b = np.polyfit(np.log(kvals), np.log(Abins), 1)
 H = -1 * (0.5 * m + 1)
 eta = (H - 1) / 2
 print("====== > Extraction of rough surface statistical parameters ...")
-print(f"RMS : {func.rms_calc(func.rescale(D, [zmin, zmax]))}")
+print(f"RMS : {rms_calc(rescale(D, [zmin, zmax]))}")
 print(f"eta : {eta}, H = {H}")
 print(f"A : {kvals[-1]}")
 print(f"B : {kvals[-1]}")
@@ -115,17 +171,16 @@ print("====== > Construction of equivalent rough surface ...")
 x = np.linspace(0, 1, 200)
 y = x
 xv, yv = np.meshgrid(x, y)
-Z = func.rough(xv, yv, eta, func.rms_calc(D), int(np.max(kvals)), int(np.max(kvals)))
+Z = rough(xv, yv, eta, rms_calc(D), int(np.max(kvals)), int(np.max(kvals)))
 
 fig3 = plt.figure()
 ax3 = fig3.add_subplot(projection="3d")
 ax3.grid(False)
 ax3.axis("off")
-ax3.scatter3D(xv, yv, Z, c=Z, cmap="jet", s=1)
-ax3.view_init(90, -90)
-
-plt.show()
+ax3.scatter3D(xv, yv, Z, c=Z, cmap="jet", s=1) # type: ignore
+ax3.view_init(90, -90) # type: ignore
 
 np.savetxt("Rough_data.csv", Z, delimiter=",")
-
 print("====== > Data saved in Rough_data.csv")
+
+plt.show()
