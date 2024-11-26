@@ -1,52 +1,45 @@
 # ---------------------------------------------------------------------------
-# 
 # Title: Func_pyrough
-#
-# Authors: Jonathan Amodeo, Javier Gonzalez, Jennifer Izaguirre, Christophe Le Bourlot & Hugo Iteney
-#
+# Authors: Jonathan Amodeo, Javier Gonzalez, Jennifer Izaguirre, Christophe Le Bourlot, Hugo Iteney
 # Date: June 01, 2022
 #
-# 
-# Func_pyrough are all the functions used in pyrough. These are required to execute the Pyrough main code.
-#  
-# 
+# Func_pyrough are all the functions used in pyrough. These are required to execute the Pyrough
+# main code.
 # ---------------------------------------------------------------------------
 
-import numpy as np
 import math
-import scipy.special as sp
-from wulffpack import SingleCrystal
-from ase.build import bulk
-import meshio
+
 import gmsh
-import matplotlib.pyplot as plt
-
-
-# np.set_printoptions(threshold=sys.maxsize)
+import meshio
+import numpy as np
+import scipy.special as sp
+from ase.build import bulk
+from wulffpack import SingleCrystal
 
 
 def rdnsurf(m, n, B, xv, yv, sfrM, sfrN):
     """
-    Generates random surface roughness that will replace the previous z values in the vertices matrix.
+    Generates random surface roughness that will replace the previous z values in the vertices
+    matrix.
 
-    :type m: array 
+    :type m: array
     :param m: Wavenumber
     :type n: array
     :param n: Wavenumber
     :type B: float
-    :param B: The degree the roughness is dependent on 
+    :param B: The degree the roughness is dependent on
     :type xv: array
-    :param xv: Unique x coordinate values from the objects vertices 
+    :param xv: Unique x coordinate values from the objects vertices
     :type yv: array
-    :param yv: Unique y coordinate values from the objects vertices 
+    :param yv: Unique y coordinate values from the objects vertices
     :type sfrM: array
-    :param sfrM: Matrix of random numbers that range from 1 to 2N 
+    :param sfrM: Matrix of random numbers that range from 1 to 2N
     :type sfrN: array
     :param sfrN: Matrix of random numbers that range from 1 to 2N
 
     :return: Roughness height matrix
     """
-    print('====== > Creating random rough surface....')
+    print("====== > Creating random rough surface....")
     Z = 0.0
     for i in range(len(sfrM)):
         for j in range(len(sfrN)):
@@ -57,9 +50,11 @@ def rdnsurf(m, n, B, xv, yv, sfrM, sfrN):
                 Z = Z + m[i][j] * mod * np.cos(2 * np.pi * (sfrM[i] * xv + sfrN[j] * yv) + n[i][j])
     return Z
 
+
 def rdnsurf_2(m, n, B, xv, yv, sfrM, sfrN):
     """
-    Generates random surface roughness that will replace the previous z values in the vertices matrix.
+    Generates random surface roughness that will replace the previous z values in the vertices
+    matrix.
 
     :type m: array
     :param m: Wavenumber
@@ -91,23 +86,23 @@ def rdnsurf_2(m, n, B, xv, yv, sfrM, sfrN):
 
 def rho(x, y):
     """
-    The Pythagorean theorem equation is used to obtain a value for a side of a triangle. 
-    
-    :param x: Represents the length of a side in the triangle 
+    The Pythagorean theorem equation is used to obtain a value for a side of a triangle.
+
+    :param x: Represents the length of a side in the triangle
     :type x: int
-    :param y: Represents the length of a side in the triangle 
+    :param y: Represents the length of a side in the triangle
     :type y: int
-    
+
     :return: The length of hypotenuse
     """
-    return np.sqrt(x ** 2 + y ** 2)
+    return np.sqrt(x**2 + y**2)
 
 
 def theta(x, y):
     """
-    Calculates the arctan2 of two given arrays whose size are the same. 
+    Calculates the arctan2 of two given arrays whose size are the same.
 
-    :param x: x coordinates 
+    :param x: x coordinates
     :type x: array
     :param y: y coordinates
     :type y: array
@@ -117,21 +112,19 @@ def theta(x, y):
     return np.arctan2(y, x)
 
 
-def cylinder(l, r, ns, out_pre):
+def cylinder(length, r, ns):
     """
 
-    :param l: Length of the cylinder
-    :type l: float
+    :param length: Length of the cylinder
+    :type length: float
     :param r: Radius of the cylinder
     :type r: float
     :param ns: Mesh size
     :type ns: float
-    :param out_pre: Output file name if required
-    :type out_pre: str
 
     :return: vertices and faces of cylinder mesh
     """
-    print('====== > Creating the Mesh')
+    print("====== > Creating the Mesh")
     # Initialize Gmsh
     gmsh.initialize()
     gmsh.option.setNumber("General.Terminal", 0)
@@ -152,7 +145,7 @@ def cylinder(l, r, ns, out_pre):
     loop = gmsh.model.geo.addCurveLoop([arc1, arc2, arc3, arc4])
     disk = gmsh.model.geo.addPlaneSurface([loop])
     # Extrude the disk to get the cylinder
-    gmsh.model.geo.extrude([(2, disk)], 0, 0, l, [l // ns])
+    gmsh.model.geo.extrude([(2, disk)], 0, 0, length, [length // ns])
     # Set a constant mesh size
     f = gmsh.model.mesh.field.add("MathEval")
     gmsh.model.mesh.field.setString(f, "F", str(ns))
@@ -163,7 +156,6 @@ def cylinder(l, r, ns, out_pre):
     # Mesh the cylinder (this uses default meshing options)
     gmsh.model.mesh.generate(2)  # 3 means 3D mesh
     # Save the mesh to a file
-    # gmsh.write('Raw_' + out_pre + '.stl')
     # Extract node information
     node_tags, node_coords, _ = gmsh.model.mesh.getNodes()
     # Extract 2D surface element types and connectivity
@@ -174,13 +166,12 @@ def cylinder(l, r, ns, out_pre):
     # Find the triangles from the extracted elements
     triangle_idx = np.where(element_types == 2)[0][0]  # 2 corresponds to triangles
     faces = element_nodes[triangle_idx].reshape(-1, 3) - 1
-    print('====== > Done creating the Mesh')
+    print("====== > Done creating the Mesh")
     return (vertices, faces)
 
 
-def box(width, length, height, ns, out_pre):
+def box(width, length, height, ns):
     """
-
     :param width: Width of the box
     :type width: float
     :param length: Length of the box
@@ -189,12 +180,10 @@ def box(width, length, height, ns, out_pre):
     :type height: float
     :param ns: Mesh size
     :type ns: float
-    :param out_pre: Output file name if required
-    :type out_pre: str
 
     :return: vertices and faces of box mesh
     """
-    print('====== > Creating the Mesh')
+    print("====== > Creating the Mesh")
     # Initialize Gmsh
     gmsh.initialize()
     # Silence Gmsh's output
@@ -227,12 +216,24 @@ def box(width, length, height, ns, out_pre):
     ]
     # Connect the edges to form the faces
     faces = [
-        gmsh.model.geo.addPlaneSurface([gmsh.model.geo.addCurveLoop([lines[0], lines[1], lines[2], lines[3]])]),
-        gmsh.model.geo.addPlaneSurface([gmsh.model.geo.addCurveLoop([lines[4], lines[5], lines[6], lines[7]])]),
-        gmsh.model.geo.addPlaneSurface([gmsh.model.geo.addCurveLoop([lines[0], lines[9], -lines[4], -lines[8]])]),
-        gmsh.model.geo.addPlaneSurface([gmsh.model.geo.addCurveLoop([-lines[2], lines[10], lines[6], -lines[11]])]),
-        gmsh.model.geo.addPlaneSurface([gmsh.model.geo.addCurveLoop([lines[1], lines[10], -lines[5], -lines[9]])]),
-        gmsh.model.geo.addPlaneSurface([gmsh.model.geo.addCurveLoop([-lines[3], lines[11], lines[7], -lines[8]])]),
+        gmsh.model.geo.addPlaneSurface(
+            [gmsh.model.geo.addCurveLoop([lines[0], lines[1], lines[2], lines[3]])]
+        ),
+        gmsh.model.geo.addPlaneSurface(
+            [gmsh.model.geo.addCurveLoop([lines[4], lines[5], lines[6], lines[7]])]
+        ),
+        gmsh.model.geo.addPlaneSurface(
+            [gmsh.model.geo.addCurveLoop([lines[0], lines[9], -lines[4], -lines[8]])]
+        ),
+        gmsh.model.geo.addPlaneSurface(
+            [gmsh.model.geo.addCurveLoop([-lines[2], lines[10], lines[6], -lines[11]])]
+        ),
+        gmsh.model.geo.addPlaneSurface(
+            [gmsh.model.geo.addCurveLoop([lines[1], lines[10], -lines[5], -lines[9]])]
+        ),
+        gmsh.model.geo.addPlaneSurface(
+            [gmsh.model.geo.addCurveLoop([-lines[3], lines[11], lines[7], -lines[8]])]
+        ),
     ]
     # Define a uniform mesh size
     f = gmsh.model.mesh.field.add("MathEval")
@@ -243,7 +244,6 @@ def box(width, length, height, ns, out_pre):
     # Generate the 3D mesh
     gmsh.model.mesh.generate(2)
     # Save the mesh to a file
-    # gmsh.write('Raw_' + out_pre + '.stl')
     # Extract node information
     node_tags, node_coords, _ = gmsh.model.mesh.getNodes()
     # Extract 2D surface element types and connectivity
@@ -254,23 +254,20 @@ def box(width, length, height, ns, out_pre):
     # Find the triangles from the extracted elements
     triangle_idx = np.where(element_types == 2)[0][0]  # 2 corresponds to triangles
     faces = element_nodes[triangle_idx].reshape(-1, 3) - 1
-    print('====== > Done creating the Mesh')
+    print("====== > Done creating the Mesh")
     return (vertices, faces)
 
 
-def sphere(r, ns, out_pre):
+def sphere(r, ns):
     """
-
     :param r: Radius of the sphere
     :type r: float
     :param ns: Mesh size
     :type ns: float
-    :param out_pre: Output file name if required
-    :type out_pre: str
 
     :return: vertices and faces of sphere mesh
     """
-    print('====== > Creating the Mesh')
+    print("====== > Creating the Mesh")
     gmsh.initialize()
     gmsh.option.setNumber("General.Terminal", 0)  # Turn off verbose output
     gmsh.model.add("sphere")
@@ -283,7 +280,6 @@ def sphere(r, ns, out_pre):
     # Generate 2D mesh
     gmsh.model.mesh.generate(2)
     # Save the mesh to a file
-    # gmsh.write('Raw_' + out_pre + '.stl')
     # Extract node information
     node_tags, node_coords, _ = gmsh.model.mesh.getNodes()
     # Extract 2D surface element types and connectivity
@@ -294,25 +290,22 @@ def sphere(r, ns, out_pre):
     # Find the triangles from the extracted elements
     triangle_idx = np.where(element_types == 2)[0][0]  # 2 corresponds to triangles
     faces = element_nodes[triangle_idx].reshape(-1, 3) - 1
-    print('====== > Done creating the Mesh')
+    print("====== > Done creating the Mesh")
     return (vertices, faces)
 
 
-def poly(length, base_points, ns, out_pre):
+def poly(length, base_points, ns):
     """
-
     :param length: Length of the faceted wire
     :type length: float
     :param base_points: Shape of the base
     :type base_points: list
     :param ns: Mesh size
     :type ns: float
-    :param out_pre: Output file name if required
-    :type out_pre: str
 
     :return: vertices and faces of faceted wire mesh
     """
-    print('====== > Creating the Mesh')
+    print("====== > Creating the Mesh")
     gmsh.initialize()
 
     gmsh.model.add("wire")
@@ -346,32 +339,28 @@ def poly(length, base_points, ns, out_pre):
     # Extract 2D surface element types and connectivity
     element_types, element_tags, element_nodes = gmsh.model.mesh.getElements(dim=2)
     # Save the mesh to a file
-    # gmsh.write('Raw_' + out_pre + '.stl')
     gmsh.finalize()
     # Reshape the node coordinates into a more user-friendly format
     vertices = node_coords.reshape(-1, 3)
     # Find the triangles from the extracted elements
     triangle_idx = np.where(element_types == 2)[0][0]  # 2 corresponds to triangles
     faces = element_nodes[triangle_idx].reshape(-1, 3) - 1
-    print('====== > Done creating the Mesh')
+    print("====== > Done creating the Mesh")
     return (vertices, faces)
 
 
-def wulff(points, faces, ns, out_pre):
+def wulff(points, faces, ns):
     """
-
     :param points: Vertices of Wulff-shape
     :type points: list
     :param faces: Facets of Wulff-shape
     :type faces: list
     :param ns: Mesh size
     :type ns: float
-    :param out_pre: Output file name if required
-    :type out_pre: str
 
     :return: vertices and faces of Wulff mesh
     """
-    print('====== > Creating the Mesh')
+    print("====== > Creating the Mesh")
     # Initialize the Gmsh API
     gmsh.initialize()
     gmsh.option.setNumber("General.Terminal", 0)
@@ -394,7 +383,6 @@ def wulff(points, faces, ns, out_pre):
     # Mesh the surface
     gmsh.model.mesh.generate(2)
     # Save the mesh as STL
-    # gmsh.write('Raw_' + out_pre + '.stl')
     # Extract node information
     node_tags, node_coords, _ = gmsh.model.mesh.getNodes()
     # Extract 2D surface element types and connectivity
@@ -405,23 +393,20 @@ def wulff(points, faces, ns, out_pre):
     # Find the triangles from the extracted elements
     triangle_idx = np.where(element_types == 2)[0][0]  # 2 corresponds to triangles
     faces = element_nodes[triangle_idx].reshape(-1, 3) - 1
-    print('====== > Done creating the Mesh')
+    print("====== > Done creating the Mesh")
     return (vertices, faces)
 
 
-def cube(length, ns, out_pre):
+def cube(length, ns):
     """
-
     :param length: Length of the cube
     :type length: float
     :param ns: Mesh size
     :type ns: float
-    :param out_pre: Output file name if required
-    :type out_pre: str
 
     :return: vertices and faces of cube mesh
     """
-    print('====== > Creating the Mesh')
+    print("====== > Creating the Mesh")
     # Initialize Gmsh
     gmsh.initialize()
     # Silence Gmsh's output
@@ -452,7 +437,6 @@ def cube(length, ns, out_pre):
     # Generate the 3D mesh
     gmsh.model.mesh.generate(2)
     # Save the mesh to a file
-    # gmsh.write('Raw_' + out_pre + '.stl')
     # Extract node information
     node_tags, node_coords, _ = gmsh.model.mesh.getNodes()
     # Extract 2D surface element types and connectivity
@@ -463,12 +447,21 @@ def cube(length, ns, out_pre):
     # Find the triangles from the extracted elements
     triangle_idx = np.where(element_types == 2)[0][0]  # 2 corresponds to triangles
     faces = element_nodes[triangle_idx].reshape(-1, 3) - 1
-    print('====== > Done creating the Mesh')
+    print("====== > Done creating the Mesh")
     return (vertices, faces)
 
 
-def make_obj(surfaces, energies, n_at, lattice_structure, lattice_parameter, material, orien_x, orien_y, orien_z,
-             out_pre):
+def make_obj(
+    surfaces,
+    energies,
+    n_at,
+    lattice_structure,
+    lattice_parameter,
+    material,
+    orien_x,
+    orien_z,
+    out_pre,
+):
     """
     Creates an OBJ file of a faceted NP. Stores the points and faces from this file.
 
@@ -498,26 +491,26 @@ def make_obj(surfaces, energies, n_at, lattice_structure, lattice_parameter, mat
     surface_energies = {tuple(surfaces[i]): float(energies[i]) for i in range(0, len(surfaces))}
     prim = bulk(material, crystalstructure=lattice_structure, a=lattice_parameter)
     particle = SingleCrystal(surface_energies, primitive_structure=prim, natoms=n_at)
-    particle.write(out_pre + '.obj')
-    with open(out_pre + '.obj') as f:
+    particle.write(out_pre + ".obj")
+    with open(out_pre + ".obj") as f:
         list_lines = f.readlines()
         obj_points = []
         obj_faces = []
         for line in list_lines:
-            if 'v' in line:
-                splited = line.split()[1:]
-                coord = [float(i) for i in splited]
+            if "v" in line:
+                splitted_line = line.split()[1:]
+                coord = [float(i) for i in splitted_line]
                 obj_points.append(coord)
-            if 'f' in line:
-                splited = line.split()[1:]
-                coord = [float(i) for i in splited]
+            if "f" in line:
+                splitted_line = line.split()[1:]
+                coord = [float(i) for i in splitted_line]
                 obj_faces.append(coord)
     obj_points = np.asarray(obj_points)
     obj_points_f = rotate_obj_wulff(obj_points, orien_x, orien_z)
     return (obj_points_f, obj_faces)
 
 
-def read_stl(sample_type, raw_stl, width, length, height, radius, ns, points, out_pre):
+def read_stl(sample_type, raw_stl, width, length, height, radius, ns, points):
     """
     Reads an input stl file or creates a new one if no input
 
@@ -537,8 +530,6 @@ def read_stl(sample_type, raw_stl, width, length, height, radius, ns, points, ou
     :type ns: int
     :param points: List of points constituting the base (in case of faceted wire)
     :type points: list
-    :param out_pre: Prefix of output files
-    :type out_pre: str
 
     :return: List of points and faces
     """
@@ -546,15 +537,15 @@ def read_stl(sample_type, raw_stl, width, length, height, radius, ns, points, ou
     faces = []
     if raw_stl == "na":
         if sample_type == "box" or sample_type == "grain":
-            vertices, faces = box(width, length, height, ns, out_pre)
+            vertices, faces = box(width, length, height, ns)
         elif sample_type == "wire":
-            vertices, faces = cylinder(length, radius, ns, out_pre)
+            vertices, faces = cylinder(length, radius, ns)
         elif sample_type == "sphere":
-            vertices, faces = sphere(radius, ns, out_pre)
+            vertices, faces = sphere(radius, ns)
         elif sample_type == "poly":
-            vertices, faces = poly(length, points, ns, out_pre)
+            vertices, faces = poly(length, points, ns)
         elif sample_type == "cube":
-            vertices, faces = cube(length, ns, out_pre)
+            vertices, faces = cube(length, ns)
     else:
         mesh = meshio.read(raw_stl)
         vertices, faces = mesh.points, mesh.cells
@@ -562,7 +553,7 @@ def read_stl(sample_type, raw_stl, width, length, height, radius, ns, points, ou
     return (vertices, faces)
 
 
-def read_stl_wulff(raw_stl, obj_points, obj_faces, ns, out_pre):
+def read_stl_wulff(raw_stl, obj_points, obj_faces, ns):
     """
     Reads an input stl file or creates a new one if no input. Wulff case.
 
@@ -574,13 +565,11 @@ def read_stl_wulff(raw_stl, obj_points, obj_faces, ns, out_pre):
     :type obj_faces: list
     :param ns: Mesh size
     :type ns: float
-    :param out_pre: Prefix of output files
-    :type out_pre: str
 
     :returns: List of points and faces
     """
     if raw_stl == "na":
-        vertices, faces = wulff(obj_points, obj_faces, ns, out_pre)
+        vertices, faces = wulff(obj_points, obj_faces, ns)
     else:
         mesh = meshio.read(raw_stl)
         vertices, faces = mesh.vertices, mesh.faces
@@ -589,28 +578,29 @@ def read_stl_wulff(raw_stl, obj_points, obj_faces, ns, out_pre):
 
 def stl_file(vertices, faces, out_pre):
     """
-    Creates an stl file from the vertices and faces of the desired object. 
-    
-    :param vertices: The coordinates obtained from the mesh 
+    Creates an stl file from the vertices and faces of the desired object.
+
+    :param vertices: The coordinates obtained from the mesh
     :type vertices: array
     :param faces: The faces of the triangles generated from the mesh
     :type vertices: array
     :param out_pre: Prefix of the output files
     :type out_pre: str
     """
-    write_stl(out_pre + '.stl', vertices, np.array(faces))
+    write_stl(out_pre + ".stl", vertices, np.array(faces))
     return
 
 
 def phi(t, z):
     """
-    Calculates the arctan2 of an array filled with vector norms and an array filled with z coordinates which are the same size.
-    
+    Calculates the arctan2 of an array filled with vector norms and an array filled with z
+    coordinates which are the same size.
+
     :param t: Coordinates x y in a list
     :type t: array
     :param z: Z coordinates
     :type z: array
-    
+
     :return: An array of angles in radians
     """
     return np.arctan2(np.linalg.norm(t, axis=1), z)
@@ -618,11 +608,12 @@ def phi(t, z):
 
 def vertex_tp(x, y, t, z):
     """
-    Creates an array filled with two elements that are the angles corresponding to the position of the node on the sphere.
-    
-    :param x: X coordinates 
+    Creates an array filled with two elements that are the angles corresponding to the position of
+    the node on the sphere.
+
+    :param x: X coordinates
     :type x: array
-    :param y: Y coordinates 
+    :param y: Y coordinates
     :type y: array
     :param t: x & y coordinates stored in a list
     :type t: array
@@ -636,11 +627,11 @@ def vertex_tp(x, y, t, z):
 
 def radius(v):
     """
-    Calculates the vector norm for the axis 1 of the values in the given array. 
+    Calculates the vector norm for the axis 1 of the values in the given array.
 
-    :param v: The vertices of the sphere 
-    :type v: array 
-        
+    :param v: The vertices of the sphere
+    :type v: array
+
     :return: A vector norm
     """
     return np.linalg.norm(v, axis=1)
@@ -649,10 +640,10 @@ def radius(v):
 def stat_analysis(z, N, M, C1, B, sample_type, out_pre):
     """
     Displays the statistical analysis of the surface roughness generator
-    
+
     :param z: Roughness height matrix
     :type z: float
-    :param N: Scaling cartesian position 
+    :param N: Scaling cartesian position
     :type N: int
     :param M: Scaling cartesian position
     :type M: int
@@ -660,13 +651,12 @@ def stat_analysis(z, N, M, C1, B, sample_type, out_pre):
     :type C1: float
     :param B: The degree the roughness is dependent on
     :type B: float
-    :param sample_type: The name of the sample 
+    :param sample_type: The name of the sample
     :type sample_type: str
     :param out_pre: Prefix of output files
     :type out_pre: str
 
     """
-    # z_an = np.reshape(z, -1)
     z_an = z.flatten()
     nu_points = len(z_an)
     mean = np.mean(z_an)
@@ -675,79 +665,68 @@ def stat_analysis(z, N, M, C1, B, sample_type, out_pre):
     skewness = np.sum(np.power((z_an - np.mean(z_an)), 3) / len(z_an)) / np.power(np.std(z_an), 3)
     kurtosis = np.sum(np.power((z_an - np.mean(z_an)), 4) / len(z_an)) / np.power(np.std(z_an), 4)
 
-    stats = [N, M, C1, round(0.5 * B - 1, 2), nu_points, mean, stand, rms, skewness, kurtosis]
+    stats = [
+        N,
+        M,
+        C1,
+        round(0.5 * B - 1, 2),
+        nu_points,
+        mean,
+        stand,
+        rms,
+        skewness,
+        kurtosis,
+    ]
     stats = list(map(str, stats))
-    stats = [sample_type, 'N = ' + stats[0], 'M = ' + stats[1], 'C1 = ' + stats[2], 'eta = ' + stats[3],
-             'No. points = ' + stats[4],
-             'Mean_Value = ' + stats[5], 'Stand_dev = ' + stats[6], 'RMS = ' + stats[7], 'Skewness = ' + stats[8],
-             'Kurtosis = ' + stats[9]]
+    stats = [
+        sample_type,
+        "N = " + stats[0],
+        "M = " + stats[1],
+        "C1 = " + stats[2],
+        "eta = " + stats[3],
+        "No. points = " + stats[4],
+        "Mean_Value = " + stats[5],
+        "Stand_dev = " + stats[6],
+        "RMS = " + stats[7],
+        "Skewness = " + stats[8],
+        "Kurtosis = " + stats[9],
+    ]
 
-    np.savetxt(out_pre + '_stat.txt', stats, fmt='%s')
-    print('')
-    print('------------ Random Surface Parameters-----------------')
-    print('         N =', N, '  M = ', M, '  C1 = ', C1, '  eta = ', round(0.5 * B - 1, 2))
-    print('No. points = ', nu_points)
-    print('Mean_Value = ', mean)
-    print(' Stand_dev = ', stand)
-    print('       RMS = ', rms)
-    print('  Skewness = ', skewness)
-    print('  Kurtosis = ', kurtosis)
-    print('--------------------------------------------------------')
-    return
-
-
-def stat_sphere(r, C1, C2, out_pre):
-    """
-    Displays the statistical analysis of the surface roughness generator with regards to the sphere. 
-    
-    :param r: Roughness height matrix
-    :type r: float
-    :param C1: Roughness normalization factor
-    :type C1: float
-    :param C2: Roughness normalization factor constant for sphere
-    :type C2: float
-    :param out_pre: Prefix of output files
-    :type out_pre: str
-    """
-    mean = np.mean(r)
-    stand = np.std(C1 * C2 * r)
-    rms = np.sqrt(C1 * C2 * np.sum(r * r) / len(r))
-
-    stats = [C1, C2, mean, stand, rms]
-    stats = list(map(str, stats))
-    stats = ['Sphere', 'C1 = ' + stats[0], 'C2 = ' + stats[1], 'Mean_Value = ' + stats[2], 'Stand_dev = ' + stats[3],
-             'RMS = ' + stats[4]]
-
-    np.savetxt(out_pre + '_stat.txt', stats, fmt='%s')
-
-    print("ave = {}".format(np.mean(r)))  # out
-    print("Stand_dev = {}".format(np.std(C1 * C2 * r)))
-    print("RMS = {}".format(np.sqrt(C1 * C2 * np.sum(r * r) / len(r))))
-    return
+    np.savetxt(out_pre + "_stat.txt", stats, fmt="%s")
+    print("")
+    print("------------ Random Surface Parameters-----------------")
+    print("         N =", N, "  M = ", M, "  C1 = ", C1, "  eta = ", round(0.5 * B - 1, 2))
+    print("No. points = ", nu_points)
+    print("Mean_Value = ", mean)
+    print(" Stand_dev = ", stand)
+    print("       RMS = ", rms)
+    print("  Skewness = ", skewness)
+    print("  Kurtosis = ", kurtosis)
+    print("--------------------------------------------------------")
 
 
 def concatenate_list_data(a_list):
     """
     Combines the elements of a list into one element in the form of a string.
-    
+
     :param a_list: List with elements of type int
     :type a_list: list
 
     :return: A string
     """
-    result = ''
+    result = ""
     for element in a_list:
         result += str(element)
     return result
 
 
-def duplicate(l, orien, lattice_par):
+def duplicate(side_length, orien, lattice_par):
     """
-    Takes in a length and an cristal orientation to calculate the duplication factor for atomsk.
+    Takes in a length and an crystal orientation to calculate the duplication factor for atomsk.
 
-    :param l: Length of one of the sides of the object
-    :type l: int
-    :param orien: Crystal orientaion
+    :param side_length: Length of one of the sides of the object
+    :type side_length: int
+    :param orien: Crystal orientation
     :type orien: list
     :param lattice_par: Lattice parameter
     :type lattice_par: float
@@ -756,17 +735,17 @@ def duplicate(l, orien, lattice_par):
     """
     storage = []
     for x in orien:
-        squared = x ** 2
+        squared = x**2
         storage.append(squared)
     Total = sum(storage)
     if Total == 6 or Total == 2:
         distance = (lattice_par * (math.sqrt(Total))) / 2
-        dup = math.ceil(l / distance)
+        dup = math.ceil(side_length / distance)
     else:
-        distance = (lattice_par * (math.sqrt(Total)))
-        dup = math.ceil(l / distance)
+        distance = lattice_par * (math.sqrt(Total))
+        dup = math.ceil(side_length / distance)
     end_orien = [(concatenate_list_data(orien))]
-    x = '[' + "".join([str(i) for i in end_orien]) + ']'
+    x = "[" + "".join([str(i) for i in end_orien]) + "]"
     dup = str(dup)
     return 0.5 * distance, dup, x
 
@@ -784,14 +763,13 @@ def random_numbers(sfrN, sfrM):
     """
     m = 0 + 1 * np.random.randn(len(sfrM), len(sfrN))  # Gaussian distributed
     n = -np.pi / 2 + np.pi * np.random.rand(len(sfrM), len(sfrN))  # Uniform distributed
-    # np.savetxt('m.txt', m, fmt='%s')
-    # np.savetxt('n.txt', n, fmt='%s')
     return m, n
 
 
 def node_indexing(vertices):
     """
-    Creates a column that has an assigned index number for each row in vertices and also the nodenumbers which is an array file from 0 - length of the vertices
+    Creates a column that has an assigned index number for each row in vertices and also the
+    nodenumbers which is an array file from 0 - length of the vertices
 
     :param vertices: Vector for the points
     :type vertices: array
@@ -805,7 +783,8 @@ def node_indexing(vertices):
 
 def node_surface(sample_type, vertices, nodenumber, points, faces):
     """
-    Finds the nodes at the surface of the object. These nodes will have the surface roughness applied to it.
+    Finds the nodes at the surface of the object. These nodes will have the surface roughness
+    applied to it.
 
     :param sample_type: The name of the sample
     :type sample_type: str
@@ -821,7 +800,7 @@ def node_surface(sample_type, vertices, nodenumber, points, faces):
     :return: Surface nodes
     """
     stay = []
-    if sample_type == 'wire':
+    if sample_type == "wire":
         max_height = max(vertices[:, 1])
         for x in range(0, len(vertices)):
             if rho(vertices[x, 0], vertices[x, 1]) > (max_height - 0.1):
@@ -830,7 +809,7 @@ def node_surface(sample_type, vertices, nodenumber, points, faces):
         nodesurf = np.delete(vertices, no_need, 0)
         return nodesurf
 
-    elif sample_type == 'box' or sample_type == 'grain':
+    elif sample_type == "box" or sample_type == "grain":
         eps = 0.000001
         max_height = max(vertices[:, 2])
         for index in range(0, len(vertices)):
@@ -840,7 +819,7 @@ def node_surface(sample_type, vertices, nodenumber, points, faces):
         nodesurf = np.delete(vertices, no_need, 0)
         return nodesurf
 
-    elif sample_type == 'poly':
+    elif sample_type == "poly":
         eps = 0.0001
         face = []
         for i in range(len(points)):
@@ -860,11 +839,11 @@ def node_surface(sample_type, vertices, nodenumber, points, faces):
                 for verti in vertices:
                     if A * verti[0] + B >= verti[1] - eps and A * verti[0] + B <= verti[1] + eps:
                         face = np.append(face, verti, axis=0)
-        l = len(face)
-        nodesurf = np.reshape(face, [int(l / 4), 4])
+        n_faces = len(face)
+        nodesurf = np.reshape(face, [int(n_faces / 4), 4])
         return np.array(remove_duplicates_2d_ordered(nodesurf))
 
-    elif sample_type == 'wulff' or sample_type == 'cube':
+    elif sample_type == "wulff" or sample_type == "cube":
         nodesurf = []
         for F in faces:
             L = []
@@ -876,7 +855,14 @@ def node_surface(sample_type, vertices, nodenumber, points, faces):
             AC = C - A
             for M in vertices:
                 AM = M[:3] - A
-                matrix = np.array([[AM[0], AB[0], AC[0]], [AM[1], AB[1], AC[1]], [AM[2], AB[2], AC[2]]], dtype=float)
+                matrix = np.array(
+                    [
+                        [AM[0], AB[0], AC[0]],
+                        [AM[1], AB[1], AC[1]],
+                        [AM[2], AB[2], AC[2]],
+                    ],
+                    dtype=float,
+                )
                 det = np.linalg.det(matrix)
                 if abs(det) <= eps:
                     L.append([M[0], M[1], M[2], M[3]])
@@ -921,7 +907,8 @@ def vectors(N, M):
 
 def coord_sphere(vertices):
     """
-    Creates a matrix with the columns that correspond to the coordinates of either x, y, z and t which contains x y z coordinates in an array
+    Creates a matrix with the columns that correspond to the coordinates of either x, y, z and t
+    which contains x y z coordinates in an array
 
     :param vertices: List of nodes
     :type vertices: array
@@ -935,7 +922,7 @@ def coord_sphere(vertices):
     return (x, y, z, t)
 
 
-def rough_matrix_sphere(nbPoint, B, thetaa, phii, vert_phi_theta, C1, RMS, r):
+def rough_matrix_sphere(nbPoint, B, thetaa, phii, vert_phi_theta, r):
     """
     Creates the displacement values of the nodes on the surface of the sphere
 
@@ -947,12 +934,9 @@ def rough_matrix_sphere(nbPoint, B, thetaa, phii, vert_phi_theta, C1, RMS, r):
     :type thetaa: array
     :param phii: Arctan2 of vector norms and z coordinates
     :type phii: array
-    :param vert_phi_theta: Array filled with two elements that are the angles corresponding to the position of the node on the sphere.
+    :param vert_phi_theta: Array filled with two elements that are the angles corresponding to the
+    position of the node on the sphere.
     :type vert_phi_theta: array
-    :param C1: Roughness normalization factor
-    :type C1: float
-    :param RMS: Root Mean Square
-    :type RMS: float
     :param r: Roughness height matrix
     :type r: int
 
@@ -963,17 +947,17 @@ def rough_matrix_sphere(nbPoint, B, thetaa, phii, vert_phi_theta, C1, RMS, r):
     print("====== > Creating random rough surface")
     for degree in range(N_s, N_e + 1, 1):  # EQUATION
         if degree == N_s:
-            print("====== > Harmonic degree : {}, ".format(degree), end=' ', flush=True)
+            print(f"====== > Harmonic degree : {degree}, ", end=" ", flush=True)
         elif degree == N_e:
-            print("{}.".format(degree))
+            print(f"{degree}.")
         else:
-            print("{}, ".format(degree), end=' ', flush=True)
+            print(f"{degree}, ", end=" ", flush=True)
         _r_amplitude = 0 + 1 * np.random.randn(nbPoint)
         _r_phase = -np.pi / 2 + np.pi * np.random.rand(nbPoint)
         mod = degree ** (-B / 2)
         for i, [theta, phi] in enumerate(vert_phi_theta):
             _phase = sp.sph_harm(0, degree, thetaa - theta, phii - phi).real
-            _phase = 2 * _phase / _phase.ptp()
+            _phase = 2 * _phase / np.ptp(_phase)
             r += _r_amplitude[i] * mod * np.cos(_phase + _r_phase)
     return r
 
@@ -1017,9 +1001,9 @@ def rebox(file_lmp):
 
     :return: Reboxed position file
     """
-    fint = open(file_lmp, "r")
+    fint = open(file_lmp)
     lines = fint.readlines()
-    data = np.array([i.split() for i in lines[15:len(lines):1]])
+    data = np.array([i.split() for i in lines[15 : len(lines) : 1]])
     listN = data[:, 0]
     listi = data[:, 1]
     listx = data[:, 2]
@@ -1039,14 +1023,19 @@ def rebox(file_lmp):
     compt = 0
     for i in range(0, len(lines), 1):
         if i == 5:
-            lines[i] = "{} {} xlo xhi\n".format(math.floor(min(listx_n)), math.ceil(max(listx_n)))
+            lines[i] = f"{math.floor(min(listx_n))} {math.ceil(max(listx_n))} xlo xhi\n"
         if i == 6:
-            lines[i] = "{} {} ylo yhi\n".format(math.floor(min(listy_n)), math.ceil(max(listy_n)))
+            lines[i] = f"{math.floor(min(listy_n))} {math.ceil(max(listy_n))} ylo yhi\n"
         if i == 7:
-            lines[i] = "{} {} zlo zhi\n".format(math.floor(min(listz_n)), math.ceil(max(listz_n)))
+            lines[i] = f"{math.floor(min(listz_n))} {math.ceil(max(listz_n))} zlo zhi\n"
         if i >= 15:
-            lines[i] = "{} {} {} {} {}\n".format(listN_int[compt], listi_int[compt], listx_n[compt], listy_n[compt],
-                                                 listz_n[compt])
+            lines[i] = "{} {} {} {} {}\n".format(
+                listN_int[compt],
+                listi_int[compt],
+                listx_n[compt],
+                listy_n[compt],
+                listz_n[compt],
+            )
             compt += 1
     fint.close()
     fend = open(file_lmp, "w")
@@ -1066,8 +1055,8 @@ def write_stl(filename, vertices, face_list):
     :param face_list: list of faces
     :type face_list: array
     """
-    with open(filename, 'w') as f:
-        f.write('solid Created by Gmsh \n')
+    with open(filename, "w") as f:
+        f.write("solid Created by Gmsh \n")
         for face in face_list:
             p1 = vertices[face[0]]
             p2 = vertices[face[1]]
@@ -1075,14 +1064,14 @@ def write_stl(filename, vertices, face_list):
             OA = [p1[0] - p2[0], p1[1] - p2[1], p1[2] - p2[2]]
             OB = [p1[0] - p3[0], p1[1] - p3[1], p1[2] - p3[2]]
             normal = np.cross(OA, OB)
-            f.write('facet normal {} {} {}\n'.format(normal[0], normal[1], normal[2]))
-            f.write('  outer loop\n')
-            f.write('    vertex {} {} {}\n'.format(p1[0], p1[1], p1[2]))
-            f.write('    vertex {} {} {}\n'.format(p2[0], p2[1], p2[2]))
-            f.write('    vertex {} {} {}\n'.format(p3[0], p3[1], p3[2]))
-            f.write('  endloop\n')
-            f.write('endfacet\n')
-        f.write('endsolid Created by Gmsh')
+            f.write(f"facet normal {normal[0]} {normal[1]} {normal[2]}\n")
+            f.write("  outer loop\n")
+            f.write(f"    vertex {p1[0]} {p1[1]} {p1[2]}\n")
+            f.write(f"    vertex {p2[0]} {p2[1]} {p2[2]}\n")
+            f.write(f"    vertex {p3[0]} {p3[1]} {p3[2]}\n")
+            f.write("  endloop\n")
+            f.write("endfacet\n")
+        f.write("endsolid Created by Gmsh")
     return
 
 
@@ -1097,7 +1086,8 @@ def rms_calc(Z):
     """
     Z = np.asarray(Z)
     Z = Z.flatten()
-    return (np.sqrt(np.sum(Z * Z) / len(Z)))
+    return np.sqrt(np.sum(Z * Z) / len(Z))
+
 
 def random_surf2(sample_type, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, RMS, out_pre):
     """
@@ -1133,7 +1123,7 @@ def random_surf2(sample_type, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, RMS, out_pr
     :return: Surface roughness
     """
     Z = rdnsurf(m, n, B, xv, yv, sfrM, sfrN)
-    if type(C1) == str:
+    if isinstance(C1, str):
         RMS_i = rms_calc(Z)
         C1 = RMS / RMS_i
         Z = C1 * Z
@@ -1161,14 +1151,14 @@ def make_rough(type_sample, z, nodesurf, vertices, angles):
     :return: Rough sample
     """
     min_dz = abs(z.min())
-    if type_sample == 'box' or type_sample == 'grain':
+    if type_sample == "box" or type_sample == "grain":
         for i in range(len(z)):
             dz = z[i] + min_dz
             node = nodesurf[i]
             index = node[3]
             poss = np.where(vertices[:, 3] == index)
             vertices[poss, 2] = vertices[poss, 2] + dz
-    elif type_sample == 'wire':
+    elif type_sample == "wire":
         for i in range(len(z)):
             dz = z[i] + min_dz
             node = nodesurf[i]
@@ -1177,7 +1167,7 @@ def make_rough(type_sample, z, nodesurf, vertices, angles):
             poss = np.where(vertices[:, 3] == index)
             vertices[poss, 0] = vertices[poss, 0] + dz * np.cos(thetaa)
             vertices[poss, 1] = vertices[poss, 1] + dz * np.sin(thetaa)
-    elif type_sample == 'poly':
+    elif type_sample == "poly":
         k = 0
         for i in range(np.shape(z)[0]):
             for j in range(np.shape(z)[1]):
@@ -1291,16 +1281,22 @@ def faces_normals(obj_points, obj_faces):
         A = obj_points[int(F[0] - 1)]
         B = obj_points[int(F[1] - 1)]
         C = obj_points[int(F[2] - 1)]
-        centroid = np.array([(A[0]+B[0]+C[0])/3, (A[1]+B[1]+C[1])/3, (A[2]+B[2]+C[2])/3])
+        centroid = np.array(
+            [
+                (A[0] + B[0] + C[0]) / 3,
+                (A[1] + B[1] + C[1]) / 3,
+                (A[2] + B[2] + C[2]) / 3,
+            ]
+        )
         AB = B - A
         AC = C - A
         n = np.cross(AB, AC)
         n = n / np.linalg.norm(n)
         d = -np.dot(n, A)
         # Check if its the external normal
-        point = centroid+n
-        if not(segment_intersects_plane(point, A, n[0], n[1], n[2], d)):
-            n = -1*n
+        point = centroid + n
+        if not (segment_intersects_plane(point, A, n[0], n[1], n[2], d)):
+            n = -1 * n
         list_n.append([n[0], n[1], n[2]])
     return list_n
 
@@ -1332,7 +1328,9 @@ def segment_intersects_plane(S, P, a, b, c, d):
         else:
             return False
     else:
-        t = (a * (p1 - x1) + b * (p2 - y1) + c * (p3 - z1)) / (a * (x2 - x1) + b * (y2 - y1) + c * (z2 - z1))
+        t = (a * (p1 - x1) + b * (p2 - y1) + c * (p3 - z1)) / (
+            a * (x2 - x1) + b * (y2 - y1) + c * (z2 - z1)
+        )
         if (t >= 0) and (t <= 1):
             return True
         else:
@@ -1390,11 +1388,15 @@ def make_rough_wulff(vertices, B, C1, RMS, N, M, nodesurf, node_edge, node_corne
     sfrN, sfrM = vectors(N, M)
     for k in range(len(nodesurf)):
         if k == 0:
-            print("====== > Creating random rough surface n° {}, ".format(k+1), end=' ', flush=True)
-        elif k == len(nodesurf)-1:
-            print("{}.".format(k+1))
+            print(
+                f"====== > Creating random rough surface n° {k + 1}, ",
+                end=" ",
+                flush=True,
+            )
+        elif k == len(nodesurf) - 1:
+            print(f"{k + 1}.")
         else:
-            print("{}, ".format(k+1), end=' ', flush=True)
+            print(f"{k + 1}, ", end=" ", flush=True)
         surf = np.array(nodesurf[k])
         n1 = np.array(list_n[k])
         surf_rot = rot(surf, n1)
@@ -1402,7 +1404,7 @@ def make_rough_wulff(vertices, B, C1, RMS, N, M, nodesurf, node_edge, node_corne
         xv = surf_norm[:, 0]
         yv = surf_norm[:, 1]
         m, n = random_numbers(sfrN, sfrM)
-        if type(C1) == str:
+        if isinstance(C1, str):
             z = rdnsurf_2(m, n, B, xv, yv, sfrM, sfrN)
             C1 = RMS / rms_calc(z)
             z = C1 * z
@@ -1422,7 +1424,7 @@ def make_rough_wulff(vertices, B, C1, RMS, N, M, nodesurf, node_edge, node_corne
             vertices[poss, 0] = vertices[poss, 0] + delta_z * n1[0]
             vertices[poss, 1] = vertices[poss, 1] + delta_z * n1[1]
             vertices[poss, 2] = vertices[poss, 2] + delta_z * n1[2]
-    return (vertices)
+    return vertices
 
 
 def rot(surf, n1):
@@ -1449,12 +1451,13 @@ def rot(surf, n1):
         point_rot = np.dot(R, point)
         surf_rot.append([point_rot[0], point_rot[1], point_rot[2], p[3]])
     surf_rot = np.asarray(surf_rot)
-    return (surf_rot)
+    return surf_rot
 
 
 def rot_matrix(n, theta):
     """
-    Generates the rotation matrix. Initial orientation is n, and the angle of rotation is theta. Final orientation is the z-axis.
+    Generates the rotation matrix. Initial orientation is n, and the angle of rotation is theta.
+    Final orientation is the z-axis.
 
     :param n: Initial orientation
     :type n: list
@@ -1475,7 +1478,7 @@ def rot_matrix(n, theta):
     R32 = n[1] * n[2] * (1 - c) + n[0] * s
     R33 = n[2] * n[2] * (1 - c) + c
     R = np.array([[R11, R12, R13], [R21, R22, R23], [R31, R32, R33]])
-    return (R)
+    return R
 
 
 def normalize(surf):
@@ -1498,7 +1501,7 @@ def normalize(surf):
     Zf = 0 * Z
     surf_norm = [[Xf[i], Yf[i], Zf[i], T[i]] for i in range(len(Xf))]
     surf_norm = np.asarray(surf_norm)
-    return (surf_norm)
+    return surf_norm
 
 
 def cube_faces(length):
@@ -1510,20 +1513,24 @@ def cube_faces(length):
 
     :return: Points and faces of the cube
     """
-    obj_points = [[0, 0, 0],
-                  [length, 0, 0],
-                  [0, length, 0],
-                  [length, length, 0],
-                  [0, 0, length],
-                  [length, 0, length],
-                  [0, length, length],
-                  [length, length, length]]
-    obj_faces = [[1, 2, 3, 4],
-                 [1, 2, 5, 6],
-                 [2, 4, 6, 8],
-                 [4, 8, 3, 7],
-                 [1, 5, 3, 7],
-                 [5, 6, 7, 8]]
+    obj_points = [
+        [0, 0, 0],
+        [length, 0, 0],
+        [0, length, 0],
+        [length, length, 0],
+        [0, 0, length],
+        [length, 0, length],
+        [0, length, length],
+        [length, length, length],
+    ]
+    obj_faces = [
+        [1, 2, 3, 4],
+        [1, 2, 5, 6],
+        [2, 4, 6, 8],
+        [4, 8, 3, 7],
+        [1, 5, 3, 7],
+        [5, 6, 7, 8],
+    ]
     obj_faces = np.asarray(obj_faces)
     obj_points = np.asarray(obj_points)
     return obj_points, obj_faces
@@ -1555,17 +1562,19 @@ def rotate_obj_wulff(obj_points, orien_x, orien_z):
     x_axis = np.array([1, 0, 0])
     x_rot = np.dot(R, x_axis)
     theta_x = np.arccos(np.dot(x_rot, orien_x) / (np.linalg.norm(x_rot) * np.linalg.norm(orien_x)))
-    R_x = np.array([[np.cos(theta_x), -1 * np.sin(theta_x), 0], [np.sin(theta_x), np.cos(theta_x), 0], [0, 0, 1]])
+    R_x = np.array(
+        [
+            [np.cos(theta_x), -1 * np.sin(theta_x), 0],
+            [np.sin(theta_x), np.cos(theta_x), 0],
+            [0, 0, 1],
+        ]
+    )
     points_f = []
     for p in surf_rot:
         rot_f = np.dot(R_x, p)
         points_f.append([rot_f[0], rot_f[1], rot_f[2]])
     obj_points_f = np.asarray(points_f)
-    # fig = plt.figure(figsize=(4, 4))
-    # ax = fig.add_subplot(111, projection='3d')
-    # ax.scatter(obj_points_f[:,0], obj_points_f[:,1], obj_points_f[:,2])
-    # plt.show()
-    return (obj_points_f)
+    return obj_points_f
 
 
 def align_poly(vertices, angles):
@@ -1580,9 +1589,16 @@ def align_poly(vertices, angles):
     :return: Rotated nodes
     """
     theta = angles[0]
-    R = np.array([[np.cos(theta), -np.sin(theta), 0], [np.sin(theta), np.cos(theta), 0], [0, 0, 1]])
+    R = np.array(
+        [
+            [np.cos(theta), -np.sin(theta), 0],
+            [np.sin(theta), np.cos(theta), 0],
+            [0, 0, 1],
+        ]
+    )
     rotated_points = np.dot(vertices, R)
-    return (rotated_points)
+    return rotated_points
+
 
 def refine_3Dmesh(type_sample, out_pre, ns, alpha, ext_fem):
     """
@@ -1600,16 +1616,16 @@ def refine_3Dmesh(type_sample, out_pre, ns, alpha, ext_fem):
 
     :return: Refined 3D meshs for all required formats
     """
-    print('====== > Refining mesh for ' + type_sample + ' object')
-    if 'stl' in ext_fem:
-        ext_fem.remove('stl')
-    if (type_sample == 'box') or (type_sample == 'grain'):
+    print("====== > Refining mesh for " + type_sample + " object")
+    if "stl" in ext_fem:
+        ext_fem.remove("stl")
+    if (type_sample == "box") or (type_sample == "grain"):
         refine_box(out_pre, ns, alpha, 45, ext_fem)
-    elif type_sample == 'wire' or type_sample == 'poly':
+    elif type_sample == "wire" or type_sample == "poly":
         refine_wire(out_pre, ns, alpha, 0, ext_fem)
-    elif type_sample == 'sphere':
+    elif type_sample == "sphere":
         refine_sphere(out_pre, ns, alpha, 0, ext_fem)
-    elif type_sample == 'wulff' or type_sample == 'cube':
+    elif type_sample == "wulff" or type_sample == "cube":
         refine_sphere(out_pre, ns, alpha, 45, ext_fem)
     return ()
 
@@ -1634,11 +1650,13 @@ def refine_box(out_pre, ns, alpha, angle, ext_fem):
     gmsh.initialize()
     gmsh.option.setNumber("General.Terminal", 0)
     # Let's merge an STL mesh that we would like to remesh.
-    gmsh.merge(out_pre + '.stl')
+    gmsh.merge(out_pre + ".stl")
 
     # Force curves to be split on given angle:
     curveAngle = 180
-    gmsh.model.mesh.classifySurfaces(angle * math.pi / 180., True, 0, curveAngle * math.pi / 180.)
+    gmsh.model.mesh.classifySurfaces(
+        angle * math.pi / 180.0, True, 0, curveAngle * math.pi / 180.0
+    )
 
     gmsh.model.mesh.createGeometry()
     s = gmsh.model.getEntities(2)
@@ -1659,9 +1677,9 @@ def refine_box(out_pre, ns, alpha, angle, ext_fem):
     gmsh.model.mesh.field.setAsBackgroundMesh(f)
 
     gmsh.model.mesh.generate(3)
-    gmsh.write(out_pre + '.stl')
+    gmsh.write(out_pre + ".stl")
     for e in ext_fem:
-        gmsh.write(out_pre + '.' + e)
+        gmsh.write(out_pre + "." + e)
     return ()
 
 
@@ -1685,11 +1703,12 @@ def refine_wire(out_pre, ns, alpha, angle, ext_fem):
     gmsh.initialize()
     gmsh.option.setNumber("General.Terminal", 0)
     # Let's merge an STL mesh that we would like to remesh.
-    gmsh.merge(out_pre + '.stl')
-    # gmsh.fltk.run()
+    gmsh.merge(out_pre + ".stl")
     # Force curves to be split on given angle:
     curveAngle = 180
-    gmsh.model.mesh.classifySurfaces(angle * math.pi / 180., True, 0, curveAngle * math.pi / 180.)
+    gmsh.model.mesh.classifySurfaces(
+        angle * math.pi / 180.0, True, 0, curveAngle * math.pi / 180.0
+    )
 
     gmsh.model.mesh.createGeometry()
 
@@ -1715,9 +1734,9 @@ def refine_wire(out_pre, ns, alpha, angle, ext_fem):
     gmsh.model.mesh.field.setAsBackgroundMesh(f)
     gmsh.model.geo.synchronize()
     gmsh.model.mesh.generate(3)
-    gmsh.write(out_pre + '.stl')
+    gmsh.write(out_pre + ".stl")
     for e in ext_fem:
-        gmsh.write(out_pre + '.' + e)
+        gmsh.write(out_pre + "." + e)
     return ()
 
 
@@ -1741,17 +1760,19 @@ def refine_sphere(out_pre, ns, alpha, angle, ext_fem):
     gmsh.initialize()
     gmsh.option.setNumber("General.Terminal", 0)
     # Let's merge an STL mesh that we would like to remesh.
-    gmsh.merge(out_pre + '.stl')
+    gmsh.merge(out_pre + ".stl")
 
     # Force curves to be split on given angle:
     curveAngle = 180
-    gmsh.model.mesh.classifySurfaces(angle * math.pi / 180., True, 0, curveAngle * math.pi / 180.)
+    gmsh.model.mesh.classifySurfaces(
+        angle * math.pi / 180.0, True, 0, curveAngle * math.pi / 180.0
+    )
 
     gmsh.model.mesh.createGeometry()
 
     s = gmsh.model.getEntities(2)
-    l = gmsh.model.geo.addSurfaceLoop([e[1] for e in s])
-    gmsh.model.geo.addVolume([l])
+    loop_tag = gmsh.model.geo.addSurfaceLoop([e[1] for e in s])
+    gmsh.model.geo.addVolume([loop_tag])
     gmsh.model.geo.synchronize()
 
     # Extract node information
@@ -1759,22 +1780,22 @@ def refine_sphere(out_pre, ns, alpha, angle, ext_fem):
     # Reshape the node coordinates into a more user-friendly format
     vertices = node_coords.reshape(-1, 3)
 
-    r_max = np.max(np.power(np.power(vertices.T[0], 2) + np.power(vertices.T[1], 2) + np.power(vertices.T[2], 2), 0.5))
-
-    # gmsh.option.setNumber("Mesh.MeshSizeExtendFromBoundary", 0)
-    # gmsh.option.setNumber("Mesh.MeshSizeFromPoints", 0)
-    # gmsh.option.setNumber("Mesh.MeshSizeFromCurvature", 0)
+    r_max = np.max(
+        np.power(
+            np.power(vertices.T[0], 2) + np.power(vertices.T[1], 2) + np.power(vertices.T[2], 2),
+            0.5,
+        )
+    )
 
     formula = f"abs((({alpha * ns}-{ns})/{r_max})*sqrt(x*x + y*y + z*z) + {ns})"
     f = gmsh.model.mesh.field.add("MathEval")
     gmsh.model.mesh.field.setString(f, "F", formula)
     gmsh.model.mesh.field.setAsBackgroundMesh(f)
     gmsh.model.geo.synchronize()
-    # gmsh.fltk.run()
     gmsh.model.mesh.generate(3)
-    gmsh.write(out_pre + '.stl')
+    gmsh.write(out_pre + ".stl")
     for e in ext_fem:
-        gmsh.write(out_pre + '.' + e)
+        gmsh.write(out_pre + "." + e)
     return ()
 
 
@@ -1797,109 +1818,8 @@ def center_3d_dataset(dataset):
     center_z = sum_z / total_points
 
     # Translate the dataset to the origin
-    centered_dataset = np.array([[point[0] - center_x, point[1] - center_y, point[2] - center_z] for point in dataset])
+    centered_dataset = np.array(
+        [[point[0] - center_x, point[1] - center_y, point[2] - center_z] for point in dataset]
+    )
 
     return centered_dataset
-
-####################################################################
-####################### SURFACE ANALYSIS ###########################
-####################################################################
-
-def rough(x, y, eta, RMS, M, N):
-    """
-    Generates a rough surface
-
-    :param x: List of x coordinates
-    :type x: array
-    :param y: List of y coordinates
-    :type y: array
-    :param eta: Roughness exponent
-    :type eta: float
-    :param C1: Normalization factor
-    :type C1: float
-    :param M: Scaling cartesian position
-    :type M: int
-    :param N: Scaling cartesian position
-    :type N: int
-
-    :return: Height matrix
-    """
-    z = np.zeros(np.shape(x))
-    listM = np.linspace(-M, M, 2 * M + 1)
-    listN = np.linspace(-N, N, 2 * N + 1)
-    k = 0
-    for m in listM:
-        for n in listN:
-            if m == 0 and n == 0:
-                pass
-            else:
-                mod = (m * m + n * n) ** (-1 * (1 + eta))
-                G = np.random.randn()
-                U = -np.pi / 2 + np.pi * np.random.rand()
-                zadd = G * mod * np.cos(2 * np.pi * (m * x + n * y) + U)
-                z = z + zadd
-            k += 1
-    RMS_i = rms_calc(z)
-    C1 = RMS / RMS_i
-    return (C1 * z)
-
-
-def sigma(z):
-    """
-    Calculates the standard deviation of a height distribution
-
-    :param z: height matrix
-    :type z: array
-
-    :return: Standard deviation
-    """
-    Z = z.flatten()
-    l = np.mean(Z)
-    return (np.sqrt(np.sum(np.power(Z - l, 2)) / len(Z)))
-
-
-def sk(z):
-    """
-    Calculates the skewness of a height distribution
-
-    :param z: height matrix
-    :type z: array
-
-    :return: Skewness
-    """
-    Z = z.flatten()
-    l = np.mean(Z)
-    return ((1 / (sigma(z) ** 3 * len(Z))) * np.sum(np.power(Z - l, 3)))
-
-
-def Kurto(z):
-    """
-    Calculates the kurtosis of a height distribution
-
-    :param z: height matrix
-    :type z: array
-
-    :return: Kurtosis
-    """
-    Z = z.flatten()
-    l = np.mean(Z)
-    return ((1 / (sigma(z) ** 4 * len(Z))) * np.sum(np.power(Z - l, 4)))
-
-
-def rescale(D, scale):
-    """
-    Rescales the height distribution between zmin and zmax
-
-    :param D: Height matrix
-    :type D: array
-    :param scale: zmin and zmax
-    :type scale: list
-
-    :return: Rescaled matrix
-    """
-    D = (D - np.min(D))
-    D = D / np.max(D)
-    lower = scale[0]
-    upper = scale[1]
-    Df = [lower + (upper - lower) * x for x in D]
-    return (np.asarray(Df))
