@@ -788,16 +788,16 @@ def node_indexing(vertices):
     :param vertices: Vector for the points
     :type vertices: array
 
-    :returns: Numbered vertices and raw numbers column.
+    :return: Numbered vertices and raw numbers column.
     """
     nodenumber = range(0, len(vertices))
     vertices = np.insert(vertices, 3, nodenumber, 1)
+
     return vertices, nodenumber
 
 def node_surface(sample_type, vertices, nodenumber, points, faces):
     """
-    Finds the nodes at the surface of the object. These nodes will have the surface roughness
-    applied to it.
+    Finds the nodes at the surface of the object. These nodes will have the surface roughness applied to it.
 
     :param sample_type: The name of the sample
     :type sample_type: str
@@ -805,10 +805,10 @@ def node_surface(sample_type, vertices, nodenumber, points, faces):
     :type vertices: array
     :param nodenumber: Number of the corresponding node
     :type nodenumber: array
-    :param points : Polygon shape (Faceted wire case)
+    :param points: Polygon shape (Faceted wire case)
     :type points: array
     :param faces: Facets list (Wulff case)
-    type faces: array
+    :type faces: array
 
     :return: Surface nodes
     """
@@ -1597,8 +1597,7 @@ def rough_matrix_sphere(nbPoint, B, thetaa, phii, vert_phi_theta, r):
     :type thetaa: array
     :param phii: Arctan2 of vector norms and z coordinates
     :type phii: array
-    :param vert_phi_theta: Array filled with two elements that are the angles corresponding to the
-    position of the node on the sphere.
+    :param vert_phi_theta: Array filled with two elements that are the angles corresponding to the position of the node on the sphere.
     :type vert_phi_theta: array
     :param r: Roughness height matrix
     :type r: int
@@ -1793,12 +1792,10 @@ def strain_file1_to_file2(file1, file2):
 
 def test_pyrough_execution(dir):
     """
-    Test if all .json files in examples/ folder can be computed without error
+    Check if all .json files in examples/ folder can be computed without error
 
     :param dir: examples/ folder
-    :type str
-
-    :return: print screen if the test is successful or not
+    :type dir: str
     """
     pyrough_dir = dir
     pyrough_path = os.path.join(pyrough_dir, 'Pyrough.py')
