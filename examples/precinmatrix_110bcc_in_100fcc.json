@@ -1,0 +1,36 @@
+{"Precinmatrix":
+    {"Spec": "precinmatrix"},
+
+"Cube":
+    {"eta": 0.9,
+    "RMS": 1,
+    "N": 30,
+    "M": 30,
+    "Length": 30.0,
+    "Mesh_size": 5,
+    "Refine_factor": 0.7,
+    "Raw_stl": "na"},
+
+"Output":
+    {"ATOM": ["lmp"],
+    "FEM": ["stl"]},
+
+"ATOM_Param":
+    {"Lattice_parameter": 2.87,
+    "Material": ["Fe"],
+    "Orien_x": [1,1,0],
+    "Orien_y":[-1,1,0] ,
+    "Orien_z": [0,0,1],
+    "Lattice_structure": "bcc"},
+
+"MATRIX_Param":
+  {"Length_x": 100.0,
+  "Length_y": 100.0,
+  "Length_z": 100.0,
+  "Lattice_parameter": 4.09,
+  "Material": ["Ag"],
+  "Orien_x": [1,0,0],
+  "Orien_y":[0,1,0] ,
+  "Orien_z": [0,0,1],
+  "Lattice_structure": "fcc"}
+}

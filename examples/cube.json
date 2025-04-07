@@ -1,5 +1,5 @@
 {"Cube":
-    {"eta": 0,
+    {"eta": 0.1,
     "RMS": 1.5,
     "N": 30,
     "M": 30,
@@ -15,8 +15,8 @@
 "ATOM_Param": 
     {"Lattice_parameter": 4.07, 
     "Material": "Au", 
-    "Orien_z": [1,0,0], 
-    "Orien_y":[0,1,0] , 
-    "Orien_x": [0,0,1], 
-    "Lattice_structure": "fcc"}
+    "Orien_x": [1,1,0], 
+    "Orien_y":[-1,1,0] , 
+    "Orien_z": [0,0,1], 
+    "Lattice_structure": "bcc"}
 }

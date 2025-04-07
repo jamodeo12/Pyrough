@@ -1,7 +1,8 @@
 Credits
 =======
 
-**Pyrough** has been developed in association between the Mécanique des Nano-Objets (MNO) division of the Institut Matériaux Microélectronique Nanosciences de Provence (France) and the MATEIS division of the Institut National des Sciences Appliquées de Lyon (France).
+**Pyrough** has been developed in association between the Mécanique des Nano-Objets (MNO) division of the Institut Matériaux Microélectronique Nanosciences de Provence (IM2NP, AMU, Marseille, France) and the MATEIS laboratory (MATEIS, INSA-Lyon, Lyon, France).
+It is currently maintained by Dr. Jonathan Amodeo, CNRS researcher at the IM2NP lab.
 
 When using **Pyrough** in your research please cite:
 

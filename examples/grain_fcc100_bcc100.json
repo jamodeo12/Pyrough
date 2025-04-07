@@ -1,0 +1,32 @@
+{"Grain":
+    {"eta": 0.50,
+    "Height": 60.0,
+    "Width": 101.0,
+    "Length": 101.0,
+    "Mesh_size": 5,
+    "Refine_factor": 0.7,
+    "RMS": 2.5,
+    "N": 30,
+    "M": 30,
+    "Raw_stl": "na"},
+
+"Output":
+    {"ATOM": ["lmp", "xyz"],
+    "FEM": ["stl", "msh"]},
+
+"ATOM1_Param":
+    {"Lattice_parameter": 4.07,
+    "Material": "Au",
+    "Orien_x": [1,0,0],
+    "Orien_y":[0,1,0] ,
+    "Orien_z": [0,0,1],
+    "Lattice_structure": "fcc"},
+
+"ATOM2_Param":
+  {"Lattice_parameter": 2.87,
+  "Material": "Fe",
+  "Orien_x": [1,0,0],
+  "Orien_y":[0,1,0] ,
+  "Orien_z": [0,0,1],
+  "Lattice_structure": "bcc"}
+}

@@ -69,8 +69,6 @@ def rescale(D, scale):
     Df = [lower + (upper - lower) * x for x in D]
     return np.asarray(Df)
 
-
-
 def hanning_window(image):
     size = np.shape(image)
     Lx = size[0]

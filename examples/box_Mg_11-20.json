@@ -1,0 +1,24 @@
+{"Box":
+    {"eta": 5000,
+    "Height": 50.0,
+    "Width": 151.0,
+    "Length": 151.0,
+    "Mesh_size": 5,
+    "Refine_factor": 0.7,
+    "RMS": 0.000000000005,
+    "N": 30,
+    "M": 30,
+    "Raw_stl": "na"},
+
+"Output":
+    {"ATOM": ["lmp"],
+    "FEM": ["stl"]},
+
+"ATOM_Param": 
+    {"Lattice_parameter": ["3.23", "5.25"],
+    "Material": ["Mg"],
+    "Orien_x": [1,1,-2,0], 
+    "Orien_y":[-1,1,0,0] , 
+    "Orien_z": [0,0,0,1], 
+    "Lattice_structure": "hcp"}
+}
