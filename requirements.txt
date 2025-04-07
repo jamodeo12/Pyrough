@@ -1,7 +1,6 @@
 numpy>=1.19.5
-gmsh +python** 
-cv2 (ex:opencv)
+gmsh 
+opencv-python 
 meshio>=4.4.6
 wulffpack>=1.1
 ase>=3.21.1
-py**-six

@@ -28,8 +28,9 @@ Additional ones might easily be implemented by the user thanks to **Pyrough**’
    ./equations.rst
    ./functions.rst
    ./shapes.rst
-   ./biblio.rst
+   ./acknowledgements.rst
    ./credits.rst
+   ./contact.rst
 
 Indices and tables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

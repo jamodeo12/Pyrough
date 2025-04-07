@@ -1,33 +1,41 @@
 # ---------------------------------------------------------------------------
 # Title: PARAM CLASS
-# Authors: Jonathan Amodeo, Javier Gonzalez, Jennifer Izaguirre, Christophe Le Bourlot, Hugo Iteney
+# Authors: Jonathan Amodeo, Hugo Iteney, Javier Gonzalez, Jennifer Izaguirre, Christophe Le Bourlot
 # Date: June 01, 2022
 #
-# This class file is used to store the parameters desired by the user.
-# It requires a JSON file to be able to function, as it reads directly
-# from the file and stores the values in a variable.
-# The code also reads the desired file format the user is requesting, either FEM or MD.
-# IMPORTANT! If values need to be changed refer to the JSON file. Do not change
-# the storage of the variable.
+# The PARAM class is responsible for reading/storing user parameters from a JSON file.
+# The class also reads the desired file format requested by the user, either for atomistic or FEM exports.
+# IMPORTANT: If any values need to be modified, update the JSON file directly.
+# Do not modify the variable storage within the code.
 # ---------------------------------------------------------------------------
-# This command opens the json file and reads what the user has inputted
-# The user needs to specify the type of sample they desire in the _int_ for this loop to wor
-# Variable Declaration based on parameters in the json file
-
 
 import json
-
+from src import Func_pyrough as fp
 
 class Parameter:
     """
-    This class is used to store the parameters desired by the user. It requires a JSON file to be
-    able to function, as it reads directly from the file and stores the values in a variable.
+    This class stores the parameters defined by the user using the JSON input file.
 
     """
 
     def __init__(self, json_file):
         with open(json_file) as json_file:
             read_param = json.load(json_file)
+
+        if "Precinmatrix" in read_param:
+            self.spec = read_param["Precinmatrix"]["Spec"]
+            self.length_x2 = read_param["MATRIX_Param"]["Length_x"]
+            self.length_y2 = read_param["MATRIX_Param"]["Length_y"]
+            self.length_z2 = read_param["MATRIX_Param"]["Length_z"]
+            self.lattice_structure2 = read_param["MATRIX_Param"]["Lattice_structure"]
+            #self.lattice_structure2 = fp.convert_in_list_of_string(self.lattice_structure2)
+            self.lattice_parameter2 = read_param["MATRIX_Param"]["Lattice_parameter"]
+            self.lattice_parameter2 = fp.convert_in_list_of_string(self.lattice_parameter2)
+            self.material2 = read_param["MATRIX_Param"]["Material"]
+            self.material2= fp.convert_in_list_of_string(self.material2)
+            self.orien_x2 = read_param["MATRIX_Param"]["Orien_x"]
+            self.orien_y2 = read_param["MATRIX_Param"]["Orien_y"]
+            self.orien_z2 = read_param["MATRIX_Param"]["Orien_z"]
 
         if "Grain" in read_param:
             self.type_S = "grain"
@@ -53,13 +61,17 @@ class Parameter:
             self.raw_stl = read_param["Grain"]["Raw_stl"]
             self.lattice_structure1 = read_param["ATOM1_Param"]["Lattice_structure"]
             self.lattice_parameter1 = read_param["ATOM1_Param"]["Lattice_parameter"]
+            self.lattice_parameter1 = fp.convert_in_list_of_string(self.lattice_parameter1)
             self.material1 = read_param["ATOM1_Param"]["Material"]
+            self.material1 = fp.convert_in_list_of_string(self.material1)
             self.orien_x1 = read_param["ATOM1_Param"]["Orien_x"]
             self.orien_y1 = read_param["ATOM1_Param"]["Orien_y"]
             self.orien_z1 = read_param["ATOM1_Param"]["Orien_z"]
             self.lattice_structure2 = read_param["ATOM2_Param"]["Lattice_structure"]
             self.lattice_parameter2 = read_param["ATOM2_Param"]["Lattice_parameter"]
+            self.lattice_parameter2 = fp.convert_in_list_of_string(self.lattice_parameter2)
             self.material2 = read_param["ATOM2_Param"]["Material"]
+            self.material2 = fp.convert_in_list_of_string(self.material2)
             self.orien_x2 = read_param["ATOM2_Param"]["Orien_x"]
             self.orien_y2 = read_param["ATOM2_Param"]["Orien_y"]
             self.orien_z2 = read_param["ATOM2_Param"]["Orien_z"]
@@ -241,11 +253,11 @@ class Parameter:
                 self.ext_fem = read_param["Output"]["FEM"]
                 self.ext_ato = read_param["Output"]["ATOM"]
 
-            # This loop is storing all the parameters from the json file and storing them, so they
-            # can be called in the main code to fun the functions
             self.lattice_structure = read_param["ATOM_Param"]["Lattice_structure"]
             self.lattice_parameter = read_param["ATOM_Param"]["Lattice_parameter"]
+            self.lattice_parameter = fp.convert_in_list_of_string(self.lattice_parameter)
             self.material = read_param["ATOM_Param"]["Material"]
+            self.material = fp.convert_in_list_of_string(self.material)
             self.orien_x = read_param["ATOM_Param"]["Orien_x"]
             self.orien_y = read_param["ATOM_Param"]["Orien_y"]
             self.orien_z = read_param["ATOM_Param"]["Orien_z"]
