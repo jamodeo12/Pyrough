@@ -5,7 +5,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Generation of rough shapes &mdash; Pyrough  documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
   
@@ -16,13 +16,13 @@
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="_static/documentation_options.js?v=5929fcd5"></script>
-        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/doctools.js?v=9bcbadda"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Bibliography" href="biblio.html" />
+    <link rel="next" title="Credits" href="credits.html" />
     <link rel="prev" title="Surface_Analysis module" href="script/Surface_Analysis.html" /> 
 </head>
 
@@ -56,12 +56,14 @@
 <li class="toctree-l2"><a class="reference internal" href="#sphere">Sphere</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#wire">Wire</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#faceted-wire">Faceted wire</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#wulff-shaped-faceted-nanoparticle">Wulff-shaped faceted nanoparticle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#wulff-shaped-faceted-particle">Wulff-shaped faceted particle</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#cube">Cube</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#grain-boundary">Grain boundary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precipitate-embedded-in-a-matrix">Precipitate embedded in a matrix</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="biblio.html">Bibliography</a></li>
 <li class="toctree-l1"><a class="reference internal" href="credits.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contact.html">Contact</a></li>
 </ul>
 
         </div>
@@ -97,24 +99,24 @@
 Surface nodes are the ones at the maximum height of the pristine sample mesh.
 The roughening procedure consists in displacing each surface node along the <em>z</em>-axis according to <em>h(x,y)</em>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;Box&quot;</span><span class="p">:</span>
-    <span class="p">{</span><span class="s2">&quot;eta&quot;</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">,</span>
-    <span class="s2">&quot;Height&quot;</span><span class="p">:</span> <span class="mf">50.0</span><span class="p">,</span>
-    <span class="s2">&quot;Width&quot;</span><span class="p">:</span> <span class="mf">151.0</span><span class="p">,</span>
-    <span class="s2">&quot;Length&quot;</span><span class="p">:</span> <span class="mf">151.0</span><span class="p">,</span>
+    <span class="p">{</span><span class="s2">&quot;eta&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+    <span class="s2">&quot;Height&quot;</span><span class="p">:</span><span class="mf">100.0</span><span class="p">,</span>
+    <span class="s2">&quot;Width&quot;</span><span class="p">:</span> <span class="mf">100.0</span><span class="p">,</span>
+    <span class="s2">&quot;Length&quot;</span><span class="p">:</span> <span class="mf">100.0</span><span class="p">,</span>
     <span class="s2">&quot;Mesh_size&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
-    <span class="s2">&quot;Refine_factor&quot;</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span>
+    <span class="s2">&quot;Refine_factor&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
     <span class="s2">&quot;RMS&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
     <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
     <span class="s2">&quot;M&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
     <span class="s2">&quot;Raw_stl&quot;</span><span class="p">:</span> <span class="s2">&quot;na&quot;</span><span class="p">},</span>
 
 <span class="s2">&quot;Output&quot;</span><span class="p">:</span>
-    <span class="p">{</span><span class="s2">&quot;ATOM&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;lmp&quot;</span><span class="p">,</span> <span class="s2">&quot;xyz&quot;</span><span class="p">],</span>
-    <span class="s2">&quot;FEM&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;stl&quot;</span><span class="p">,</span> <span class="s2">&quot;msh&quot;</span><span class="p">]},</span>
+    <span class="p">{</span><span class="s2">&quot;ATOM&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;lmp&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;FEM&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;stl&quot;</span><span class="p">]},</span>
 
 <span class="s2">&quot;ATOM_Param&quot;</span><span class="p">:</span> 
     <span class="p">{</span><span class="s2">&quot;Lattice_parameter&quot;</span><span class="p">:</span> <span class="mf">4.07</span><span class="p">,</span>
-    <span class="s2">&quot;Material&quot;</span><span class="p">:</span> <span class="s2">&quot;Au&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Material&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Au&quot;</span><span class="p">],</span>
     <span class="s2">&quot;Orien_x&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> 
     <span class="s2">&quot;Orien_y&quot;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="p">,</span> 
     <span class="s2">&quot;Orien_z&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> 
@@ -129,8 +131,8 @@ The roughening procedure consists in displacing each surface node along the <em>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;Sphere&quot;</span><span class="p">:</span> 
     <span class="p">{</span><span class="s2">&quot;Mesh_size&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
     <span class="s2">&quot;Refine_factor&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
-    <span class="s2">&quot;C1&quot;</span><span class="p">:</span> <span class="mi">10000</span><span class="p">,</span>
-    <span class="s2">&quot;eta&quot;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span>
+    <span class="s2">&quot;C1&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;eta&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
     <span class="s2">&quot;Radius&quot;</span><span class="p">:</span> <span class="mi">75</span><span class="p">,</span>
     <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
     <span class="s2">&quot;M&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
@@ -213,8 +215,8 @@ Surface nodes are here translated along the facet normal <span class="math notra
 </pre></div>
 </div>
 </section>
-<section id="wulff-shaped-faceted-nanoparticle">
-<h2>Wulff-shaped faceted nanoparticle<a class="headerlink" href="#wulff-shaped-faceted-nanoparticle" title="Link to this heading"></a></h2>
+<section id="wulff-shaped-faceted-particle">
+<h2>Wulff-shaped faceted particle<a class="headerlink" href="#wulff-shaped-faceted-particle" title="Link to this heading"></a></h2>
 <p>One rough surface per facet is generated in this case.
 Each node is translated along its facet normal <span class="math notranslate nohighlight">\(\vec{n}\)</span> using <em>h(x,y)</em> to build the rough surface.
 The process is repeated for each facet of the sample.</p>
@@ -250,7 +252,7 @@ The process is repeated for each facet of the sample.</p>
 <p>A pristine cube of edge length <em>length</em> is generated.
 Surface roughness is applied in the same way as in the case of wulff shapes.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;Cube&quot;</span><span class="p">:</span>
-    <span class="p">{</span><span class="s2">&quot;eta&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="p">{</span><span class="s2">&quot;eta&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
     <span class="s2">&quot;RMS&quot;</span><span class="p">:</span> <span class="mf">1.5</span><span class="p">,</span>
     <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
     <span class="s2">&quot;M&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
@@ -266,10 +268,91 @@ Surface roughness is applied in the same way as in the case of wulff shapes.</p>
 <span class="s2">&quot;ATOM_Param&quot;</span><span class="p">:</span> 
     <span class="p">{</span><span class="s2">&quot;Lattice_parameter&quot;</span><span class="p">:</span> <span class="mf">4.07</span><span class="p">,</span> 
     <span class="s2">&quot;Material&quot;</span><span class="p">:</span> <span class="s2">&quot;Au&quot;</span><span class="p">,</span> 
-    <span class="s2">&quot;Orien_z&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> 
-    <span class="s2">&quot;Orien_y&quot;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="p">,</span> 
-    <span class="s2">&quot;Orien_x&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> 
-    <span class="s2">&quot;Lattice_structure&quot;</span><span class="p">:</span> <span class="s2">&quot;fcc&quot;</span><span class="p">}</span>
+    <span class="s2">&quot;Orien_x&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> 
+    <span class="s2">&quot;Orien_y&quot;</span><span class="p">:[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="p">,</span> 
+    <span class="s2">&quot;Orien_z&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> 
+    <span class="s2">&quot;Lattice_structure&quot;</span><span class="p">:</span> <span class="s2">&quot;bcc&quot;</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="grain-boundary">
+<h2>Grain boundary<a class="headerlink" href="#grain-boundary" title="Link to this heading"></a></h2>
+<p>A 3D block made composed of two grains separated by a rough and wavy grain boundary, where each grain can have its own crystal structure and orientation.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;Grain&quot;</span><span class="p">:</span>
+    <span class="p">{</span><span class="s2">&quot;eta&quot;</span><span class="p">:</span> <span class="mf">0.50</span><span class="p">,</span>
+    <span class="s2">&quot;Height&quot;</span><span class="p">:</span> <span class="mf">60.0</span><span class="p">,</span>
+    <span class="s2">&quot;Width&quot;</span><span class="p">:</span> <span class="mf">101.0</span><span class="p">,</span>
+    <span class="s2">&quot;Length&quot;</span><span class="p">:</span> <span class="mf">101.0</span><span class="p">,</span>
+    <span class="s2">&quot;Mesh_size&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="s2">&quot;Refine_factor&quot;</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span>
+    <span class="s2">&quot;RMS&quot;</span><span class="p">:</span> <span class="mf">2.5</span><span class="p">,</span>
+    <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
+    <span class="s2">&quot;M&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
+    <span class="s2">&quot;Raw_stl&quot;</span><span class="p">:</span> <span class="s2">&quot;na&quot;</span><span class="p">},</span>
+
+<span class="s2">&quot;Output&quot;</span><span class="p">:</span>
+    <span class="p">{</span><span class="s2">&quot;ATOM&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;lmp&quot;</span><span class="p">,</span> <span class="s2">&quot;xyz&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;FEM&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;stl&quot;</span><span class="p">,</span> <span class="s2">&quot;msh&quot;</span><span class="p">]},</span>
+
+<span class="s2">&quot;ATOM1_Param&quot;</span><span class="p">:</span>
+    <span class="p">{</span><span class="s2">&quot;Lattice_parameter&quot;</span><span class="p">:</span> <span class="mf">4.07</span><span class="p">,</span>
+    <span class="s2">&quot;Material&quot;</span><span class="p">:</span> <span class="s2">&quot;Au&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Orien_x&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+    <span class="s2">&quot;Orien_y&quot;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="p">,</span>
+    <span class="s2">&quot;Orien_z&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+    <span class="s2">&quot;Lattice_structure&quot;</span><span class="p">:</span> <span class="s2">&quot;fcc&quot;</span><span class="p">},</span>
+
+<span class="s2">&quot;ATOM2_Param&quot;</span><span class="p">:</span>
+  <span class="p">{</span><span class="s2">&quot;Lattice_parameter&quot;</span><span class="p">:</span> <span class="mf">4.09</span><span class="p">,</span>
+  <span class="s2">&quot;Material&quot;</span><span class="p">:</span> <span class="s2">&quot;Ag&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;Orien_x&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+  <span class="s2">&quot;Orien_y&quot;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="p">,</span>
+  <span class="s2">&quot;Orien_z&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+  <span class="s2">&quot;Lattice_structure&quot;</span><span class="p">:</span> <span class="s2">&quot;fcc&quot;</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="precipitate-embedded-in-a-matrix">
+<h2>Precipitate embedded in a matrix<a class="headerlink" href="#precipitate-embedded-in-a-matrix" title="Link to this heading"></a></h2>
+<p>A precipitate (rough or not) embedded into a 3D-periodic matrix.
+The precipitate can take any of the shapes already managed by Pyrough (sphere, cube, cylinder, wulff-shape, <em>etc.</em>).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;Precinmatrix&quot;</span><span class="p">:</span>
+    <span class="p">{</span><span class="s2">&quot;Spec&quot;</span><span class="p">:</span> <span class="s2">&quot;precinmatrix&quot;</span><span class="p">},</span>
+
+<span class="s2">&quot;Cube&quot;</span><span class="p">:</span>
+    <span class="p">{</span><span class="s2">&quot;eta&quot;</span><span class="p">:</span> <span class="mf">0.9</span><span class="p">,</span>
+    <span class="s2">&quot;RMS&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
+    <span class="s2">&quot;M&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
+    <span class="s2">&quot;Length&quot;</span><span class="p">:</span> <span class="mf">30.0</span><span class="p">,</span>
+    <span class="s2">&quot;Mesh_size&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="s2">&quot;Refine_factor&quot;</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span>
+    <span class="s2">&quot;Raw_stl&quot;</span><span class="p">:</span> <span class="s2">&quot;na&quot;</span><span class="p">},</span>
+
+<span class="s2">&quot;Output&quot;</span><span class="p">:</span>
+    <span class="p">{</span><span class="s2">&quot;ATOM&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;lmp&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;FEM&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;stl&quot;</span><span class="p">]},</span>
+
+<span class="s2">&quot;ATOM_Param&quot;</span><span class="p">:</span>
+    <span class="p">{</span><span class="s2">&quot;Lattice_parameter&quot;</span><span class="p">:</span> <span class="mf">2.87</span><span class="p">,</span>
+    <span class="s2">&quot;Material&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Fe&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;Orien_x&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+    <span class="s2">&quot;Orien_y&quot;</span><span class="p">:[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="p">,</span>
+    <span class="s2">&quot;Orien_z&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+    <span class="s2">&quot;Lattice_structure&quot;</span><span class="p">:</span> <span class="s2">&quot;bcc&quot;</span><span class="p">},</span>
+
+<span class="s2">&quot;MATRIX_Param&quot;</span><span class="p">:</span>
+  <span class="p">{</span><span class="s2">&quot;Length_x&quot;</span><span class="p">:</span> <span class="mf">100.0</span><span class="p">,</span>
+  <span class="s2">&quot;Length_y&quot;</span><span class="p">:</span> <span class="mf">100.0</span><span class="p">,</span>
+  <span class="s2">&quot;Length_z&quot;</span><span class="p">:</span> <span class="mf">100.0</span><span class="p">,</span>
+  <span class="s2">&quot;Lattice_parameter&quot;</span><span class="p">:</span> <span class="mf">4.09</span><span class="p">,</span>
+  <span class="s2">&quot;Material&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Ag&quot;</span><span class="p">],</span>
+  <span class="s2">&quot;Orien_x&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+  <span class="s2">&quot;Orien_y&quot;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="p">,</span>
+  <span class="s2">&quot;Orien_z&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+  <span class="s2">&quot;Lattice_structure&quot;</span><span class="p">:</span> <span class="s2">&quot;fcc&quot;</span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -281,7 +364,7 @@ Surface roughness is applied in the same way as in the case of wulff shapes.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="script/Surface_Analysis.html" class="btn btn-neutral float-left" title="Surface_Analysis module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="biblio.html" class="btn btn-neutral float-right" title="Bibliography" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="credits.html" class="btn btn-neutral float-right" title="Credits" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

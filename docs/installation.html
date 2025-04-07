@@ -5,7 +5,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Installation &mdash; Pyrough  documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
   
@@ -16,7 +16,7 @@
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="_static/documentation_options.js?v=5929fcd5"></script>
-        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/doctools.js?v=9bcbadda"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -52,13 +52,14 @@
 <li class="toctree-l2"><a class="reference internal" href="#additionnal-requirement">Additionnal requirement</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#download-the-code">Download the code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#run-pyrough">Run Pyrough</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-pyrough-with-options">Run Pyrough with options</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="equations.html">Rough surface generation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="functions.html">Package functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="shapes.html">Generation of rough shapes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="biblio.html">Bibliography</a></li>
 <li class="toctree-l1"><a class="reference internal" href="credits.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contact.html">Contact</a></li>
 </ul>
 
         </div>
@@ -115,8 +116,15 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">Pyrough</span><span class="o">.</span><span class="n">py</span> <span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">the</span><span class="o">/</span><span class="n">file</span><span class="o">/</span><span class="n">input_file</span><span class="o">.</span><span class="n">json</span>
 </pre></div>
 </div>
-<p>To run the surface analysis process, simply add the <em>-surface</em> option, then the surface to analyse and the heights interval:</p>
+</section>
+<section id="run-pyrough-with-options">
+<h2>Run Pyrough with options<a class="headerlink" href="#run-pyrough-with-options" title="Link to this heading"></a></h2>
+<p>Tu run image surface analysis and generate digital twin, add the <em>-surface</em> keyword, the image file to  analyze and the heights interval, when running Pyrough:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">Pyrough</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">surface</span> <span class="n">Surf</span><span class="o">.</span><span class="n">png</span> <span class="n">size</span> <span class="n">zmin</span> <span class="n">zmax</span>
+</pre></div>
+</div>
+<p>To test the installation of Pyrough, you can use the <em>-test_pyrough_execution</em> option which checks the correct computation for each .json file in the examples/ folder:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">Pyrough</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">test_pyrough_execution</span>
 </pre></div>
 </div>
 </section>
