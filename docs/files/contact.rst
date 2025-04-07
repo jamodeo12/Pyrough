@@ -4,7 +4,7 @@ Contact
 
 E-mail :
 --------
-jonathan.amodeo@cnrs.fr
+jonathan.amodeo(at)cnrs.fr
 
 Contact:
 --------
