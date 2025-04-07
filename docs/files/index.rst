@@ -21,7 +21,7 @@ Additional ones might easily be implemented by the user thanks to **Pyrough**’
 
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 7
    :caption: Contents
 
    ./installation.rst
