@@ -28,7 +28,7 @@ Additional ones might easily be implemented by the user thanks to **Pyrough**’
    ./equations.rst
    ./functions.rst
    ./shapes.rst
-   ./acknowledgements.rst
+   ./acknowledgments.rst
    ./credits.rst
    ./contact.rst
 
