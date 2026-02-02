@@ -1,0 +1,26 @@
+{"Multi_layered":
+    {"eta": 0.35,
+    "pattern_layer":[0,1],
+    "height_layer":[75.0,15.0],
+    "Height":540,
+    "Width": 101.0,
+    "Length": 101.0,
+    "Mesh_size": 5,
+    "Refine_factor":1.0,
+    "C1":1,
+    "N": 30,
+    "M": 30,
+    "Raw_stl": "na"},
+
+"Output":
+  {"ATOM": ["lmp", "cfg"],
+  "FEM": ["stl","msh"]},
+
+"ATOMS_Param":
+    {"Lattice_parameter": [3.54,[2.71,4.2]],
+    "Material": [["Ni","Fe"],"Ru"],
+    "Orien_x": [[1,0,0],[0,0,0,1]],
+    "Orien_y": [[0,1,0],[2,-3,1,0]],
+    "Orien_z": [[0,0,1],[-1,-2,3,0]],
+    "Lattice_structure": ["fcc","hcp"]}
+}
