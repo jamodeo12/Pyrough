@@ -1,3 +1,6 @@
+# Ignorer tous les fichiers dans multi_layered
+examples/multi_layered/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
