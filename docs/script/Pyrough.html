@@ -1,29 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html4" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pyrough module &mdash; Pyrough  documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <title>Pyrough module &mdash; Pyrough  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-      <script>
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../',
-              VERSION:'',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=9bcbadda"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -36,17 +30,22 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search"  style="background: white" >
-            <a href="../index.html"><img src="../_static/Logo.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/Logo.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption"><span class="caption-text">Contents</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../equations.html">Rough surface generation</a></li>
@@ -59,8 +58,8 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../shapes.html">Generation of rough shapes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../biblio.html">Bibliography</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../credits.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contact.html">Contact</a></li>
 </ul>
 
         </div>
@@ -76,9 +75,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../functions.html">Package functions</a> &raquo;</li>
-      <li>Pyrough module</li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../functions.html">Package functions</a></li>
+      <li class="breadcrumb-item active">Pyrough module</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/script/Pyrough.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -88,137 +87,209 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="pyrough-module">
-<h1>Pyrough module<a class="headerlink" href="#pyrough-module" title="Permalink to this headline">¶</a></h1>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># ---------------------------------------------------------------------------</span>
-<span class="c1"># </span>
-<span class="c1"># Title: Main code pyrough</span>
-<span class="c1">#</span>
-<span class="c1"># Authors: Jonathan Amodeo, Javier Gonzalez, Jennifer Izaguirre, Christophe Le Bourlot &amp; Hugo Iteney</span>
-<span class="c1">#</span>
+  <section id="pyrough-module">
+<h1>Pyrough module<a class="headerlink" href="#pyrough-module" title="Link to this heading"></a></h1>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Title: Main code Pyrough</span>
+<span class="c1"># Authors: Jonathan Amodeo, Hugo Iteney, Javier Gonzalez, Jennifer Izaguirre, Christophe Le Bourlot</span>
 <span class="c1"># Date: June 01, 2022</span>
 <span class="c1">#</span>
-<span class="c1"># Pyrough is a code used to provide the user with either FEM or MD files of various objects that have had random surface roughness applied to it.</span>
-<span class="c1"># The objects included in this code are nanowire , slab, sphere. In the main code the user must provide what type of </span>
-<span class="c1"># object thy desired. Based on this the code will read the parameters from the json file provided and return an stl if FEM is desired or</span>
-<span class="c1"># lmp file if MD is desired.  </span>
-<span class="c1"># </span>
+<span class="c1"># Pyrough generates 3D virtual samples with rough surfaces for atomistic and finite-element simulations.</span>
+<span class="c1"># Several objects such as spheres, cubes, Wulff-shaped systems or wires can be generated.</span>
+<span class="c1"># Additional options allowing to generate rough GBs or post-treat experimental images are also available.</span>
+<span class="c1"># Various output formats are handled including .stl, .msh, .xyz, .lmp, etc.</span>
+<span class="c1"># Example input .json files are provided in the examples/ folder, have a look !</span>
 <span class="c1"># ---------------------------------------------------------------------------</span>
-<span class="kn">from</span> <span class="nn">src</span> <span class="kn">import</span> <span class="n">Param_class</span>
-<span class="kn">from</span> <span class="nn">src</span> <span class="kn">import</span> <span class="n">Sample_class</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">subprocess</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">src</span><span class="w"> </span><span class="kn">import</span> <span class="n">Param_class</span><span class="p">,</span> <span class="n">Sample_class</span><span class="p">,</span> <span class="n">Func_pyrough</span> <span class="k">as</span> <span class="n">fp</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;#######################################################################################&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;#                                       Pyrough                                       #&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;#                          Jonathan Amodeo &amp; Hugo Iteney 2023                         #&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;#######################################################################################&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;##################################################################&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;#    /\/\/\                                                      #&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;#    | O _ |        Pyrough                                      #&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;#  &lt;|-|--/          Version 1.2                                  #&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;#      \---|-|&gt;     (C) 2023 Jonathan Amodeo and co.             #&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;#      | _ O |      https://github.com/jamodeo12/Pyrough         #&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;#      \/\/\/                                                    #&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;##################################################################&quot;</span><span class="p">)</span>
 
 <span class="c1"># _____________________Main Code____________________</span>
-<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;-surface&#39;</span> <span class="p">:</span>
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;-surface&quot;</span><span class="p">:</span>
+    <span class="c1"># -surface : Image characterization and digital twin generation</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;====== &gt; Pyrough.py : surface analysis treatment running...&quot;</span><span class="p">)</span>
     <span class="n">current_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
-    <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="s1">&#39;python&#39;</span><span class="p">,</span> <span class="n">current_dir</span><span class="o">+</span><span class="s1">&#39;/src/Surface_Analysis.py&#39;</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">5</span><span class="p">]])</span>
-<span class="k">else</span> <span class="p">:</span>
+    <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="s2">&quot;python&quot;</span><span class="p">,</span>
+            <span class="n">current_dir</span> <span class="o">+</span> <span class="s2">&quot;/src/Surface_Analysis.py&quot;</span><span class="p">,</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+<span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;-test_pyrough_execution&quot;</span><span class="p">:</span>
+    <span class="c1"># -test_pyrough_execution : test if all examples/*.json files can be processed</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;====== &gt; Pyrough.py : test_pyrough_execution running...&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;====== &gt; Pyrough.py : check/execute all .json files in examples folder&quot;</span><span class="p">)</span>
+    <span class="n">current_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+    <span class="n">fp</span><span class="o">.</span><span class="n">test_pyrough_execution</span><span class="p">(</span><span class="n">current_dir</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="c1"># If no specific option, we generate a rough sample</span>
+    <span class="c1"># Parameter file definition</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;====== &gt; Pyrough.py : parameter file definition running...&quot;</span><span class="p">)</span>
     <span class="n">Param_file</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">out_pre</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">Param_file</span><span class="p">)[:</span><span class="o">-</span><span class="mi">5</span><span class="p">]</span>
 
     <span class="n">param</span> <span class="o">=</span> <span class="n">Param_class</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">Param_file</span><span class="p">)</span>
 
-    <span class="c1"># -----------------------second task calling the nanowire into the sample to get an stl</span>
+    <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">type_S</span> <span class="o">==</span> <span class="s2">&quot;grain&quot;</span><span class="p">:</span>
+        <span class="c1"># If grain, we first create the mesh of a rough box</span>
+        <span class="c1"># the STL file will be used to make grain 1, while its negative will be used for grain 2</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;====== &gt; Pyrough.py : grain option treatment running...&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;====== &gt; Pyrough.py : Sample_class.make_box running...&quot;</span><span class="p">)</span>
+        <span class="n">vertices</span><span class="p">,</span> <span class="n">FEM_stl</span> <span class="o">=</span> <span class="n">Sample_class</span><span class="o">.</span><span class="n">make_box</span><span class="p">(</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">type_S</span><span class="p">,</span>
+            <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">param</span><span class="o">.</span><span class="n">eta</span><span class="p">),</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">C1</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">RMS</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">N</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">M</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">length</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">height</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">width</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">ns</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">alpha</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">raw_stl</span><span class="p">,</span>
+            <span class="n">out_pre</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">ext_fem</span><span class="p">,</span>
+        <span class="p">)</span>
 
-    <span class="c1"># SAMPLE IS THE PATH GUIDE TO CALLING THE CLASS TO CREATE THE STL FILE</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;====== &gt; Pyrough.py : Sample_class.make_atom_grain running...&quot;</span><span class="p">)</span>
+        <span class="n">Sample_class</span><span class="o">.</span><span class="n">make_atom_grain</span><span class="p">(</span>
+            <span class="n">FEM_stl</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">lattice_structure1</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">lattice_parameter1</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">material1</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">orien_x1</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">orien_y1</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">orien_z1</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">lattice_structure2</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">lattice_parameter2</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">material2</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">orien_x2</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">orien_y2</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">orien_z2</span><span class="p">,</span>
+            <span class="n">vertices</span><span class="p">,</span>
+            <span class="n">out_pre</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">ext_ato</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># call make it md to create atomsk file</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;JOB DONE!&quot;</span> <span class="o">+</span> <span class="s2">&quot;  File name: &quot;</span> <span class="o">+</span> <span class="n">out_pre</span> <span class="o">+</span> <span class="s2">&quot;.lmp&quot;</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">type_S</span> <span class="o">==</span> <span class="s1">&#39;grain&#39;</span> <span class="p">:</span>
-        <span class="n">vertices</span><span class="p">,</span> <span class="n">FEM_stl</span> <span class="o">=</span> <span class="n">Sample_class</span><span class="o">.</span><span class="n">make_box</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">type_S</span><span class="p">,</span>
-                                                  <span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">param</span><span class="o">.</span><span class="n">H</span><span class="p">),</span>
-                                                  <span class="n">param</span><span class="o">.</span><span class="n">C1</span><span class="p">,</span>
-                                                  <span class="n">param</span><span class="o">.</span><span class="n">RMS</span><span class="p">,</span>
-                                                  <span class="n">param</span><span class="o">.</span><span class="n">N</span><span class="p">,</span>
-                                                  <span class="n">param</span><span class="o">.</span><span class="n">M</span><span class="p">,</span>
-                                                  <span class="n">param</span><span class="o">.</span><span class="n">length</span><span class="p">,</span>
-                                                  <span class="n">param</span><span class="o">.</span><span class="n">height</span><span class="p">,</span>
-                                                  <span class="n">param</span><span class="o">.</span><span class="n">width</span><span class="p">,</span>
-                                                  <span class="n">param</span><span class="o">.</span><span class="n">ns</span><span class="p">,</span>
-                                                  <span class="n">param</span><span class="o">.</span><span class="n">alpha</span><span class="p">,</span>
-                                                  <span class="n">param</span><span class="o">.</span><span class="n">raw_stl</span><span class="p">,</span>
-                                                  <span class="n">out_pre</span><span class="p">,</span>
-                                                  <span class="n">param</span><span class="o">.</span><span class="n">ext_fem</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;====== &gt; Pyrough.py : </span><span class="si">{}</span><span class="s2"> option treatment running...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">type_S</span><span class="p">))</span>
+        <span class="n">sample</span> <span class="o">=</span> <span class="n">Sample_class</span><span class="o">.</span><span class="n">Sample</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">type_S</span><span class="p">)</span>
 
-        <span class="n">Sample_class</span><span class="o">.</span><span class="n">make_atom_grain</span><span class="p">(</span><span class="n">FEM_stl</span><span class="p">,</span>
-                             <span class="n">param</span><span class="o">.</span><span class="n">lattice_structure1</span><span class="p">,</span>
-                             <span class="n">param</span><span class="o">.</span><span class="n">lattice_parameter1</span><span class="p">,</span>
-                             <span class="n">param</span><span class="o">.</span><span class="n">material1</span><span class="p">,</span>
-                             <span class="n">param</span><span class="o">.</span><span class="n">orien_x1</span><span class="p">,</span>
-                             <span class="n">param</span><span class="o">.</span><span class="n">orien_y1</span><span class="p">,</span>
-                             <span class="n">param</span><span class="o">.</span><span class="n">orien_z1</span><span class="p">,</span>
-                             <span class="n">param</span><span class="o">.</span><span class="n">lattice_structure2</span><span class="p">,</span>
-                             <span class="n">param</span><span class="o">.</span><span class="n">lattice_parameter2</span><span class="p">,</span>
-                             <span class="n">param</span><span class="o">.</span><span class="n">material2</span><span class="p">,</span>
-                             <span class="n">param</span><span class="o">.</span><span class="n">orien_x2</span><span class="p">,</span>
-                             <span class="n">param</span><span class="o">.</span><span class="n">orien_y2</span><span class="p">,</span>
-                             <span class="n">param</span><span class="o">.</span><span class="n">orien_z2</span><span class="p">,</span>
-                             <span class="n">vertices</span><span class="p">,</span>
-                             <span class="n">out_pre</span><span class="p">,</span>
-                             <span class="n">param</span><span class="o">.</span><span class="n">ext_ato</span><span class="p">)</span>
-            <span class="c1"># call make it md to create atomsk file</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;JOB DONE!&#39;</span> <span class="o">+</span> <span class="s1">&#39;  File name: &#39;</span> <span class="o">+</span> <span class="n">out_pre</span> <span class="o">+</span> <span class="s1">&#39;.lmp&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;====== &gt; Pyrough.py : sample.make_stl running...&quot;</span><span class="p">)</span>
+        <span class="n">vertices</span><span class="p">,</span> <span class="n">FEM_stl</span> <span class="o">=</span> <span class="n">sample</span><span class="o">.</span><span class="n">make_stl</span><span class="p">(</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">type_S</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">eta</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">C1</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">RMS</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">N</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">M</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">length</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">height</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">width</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">ns</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">alpha</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">raw_stl</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">nfaces</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">surfaces</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">energies</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">n_at</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">lattice_structure</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">lattice_parameter</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">material</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">orien_x</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">orien_z</span><span class="p">,</span>
+            <span class="n">out_pre</span><span class="p">,</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">ext_fem</span><span class="p">,</span>
+        <span class="p">)</span>
 
-    <span class="k">else</span> <span class="p">:</span>
-        <span class="n">sample</span> <span class="o">=</span> <span class="n">Sample_class</span><span class="o">.</span><span class="n">Sample</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">type_S</span><span class="p">)</span>  <span class="c1"># THIS CLASS CALLING REAUIRES A SAMPLE WITH A DESIRED OBJECT NAME AS AN INPUT</span>
-
-        <span class="n">vertices</span><span class="p">,</span> <span class="n">FEM_stl</span> <span class="o">=</span> <span class="n">sample</span><span class="o">.</span><span class="n">make_stl</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">type_S</span><span class="p">,</span>
-                                            <span class="n">param</span><span class="o">.</span><span class="n">H</span><span class="p">,</span>
-                                            <span class="n">param</span><span class="o">.</span><span class="n">C1</span><span class="p">,</span>
-                                            <span class="n">param</span><span class="o">.</span><span class="n">RMS</span><span class="p">,</span>
-                                            <span class="n">param</span><span class="o">.</span><span class="n">N</span><span class="p">,</span>
-                                            <span class="n">param</span><span class="o">.</span><span class="n">M</span><span class="p">,</span>
-                                            <span class="n">param</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span>
-                                            <span class="n">param</span><span class="o">.</span><span class="n">length</span><span class="p">,</span>
-                                            <span class="n">param</span><span class="o">.</span><span class="n">height</span><span class="p">,</span>
-                                            <span class="n">param</span><span class="o">.</span><span class="n">width</span><span class="p">,</span>
-                                            <span class="n">param</span><span class="o">.</span><span class="n">ns</span><span class="p">,</span>
-                                            <span class="n">param</span><span class="o">.</span><span class="n">alpha</span><span class="p">,</span>
-                                            <span class="n">param</span><span class="o">.</span><span class="n">raw_stl</span><span class="p">,</span>
-                                            <span class="n">param</span><span class="o">.</span><span class="n">nfaces</span><span class="p">,</span>
-                                            <span class="n">param</span><span class="o">.</span><span class="n">surfaces</span><span class="p">,</span>
-                                            <span class="n">param</span><span class="o">.</span><span class="n">energies</span><span class="p">,</span>
-                                            <span class="n">param</span><span class="o">.</span><span class="n">n_at</span><span class="p">,</span>
-                                            <span class="n">param</span><span class="o">.</span><span class="n">lattice_structure</span><span class="p">,</span>
-                                            <span class="n">param</span><span class="o">.</span><span class="n">lattice_parameter</span><span class="p">,</span>
-                                            <span class="n">param</span><span class="o">.</span><span class="n">material</span><span class="p">,</span>
-                                            <span class="n">param</span><span class="o">.</span><span class="n">orien_x</span><span class="p">,</span>
-                                            <span class="n">param</span><span class="o">.</span><span class="n">orien_y</span><span class="p">,</span>
-                                            <span class="n">param</span><span class="o">.</span><span class="n">orien_z</span><span class="p">,</span>
-                                            <span class="n">out_pre</span><span class="p">,</span>
-                                            <span class="n">param</span><span class="o">.</span><span class="n">ext_fem</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;====== &gt; FEM JOB DONE !&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;====== &gt; FEM JOB DONE !&quot;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="n">param</span><span class="o">.</span><span class="n">ext_fem</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;====== &gt; File name: &#39;</span> <span class="o">+</span> <span class="n">out_pre</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ext</span><span class="p">))</span>
-        <span class="k">if</span> <span class="s1">&#39;stl&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">param</span><span class="o">.</span><span class="n">ext_fem</span> <span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;====== &gt; File name: &#39;</span> <span class="o">+</span> <span class="n">out_pre</span> <span class="o">+</span> <span class="s1">&#39;.stl&#39;</span><span class="p">)</span>
-        <span class="c1"># Calling the sample class function of MAKE it which returns an stl file of the object desired.</span>
-        <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">Param_file</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;ATOM&#39;</span><span class="p">:</span>
-            <span class="n">sample</span><span class="o">.</span><span class="n">make_atom</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">type_S</span><span class="p">,</span>
-                             <span class="n">FEM_stl</span><span class="p">,</span>
-                             <span class="n">param</span><span class="o">.</span><span class="n">lattice_structure</span><span class="p">,</span>
-                             <span class="n">param</span><span class="o">.</span><span class="n">lattice_parameter</span><span class="p">,</span>
-                             <span class="n">param</span><span class="o">.</span><span class="n">material</span><span class="p">,</span>
-                             <span class="n">param</span><span class="o">.</span><span class="n">orien_x</span><span class="p">,</span>
-                             <span class="n">param</span><span class="o">.</span><span class="n">orien_y</span><span class="p">,</span>
-                             <span class="n">param</span><span class="o">.</span><span class="n">orien_z</span><span class="p">,</span>
-                             <span class="n">vertices</span><span class="p">,</span>
-                             <span class="n">out_pre</span><span class="p">,</span>
-                             <span class="n">param</span><span class="o">.</span><span class="n">ext_ato</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;====== &gt; File name: &quot;</span> <span class="o">+</span> <span class="n">out_pre</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ext</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="s2">&quot;stl&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">param</span><span class="o">.</span><span class="n">ext_fem</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;====== &gt; File name: &quot;</span> <span class="o">+</span> <span class="n">out_pre</span> <span class="o">+</span> <span class="s2">&quot;.stl&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">Param_file</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;ATOM&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="s2">&quot;spec&quot;</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;====== &gt; Pyrough.py : sample.make_atom running...&quot;</span><span class="p">)</span>
+            <span class="n">sample</span><span class="o">.</span><span class="n">make_atom</span><span class="p">(</span>
+                <span class="n">FEM_stl</span><span class="p">,</span>
+                <span class="n">param</span><span class="o">.</span><span class="n">lattice_structure</span><span class="p">,</span>
+                <span class="n">param</span><span class="o">.</span><span class="n">lattice_parameter</span><span class="p">,</span>
+                <span class="n">param</span><span class="o">.</span><span class="n">material</span><span class="p">,</span>
+                <span class="n">param</span><span class="o">.</span><span class="n">orien_x</span><span class="p">,</span>
+                <span class="n">param</span><span class="o">.</span><span class="n">orien_y</span><span class="p">,</span>
+                <span class="n">param</span><span class="o">.</span><span class="n">orien_z</span><span class="p">,</span>
+                <span class="n">vertices</span><span class="p">,</span>
+                <span class="n">out_pre</span><span class="p">,</span>
+                <span class="n">param</span><span class="o">.</span><span class="n">ext_ato</span><span class="p">,</span>
+            <span class="p">)</span>
+
             <span class="c1"># call make it md to create atomsk file</span>
-            <span class="c1"># print(&#39;JOB DONE!&#39; + &#39;  File name: &#39; + out_pre + &#39;.&#39; + str(param.ext_ato[0]))</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;====== &gt; ATOM JOB DONE !&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;====== &gt; ATOM OBJECT JOB DONE !&quot;</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="n">param</span><span class="o">.</span><span class="n">ext_ato</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;====== &gt; File name: &#39;</span> <span class="o">+</span> <span class="n">out_pre</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ext</span><span class="p">))</span>
-        <span class="c1"># else:</span>
-            <span class="c1"># print(&#39;JOB DONE!&#39; + &#39;  File name: &#39; + FEM_stl)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;====== &gt; File name: &quot;</span> <span class="o">+</span> <span class="n">out_pre</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ext</span><span class="p">))</span>
+
+        <span class="k">if</span>  <span class="nb">hasattr</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="s2">&quot;spec&quot;</span><span class="p">):</span>
+             <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">spec</span> <span class="o">==</span> <span class="s2">&quot;precinmatrix&quot;</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;====== &gt; Pyrough.py : precinmatric option treatment running...&quot;</span><span class="p">)</span>
+
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;====== &gt; sample.make_precipitate running&quot;</span><span class="p">)</span>
+                <span class="c1"># Generate the precipitate centered in the matrix-sized supercell : precipitate.lmp</span>
+                <span class="n">sample</span><span class="o">.</span><span class="n">make_precipitate</span><span class="p">(</span>
+                    <span class="n">FEM_stl</span><span class="p">,</span>
+                    <span class="n">param</span><span class="o">.</span><span class="n">lattice_structure</span><span class="p">,</span>
+                    <span class="n">param</span><span class="o">.</span><span class="n">lattice_parameter</span><span class="p">,</span>
+                    <span class="n">param</span><span class="o">.</span><span class="n">material</span><span class="p">,</span>
+                    <span class="n">param</span><span class="o">.</span><span class="n">orien_x</span><span class="p">,</span>
+                    <span class="n">param</span><span class="o">.</span><span class="n">orien_y</span><span class="p">,</span>
+                    <span class="n">param</span><span class="o">.</span><span class="n">orien_z</span><span class="p">,</span>
+                    <span class="n">param</span><span class="o">.</span><span class="n">length_x2</span><span class="p">,</span>
+                    <span class="n">param</span><span class="o">.</span><span class="n">length_y2</span><span class="p">,</span>
+                    <span class="n">param</span><span class="o">.</span><span class="n">length_z2</span><span class="p">,</span>
+                <span class="p">)</span>
+
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;====== &gt; sample.make_atom_matrix running&quot;</span><span class="p">)</span>
+                <span class="n">sample</span><span class="o">.</span><span class="n">make_atom_matrix</span><span class="p">(</span>
+                <span class="n">FEM_stl</span><span class="p">,</span>
+                <span class="n">param</span><span class="o">.</span><span class="n">length_x2</span><span class="p">,</span>
+                <span class="n">param</span><span class="o">.</span><span class="n">length_y2</span><span class="p">,</span>
+                <span class="n">param</span><span class="o">.</span><span class="n">length_z2</span><span class="p">,</span>
+                <span class="n">param</span><span class="o">.</span><span class="n">lattice_structure2</span><span class="p">,</span>
+                <span class="n">param</span><span class="o">.</span><span class="n">lattice_parameter2</span><span class="p">,</span>
+                <span class="n">param</span><span class="o">.</span><span class="n">material2</span><span class="p">,</span>
+                <span class="n">param</span><span class="o">.</span><span class="n">orien_x2</span><span class="p">,</span>
+                <span class="n">param</span><span class="o">.</span><span class="n">orien_y2</span><span class="p">,</span>
+                <span class="n">param</span><span class="o">.</span><span class="n">orien_z2</span><span class="p">,</span>
+                <span class="p">)</span>
+
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;====== &gt; sample.put_prec_in_matrix running...&quot;</span><span class="p">)</span>
+                <span class="n">sample</span><span class="o">.</span><span class="n">put_prec_in_matrix</span><span class="p">(</span>
+                    <span class="n">out_pre</span><span class="p">,</span>
+                    <span class="n">param</span><span class="o">.</span><span class="n">ext_ato</span>
+                 <span class="p">)</span>
+
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;====== &gt; ATOM PRECIPITATE IN MATRIX JOB DONE !&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
+</section>
 
 
            </div>

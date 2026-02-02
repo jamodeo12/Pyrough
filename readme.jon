@@ -1,0 +1,26 @@
+#! /bin/bash
+
+# USAGE : 
+python3.10 
+we have a compatibility problem with python3.12 (related to wulffpack only, spgslib)
+
+# Here are the original requirements.txt on Wed Apr  2 12:31:04 CEST 2025
+numpy>=1.19.5
+gmsh 
+opencv-python 
+meshio>=4.4.6
+wulffpack>=1.1
+ase>=3.21.1
+
+
+# on my mac I needed :
+py**-six
+gmsh +python** +oce
+
+it is all set for python3.10 currently
+
+# previously, we also had
+cv2
+
+# from Arnaud's version we also need : 
+tqdm

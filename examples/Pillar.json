@@ -1,0 +1,25 @@
+{"Pillar":
+    {"Length": 300,
+    "N_Faces" : 0,
+    "Radius": 50,
+    "N": 30,
+    "M": 30,
+    "RMS": [1.5 , 2.2],
+    "eta": [0.5 , 0.2],
+    "Mesh_size": 5,
+    "Refine_factor": 0.75,
+    "Raw_stl": "na"},
+
+"Output":
+   {"ATOM": ["lmp"],
+    "FEM": ["stl"]},
+
+"ATOM_Param":
+    {"Lattice_parameter": 4.07,
+    "Material": "Au",
+    "Orien_z": [1,1,1],
+    "Orien_y":[1,-2,1] ,
+    "Orien_x": [-1,0,1],
+    "Lattice_structure": "fcc"}
+}
+

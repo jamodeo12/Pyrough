@@ -1,4 +1,3 @@
-# ---------------------------------------------------------------------------
 # Title: Main code Pyrough
 # Authors: Jonathan Amodeo, Hugo Iteney, Javier Gonzalez, Jennifer Izaguirre, Christophe Le Bourlot
 # Date: June 01, 2022
@@ -15,12 +14,12 @@ import sys
 from src import Param_class, Sample_class, Func_pyrough as fp
 
 print("##################################################################")
-print("#    /\/\/\                                                      #")
+print("#    /\\/\\/\\                                                      #")
 print("#    | O _ |        Pyrough                                      #")
 print("#  <|-|--/          Version 1.2                                  #")
-print("#      \---|-|>     (C) 2023 Jonathan Amodeo and co.             #")
+print("#     \\---|-|>     (C) 2023 Jonathan Amodeo and co.              #")
 print("#      | _ O |      https://github.com/jamodeo12/Pyrough         #")
-print("#      \/\/\/                                                    #")
+print("#    \\/\\/\\/                                                      #")
 print("##################################################################")
 
 # _____________________Main Code____________________
@@ -96,6 +95,39 @@ else:
         )
         # call make it md to create atomsk file
         print("JOB DONE!" + "  File name: " + out_pre + ".lmp")
+#-----------------------------------------------------------------------------------------------------------------------------------------
+    elif param.type_S == "multi_layered" :
+        # If grain, we first create the mesh of a rough box
+        # the STL file will be used to make grain 1, while its negative will be used for grain 2
+        print("====== > Pyrough.py : multi_layered option treatment running...")
+        print("====== > Pyrough.py : Sample_class.make_atom_multi-layered running...")
+
+        Sample_class.make_atom_multilayered(
+            param.type_S,
+            param.height_layer,
+            param.pattern_layer,
+            2 * (1 + param.eta),
+            param.C1,
+            param.RMS,
+            param.N,
+            param.M,
+            param.length,
+            param.height,
+            param.width,
+            param.ns,
+            param.alpha,
+            param.raw_stl,
+            param.lattice_structure,
+            param.lattice_parameter,
+            param.material,
+            param.orien_x,
+            param.orien_y,
+            param.orien_z,
+            out_pre,
+            param.ext_fem,
+            param.ext_ato,
+        )
+#---------------------------------------------------------------------------------------------------------------------------------------------
 
     else:
         print("====== > Pyrough.py : {} option treatment running...".format(param.type_S))

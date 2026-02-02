@@ -78,6 +78,56 @@ class Parameter:
             self.ext_fem = read_param["Output"]["FEM"]
             self.ext_ato = read_param["Output"]["ATOM"]
 
+        elif "Multi_layered" in read_param:
+            self.type_S = "multi_layered"
+            self.N = read_param["Multi_layered"]["N"]
+            self.M = read_param["Multi_layered"]["M"]
+            self.eta = read_param["Multi_layered"]["eta"]
+            try:
+                self.C1 = read_param["Multi_layered"]["C1"]
+            except KeyError:
+                self.C1 = ""
+            try:
+                self.RMS = read_param["Multi_layered"]["RMS"]
+            except KeyError:
+                self.RMS = ""
+            self.height = read_param["Multi_layered"]["Height"]
+            self.length = read_param["Multi_layered"]["Length"]
+            self.width = read_param["Multi_layered"]["Width"]
+            self.ns = read_param["Multi_layered"]["Mesh_size"]
+            try:
+                self.alpha = read_param["Multi_layered"]["Refine_factor"]
+            except KeyError:
+                self.alpha = 1
+            self.raw_stl = read_param["Multi_layered"]["Raw_stl"]
+            self.lattice_structure = read_param["ATOMS_Param"]["Lattice_structure"]
+            self.lattice_parameter = read_param["ATOMS_Param"]["Lattice_parameter"]
+            for lp in range(len(self.lattice_parameter)):
+                self.lattice_parameter[lp] = fp.convert_in_list_of_string(self.lattice_parameter[lp])
+            self.material = read_param["ATOMS_Param"]["Material"]
+            for mat in range(len(self.material)):
+                self.material[mat] = fp.convert_in_list_of_string(self.material[mat])
+            self.orien_x = read_param["ATOMS_Param"]["Orien_x"]
+            self.orien_y = read_param["ATOMS_Param"]["Orien_y"]
+            self.orien_z = read_param["ATOMS_Param"]["Orien_z"]
+            try:
+                self.pattern_layer = read_param["Multi_layered"]["pattern_layer"]
+            except KeyError:
+                self.pattern_layer = []
+                for i in range(len(self.material)):
+                    self.pattern_layer.append(i)
+            try:
+                self.height_layer = read_param["Multi_layered"]["height_layer"]
+            except KeyError:
+                self.height_layer = []
+                j=0
+                while j < (len(self.material)):
+                    self.height_layer.append(self.height/len(self.pattern_layer))
+                    j=j+1
+
+            self.ext_fem = read_param["Output"]["FEM"]
+            self.ext_ato = read_param["Output"]["ATOM"]
+
         else:
             if "cWire" in read_param:
                 self.type_S = "wire"
@@ -253,6 +303,69 @@ class Parameter:
                 self.ext_fem = read_param["Output"]["FEM"]
                 self.ext_ato = read_param["Output"]["ATOM"]
 
+#------------------------------------------------------------------------------------------------------------------------------
+### Pillar part: under development
+            elif "fPillar" in read_param:
+                self.type_S = "poly_pillar"
+                self.eta = read_param["fPillar"]["eta"]
+                try:
+                    self.C1 = read_param["fPillar"]["C1"]
+                except KeyError:
+                    self.C1 =["",""]
+                try:
+                    self.RMS = read_param["fPillar"]["RMS"]
+                except KeyError:
+                    self.RMS =["",""]
+                self.N = read_param["fPillar"]["N"]
+                self.M = read_param["fPillar"]["M"]
+                self.length = read_param["fPillar"]["Length"]
+                self.nfaces = read_param["fPillar"]["N_Faces"]
+                self.radius = read_param["fPillar"]["Radius"]
+                self.ns = read_param["fPillar"]["Mesh_size"]
+                try:
+                    self.alpha = read_param["fPillar"]["Refine_factor"]
+                except KeyError:
+                    self.alpha = 1
+                self.height = 0
+                self.width = 0
+                self.raw_stl = read_param["fPillar"]["Raw_stl"]
+                self.surfaces = 0
+                self.energies = 0
+                self.n_at = 0
+                self.ext_fem = read_param["Output"]["FEM"]
+                self.ext_ato = read_param["Output"]["ATOM"]
+
+            elif "Pillar" in read_param:
+                self.type_S = "pillar"
+                self.eta = read_param["Pillar"]["eta"]
+                try:
+                    self.C1 = read_param["Pillar"]["C1"]
+                except KeyError:
+                    self.C1 =["",""]
+                try:
+                    self.RMS = read_param["Pillar"]["RMS"]
+                except KeyError:
+                    self.RMS =["",""]
+                self.N = read_param["Pillar"]["N"]
+                self.M = read_param["Pillar"]["M"]
+                self.length = read_param["Pillar"]["Length"]
+                self.nfaces = read_param["Pillar"]["N_Faces"]
+                self.radius = read_param["Pillar"]["Radius"]
+                self.ns = read_param["Pillar"]["Mesh_size"]
+                try:
+                    self.alpha = read_param["Pillar"]["Refine_factor"]
+                except KeyError:
+                    self.alpha = 1
+                self.height = 0
+                self.width = 0
+                self.raw_stl = read_param["Pillar"]["Raw_stl"]
+                self.surfaces = 0
+                self.energies = 0
+                self.n_at = 0
+                self.ext_fem = read_param["Output"]["FEM"]
+                self.ext_ato = read_param["Output"]["ATOM"]
+
+#-------------------------------------------------------------------------------------------------------------------------------------------------
             self.lattice_structure = read_param["ATOM_Param"]["Lattice_structure"]
             self.lattice_parameter = read_param["ATOM_Param"]["Lattice_parameter"]
             self.lattice_parameter = fp.convert_in_list_of_string(self.lattice_parameter)

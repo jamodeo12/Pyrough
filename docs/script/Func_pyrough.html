@@ -1,29 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html4" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Func_pyrough module &mdash; Pyrough  documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <title>Func_pyrough module &mdash; Pyrough  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-      <script>
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../',
-              VERSION:'',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=9bcbadda"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -36,17 +30,22 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search"  style="background: white" >
-            <a href="../index.html"><img src="../_static/Logo.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/Logo.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption"><span class="caption-text">Contents</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../equations.html">Rough surface generation</a></li>
@@ -54,13 +53,77 @@
 <li class="toctree-l2"><a class="reference internal" href="Pyrough.html">Pyrough module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Sample_class.html">Sample_class module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Param_class.html">Param_class module</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Func_pyrough module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Func_pyrough module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.G_hex"><code class="docutils literal notranslate"><span class="pre">G_hex()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.Vector4to3"><code class="docutils literal notranslate"><span class="pre">Vector4to3()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.align_poly"><code class="docutils literal notranslate"><span class="pre">align_poly()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.base"><code class="docutils literal notranslate"><span class="pre">base()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.box"><code class="docutils literal notranslate"><span class="pre">box()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.cart2cyl"><code class="docutils literal notranslate"><span class="pre">cart2cyl()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.center_3d_dataset"><code class="docutils literal notranslate"><span class="pre">center_3d_dataset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.concatenate_list_data"><code class="docutils literal notranslate"><span class="pre">concatenate_list_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.convert_in_list_of_string"><code class="docutils literal notranslate"><span class="pre">convert_in_list_of_string()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.coord_cart_sphere"><code class="docutils literal notranslate"><span class="pre">coord_cart_sphere()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.coord_sphere"><code class="docutils literal notranslate"><span class="pre">coord_sphere()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.cube"><code class="docutils literal notranslate"><span class="pre">cube()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.cube_faces"><code class="docutils literal notranslate"><span class="pre">cube_faces()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.cyl2cart"><code class="docutils literal notranslate"><span class="pre">cyl2cart()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.cylinder"><code class="docutils literal notranslate"><span class="pre">cylinder()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.dotprod"><code class="docutils literal notranslate"><span class="pre">dotprod()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.duplicate"><code class="docutils literal notranslate"><span class="pre">duplicate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.error_quit"><code class="docutils literal notranslate"><span class="pre">error_quit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.faces_normals"><code class="docutils literal notranslate"><span class="pre">faces_normals()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.make_obj"><code class="docutils literal notranslate"><span class="pre">make_obj()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.make_rough"><code class="docutils literal notranslate"><span class="pre">make_rough()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.make_rough_wulff"><code class="docutils literal notranslate"><span class="pre">make_rough_wulff()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.needs_triple_correction"><code class="docutils literal notranslate"><span class="pre">needs_triple_correction()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.node_corner"><code class="docutils literal notranslate"><span class="pre">node_corner()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.node_indexing"><code class="docutils literal notranslate"><span class="pre">node_indexing()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.node_surface"><code class="docutils literal notranslate"><span class="pre">node_surface()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.norm"><code class="docutils literal notranslate"><span class="pre">norm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.normalize"><code class="docutils literal notranslate"><span class="pre">normalize()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.phi"><code class="docutils literal notranslate"><span class="pre">phi()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.physical_norm"><code class="docutils literal notranslate"><span class="pre">physical_norm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.poly"><code class="docutils literal notranslate"><span class="pre">poly()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.radius"><code class="docutils literal notranslate"><span class="pre">radius()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.random_numbers"><code class="docutils literal notranslate"><span class="pre">random_numbers()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.random_surf2"><code class="docutils literal notranslate"><span class="pre">random_surf2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.rdnsurf"><code class="docutils literal notranslate"><span class="pre">rdnsurf()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.rdnsurf_2"><code class="docutils literal notranslate"><span class="pre">rdnsurf_2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.read_stl"><code class="docutils literal notranslate"><span class="pre">read_stl()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.read_stl_wulff"><code class="docutils literal notranslate"><span class="pre">read_stl_wulff()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.rebox"><code class="docutils literal notranslate"><span class="pre">rebox()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.refine_3Dmesh"><code class="docutils literal notranslate"><span class="pre">refine_3Dmesh()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.refine_box"><code class="docutils literal notranslate"><span class="pre">refine_box()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.refine_sphere"><code class="docutils literal notranslate"><span class="pre">refine_sphere()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.refine_wire"><code class="docutils literal notranslate"><span class="pre">refine_wire()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.remove_duplicates_2d_ordered"><code class="docutils literal notranslate"><span class="pre">remove_duplicates_2d_ordered()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.rho"><code class="docutils literal notranslate"><span class="pre">rho()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.rms_calc"><code class="docutils literal notranslate"><span class="pre">rms_calc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.rot"><code class="docutils literal notranslate"><span class="pre">rot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.rot_matrix"><code class="docutils literal notranslate"><span class="pre">rot_matrix()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.rotate_obj_wulff"><code class="docutils literal notranslate"><span class="pre">rotate_obj_wulff()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.rough_matrix_sphere"><code class="docutils literal notranslate"><span class="pre">rough_matrix_sphere()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.segment_intersects_plane"><code class="docutils literal notranslate"><span class="pre">segment_intersects_plane()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.sphere"><code class="docutils literal notranslate"><span class="pre">sphere()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.stat_analysis"><code class="docutils literal notranslate"><span class="pre">stat_analysis()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.stl_file"><code class="docutils literal notranslate"><span class="pre">stl_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.strain_file1_to_file2"><code class="docutils literal notranslate"><span class="pre">strain_file1_to_file2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.test_pyrough_execution"><code class="docutils literal notranslate"><span class="pre">test_pyrough_execution()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.theta"><code class="docutils literal notranslate"><span class="pre">theta()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.two_odd_one_even"><code class="docutils literal notranslate"><span class="pre">two_odd_one_even()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.vectors"><code class="docutils literal notranslate"><span class="pre">vectors()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.vertex_tp"><code class="docutils literal notranslate"><span class="pre">vertex_tp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.write_stl"><code class="docutils literal notranslate"><span class="pre">write_stl()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Func_pyrough.wulff"><code class="docutils literal notranslate"><span class="pre">wulff()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="Surface_Analysis.html">Surface_Analysis module</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../shapes.html">Generation of rough shapes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../biblio.html">Bibliography</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../credits.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contact.html">Contact</a></li>
 </ul>
 
         </div>
@@ -76,9 +139,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../functions.html">Package functions</a> &raquo;</li>
-      <li>Func_pyrough module</li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../functions.html">Package functions</a></li>
+      <li class="breadcrumb-item active">Func_pyrough module</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/script/Func_pyrough.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -88,1216 +151,1070 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="module-Func_pyrough">
-<span id="func-pyrough-module"></span><h1>Func_pyrough module<a class="headerlink" href="#module-Func_pyrough" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
-<dt id="Func_pyrough.Kurto">
-<code class="descclassname">Func_pyrough.</code><code class="descname">Kurto</code><span class="sig-paren">(</span><em>z</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.Kurto" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the kurtosis of a height distribution</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>z</strong> (<em>array</em>) – height matrix</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Kurtosis</td>
-</tr>
-</tbody>
-</table>
+  <section id="module-Func_pyrough">
+<span id="func-pyrough-module"></span><h1>Func_pyrough module<a class="headerlink" href="#module-Func_pyrough" title="Link to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.G_hex">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">G_hex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">latt_param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latt_param_z</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.G_hex" title="Link to this definition"></a></dt>
+<dd><p>Generate the direct metric tensor for Miller-Bravais indices for hcp structure</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>latt_param</strong> – lattice parameter along a</p></li>
+<li><p><strong>latt_param_z</strong> – lattice parameter along c</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The direct metric tensor</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.align_poly">
-<code class="descclassname">Func_pyrough.</code><code class="descname">align_poly</code><span class="sig-paren">(</span><em>vertices</em>, <em>angles</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.align_poly" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.Vector4to3">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">Vector4to3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orien</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.Vector4to3" title="Link to this definition"></a></dt>
+<dd><p>Convert a 4-indices vector into a normalized 3-indices vector</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>orien</strong> (<em>array</em>) – [h,k,l,m] vector</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>an</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.align_poly">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">align_poly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angles</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.align_poly" title="Link to this definition"></a></dt>
 <dd><p>Aligns the first facet with x-axis</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>vertices</strong> (<em>array</em>) – List of nodes</li>
-<li><strong>angles</strong> (<em>array</em>) – List of angles</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vertices</strong> (<em>array</em>) – List of nodes</p></li>
+<li><p><strong>angles</strong> (<em>array</em>) – List of angles</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Rotated nodes</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Rotated nodes</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.base">
-<code class="descclassname">Func_pyrough.</code><code class="descname">base</code><span class="sig-paren">(</span><em>radius</em>, <em>nfaces</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.base" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.base">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">base</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nfaces</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.base" title="Link to this definition"></a></dt>
 <dd><p>Creates the base of the faceted wire from radius and number of faces.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>radius</strong> (<em>float</em>) – Radius of the wire</li>
-<li><strong>nfaces</strong> (<em>int</em>) – Number of faces</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>radius</strong> (<em>float</em>) – Radius of the wire</p></li>
+<li><p><strong>nfaces</strong> (<em>int</em>) – Number of faces</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Points forming the base of the wire and angles associated to each face</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Points forming the base of the wire and angles associated to each face</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.box">
-<code class="descclassname">Func_pyrough.</code><code class="descname">box</code><span class="sig-paren">(</span><em>width</em>, <em>length</em>, <em>height</em>, <em>ns</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.box" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>width</strong> (<em>float</em>) – Width of the box</li>
-<li><strong>length</strong> (<em>float</em>) – Length of the box</li>
-<li><strong>height</strong> (<em>float</em>) – Height of the box</li>
-<li><strong>ns</strong> (<em>float</em>) – Mesh size</li>
-<li><strong>out_pre</strong> (<em>str</em>) – Output file name if required</li>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.box">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">box</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ns</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.box" title="Link to this definition"></a></dt>
+<dd><p>Creates the box mesh</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>width</strong> (<em>float</em>) – Width of the box</p></li>
+<li><p><strong>length</strong> (<em>float</em>) – Length of the box</p></li>
+<li><p><strong>height</strong> (<em>float</em>) – Height of the box</p></li>
+<li><p><strong>ns</strong> (<em>float</em>) – Mesh size</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">vertices and faces of box mesh</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>vertices and faces of box mesh</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.cart2cyl">
-<code class="descclassname">Func_pyrough.</code><code class="descname">cart2cyl</code><span class="sig-paren">(</span><em>matrix</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.cart2cyl" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.cart2cyl">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">cart2cyl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.cart2cyl" title="Link to this definition"></a></dt>
 <dd><p>Calculates cylindrical coordinates from cartesian ones.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>matrix</strong> (<em>array</em>) – List of cartesian coordinates</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Cylindrical coordinates</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>matrix</strong> (<em>array</em>) – List of cartesian coordinates</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Cylindrical coordinates</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.center_3d_dataset">
-<code class="descclassname">Func_pyrough.</code><code class="descname">center_3d_dataset</code><span class="sig-paren">(</span><em>dataset</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.center_3d_dataset" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dataset</strong> (<em>array</em>) – Array of positions</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Centered position dataset</td>
-</tr>
-</tbody>
-</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.center_3d_dataset">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">center_3d_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.center_3d_dataset" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dataset</strong> (<em>array</em>) – Array of positions</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Centered position dataset</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.concatenate_list_data">
-<code class="descclassname">Func_pyrough.</code><code class="descname">concatenate_list_data</code><span class="sig-paren">(</span><em>a_list</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.concatenate_list_data" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.concatenate_list_data">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">concatenate_list_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.concatenate_list_data" title="Link to this definition"></a></dt>
 <dd><p>Combines the elements of a list into one element in the form of a string.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>a_list</strong> (<em>list</em>) – List with elements of type int</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A string</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>a_list</strong> (<em>list</em>) – List with elements of type int</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A string</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.coord_cart_sphere">
-<code class="descclassname">Func_pyrough.</code><code class="descname">coord_cart_sphere</code><span class="sig-paren">(</span><em>C1</em>, <em>C2</em>, <em>r</em>, <em>vertices</em>, <em>t</em>, <em>z</em>, <em>y</em>, <em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.coord_cart_sphere" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.convert_in_list_of_string">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">convert_in_list_of_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lattice_parameter</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.convert_in_list_of_string" title="Link to this definition"></a></dt>
+<dd><p>Rewrite the json lattice_parameter in the correct format i.e., a list of string</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>lattice_parameter</strong> (<em>float</em><em> or </em><em>list</em><em> of </em><em>floats</em>) – input from the json file</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>lattice_parameter (list of strings)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.coord_cart_sphere">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">coord_cart_sphere</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">C1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.coord_cart_sphere" title="Link to this definition"></a></dt>
 <dd><p>Creates a new matrix with x, y, z in cartesian coordinates</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>C1</strong> (<em>float</em>) – Roughness normalization factor</li>
-<li><strong>C2</strong> (<em>float</em>) – Roughness normalization factor constant for sphere</li>
-<li><strong>r</strong> (<em>int</em>) – Roughness height matrix</li>
-<li><strong>vertices</strong> (<em>array</em>) – List of nodes</li>
-<li><strong>t</strong> (<em>array</em>) – x y z coordinates</li>
-<li><strong>z</strong> (<em>array</em>) – z coordinates</li>
-<li><strong>y</strong> (<em>array</em>) – y coordinates</li>
-<li><strong>x</strong> (<em>array</em>) – x coordinates</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>C1</strong> (<em>float</em>) – Roughness normalization factor</p></li>
+<li><p><strong>C2</strong> (<em>float</em>) – Roughness normalization factor constant for sphere</p></li>
+<li><p><strong>r</strong> (<em>int</em>) – Roughness height matrix</p></li>
+<li><p><strong>vertices</strong> (<em>array</em>) – List of nodes</p></li>
+<li><p><strong>t</strong> (<em>array</em>) – x y z coordinates</p></li>
+<li><p><strong>z</strong> (<em>array</em>) – z coordinates</p></li>
+<li><p><strong>y</strong> (<em>array</em>) – y coordinates</p></li>
+<li><p><strong>x</strong> (<em>array</em>) – x coordinates</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Cartesian coordinates</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Cartesian coordinates</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.coord_sphere">
-<code class="descclassname">Func_pyrough.</code><code class="descname">coord_sphere</code><span class="sig-paren">(</span><em>vertices</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.coord_sphere" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a matrix with the columns that correspond to the coordinates of either x, y, z and t which contains x y z coordinates in an array</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>vertices</strong> (<em>array</em>) – List of nodes</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Coordinates</td>
-</tr>
-</tbody>
-</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.coord_sphere">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">coord_sphere</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertices</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.coord_sphere" title="Link to this definition"></a></dt>
+<dd><p>Creates a matrix with the columns that correspond to the coordinates of either x, y, z and t
+which contains x y z coordinates in an array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vertices</strong> (<em>array</em>) – List of nodes</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Coordinates</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.cube">
-<code class="descclassname">Func_pyrough.</code><code class="descname">cube</code><span class="sig-paren">(</span><em>length</em>, <em>ns</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.cube" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>length</strong> (<em>float</em>) – Length of the cube</li>
-<li><strong>ns</strong> (<em>float</em>) – Mesh size</li>
-<li><strong>out_pre</strong> (<em>str</em>) – Output file name if required</li>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.cube">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">cube</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ns</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.cube" title="Link to this definition"></a></dt>
+<dd><p>Creates cube object mesh</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>length</strong> (<em>float</em>) – Length of the cube</p></li>
+<li><p><strong>ns</strong> (<em>float</em>) – Mesh size</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">vertices and faces of cube mesh</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>vertices and faces of cube mesh</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.cube_faces">
-<code class="descclassname">Func_pyrough.</code><code class="descname">cube_faces</code><span class="sig-paren">(</span><em>length</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.cube_faces" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.cube_faces">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">cube_faces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">length</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.cube_faces" title="Link to this definition"></a></dt>
 <dd><p>Generates the points and faces of a cube</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>length</strong> (<em>float</em>) – Size of the cube</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Points and faces of the cube</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>length</strong> (<em>float</em>) – Size of the cube</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Points and faces of the cube</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.cyl2cart">
-<code class="descclassname">Func_pyrough.</code><code class="descname">cyl2cart</code><span class="sig-paren">(</span><em>matrix</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.cyl2cart" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.cyl2cart">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">cyl2cart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.cyl2cart" title="Link to this definition"></a></dt>
 <dd><p>Calculates cartesian coordinates from cylindrical ones.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>matrix</strong> (<em>array</em>) – List of cylindrical coordinates</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Cartesian coordinates</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>matrix</strong> (<em>array</em>) – List of cylindrical coordinates</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Cartesian coordinates</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.cylinder">
-<code class="descclassname">Func_pyrough.</code><code class="descname">cylinder</code><span class="sig-paren">(</span><em>l</em>, <em>r</em>, <em>ns</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.cylinder" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>l</strong> (<em>float</em>) – Length of the cylinder</li>
-<li><strong>r</strong> (<em>float</em>) – Radius of the cylinder</li>
-<li><strong>ns</strong> (<em>float</em>) – Mesh size</li>
-<li><strong>out_pre</strong> (<em>str</em>) – Output file name if required</li>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.cylinder">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">cylinder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ns</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.cylinder" title="Link to this definition"></a></dt>
+<dd><p>Creates the mesh of a cylinder</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>length</strong> (<em>float</em>) – Length of the cylinder</p></li>
+<li><p><strong>r</strong> (<em>float</em>) – Radius of the cylinder</p></li>
+<li><p><strong>ns</strong> (<em>float</em>) – Mesh size</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">vertices and faces of cylinder mesh</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>vertices and faces of cylinder mesh</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.duplicate">
-<code class="descclassname">Func_pyrough.</code><code class="descname">duplicate</code><span class="sig-paren">(</span><em>l</em>, <em>orien</em>, <em>lattice_par</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.duplicate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Takes in a length and an cristal orientation to calculate the duplication factor for atomsk.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>l</strong> (<em>int</em>) – Length of one of the sides of the object</li>
-<li><strong>orien</strong> (<em>list</em>) – Crystal orientaion</li>
-<li><strong>lattice_par</strong> (<em>float</em>) – Lattice parameter</li>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.dotprod">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">dotprod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orien1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orien2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lattice_parameter</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#Func_pyrough.dotprod" title="Link to this definition"></a></dt>
+<dd><p>Run the dot product between two vectors. Works for cubic and hexagonal basis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>orien1</strong> (<em>list</em>) – [h,k,l] or [h,k,i,l] vector</p></li>
+<li><p><strong>orien2</strong> (<em>list</em>) – [h,k,l] or [h,k,i,l] vector</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Duplication factor and string of orientations</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the float result of the dot product</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.faces_normals">
-<code class="descclassname">Func_pyrough.</code><code class="descname">faces_normals</code><span class="sig-paren">(</span><em>obj_points</em>, <em>obj_faces</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.faces_normals" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.duplicate">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">duplicate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">side_length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orien</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lattice_par</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cristallo</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.duplicate" title="Link to this definition"></a></dt>
+<dd><p>Takes in a length and an crystal orientation to calculate the duplication factor for atomsk.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>side_length</strong> (<em>float</em>) – Length of one of the sides of the object</p></li>
+<li><p><strong>orien</strong> (<em>list</em>) – Crystal orientation</p></li>
+<li><p><strong>lattice_par</strong> (<em>string</em>) – Lattice parameter</p></li>
+<li><p><strong>cristallo</strong> – cristal structure</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Duplication factor and string of orientations</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.error_quit">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">error_quit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">error_mess</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.error_quit" title="Link to this definition"></a></dt>
+<dd><p>Print error message before quiting the code.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>error_mess</strong> (<em>str</em>) – error message</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>print error and quit</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.faces_normals">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">faces_normals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj_points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj_faces</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.faces_normals" title="Link to this definition"></a></dt>
 <dd><p>Calculates each face’s normals.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>obj_points</strong> (<em>array</em>) – List of points</li>
-<li><strong>obj_faces</strong> (<em>array</em>) – List of faces</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj_points</strong> (<em>array</em>) – List of points</p></li>
+<li><p><strong>obj_faces</strong> (<em>array</em>) – List of faces</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">List of normals</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of normals</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.make_obj">
-<code class="descclassname">Func_pyrough.</code><code class="descname">make_obj</code><span class="sig-paren">(</span><em>surfaces</em>, <em>energies</em>, <em>n_at</em>, <em>lattice_structure</em>, <em>lattice_parameter</em>, <em>material</em>, <em>orien_x</em>, <em>orien_y</em>, <em>orien_z</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.make_obj" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.make_obj">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">make_obj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">surfaces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energies</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_at</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lattice_structure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lattice_parameter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">material</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orien_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orien_z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_pre</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.make_obj" title="Link to this definition"></a></dt>
 <dd><p>Creates an OBJ file of a faceted NP. Stores the points and faces from this file.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>surfaces</strong> (<em>list</em>) – List of surfaces for Wulff theory</li>
-<li><strong>energies</strong> (<em>list</em>) – List of energies associated to surfaces for Wulff theory</li>
-<li><strong>n_at</strong> (<em>int</em>) – Number of atoms</li>
-<li><strong>lattice_structure</strong> (<em>str</em>) – Atomic structure of the sample</li>
-<li><strong>lattice_parameter</strong> (<em>float</em>) – Lattice parameter</li>
-<li><strong>material</strong> (<em>str</em>) – Type of atom</li>
-<li><strong>orien_x</strong> (<em>list</em>) – Orientation along x-axis</li>
-<li><strong>orien_y</strong> (<em>list</em>) – Orientation along y-axis</li>
-<li><strong>orien_z</strong> (<em>list</em>) – Orientation along z-axis</li>
-<li><strong>out_pre</strong> (<em>str</em>) – Prefix for output files</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>surfaces</strong> (<em>list</em>) – List of surfaces for Wulff theory</p></li>
+<li><p><strong>energies</strong> (<em>list</em>) – List of energies associated to surfaces for Wulff theory</p></li>
+<li><p><strong>n_at</strong> (<em>int</em>) – Number of atoms</p></li>
+<li><p><strong>lattice_structure</strong> (<em>str</em>) – Atomic structure of the sample</p></li>
+<li><p><strong>lattice_parameter</strong> (<em>float</em>) – Lattice parameter</p></li>
+<li><p><strong>material</strong> (<em>str</em>) – Type of atom</p></li>
+<li><p><strong>orien_x</strong> (<em>list</em>) – Orientation along x-axis</p></li>
+<li><p><strong>orien_y</strong> (<em>list</em>) – Orientation along y-axis</p></li>
+<li><p><strong>orien_z</strong> (<em>list</em>) – Orientation along z-axis</p></li>
+<li><p><strong>out_pre</strong> (<em>str</em>) – Prefix for output files</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">List of points and faces of OBJ file</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of points and faces of OBJ file</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.make_rough">
-<code class="descclassname">Func_pyrough.</code><code class="descname">make_rough</code><span class="sig-paren">(</span><em>type_sample</em>, <em>z</em>, <em>nodesurf</em>, <em>vertices</em>, <em>angles</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.make_rough" title="Permalink to this definition">¶</a></dt>
-<dd><p>Applies roughness on the sample.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>type_sample</strong> (<em>str</em>) – The type of the sample</li>
-<li><strong>z</strong> (<em>array</em>) – Surface roughness to apply on the sample</li>
-<li><strong>nodesurf</strong> (<em>array</em>) – List of nodes to be moved</li>
-<li><strong>vertices</strong> (<em>array</em>) – Nodes of the sample</li>
-<li><strong>angles</strong> (<em>array</em>) – List of angles to be followed by roughness (Only in the case of a faceted wire)</li>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.make_rough">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">make_rough</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type_sample</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nodesurf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angles</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.make_rough" title="Link to this definition"></a></dt>
+<dd><p>Applies roughness to the sample.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type_sample</strong> (<em>str</em>) – The type of the sample</p></li>
+<li><p><strong>z</strong> (<em>array</em>) – Surface roughness to apply on the sample</p></li>
+<li><p><strong>nodesurf</strong> (<em>array</em>) – List of nodes to be moved</p></li>
+<li><p><strong>vertices</strong> (<em>array</em>) – Nodes of the sample</p></li>
+<li><p><strong>angles</strong> (<em>array</em>) – List of angles to be followed by roughness (Only in the case of a faceted wire)</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Rough sample</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Rough sample</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.make_rough_wulff">
-<code class="descclassname">Func_pyrough.</code><code class="descname">make_rough_wulff</code><span class="sig-paren">(</span><em>vertices</em>, <em>B</em>, <em>C1</em>, <em>RMS</em>, <em>N</em>, <em>M</em>, <em>nodesurf</em>, <em>node_edge</em>, <em>node_corner</em>, <em>list_n</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.make_rough_wulff" title="Permalink to this definition">¶</a></dt>
-<dd><p>Applies roughness on the sample in the case of a Wulff Shaped NP.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>vertices</strong> (<em>array</em>) – Nodes of the sample</li>
-<li><strong>B</strong> (<em>float</em>) – The degree of the roughness</li>
-<li><strong>C1</strong> (<em>float</em>) – Roughness normalization factor</li>
-<li><strong>RMS</strong> (<em>float</em>) – Root Mean Square</li>
-<li><strong>N</strong> (<em>int</em>) – Scaling cartesian position</li>
-<li><strong>M</strong> (<em>int</em>) – Scaling cartesian position</li>
-<li><strong>nodesurf</strong> (<em>array</em>) – List of surface nodes</li>
-<li><strong>node_edge</strong> (<em>array</em>) – List of nodes located on edges</li>
-<li><strong>node_corner</strong> (<em>array</em>) – List of nodes located on corners</li>
-<li><strong>list_n</strong> (<em>list</em>) – List of face’s normals</li>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.make_rough_wulff">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">make_rough_wulff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">RMS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nodesurf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_edge</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_corner</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">list_n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.make_rough_wulff" title="Link to this definition"></a></dt>
+<dd><p>Applies roughness to the sample in the case of a Wulff-shaped nanoparticle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vertices</strong> (<em>array</em>) – Nodes of the sample</p></li>
+<li><p><strong>B</strong> (<em>float</em>) – The degree of the roughness</p></li>
+<li><p><strong>C1</strong> (<em>float</em>) – Roughness normalization factor</p></li>
+<li><p><strong>RMS</strong> (<em>float</em>) – Root Mean Square</p></li>
+<li><p><strong>N</strong> (<em>int</em>) – Scaling cartesian position</p></li>
+<li><p><strong>M</strong> (<em>int</em>) – Scaling cartesian position</p></li>
+<li><p><strong>nodesurf</strong> (<em>array</em>) – List of surface nodes</p></li>
+<li><p><strong>node_edge</strong> (<em>array</em>) – List of nodes located on edges</p></li>
+<li><p><strong>node_corner</strong> (<em>array</em>) – List of nodes located on corners</p></li>
+<li><p><strong>list_n</strong> (<em>list</em>) – List of face’s normals</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Rough Wulff sample</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Rough Wulff sample</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.node_corner">
-<code class="descclassname">Func_pyrough.</code><code class="descname">node_corner</code><span class="sig-paren">(</span><em>nodesurf</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.node_corner" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.needs_triple_correction">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">needs_triple_correction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orien</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#Func_pyrough.needs_triple_correction" title="Link to this definition"></a></dt>
+<dd><p>Check if a 4-indices hcp orientation vector needs the 1/3 normalization factor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>orien</strong> (<em>array</em>) – orientation vector</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.node_corner">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">node_corner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodesurf</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.node_corner" title="Link to this definition"></a></dt>
 <dd><p>From surface nodes, finds all nodes located on edges and corners.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nodesurf</strong> (<em>array</em>) – List of surface nodes</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">List of nodes located on edges and list of nodes located on corners</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nodesurf</strong> (<em>array</em>) – List of surface nodes</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of nodes located on edges and list of nodes located on corners</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.node_indexing">
-<code class="descclassname">Func_pyrough.</code><code class="descname">node_indexing</code><span class="sig-paren">(</span><em>vertices</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.node_indexing" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a column that has an assigned index number for each row in vertices and also the nodenumbers which is an array file from 0 - length of the vertices</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>vertices</strong> (<em>array</em>) – Vector for the points</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Numbered vertices and raw numbers column.</td>
-</tr>
-</tbody>
-</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.node_indexing">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">node_indexing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertices</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.node_indexing" title="Link to this definition"></a></dt>
+<dd><p>Creates a column that has an assigned index number for each row in vertices and also the
+nodenumbers which is an array file from 0 - length of the vertices</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vertices</strong> (<em>array</em>) – Vector for the points</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Numbered vertices and raw numbers column.</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.node_surface">
-<code class="descclassname">Func_pyrough.</code><code class="descname">node_surface</code><span class="sig-paren">(</span><em>sample_type</em>, <em>vertices</em>, <em>nodenumber</em>, <em>points</em>, <em>faces</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.node_surface" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.node_surface">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">node_surface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nodenumber</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faces</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.node_surface" title="Link to this definition"></a></dt>
 <dd><p>Finds the nodes at the surface of the object. These nodes will have the surface roughness applied to it.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>sample_type</strong> (<em>str</em>) – The name of the sample</li>
-<li><strong>vertices</strong> (<em>array</em>) – List of nodes</li>
-<li><strong>nodenumber</strong> (<em>array</em>) – Number of the corresponding node</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sample_type</strong> (<em>str</em>) – The name of the sample</p></li>
+<li><p><strong>vertices</strong> (<em>array</em>) – List of nodes</p></li>
+<li><p><strong>nodenumber</strong> (<em>array</em>) – Number of the corresponding node</p></li>
+<li><p><strong>points</strong> (<em>array</em>) – Polygon shape (Faceted wire case)</p></li>
+<li><p><strong>faces</strong> (<em>array</em>) – Facets list (Wulff case)</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
-<p>:param points : Polygon shape (Faceted wire case)
-:type points: array
-:param faces: Facets list (Wulff case)
-type faces: array</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Surface nodes</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Surface nodes</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.normalize">
-<code class="descclassname">Func_pyrough.</code><code class="descname">normalize</code><span class="sig-paren">(</span><em>surf</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.normalize" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.norm">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">norm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lattparam</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#Func_pyrough.norm" title="Link to this definition"></a></dt>
+<dd><p>Returns the norm of a 3- or 4-indices vector vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vec</strong> (<em>array</em>) – [h,k,l] or [h,k,i,l] vector</p></li>
+<li><p><strong>lattparam</strong> (<em>array</em>) – lattice parameter(s)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the  norm (float) of the vector vec</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.normalize">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">surf</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.normalize" title="Link to this definition"></a></dt>
 <dd><p>Normalizes the coordinates of points composing the surface.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>surf</strong> (<em>array</em>) – List of nodes of the surface</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Normalized surface</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>surf</strong> (<em>array</em>) – List of nodes of the surface</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Normalized surface</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.phi">
-<code class="descclassname">Func_pyrough.</code><code class="descname">phi</code><span class="sig-paren">(</span><em>t</em>, <em>z</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.phi" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the arctan2 of an array filled with vector norms and an array filled with z coordinates which are the same size.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>t</strong> (<em>array</em>) – Coordinates x y in a list</li>
-<li><strong>z</strong> (<em>array</em>) – Z coordinates</li>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.phi">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">phi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.phi" title="Link to this definition"></a></dt>
+<dd><p>Calculates the arctan2 of an array filled with vector norms and an array filled with z
+coordinates which are the same size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t</strong> (<em>array</em>) – Coordinates x y in a list</p></li>
+<li><p><strong>z</strong> (<em>array</em>) – Z coordinates</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">An array of angles in radians</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array of angles in radians</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.poly">
-<code class="descclassname">Func_pyrough.</code><code class="descname">poly</code><span class="sig-paren">(</span><em>length</em>, <em>base_points</em>, <em>ns</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.poly" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>length</strong> (<em>float</em>) – Length of the faceted wire</li>
-<li><strong>base_points</strong> (<em>list</em>) – Shape of the base</li>
-<li><strong>ns</strong> (<em>float</em>) – Mesh size</li>
-<li><strong>out_pre</strong> (<em>str</em>) – Output file name if required</li>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.physical_norm">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">physical_norm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uvtw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.physical_norm" title="Link to this definition"></a></dt>
+<dd><p>Returns the physically correct length of a crystallographic vector.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.poly">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">poly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ns</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.poly" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>length</strong> (<em>float</em>) – Length of the faceted wire</p></li>
+<li><p><strong>base_points</strong> (<em>list</em>) – Shape of the base</p></li>
+<li><p><strong>ns</strong> (<em>float</em>) – Mesh size</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">vertices and faces of faceted wire mesh</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>vertices and faces of faceted wire mesh</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.radius">
-<code class="descclassname">Func_pyrough.</code><code class="descname">radius</code><span class="sig-paren">(</span><em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.radius" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.radius">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">radius</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.radius" title="Link to this definition"></a></dt>
 <dd><p>Calculates the vector norm for the axis 1 of the values in the given array.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>v</strong> (<em>array</em>) – The vertices of the sphere</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A vector norm</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>v</strong> (<em>array</em>) – The vertices of the sphere</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A vector norm</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.random_numbers">
-<code class="descclassname">Func_pyrough.</code><code class="descname">random_numbers</code><span class="sig-paren">(</span><em>sfrN</em>, <em>sfrM</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.random_numbers" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.random_numbers">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">random_numbers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sfrN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sfrM</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.random_numbers" title="Link to this definition"></a></dt>
 <dd><p>Generates the G and U matrices for the mathematical formulation of rough surfaces.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>sfrN</strong> (<em>array</em>) – Vector for the N decomposition</li>
-<li><strong>sfrM</strong> (<em>array</em>) – Vector for the M decomposition</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sfrN</strong> (<em>array</em>) – Vector for the N decomposition</p></li>
+<li><p><strong>sfrM</strong> (<em>array</em>) – Vector for the M decomposition</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">G and U matrices</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>G and U matrices</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.random_surf2">
-<code class="descclassname">Func_pyrough.</code><code class="descname">random_surf2</code><span class="sig-paren">(</span><em>sample_type</em>, <em>m</em>, <em>n</em>, <em>N</em>, <em>M</em>, <em>B</em>, <em>xv</em>, <em>yv</em>, <em>sfrM</em>, <em>sfrN</em>, <em>C1</em>, <em>RMS</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.random_surf2" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.random_surf2">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">random_surf2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sfrM</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sfrN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">RMS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_pre</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.random_surf2" title="Link to this definition"></a></dt>
 <dd><p>Returns an array with the Z values representing the surface roughness.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>sample_type</strong> (<em>str</em>) – The type of the sample</li>
-<li><strong>m</strong> (<em>array</em>) – Wavenumbers</li>
-<li><strong>n</strong> (<em>array</em>) – Wavenumbers</li>
-<li><strong>N</strong> (<em>int</em>) – Scaling cartesian position</li>
-<li><strong>M</strong> (<em>int</em>) – Scaling cartesian position</li>
-<li><strong>B</strong> (<em>float</em>) – The degree of the roughness</li>
-<li><strong>xv</strong> (<em>array</em>) – Unique x coordinate values from the objects vertices</li>
-<li><strong>yv</strong> (<em>array</em>) – Unique y coordinate values from the objects vertices</li>
-<li><strong>sfrN</strong> (<em>array</em>) – Vector for the N decomposition</li>
-<li><strong>sfrM</strong> (<em>array</em>) – Vector for the M decomposition</li>
-<li><strong>C1</strong> (<em>float</em>) – Roughness normalization factor</li>
-<li><strong>RMS</strong> (<em>float</em>) – Root Mean Square</li>
-<li><strong>out_pre</strong> (<em>str</em>) – Prefix of output files</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sample_type</strong> (<em>str</em>) – The type of the sample</p></li>
+<li><p><strong>m</strong> (<em>array</em>) – Wavenumbers</p></li>
+<li><p><strong>n</strong> (<em>array</em>) – Wavenumbers</p></li>
+<li><p><strong>N</strong> (<em>int</em>) – Scaling cartesian position</p></li>
+<li><p><strong>M</strong> (<em>int</em>) – Scaling cartesian position</p></li>
+<li><p><strong>B</strong> (<em>float</em>) – The degree of the roughness</p></li>
+<li><p><strong>xv</strong> (<em>array</em>) – Unique x coordinate values from the objects vertices</p></li>
+<li><p><strong>yv</strong> (<em>array</em>) – Unique y coordinate values from the objects vertices</p></li>
+<li><p><strong>sfrN</strong> (<em>array</em>) – Vector for the N decomposition</p></li>
+<li><p><strong>sfrM</strong> (<em>array</em>) – Vector for the M decomposition</p></li>
+<li><p><strong>C1</strong> (<em>float</em>) – Roughness normalization factor</p></li>
+<li><p><strong>RMS</strong> (<em>float</em>) – Root Mean Square</p></li>
+<li><p><strong>out_pre</strong> (<em>str</em>) – Prefix of output files</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Surface roughness</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Surface roughness</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.rdnsurf">
-<code class="descclassname">Func_pyrough.</code><code class="descname">rdnsurf</code><span class="sig-paren">(</span><em>m</em>, <em>n</em>, <em>B</em>, <em>xv</em>, <em>yv</em>, <em>sfrM</em>, <em>sfrN</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.rdnsurf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates random surface roughness that will replace the previous z values in the vertices matrix.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>m</strong> (<em>array</em>) – Wavenumber</li>
-<li><strong>n</strong> (<em>array</em>) – Wavenumber</li>
-<li><strong>B</strong> (<em>float</em>) – The degree the roughness is dependent on</li>
-<li><strong>xv</strong> (<em>array</em>) – Unique x coordinate values from the objects vertices</li>
-<li><strong>yv</strong> (<em>array</em>) – Unique y coordinate values from the objects vertices</li>
-<li><strong>sfrM</strong> (<em>array</em>) – Matrix of random numbers that range from 1 to 2N</li>
-<li><strong>sfrN</strong> (<em>array</em>) – Matrix of random numbers that range from 1 to 2N</li>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.rdnsurf">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">rdnsurf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sfrM</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sfrN</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.rdnsurf" title="Link to this definition"></a></dt>
+<dd><p>Generates random surface roughness that will replace the previous z values in the vertices
+matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>m</strong> (<em>array</em>) – Wavenumber</p></li>
+<li><p><strong>n</strong> (<em>array</em>) – Wavenumber</p></li>
+<li><p><strong>B</strong> (<em>float</em>) – The degree the roughness is dependent on</p></li>
+<li><p><strong>xv</strong> (<em>array</em>) – Unique x coordinate values from the objects vertices</p></li>
+<li><p><strong>yv</strong> (<em>array</em>) – Unique y coordinate values from the objects vertices</p></li>
+<li><p><strong>sfrM</strong> (<em>array</em>) – Matrix of random numbers that range from 1 to 2N</p></li>
+<li><p><strong>sfrN</strong> (<em>array</em>) – Matrix of random numbers that range from 1 to 2N</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Roughness height matrix</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Roughness height matrix</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.rdnsurf_2">
-<code class="descclassname">Func_pyrough.</code><code class="descname">rdnsurf_2</code><span class="sig-paren">(</span><em>m</em>, <em>n</em>, <em>B</em>, <em>xv</em>, <em>yv</em>, <em>sfrM</em>, <em>sfrN</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.rdnsurf_2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates random surface roughness that will replace the previous z values in the vertices matrix.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>m</strong> (<em>array</em>) – Wavenumber</li>
-<li><strong>n</strong> (<em>array</em>) – Wavenumber</li>
-<li><strong>B</strong> (<em>float</em>) – The degree the roughness is dependent on</li>
-<li><strong>xv</strong> (<em>array</em>) – Unique x coordinate values from the objects vertices</li>
-<li><strong>yv</strong> (<em>array</em>) – Unique y coordinate values from the objects vertices</li>
-<li><strong>sfrM</strong> (<em>array</em>) – Matrix of random numbers that range from 1 to 2N</li>
-<li><strong>sfrN</strong> (<em>array</em>) – Matrix of random numbers that range from 1 to 2N</li>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.rdnsurf_2">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">rdnsurf_2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sfrM</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sfrN</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.rdnsurf_2" title="Link to this definition"></a></dt>
+<dd><p>Generates random surface roughness that will replace the previous z values in the vertices
+matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>m</strong> (<em>array</em>) – Wavenumber</p></li>
+<li><p><strong>n</strong> (<em>array</em>) – Wavenumber</p></li>
+<li><p><strong>B</strong> (<em>float</em>) – The degree the roughness is dependent on</p></li>
+<li><p><strong>xv</strong> (<em>array</em>) – Unique x coordinate values from the objects vertices</p></li>
+<li><p><strong>yv</strong> (<em>array</em>) – Unique y coordinate values from the objects vertices</p></li>
+<li><p><strong>sfrM</strong> (<em>array</em>) – Matrix of random numbers that range from 1 to 2N</p></li>
+<li><p><strong>sfrN</strong> (<em>array</em>) – Matrix of random numbers that range from 1 to 2N</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Roughness height matrix</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Roughness height matrix</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.read_stl">
-<code class="descclassname">Func_pyrough.</code><code class="descname">read_stl</code><span class="sig-paren">(</span><em>sample_type</em>, <em>raw_stl</em>, <em>width</em>, <em>length</em>, <em>height</em>, <em>radius</em>, <em>ns</em>, <em>points</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.read_stl" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.read_stl">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">read_stl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raw_stl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ns</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.read_stl" title="Link to this definition"></a></dt>
 <dd><p>Reads an input stl file or creates a new one if no input</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>sample_type</strong> (<em>str</em>) – Name of the sample</li>
-<li><strong>raw_stl</strong> (<em>str</em>) – Name of the input stl file</li>
-<li><strong>width</strong> (<em>float</em>) – Width of the box</li>
-<li><strong>length</strong> (<em>float</em>) – Length of the box/wire</li>
-<li><strong>height</strong> (<em>float</em>) – Height of the box</li>
-<li><strong>radius</strong> (<em>float</em>) – Radius of the wire/sphere</li>
-<li><strong>ns</strong> (<em>int</em>) – The number of segments desired</li>
-<li><strong>points</strong> (<em>list</em>) – List of points constituting the base (in case of faceted wire)</li>
-<li><strong>out_pre</strong> (<em>str</em>) – Prefix of output files</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sample_type</strong> (<em>str</em>) – Name of the sample</p></li>
+<li><p><strong>raw_stl</strong> (<em>str</em>) – Name of the input stl file</p></li>
+<li><p><strong>width</strong> (<em>float</em>) – Width of the box</p></li>
+<li><p><strong>length</strong> (<em>float</em>) – Length of the box/wire</p></li>
+<li><p><strong>height</strong> (<em>float</em>) – Height of the box</p></li>
+<li><p><strong>radius</strong> (<em>float</em>) – Radius of the wire/sphere</p></li>
+<li><p><strong>ns</strong> (<em>int</em>) – The number of segments desired</p></li>
+<li><p><strong>points</strong> (<em>list</em>) – List of points constituting the base (in case of faceted wire)</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">List of points and faces</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of points and faces</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.read_stl_wulff">
-<code class="descclassname">Func_pyrough.</code><code class="descname">read_stl_wulff</code><span class="sig-paren">(</span><em>raw_stl</em>, <em>obj_points</em>, <em>obj_faces</em>, <em>ns</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.read_stl_wulff" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reads an input stl file or creates a new one if no input. Wulff case.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>raw_stl</strong> (<em>str</em>) – Name of the input stl file</li>
-<li><strong>obj_points</strong> (<em>list</em>) – List of points from OBJ file</li>
-<li><strong>obj_faces</strong> (<em>list</em>) – List of faces from OBJ file</li>
-<li><strong>ns</strong> (<em>float</em>) – Mesh size</li>
-<li><strong>out_pre</strong> (<em>str</em>) – Prefix of output files</li>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.read_stl_wulff">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">read_stl_wulff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_stl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj_points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj_faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ns</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.read_stl_wulff" title="Link to this definition"></a></dt>
+<dd><p>Reads an input stl file or creates a new one if no input (Wulff case).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>raw_stl</strong> (<em>str</em>) – Name of the input stl file</p></li>
+<li><p><strong>obj_points</strong> (<em>list</em>) – List of points from OBJ file</p></li>
+<li><p><strong>obj_faces</strong> (<em>list</em>) – List of faces from OBJ file</p></li>
+<li><p><strong>ns</strong> (<em>float</em>) – Mesh size</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">List of points and faces</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of points and faces</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.rebox">
-<code class="descclassname">Func_pyrough.</code><code class="descname">rebox</code><span class="sig-paren">(</span><em>file_lmp</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.rebox" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fits the box dimensions with the sample. Also centers the sample.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>file_lmp</strong> (<em>str</em>) – .lmp file containing the atom positions</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Reboxed position file</td>
-</tr>
-</tbody>
-</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.rebox">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">rebox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_lmp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.rebox" title="Link to this definition"></a></dt>
+<dd><p>Fits the box dimensions to the sample.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_lmp</strong> (<em>str</em>) – .lmp file containing the atom positions</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Reboxed position file</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.refine_3Dmesh">
-<code class="descclassname">Func_pyrough.</code><code class="descname">refine_3Dmesh</code><span class="sig-paren">(</span><em>type_sample</em>, <em>out_pre</em>, <em>ns</em>, <em>alpha</em>, <em>ext_fem</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.refine_3Dmesh" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>type_sample</strong> (<em>str</em>) – Type of object</li>
-<li><strong>out_pre</strong> (<em>str</em>) – Outfit file name</li>
-<li><strong>ns</strong> (<em>float</em>) – Mesh size</li>
-<li><strong>alpha</strong> (<em>float</em>) – Refine mesh factor</li>
-<li><strong>ext_fem</strong> (<em>list</em>) – FEM extensions list</li>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.refine_3Dmesh">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">refine_3Dmesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type_sample</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_pre</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ns</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ext_fem</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.refine_3Dmesh" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type_sample</strong> (<em>str</em>) – Type of object</p></li>
+<li><p><strong>out_pre</strong> (<em>str</em>) – Outfit file name</p></li>
+<li><p><strong>ns</strong> (<em>float</em>) – Mesh size</p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – Refine mesh factor</p></li>
+<li><p><strong>ext_fem</strong> (<em>list</em>) – FEM extensions list</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Refined 3D meshs for all required formats</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Refined 3D meshs for all required formats</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.refine_box">
-<code class="descclassname">Func_pyrough.</code><code class="descname">refine_box</code><span class="sig-paren">(</span><em>out_pre</em>, <em>ns</em>, <em>alpha</em>, <em>angle</em>, <em>ext_fem</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.refine_box" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>out_pre</strong> (<em>str</em>) – Outfit file name</li>
-<li><strong>ns</strong> (<em>float</em>) – Mesh size</li>
-<li><strong>alpha</strong> (<em>float</em>) – Refine mesh factor</li>
-<li><strong>angle</strong> (<em>float</em>) – Angle value for facets detection</li>
-<li><strong>ext_fem</strong> (<em>list</em>) – FEM extensions list</li>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.refine_box">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">refine_box</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_pre</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ns</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ext_fem</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.refine_box" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>out_pre</strong> (<em>str</em>) – Outfit file name</p></li>
+<li><p><strong>ns</strong> (<em>float</em>) – Mesh size</p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – Refine mesh factor</p></li>
+<li><p><strong>angle</strong> (<em>float</em>) – Angle value for facets detection</p></li>
+<li><p><strong>ext_fem</strong> (<em>list</em>) – FEM extensions list</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Refined box mesh</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Refined box mesh</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.refine_sphere">
-<code class="descclassname">Func_pyrough.</code><code class="descname">refine_sphere</code><span class="sig-paren">(</span><em>out_pre</em>, <em>ns</em>, <em>alpha</em>, <em>angle</em>, <em>ext_fem</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.refine_sphere" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>out_pre</strong> (<em>str</em>) – Outfit file name</li>
-<li><strong>ns</strong> (<em>float</em>) – Mesh size</li>
-<li><strong>alpha</strong> (<em>float</em>) – Refine mesh factor</li>
-<li><strong>angle</strong> (<em>float</em>) – Angle value for facets detection</li>
-<li><strong>ext_fem</strong> (<em>list</em>) – FEM extensions list</li>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.refine_sphere">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">refine_sphere</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_pre</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ns</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ext_fem</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.refine_sphere" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>out_pre</strong> (<em>str</em>) – Outfit file name</p></li>
+<li><p><strong>ns</strong> (<em>float</em>) – Mesh size</p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – Refine mesh factor</p></li>
+<li><p><strong>angle</strong> (<em>float</em>) – Angle value for facets detection</p></li>
+<li><p><strong>ext_fem</strong> (<em>list</em>) – FEM extensions list</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Refined sphere mesh</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Refined sphere mesh</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.refine_wire">
-<code class="descclassname">Func_pyrough.</code><code class="descname">refine_wire</code><span class="sig-paren">(</span><em>out_pre</em>, <em>ns</em>, <em>alpha</em>, <em>angle</em>, <em>ext_fem</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.refine_wire" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>out_pre</strong> (<em>str</em>) – Outfit file name</li>
-<li><strong>ns</strong> (<em>float</em>) – Mesh size</li>
-<li><strong>alpha</strong> (<em>float</em>) – Refine mesh factor</li>
-<li><strong>angle</strong> (<em>float</em>) – Angle value for facets detection</li>
-<li><strong>ext_fem</strong> (<em>list</em>) – FEM extensions list</li>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.refine_wire">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">refine_wire</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_pre</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ns</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ext_fem</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.refine_wire" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>out_pre</strong> (<em>str</em>) – Outfit file name</p></li>
+<li><p><strong>ns</strong> (<em>float</em>) – Mesh size</p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – Refine mesh factor</p></li>
+<li><p><strong>angle</strong> (<em>float</em>) – Angle value for facets detection</p></li>
+<li><p><strong>ext_fem</strong> (<em>list</em>) – FEM extensions list</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Refined wire mesh</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Refined wire mesh</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.remove_duplicates_2d_ordered">
-<code class="descclassname">Func_pyrough.</code><code class="descname">remove_duplicates_2d_ordered</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.remove_duplicates_2d_ordered" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>list</em>) – Initial list</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">List with no duplicates</td>
-</tr>
-</tbody>
-</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.remove_duplicates_2d_ordered">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">remove_duplicates_2d_ordered</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.remove_duplicates_2d_ordered" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>list</em>) – Initial list</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List with no duplicates</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.rescale">
-<code class="descclassname">Func_pyrough.</code><code class="descname">rescale</code><span class="sig-paren">(</span><em>D</em>, <em>scale</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.rescale" title="Permalink to this definition">¶</a></dt>
-<dd><p>Rescales the height distribution between zmin and zmax</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>D</strong> (<em>array</em>) – Height matrix</li>
-<li><strong>scale</strong> (<em>list</em>) – zmin and zmax</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Rescaled matrix</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="Func_pyrough.rho">
-<code class="descclassname">Func_pyrough.</code><code class="descname">rho</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.rho" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.rho">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">rho</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.rho" title="Link to this definition"></a></dt>
 <dd><p>The Pythagorean theorem equation is used to obtain a value for a side of a triangle.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>x</strong> (<em>int</em>) – Represents the length of a side in the triangle</li>
-<li><strong>y</strong> (<em>int</em>) – Represents the length of a side in the triangle</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>int</em>) – Represents the length of a side in the triangle</p></li>
+<li><p><strong>y</strong> (<em>int</em>) – Represents the length of a side in the triangle</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The length of hypotenuse</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The length of hypotenuse</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.rms_calc">
-<code class="descclassname">Func_pyrough.</code><code class="descname">rms_calc</code><span class="sig-paren">(</span><em>Z</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.rms_calc" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.rms_calc">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">rms_calc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Z</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.rms_calc" title="Link to this definition"></a></dt>
 <dd><p>Calculates the RMS of a height distribution</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>z</strong> (<em>array</em>) – height matrix</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">RMS</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>z</strong> (<em>array</em>) – height matrix</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>RMS</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.rot">
-<code class="descclassname">Func_pyrough.</code><code class="descname">rot</code><span class="sig-paren">(</span><em>surf</em>, <em>n1</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.rot" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.rot">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">rot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">surf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.rot" title="Link to this definition"></a></dt>
 <dd><p>Rotates a surface oriented along n1 axis in order to be oriented along z-axis.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>surf</strong> (<em>array</em>) – List of nodes from the surface</li>
-<li><strong>n1</strong> (<em>array</em>) – Surface normal</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>surf</strong> (<em>array</em>) – List of nodes from the surface</p></li>
+<li><p><strong>n1</strong> (<em>array</em>) – Surface normal</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Rotated surface</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Rotated surface</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.rot_matrix">
-<code class="descclassname">Func_pyrough.</code><code class="descname">rot_matrix</code><span class="sig-paren">(</span><em>n</em>, <em>theta</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.rot_matrix" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates the rotation matrix. Initial orientation is n, and the angle of rotation is theta. Final orientation is the z-axis.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>n</strong> (<em>list</em>) – Initial orientation</li>
-<li><strong>theta</strong> (<em>float</em>) – Rotation angle</li>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.rot_matrix">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">rot_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.rot_matrix" title="Link to this definition"></a></dt>
+<dd><p>Generates the rotation matrix. Initial orientation is n, and the angle of rotation is theta.
+Final orientation is the z-axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> (<em>list</em>) – Initial orientation</p></li>
+<li><p><strong>theta</strong> (<em>float</em>) – Rotation angle</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Rotation matrix</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Rotation matrix</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.rotate_obj_wulff">
-<code class="descclassname">Func_pyrough.</code><code class="descname">rotate_obj_wulff</code><span class="sig-paren">(</span><em>obj_points</em>, <em>orien_x</em>, <em>orien_z</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.rotate_obj_wulff" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>obj_points</strong> (<em>array</em>) – Points describing the facets of the wulff-shape</li>
-<li><strong>orien_x</strong> (<em>list</em>) – Orientation along x-axis</li>
-<li><strong>orien_z</strong> (<em>list</em>) – Orientation along z-axis</li>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.rotate_obj_wulff">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">rotate_obj_wulff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj_points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orien_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orien_z</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.rotate_obj_wulff" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj_points</strong> (<em>array</em>) – Points describing the facets of the wulff-shape</p></li>
+<li><p><strong>orien_x</strong> (<em>list</em>) – Orientation along x-axis</p></li>
+<li><p><strong>orien_z</strong> (<em>list</em>) – Orientation along z-axis</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Points respecting the desired orientation</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Points respecting the desired orientation</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.rough">
-<code class="descclassname">Func_pyrough.</code><code class="descname">rough</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>H</em>, <em>RMS</em>, <em>M</em>, <em>N</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.rough" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates a rough surface</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>x</strong> (<em>array</em>) – List of x coordinates</li>
-<li><strong>y</strong> (<em>array</em>) – List of y coordinates</li>
-<li><strong>H</strong> (<em>float</em>) – Hurst exponent</li>
-<li><strong>C1</strong> (<em>float</em>) – Normalization factor</li>
-<li><strong>M</strong> (<em>int</em>) – Scaling cartesian position</li>
-<li><strong>N</strong> (<em>int</em>) – Scaling cartesian position</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Height matrix</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="Func_pyrough.rough_matrix_sphere">
-<code class="descclassname">Func_pyrough.</code><code class="descname">rough_matrix_sphere</code><span class="sig-paren">(</span><em>nbPoint</em>, <em>B</em>, <em>thetaa</em>, <em>phii</em>, <em>vert_phi_theta</em>, <em>C1</em>, <em>RMS</em>, <em>r</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.rough_matrix_sphere" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.rough_matrix_sphere">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">rough_matrix_sphere</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbPoint</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thetaa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phii</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vert_phi_theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.rough_matrix_sphere" title="Link to this definition"></a></dt>
 <dd><p>Creates the displacement values of the nodes on the surface of the sphere</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>nbPoint</strong> (<em>int</em>) – Number of points on the sphere</li>
-<li><strong>B</strong> (<em>float</em>) – The degree the roughness is dependent on</li>
-<li><strong>thetaa</strong> (<em>array</em>) – Arctan2 of x and y coordinates</li>
-<li><strong>phii</strong> (<em>array</em>) – Arctan2 of vector norms and z coordinates</li>
-<li><strong>vert_phi_theta</strong> (<em>array</em>) – Array filled with two elements that are the angles corresponding to the position of the node on the sphere.</li>
-<li><strong>C1</strong> (<em>float</em>) – Roughness normalization factor</li>
-<li><strong>RMS</strong> (<em>float</em>) – Root Mean Square</li>
-<li><strong>r</strong> (<em>int</em>) – Roughness height matrix</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nbPoint</strong> (<em>int</em>) – Number of points on the sphere</p></li>
+<li><p><strong>B</strong> (<em>float</em>) – The degree the roughness is dependent on</p></li>
+<li><p><strong>thetaa</strong> (<em>array</em>) – Arctan2 of x and y coordinates</p></li>
+<li><p><strong>phii</strong> (<em>array</em>) – Arctan2 of vector norms and z coordinates</p></li>
+<li><p><strong>vert_phi_theta</strong> (<em>array</em>) – Array filled with two elements that are the angles corresponding to the position of the node on the sphere.</p></li>
+<li><p><strong>r</strong> (<em>int</em>) – Roughness height matrix</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Rough matrix</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Rough matrix</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.segment_intersects_plane">
-<code class="descclassname">Func_pyrough.</code><code class="descname">segment_intersects_plane</code><span class="sig-paren">(</span><em>S</em>, <em>P</em>, <em>a</em>, <em>b</em>, <em>c</em>, <em>d</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.segment_intersects_plane" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>S</strong> (<em>list</em>) – Point defining segment with the origin</li>
-<li><strong>P</strong> (<em>list</em>) – Plane normal</li>
-<li><strong>a</strong> (<em>float</em>) – Plane equation (ax + by + cz + d = 0)</li>
-<li><strong>b</strong> (<em>float</em>) – Plane equation (ax + by + cz + d = 0)</li>
-<li><strong>c</strong> (<em>float</em>) – Plane equation (ax + by + cz + d = 0)</li>
-<li><strong>d</strong> (<em>float</em>) – Plane equation (ax + by + cz + d = 0)</li>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.segment_intersects_plane">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">segment_intersects_plane</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">P</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.segment_intersects_plane" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>S</strong> (<em>list</em>) – Point defining segment with the origin</p></li>
+<li><p><strong>P</strong> (<em>list</em>) – Plane normal</p></li>
+<li><p><strong>a</strong> (<em>float</em>) – Plane equation (ax + by + cz + d = 0)</p></li>
+<li><p><strong>b</strong> (<em>float</em>) – Plane equation (ax + by + cz + d = 0)</p></li>
+<li><p><strong>c</strong> (<em>float</em>) – Plane equation (ax + by + cz + d = 0)</p></li>
+<li><p><strong>d</strong> (<em>float</em>) – Plane equation (ax + by + cz + d = 0)</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Boolean value for plane intersection or not</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Boolean value for plane intersection or not</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.sigma">
-<code class="descclassname">Func_pyrough.</code><code class="descname">sigma</code><span class="sig-paren">(</span><em>z</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.sigma" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the standard deviation of a height distribution</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>z</strong> (<em>array</em>) – height matrix</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Standard deviation</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="Func_pyrough.sk">
-<code class="descclassname">Func_pyrough.</code><code class="descname">sk</code><span class="sig-paren">(</span><em>z</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.sk" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the skewness of a height distribution</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>z</strong> (<em>array</em>) – height matrix</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Skewness</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="Func_pyrough.sphere">
-<code class="descclassname">Func_pyrough.</code><code class="descname">sphere</code><span class="sig-paren">(</span><em>r</em>, <em>ns</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.sphere" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>r</strong> (<em>float</em>) – Radius of the sphere</li>
-<li><strong>ns</strong> (<em>float</em>) – Mesh size</li>
-<li><strong>out_pre</strong> (<em>str</em>) – Output file name if required</li>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.sphere">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">sphere</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ns</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.sphere" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r</strong> (<em>float</em>) – Radius of the sphere</p></li>
+<li><p><strong>ns</strong> (<em>float</em>) – Mesh size</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">vertices and faces of sphere mesh</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>vertices and faces of sphere mesh</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.stat_analysis">
-<code class="descclassname">Func_pyrough.</code><code class="descname">stat_analysis</code><span class="sig-paren">(</span><em>z</em>, <em>N</em>, <em>M</em>, <em>C1</em>, <em>B</em>, <em>sample_type</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.stat_analysis" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.stat_analysis">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">stat_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_pre</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.stat_analysis" title="Link to this definition"></a></dt>
 <dd><p>Displays the statistical analysis of the surface roughness generator</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>z</strong> (<em>float</em>) – Roughness height matrix</li>
-<li><strong>N</strong> (<em>int</em>) – Scaling cartesian position</li>
-<li><strong>M</strong> (<em>int</em>) – Scaling cartesian position</li>
-<li><strong>C1</strong> (<em>float</em>) – Roughness normalization factor</li>
-<li><strong>B</strong> (<em>float</em>) – The degree the roughness is dependent on</li>
-<li><strong>sample_type</strong> (<em>str</em>) – The name of the sample</li>
-<li><strong>out_pre</strong> (<em>str</em>) – Prefix of output files</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>z</strong> (<em>float</em>) – Roughness height matrix</p></li>
+<li><p><strong>N</strong> (<em>int</em>) – Scaling cartesian position</p></li>
+<li><p><strong>M</strong> (<em>int</em>) – Scaling cartesian position</p></li>
+<li><p><strong>C1</strong> (<em>float</em>) – Roughness normalization factor</p></li>
+<li><p><strong>B</strong> (<em>float</em>) – The degree the roughness is dependent on</p></li>
+<li><p><strong>sample_type</strong> (<em>str</em>) – The name of the sample</p></li>
+<li><p><strong>out_pre</strong> (<em>str</em>) – Prefix of output files</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.stat_sphere">
-<code class="descclassname">Func_pyrough.</code><code class="descname">stat_sphere</code><span class="sig-paren">(</span><em>r</em>, <em>C1</em>, <em>C2</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.stat_sphere" title="Permalink to this definition">¶</a></dt>
-<dd><p>Displays the statistical analysis of the surface roughness generator with regards to the sphere.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>r</strong> (<em>float</em>) – Roughness height matrix</li>
-<li><strong>C1</strong> (<em>float</em>) – Roughness normalization factor</li>
-<li><strong>C2</strong> (<em>float</em>) – Roughness normalization factor constant for sphere</li>
-<li><strong>out_pre</strong> (<em>str</em>) – Prefix of output files</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="Func_pyrough.stl_file">
-<code class="descclassname">Func_pyrough.</code><code class="descname">stl_file</code><span class="sig-paren">(</span><em>vertices</em>, <em>faces</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.stl_file" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.stl_file">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">stl_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_pre</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.stl_file" title="Link to this definition"></a></dt>
 <dd><p>Creates an stl file from the vertices and faces of the desired object.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>vertices</strong> (<em>array</em>) – The coordinates obtained from the mesh</li>
-<li><strong>faces</strong> – The faces of the triangles generated from the mesh</li>
-<li><strong>out_pre</strong> (<em>str</em>) – Prefix of the output files</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vertices</strong> (<em>array</em>) – The coordinates obtained from the mesh</p></li>
+<li><p><strong>faces</strong> – The faces of the triangles generated from the mesh</p></li>
+<li><p><strong>out_pre</strong> (<em>str</em>) – Prefix of the output files</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.theta">
-<code class="descclassname">Func_pyrough.</code><code class="descname">theta</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.theta" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.strain_file1_to_file2">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">strain_file1_to_file2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.strain_file1_to_file2" title="Link to this definition"></a></dt>
+<dd><p>Strain file1 to match file2 dimensions</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file1</strong></p></li>
+<li><p><strong>file2</strong></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>reprocessed file1</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.test_pyrough_execution">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">test_pyrough_execution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dir</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.test_pyrough_execution" title="Link to this definition"></a></dt>
+<dd><p>Check if all .json files in examples/ folder can be computed without error</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dir</strong> (<em>str</em>) – examples/ folder</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.theta">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">theta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.theta" title="Link to this definition"></a></dt>
 <dd><p>Calculates the arctan2 of two given arrays whose size are the same.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>x</strong> (<em>array</em>) – x coordinates</li>
-<li><strong>y</strong> (<em>array</em>) – y coordinates</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>array</em>) – x coordinates</p></li>
+<li><p><strong>y</strong> (<em>array</em>) – y coordinates</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">An array of angles in radians</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array of angles in radians</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.vectors">
-<code class="descclassname">Func_pyrough.</code><code class="descname">vectors</code><span class="sig-paren">(</span><em>N</em>, <em>M</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.vectors" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.two_odd_one_even">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">two_odd_one_even</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orien</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.two_odd_one_even" title="Link to this definition"></a></dt>
+<dd><p>Test if 2 indices amongst [h,k,l] are odd</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>orien</strong> (<em>array</em>) – [h,k,l] vector</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True or False</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.vectors">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">vectors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.vectors" title="Link to this definition"></a></dt>
 <dd><p>Creates vector of integers between -N and N. Same for M</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>N</strong> (<em>int</em>) – Scaling cartesian position</li>
-<li><strong>M</strong> (<em>int</em>) – Scaling cartesian position</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>N</strong> (<em>int</em>) – Scaling cartesian position</p></li>
+<li><p><strong>M</strong> (<em>int</em>) – Scaling cartesian position</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Vectors</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>2 vectors</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.vertex_tp">
-<code class="descclassname">Func_pyrough.</code><code class="descname">vertex_tp</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>t</em>, <em>z</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.vertex_tp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates an array filled with two elements that are the angles corresponding to the position of the node on the sphere.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>x</strong> (<em>array</em>) – X coordinates</li>
-<li><strong>y</strong> (<em>array</em>) – Y coordinates</li>
-<li><strong>t</strong> (<em>array</em>) – x &amp; y coordinates stored in a list</li>
-<li><strong>z</strong> (<em>array</em>) – Z coordinates</li>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.vertex_tp">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">vertex_tp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.vertex_tp" title="Link to this definition"></a></dt>
+<dd><p>Creates an array filled with two elements that are the angles corresponding to the position of
+the node on the sphere.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>array</em>) – X coordinates</p></li>
+<li><p><strong>y</strong> (<em>array</em>) – Y coordinates</p></li>
+<li><p><strong>t</strong> (<em>array</em>) – x &amp; y coordinates stored in a list</p></li>
+<li><p><strong>z</strong> (<em>array</em>) – Z coordinates</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">An array with angles as elements</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array with angles as elements</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.write_stl">
-<code class="descclassname">Func_pyrough.</code><code class="descname">write_stl</code><span class="sig-paren">(</span><em>filename</em>, <em>vertices</em>, <em>face_list</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.write_stl" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.write_stl">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">write_stl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">face_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.write_stl" title="Link to this definition"></a></dt>
 <dd><p>Creates an STL file from faces and vertices.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>filename</strong> (<em>str</em>) – name of the STL file</li>
-<li><strong>vertices</strong> (<em>array</em>) – list of vertices</li>
-<li><strong>face_list</strong> (<em>array</em>) – list of faces</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em>) – name of the STL file</p></li>
+<li><p><strong>vertices</strong> (<em>array</em>) – list of vertices</p></li>
+<li><p><strong>face_list</strong> (<em>array</em>) – list of faces</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="Func_pyrough.wulff">
-<code class="descclassname">Func_pyrough.</code><code class="descname">wulff</code><span class="sig-paren">(</span><em>points</em>, <em>faces</em>, <em>ns</em>, <em>out_pre</em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.wulff" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>points</strong> (<em>list</em>) – Vertices of Wulff-shape</li>
-<li><strong>faces</strong> (<em>list</em>) – Facets of Wulff-shape</li>
-<li><strong>ns</strong> (<em>float</em>) – Mesh size</li>
-<li><strong>out_pre</strong> (<em>str</em>) – Output file name if required</li>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func_pyrough.wulff">
+<span class="sig-prename descclassname"><span class="pre">Func_pyrough.</span></span><span class="sig-name descname"><span class="pre">wulff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ns</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func_pyrough.wulff" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>points</strong> (<em>list</em>) – Vertices of Wulff-shape</p></li>
+<li><p><strong>faces</strong> (<em>list</em>) – Facets of Wulff-shape</p></li>
+<li><p><strong>ns</strong> (<em>float</em>) – Mesh size</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">vertices and faces of Wulff mesh</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>vertices and faces of Wulff mesh</p>
+</dd>
+</dl>
 </dd></dl>
 
-</div>
+</section>
 
 
            </div>

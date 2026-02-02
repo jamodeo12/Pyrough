@@ -21,14 +21,13 @@ Additional ones might easily be implemented by the user thanks to **Pyrough**’
 
 
 .. toctree::
-   :maxdepth: 7
+   :maxdepth: 6
    :caption: Contents
 
    ./installation.rst
    ./equations.rst
    ./functions.rst
    ./shapes.rst
-   ./acknowledgments.rst
    ./credits.rst
    ./contact.rst
 
