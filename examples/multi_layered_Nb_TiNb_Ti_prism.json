@@ -1,0 +1,27 @@
+{"Multi_layered":
+    {"eta": 1,
+    "pattern_layer":[0,1,2,1],
+    "height_layer":[150,50,150,50],
+    "Height":400,
+    "Width": 100.0,
+    "Length": 100.0,
+    "Mesh_size": 5,
+    "Refine_factor":1.0,
+    "C1":0.001,
+    "N": 30,
+    "M": 30,
+    "Raw_stl": "na"},
+
+"Output":
+  {"ATOM": ["lmp"],
+  "FEM": ["stl"]},
+  
+
+"ATOMS_Param":
+    {"Lattice_parameter": [[3.3257768],[3.3257768],[2.9170752, 4.6536525],[3.3257768]],
+    "Material": [["Nb"],["Ti","Nb"],["Ti"],["Ti","Nb"]],
+    "Orien_x": [[1,-1,0],[1,-1,0],[0,0,0,1],[1,-1,0]],
+    "Orien_y": [[1,1,1],[1,1,1],[1,1,-2,0],[1,1,1]],
+    "Orien_z": [[1,1,-2],[1,1,-2],[1,-1,0,0],[1,1,-2]],
+    "Lattice_structure": ["bcc","bcc","hcp","bcc"]}
+}
