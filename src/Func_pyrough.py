@@ -14,6 +14,9 @@ import gmsh, meshio
 import numpy as np
 import scipy.special as sp
 
+from math import gcd
+from functools import reduce
+
 from ase import Atoms
 from ase.io import read, write
 from ase.build import bulk
@@ -21,7 +24,7 @@ from ase.cell import Cell
 from numpy.ma.core import is_string_or_list_of_strings
 from wulffpack import SingleCrystal
 
-def align_poly(vertices, angles):
+def align_f(vertices, angles):
     """
     Aligns the first facet with x-axis
 
@@ -53,6 +56,160 @@ def ase_to_spglib_cell(atoms):
     positions = atoms.get_scaled_positions()
     numbers = atoms.get_atomic_numbers()
     return (lattice, positions, numbers)
+
+def atomsk_cmd_to_string(cmd):
+    """
+    For debugging : print the content of Atomsk cmd
+    :param cmd: list of Atomsk argument
+    :return: string
+    """
+    rez = " ".join(str(c) for c in cmd)
+    print("{}".format(rez))
+
+def atomsk_select_stl_local_cutin(infile, stlfile, outfile, shift):
+    """
+    Allow to use the stl file extraction of Atomsk not only in the middle of the box but localised at precpos position
+    Make the precipitate inprint.
+    :param infile : input .lmp file
+    :return: string
+    :param stlfile : .stl mask file to cut the intput file
+    :return: string
+    :param outfile : output .lmp file
+    :return: string
+    :param precpos: [x, y, z] position of the stl mesh within the input .lmp file
+    :return: list
+    """
+    # precpos processing
+    #print("precpos : {} , {}".format(type(shift[0]), shift))
+    shift_x, shift_y, shift_z = str(shift[0]), str(shift[1]), str(shift[2])
+    revshift_x, revshift_y, revshift_z = str(-1*shift[0]), str(-1*shift[1]), str(-1*shift[2])
+    #print("revshift : {}, {}".format(type(revshift_x), revshift_x))
+
+    # Shift the matrix and center the inprint on (0,0,0), cut out
+    cmd = [
+        "atomsk",
+        infile,
+        "-shift",
+        revshift_x,
+        revshift_y,
+        revshift_z,
+        "-select",
+        "stl",
+        stlfile,
+        "-rmatom",
+        "select",
+        "temp.lmp",
+        "-v",
+        "2",
+        ]
+    print("Atomsk call:", " ".join(map(str, cmd)))
+    subprocess.call(cmd)
+
+    # Shift back
+    cmd = [
+        "atomsk",
+        "temp.lmp",
+        "-shift",
+        shift_x,
+        shift_y,
+        shift_z,
+        outfile,
+        "-v",
+        "2",
+    ]
+    print("Atomsk call:", " ".join(map(str, cmd)))
+    subprocess.call(cmd)
+    subprocess.call(["rm", "temp.lmp"])
+
+def atomsk_select_stl_local_cutout(infile, stlfile, outfile, shift):
+    """
+    Allow to use the stl file extraction of Atomsk not only in the middle of the box but localised at precpos position
+    Make the precipitate.
+    :param infile : input .lmp file
+    :return: string
+    :param stlfile : .stl mask file to cut the intput file
+    :return: string
+    :param outfile : output .lmp file
+    :return: string
+    :param precpos: [x, y, z] position of the stl mesh within the input .lmp file
+    :return: list
+    """
+    # precpos processing
+    shift_x, shift_y, shift_z = str(shift[0]), str(shift[1]), str(shift[2])
+    revshift_x, revshift_y, revshift_z = str(-1*shift[0]), str(-1*shift[1]), str(-1*shift[2])
+
+    # Shift the matrix and center the inprint on (0,0,0), cut out
+    cmd = [
+        "atomsk",
+        infile,
+        "-shift",
+        revshift_x,
+        revshift_y,
+        revshift_z,
+        "-select",
+        "stl",
+        stlfile,
+        "-select",
+        "invert",
+        "-rmatom",
+        "select",
+        "temp.lmp",
+        "-v",
+        "2",
+        ]
+    print("Atomsk call:", " ".join(map(str, cmd)))
+    subprocess.call(cmd)
+
+    # Shift back
+    cmd = [
+        "atomsk",
+        "temp.lmp",
+        "-shift",
+        shift_x,
+        shift_y,
+        shift_z,
+        outfile,
+        "-v",
+        "2",
+    ]
+    print("Atomsk call:", " ".join(map(str, cmd)))
+    subprocess.call(cmd)
+    subprocess.call(["rm", "temp.lmp"])
+
+
+def av_length_and_strain(list_supercell, Height):
+    """
+    Calculate the average dimension of each supercell, and strain all supercell to match these dimensions
+    :param list_supercell: list of all supercell file
+    :type list_supercell: List
+    :param list_distance: list of dimensions of all supercell
+    :type list_distance: List
+    """
+
+    #print("list_supercell_out : {}".format(list_supercell_out))
+    atoms = []
+    cells = []
+    for i in range(len(list_supercell)):
+        atoms.append(read(list_supercell[i]))
+        cells.append(atoms[i].get_cell())
+    #print("atoms : {}".format(atoms))
+    #print("cells : {}".format(cells))
+
+    cell_moyx = 0
+    cell_moyy = 0
+    cell_moyz = Height
+    for j in range(len(cells)):
+        cell_moyx = cell_moyx + (cells[j][0][0])/(len(cells))
+        #print("cells[j][0][0] : {}".format(cells[j][0][0]))
+        cell_moyy = cell_moyy + (cells[j][1][1])/(len(cells))
+
+    cell_moy =  Cell.new([[cell_moyx,0,0],[0,cell_moyy,0],[0,0,cell_moyz]])
+
+    #print("cell_moy : {}".format(cell_moy))
+
+    for k in range(len(atoms)):
+        atoms[k].set_cell(cell_moy, scale_atoms=True)
+        write(list_supercell[k], atoms[k])
 
 def base(radius, nfaces):
     """
@@ -576,6 +733,60 @@ def faces_normals(obj_points, obj_faces):
 
     return list_n
 
+def fwire(length, base_points, ns):
+    """
+    :param length: Length of the faceted wire
+    :type length: float
+    :param base_points: Shape of the base
+    :type base_points: list
+    :param ns: Mesh size
+    :type ns: float
+
+    :return: vertices and faces of faceted wire mesh
+    """
+    print("====== > Creating the Mesh")
+    gmsh.initialize()
+
+    gmsh.model.add("wire")
+
+    # Set verbosity to False
+    gmsh.option.setNumber("General.Terminal", 0)
+
+    # Define the base points in gmsh
+    base_gmsh_points = []
+    for point in base_points:
+        base_gmsh_points.append(gmsh.model.geo.addPoint(point[0], point[1], 0, ns))
+
+    # Create lines between base points
+    lines = []
+    for i in range(len(base_gmsh_points) - 1):
+        lines.append(gmsh.model.geo.addLine(base_gmsh_points[i], base_gmsh_points[i + 1]))
+    lines.append(gmsh.model.geo.addLine(base_gmsh_points[-1], base_gmsh_points[0]))
+
+    # Define the curve loop and surface
+    curve_loop = gmsh.model.geo.addCurveLoop(lines)
+    surface = gmsh.model.geo.addPlaneSurface([curve_loop])
+
+    # Extrude the surface to create the wire
+    gmsh.model.geo.extrude([(2, surface)], 0, 0, length, [length // ns])
+
+    # Synchronize and mesh the model
+    gmsh.model.geo.synchronize()
+    gmsh.model.mesh.generate(2)
+    # Extract node information
+    node_tags, node_coords, _ = gmsh.model.mesh.getNodes()
+    # Extract 2D surface element types and connectivity
+    element_types, element_tags, element_nodes = gmsh.model.mesh.getElements(dim=2)
+    # Save the mesh to a file
+    gmsh.finalize()
+    # Reshape the node coordinates into a more user-friendly format
+    vertices = node_coords.reshape(-1, 3)
+    # Find the triangles from the extracted elements
+    triangle_idx = np.where(element_types == 2)[0][0]  # 2 corresponds to triangles
+    faces = element_nodes[triangle_idx].reshape(-1, 3) - 1
+    print("====== > Done creating the Mesh")
+    return (vertices, faces)
+
 def G_hex(latt_param, latt_param_z):
     """
     Generate the direct metric tensor for Miller-Bravais indices for hcp structure
@@ -588,6 +799,167 @@ def G_hex(latt_param, latt_param_z):
     res = (latt_param**2 / 2) * np.array([[2, -1, -1, 0], [-1, 2, -1, 0], [-1, -1, 2, 0], [0, 0, 0, 2 * latt_param_z**2 / latt_param**2]])
 
     return res
+
+def lmp_rotate_euler(input_file, output_file, angles_deg, order='zyx'):
+    """
+    Rotate a LAMMPS atomic data file (.lmp) using Euler rotations.
+    Positions and simulation box are rotated consistently.
+
+    Parameters
+    ----------
+    input_file : str
+        Input LAMMPS data file
+    output_file : str
+        Output rotated LAMMPS data file
+    angles_deg : list or tuple of 3 floats
+        Euler angles in degrees [alpha, beta, gamma]
+    order : str
+        Rotation order, e.g. 'zyx'
+    """
+
+    # =========================
+    # Read file
+    # =========================
+    with open(input_file, "r") as f:
+        lines = f.readlines()
+
+    header = []
+    masses = []
+    atoms = []
+
+    xlo = xhi = ylo = yhi = zlo = zhi = None
+
+    mode = None
+    for line in lines:
+        s = line.strip()
+
+        if s.endswith("xlo xhi"):
+            xlo, xhi = map(float, s.split()[:2])
+        elif s.endswith("ylo yhi"):
+            ylo, yhi = map(float, s.split()[:2])
+        elif s.endswith("zlo zhi"):
+            zlo, zhi = map(float, s.split()[:2])
+        elif s.startswith("Masses"):
+            mode = "masses"
+            masses.append(line)
+        elif s.startswith("Atoms"):
+            mode = "atoms"
+            atoms.append(line)
+        else:
+            if mode == "masses":
+                if s == "":
+                    masses.append(line)
+                else:
+                    masses.append(line)
+            elif mode == "atoms":
+                if s == "":
+                    atoms.append(line)
+                else:
+                    atoms.append(line)
+            else:
+                header.append(line)
+
+    # =========================
+    # Extract atomic positions
+    # =========================
+    atom_data = []
+    for line in atoms[1:]:
+        if line.strip() == "":
+            continue
+        fields = line.split()
+        atom_id = int(fields[0])
+        atom_type = int(fields[1])
+        x, y, z = map(float, fields[2:5])
+        atom_data.append([atom_id, atom_type, x, y, z])
+
+    atom_data = np.array(atom_data, dtype=float)
+    positions = atom_data[:, 2:5]
+
+    # =========================
+    # Center positions
+    # =========================
+    center = positions.mean(axis=0)
+    positions -= center
+
+    # =========================
+    # Euler rotation matrix
+    # =========================
+    alpha, beta, gamma = np.deg2rad(angles_deg)
+
+    Rx = np.array([
+        [1, 0, 0],
+        [0, np.cos(alpha), -np.sin(alpha)],
+        [0, np.sin(alpha),  np.cos(alpha)]
+    ])
+
+    Ry = np.array([
+        [ np.cos(beta), 0, np.sin(beta)],
+        [0, 1, 0],
+        [-np.sin(beta), 0, np.cos(beta)]
+    ])
+
+    Rz = np.array([
+        [np.cos(gamma), -np.sin(gamma), 0],
+        [np.sin(gamma),  np.cos(gamma), 0],
+        [0, 0, 1]
+    ])
+
+    mat_map = {'x': Rx, 'y': Ry, 'z': Rz}
+    R = np.eye(3)
+    for ax in order:
+        R = mat_map[ax] @ R
+
+    # =========================
+    # Rotate positions
+    # =========================
+    positions_rot = positions @ R.T
+    atom_data[:, 2:5] = positions_rot
+
+    # =========================
+    # Rotate box
+    # =========================
+    Lx = xhi - xlo
+    Ly = yhi - ylo
+    Lz = zhi - zlo
+
+    box = np.array([
+        [Lx, 0, 0],
+        [0, Ly, 0],
+        [0, 0, Lz]
+    ])
+
+    box_rot = box @ R.T
+
+    mins = box_rot.min(axis=0)
+    maxs = box_rot.max(axis=0)
+
+    xlo_new, xhi_new = mins[0], maxs[0]
+    ylo_new, yhi_new = mins[1], maxs[1]
+    zlo_new, zhi_new = mins[2], maxs[2]
+
+    # Shift atoms back into box
+    atom_data[:, 2] -= xlo_new
+    atom_data[:, 3] -= ylo_new
+    atom_data[:, 4] -= zlo_new
+
+    # =========================
+    # Write output file
+    # =========================
+    with open(output_file, "w") as f:
+        for line in header:
+            f.write(line)
+
+        f.write(f"{xlo_new} {xhi_new} xlo xhi\n")
+        f.write(f"{ylo_new} {yhi_new} ylo yhi\n")
+        f.write(f"{zlo_new} {zhi_new} zlo zhi\n\n")
+
+        for line in masses:
+            f.write(line)
+
+        f.write("\nAtoms # atomic\n\n")
+        for a in atom_data:
+            f.write(f"{int(a[0])} {int(a[1])} {a[2]} {a[3]} {a[4]}\n")
+
 
 def make_obj(
     surfaces,
@@ -686,7 +1058,7 @@ def make_rough(type_sample, z, nodesurf, vertices, angles):
             poss = np.where(vertices[:, 3] == index)
             vertices[poss, 0] = vertices[poss, 0] + dz * np.cos(thetaa)
             vertices[poss, 1] = vertices[poss, 1] + dz * np.sin(thetaa)
-    elif type_sample == "poly":
+    elif type_sample == "fwire":
         k = 0
         for i in range(np.shape(z)[0]):
             for j in range(np.shape(z)[1]):
@@ -712,6 +1084,100 @@ def make_rough(type_sample, z, nodesurf, vertices, angles):
                 k += 1
     return vertices
 
+#-----------------------------------------------------------------------------------------------------------------------
+def make_rough_pillar(type_sample, z1, z2, nodesurf1 , nodesurf2 , node_edge , vertices, anglesfac):
+    """
+    Applies roughness to a sample with Pillar shape.
+
+    :type type_sample: str
+    :param z1: Lateral surface roughness to apply on the sample
+    :type z1: array
+    :param z2: Topside surface roughness to apply on the sample
+    :type z2: array
+    :param nodesurf1: List of nodes on the lateral surface to be moved
+    :type nodesurf1: array
+    :param nodesurf2: List of nodes on the topside surface to be moved
+    :type nodesurf2: array
+    :param node_edge: List of nodes on the edge which are moved tw    :param type_sample: The type of the sample
+ice
+    :type node_edge: array
+    :param vertices: Nodes of the sample
+    :type vertices: array
+    :param anglesfac: List of angles to be followed by roughness (Only in the case of a faceted wire)
+    :type anglesfac: array
+
+    :return: Rough sample
+    """
+    min_dz1 = abs(z1.min())
+    min_dz2 = abs(z2.min())
+    if type_sample == "pillar":
+        #Box roughness application on the topside surface
+        for i in range(len(z2)):
+            dz2 = z2[i] + min_dz2
+            node = nodesurf2[i]
+            index = node[3]
+            poss = np.where(vertices[:, 3] == index)
+            vertices[poss, 2] = vertices[poss, 2] + dz2
+            #edge case
+            for k in range(len(node_edge)):
+                if index == node_edge[k]:
+                    vertices[poss, 2] = vertices[poss, 2] - dz2 + (dz2 / 2)
+
+        #Wire roughness application on the lateral surface
+        for i in range(len(z1)):
+            dz1 = z1[i] + min_dz1
+            node = nodesurf1[i]
+            thetaa = node[1]
+            index = node[3]
+            poss = np.where(vertices[:, 3] == index)
+            vertices[poss, 0] = vertices[poss, 0] + dz1 * np.cos(thetaa)
+            vertices[poss, 1] = vertices[poss, 1] + dz1 * np.sin(thetaa)
+            #Edge case
+            for k in range(len(node_edge)):
+                if index == node_edge[k]:
+                    vertices[poss, 0] = vertices[poss, 0] - dz1 * np.cos(thetaa) + (dz1 * np.cos(thetaa))/2
+                    vertices[poss, 1] = vertices[poss, 1] - dz1 * np.sin(thetaa) + (dz1 * np.sin(thetaa))/2
+
+    elif type_sample == "fpillar":
+
+        #Box roughness application on the topside surface
+        for i in range(len(z2)):
+            dz2 = z2[i] + min_dz2
+            node = nodesurf2[i]
+            index = node[3]
+            poss = np.where(vertices[:, 3] == index)
+            vertices[poss, 2] = vertices[poss, 2] + dz2
+            #Edge case
+            for k in range(len(node_edge)):
+                if index == node_edge[k]:
+                    vertices[poss, 2] = vertices[poss, 2] - dz2 + (dz2 / 2)
+
+        #Faceted wire roughness application on the lateral surface
+        k = 0
+        for i in range(np.shape(z1)[0]):
+            for j in range(np.shape(z1)[1]):
+                dz1 = z1[i, j] + min_dz1
+                node = nodesurf1[k]
+                index = int(node[3])
+                thetaa = np.arctan2(node[1], node[0])
+                if thetaa < 0:
+                    thetaa = thetaa + 2 * np.pi
+                theta_min = np.abs(np.array(anglesfac) - thetaa)
+                possi = np.where(abs(theta_min - np.amin(theta_min)) <= 0.01)[0]
+                if len(possi) > 1:
+                    angle = 0.5 * (anglesfac[int(possi[0])] + anglesfac[int(possi[1])])
+                    dz1 = 0.5 * dz1
+                elif thetaa == 0:
+                    angle = 0
+                    dz1 = 0.5 * dz1
+                else:
+                    angle = anglesfac[int(possi)]
+                poss = int(np.where(vertices[:, 3] == index)[0])
+                vertices[poss, 0] = vertices[poss, 0] + dz1 * np.cos(angle)
+                vertices[poss, 1] = vertices[poss, 1] + dz1 * np.sin(angle)
+                k += 1
+    return vertices
+#-----------------------------------------------------------------------------------------------------------------------
 
 
 def make_rough_wulff(vertices, B, C1, RMS, N, M, nodesurf, node_edge, node_corner, list_n):
@@ -781,6 +1247,202 @@ def make_rough_wulff(vertices, B, C1, RMS, N, M, nodesurf, node_edge, node_corne
             vertices[poss, 1] = vertices[poss, 1] + delta_z * n1[1]
             vertices[poss, 2] = vertices[poss, 2] + delta_z * n1[2]
     return vertices
+
+
+
+def miller_rotate_euler_int(orien_x, orien_y, orien_z, angles_deg, order='zyx',
+                            tol=1e-6, max_den=12):
+    """
+    Rotate Miller orientations (given as [hkl] strings) using Euler angles
+    and return nearest integer Miller indices formatted as '[hkl]'
+    """
+
+    def miller_integerize(v):
+        v = np.array(v, dtype=float)
+        v[np.abs(v) < tol] = 0.0
+
+        norm = np.linalg.norm(v)
+        if norm < tol:
+            raise ValueError("Zero direction vector")
+
+        v = v / norm
+
+        best = None
+        best_err = np.inf
+
+        for n in range(1, max_den + 1):
+            w = np.round(v * n)
+            if np.linalg.norm(w) < tol:
+                continue
+            err = np.linalg.norm(v - w / np.linalg.norm(w))
+            if err < best_err:
+                best = w
+                best_err = err
+
+        h, k, l = best.astype(int)
+
+        g = reduce(gcd, [abs(h), abs(k), abs(l)])
+        if g > 0:
+            h //= g
+            k //= g
+            l //= g
+
+        return int(h), int(k), int(l)
+
+    def format_miller(h, k, l):
+        return f"[{h}{k}{l}]"
+
+    # Parse Miller strings
+    ox = np.array(miller_parse(orien_x), dtype=float)
+    oy = np.array(miller_parse(orien_y), dtype=float)
+    oz = np.array(miller_parse(orien_z), dtype=float)
+
+    # Euler rotations
+    alpha, beta, gamma = np.deg2rad(angles_deg)
+
+    Rx = np.array([[1, 0, 0],
+                   [0, np.cos(alpha), -np.sin(alpha)],
+                   [0, np.sin(alpha),  np.cos(alpha)]])
+
+    Ry = np.array([[ np.cos(beta), 0, np.sin(beta)],
+                   [0, 1, 0],
+                   [-np.sin(beta), 0, np.cos(beta)]])
+
+    Rz = np.array([[np.cos(gamma), -np.sin(gamma), 0],
+                   [np.sin(gamma),  np.cos(gamma), 0],
+                   [0, 0, 1]])
+
+    mat_map = {'x': Rx, 'y': Ry, 'z': Rz}
+
+    R = np.eye(3)
+    for ax in order:
+        R = mat_map[ax] @ R
+
+    # Rotate orientations
+    ox_r = R @ ox
+    oy_r = R @ oy
+    oz_r = R @ oz
+
+    # Integer Miller indices
+    ox_i = miller_integerize(ox_r)
+    oy_i = miller_integerize(oy_r)
+    oz_i = miller_integerize(oz_r)
+
+    # Return formatted Miller strings
+    return (
+        format_miller(*ox_i),
+        format_miller(*oy_i),
+        format_miller(*oz_i),
+    )
+
+def miller_parse(miller_str):
+    """
+    Parse a Miller direction string like '[1-21]' or '[-110]' into a vector
+    """
+    s = miller_str.strip().replace('[', '').replace(']', '')
+    vec = []
+    i = 0
+    while i < len(s):
+        if s[i] == '-':
+            vec.append(-int(s[i+1]))
+            i += 2
+        else:
+            vec.append(int(s[i]))
+            i += 1
+    if len(vec) != 3:
+        raise ValueError(f"Invalid Miller index: [{s}]")
+    return vec
+
+def multi_layered(h,width, length, height, ns):
+    """
+    Creates a box mesh with a minimal height = h, z_min == h
+    :param h: initial height of the box
+    :type h: float
+    :param width: Width of the box
+    :type width: float
+    :param length: Length of the box
+    :type length: float
+    :param height: Height of the box
+    :type height: float
+    :param ns: Mesh size
+    :type ns: float
+
+    :return: vertices and faces of box mesh
+    """
+    print("====== > Creating the Mesh")
+    print(h)
+    # Initialize Gmsh
+    gmsh.initialize()
+    # Silence Gmsh's output
+    gmsh.option.setNumber("General.Terminal", 0)
+    # Create a new model
+    gmsh.model.add("Box")
+    # Define the box's vertices
+    p1 = gmsh.model.geo.addPoint(0, 0, h)
+    p2 = gmsh.model.geo.addPoint(length, 0, h)
+    p3 = gmsh.model.geo.addPoint(length, width, h)
+    p4 = gmsh.model.geo.addPoint(0, width, h)
+    p5 = gmsh.model.geo.addPoint(0, 0, h+height)
+    p6 = gmsh.model.geo.addPoint(length, 0, h+height)
+    p7 = gmsh.model.geo.addPoint(length, width, h+height)
+    p8 = gmsh.model.geo.addPoint(0, width, h+height)
+    # Connect the points to form the edges
+    lines = [
+        gmsh.model.geo.addLine(p1, p2),
+        gmsh.model.geo.addLine(p2, p3),
+        gmsh.model.geo.addLine(p3, p4),
+        gmsh.model.geo.addLine(p4, p1),
+        gmsh.model.geo.addLine(p5, p6),
+        gmsh.model.geo.addLine(p6, p7),
+        gmsh.model.geo.addLine(p7, p8),
+        gmsh.model.geo.addLine(p8, p5),
+        gmsh.model.geo.addLine(p1, p5),
+        gmsh.model.geo.addLine(p2, p6),
+        gmsh.model.geo.addLine(p3, p7),
+        gmsh.model.geo.addLine(p4, p8),
+    ]
+    # Connect the edges to form the faces
+    faces = [
+        gmsh.model.geo.addPlaneSurface(
+            [gmsh.model.geo.addCurveLoop([lines[0], lines[1], lines[2], lines[3]])]
+        ),
+        gmsh.model.geo.addPlaneSurface(
+            [gmsh.model.geo.addCurveLoop([lines[4], lines[5], lines[6], lines[7]])]
+        ),
+        gmsh.model.geo.addPlaneSurface(
+            [gmsh.model.geo.addCurveLoop([lines[0], lines[9], -lines[4], -lines[8]])]
+        ),
+        gmsh.model.geo.addPlaneSurface(
+            [gmsh.model.geo.addCurveLoop([-lines[2], lines[10], lines[6], -lines[11]])]
+        ),
+        gmsh.model.geo.addPlaneSurface(
+            [gmsh.model.geo.addCurveLoop([lines[1], lines[10], -lines[5], -lines[9]])]
+        ),
+        gmsh.model.geo.addPlaneSurface(
+            [gmsh.model.geo.addCurveLoop([-lines[3], lines[11], lines[7], -lines[8]])]
+        ),
+    ]
+    # Define a uniform mesh size
+    f = gmsh.model.mesh.field.add("MathEval")
+    gmsh.model.mesh.field.setString(f, "F", str(ns))
+    gmsh.model.mesh.field.setAsBackgroundMesh(f)
+    # Synchronize the model
+    gmsh.model.geo.synchronize()
+    # Generate the 3D mesh
+    gmsh.model.mesh.generate(2)
+    # Save the mesh to a file
+    # Extract node information
+    node_tags, node_coords, _ = gmsh.model.mesh.getNodes()
+    # Extract 2D surface element types and connectivity
+    element_types, element_tags, element_nodes = gmsh.model.mesh.getElements(dim=2)
+    gmsh.finalize()
+    # Reshape the node coordinates into a more user-friendly format
+    vertices = node_coords.reshape(-1, 3)
+    # Find the triangles from the extracted elements
+    triangle_idx = np.where(element_types == 2)[0][0]  # 2 corresponds to triangles
+    faces = element_nodes[triangle_idx].reshape(-1, 3) - 1
+    print("====== > Done creating the Mesh")
+    return (vertices, faces)
 
 def needs_triple_correction(orien) -> bool:
     """
@@ -873,7 +1535,7 @@ def node_surface(sample_type, vertices, nodenumber, points, faces):
         nodesurf = np.delete(vertices, no_need, 0)
         return nodesurf
 
-    elif sample_type == "poly":
+    elif sample_type == ("fwire"):
         eps = 0.0001
         face = []
         for i in range(len(points)):
@@ -986,59 +1648,7 @@ def physical_norm(self, uvtw):
     """Returns the physically correct length of a crystallographic vector."""
     return self.norm(uvtw) / 3 if self.__needs_triple_correction(uvtw) else self.norm(uvtw)
 
-def poly(length, base_points, ns):
-    """
-    :param length: Length of the faceted wire
-    :type length: float
-    :param base_points: Shape of the base
-    :type base_points: list
-    :param ns: Mesh size
-    :type ns: float
 
-    :return: vertices and faces of faceted wire mesh
-    """
-    print("====== > Creating the Mesh")
-    gmsh.initialize()
-
-    gmsh.model.add("wire")
-
-    # Set verbosity to False
-    gmsh.option.setNumber("General.Terminal", 0)
-
-    # Define the base points in gmsh
-    base_gmsh_points = []
-    for point in base_points:
-        base_gmsh_points.append(gmsh.model.geo.addPoint(point[0], point[1], 0, ns))
-
-    # Create lines between base points
-    lines = []
-    for i in range(len(base_gmsh_points) - 1):
-        lines.append(gmsh.model.geo.addLine(base_gmsh_points[i], base_gmsh_points[i + 1]))
-    lines.append(gmsh.model.geo.addLine(base_gmsh_points[-1], base_gmsh_points[0]))
-
-    # Define the curve loop and surface
-    curve_loop = gmsh.model.geo.addCurveLoop(lines)
-    surface = gmsh.model.geo.addPlaneSurface([curve_loop])
-
-    # Extrude the surface to create the wire
-    gmsh.model.geo.extrude([(2, surface)], 0, 0, length, [length // ns])
-
-    # Synchronize and mesh the model
-    gmsh.model.geo.synchronize()
-    gmsh.model.mesh.generate(2)
-    # Extract node information
-    node_tags, node_coords, _ = gmsh.model.mesh.getNodes()
-    # Extract 2D surface element types and connectivity
-    element_types, element_tags, element_nodes = gmsh.model.mesh.getElements(dim=2)
-    # Save the mesh to a file
-    gmsh.finalize()
-    # Reshape the node coordinates into a more user-friendly format
-    vertices = node_coords.reshape(-1, 3)
-    # Find the triangles from the extracted elements
-    triangle_idx = np.where(element_types == 2)[0][0]  # 2 corresponds to triangles
-    faces = element_nodes[triangle_idx].reshape(-1, 3) - 1
-    print("====== > Done creating the Mesh")
-    return (vertices, faces)
 
 def radius(v):
     """
@@ -1205,12 +1815,12 @@ def read_stl(sample_type, raw_stl, width, length, height, radius, ns, points):
 #----------------------------------------------------------------------------------------------------------------------
         if sample_type == "box" or sample_type == "grain" or sample_type == "multi_layered":
             vertices, faces = box(width, length, height, ns)
-        elif sample_type == "wire" or sample_type == "pillar":
+        elif sample_type == "cwire" or sample_type == "cpillar":
             vertices, faces = cylinder(length, radius, ns)
         elif sample_type == "sphere":
             vertices, faces = sphere(radius, ns)
-        elif sample_type == "poly" or sample_type == "poly_pillar":
-            vertices, faces = poly(length, points, ns)
+        elif sample_type == "fwire" or sample_type == "fpillar":
+            vertices, faces = fwire(length, points, ns)
 #-----------------------------------------------------------------------------------------------------------------------
         elif sample_type == "cube":
             vertices, faces = cube(length, ns)
@@ -1324,14 +1934,14 @@ def refine_3Dmesh(type_sample, out_pre, ns, alpha, ext_fem):
     if (type_sample == "box") or (type_sample == "grain") or (type_sample == "multi_layered"):
 #-----------------------------------------------------------------------------------------------------------------------
         refine_box(out_pre, ns, alpha, 45, ext_fem)
-    elif type_sample == "wire" or type_sample == "poly" :
+    elif type_sample == "cwire" or type_sample == "fwore" :
         refine_wire(out_pre, ns, alpha, 0, ext_fem)
     elif type_sample == "sphere":
         refine_sphere(out_pre, ns, alpha, 0, ext_fem)
     elif type_sample == "wulff" or type_sample == "cube":
         refine_sphere(out_pre, ns, alpha, 45, ext_fem)
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
-    elif type_sample == "pillar" or type_sample == "poly_pillar":
+    elif type_sample == "cpillar" or type_sample == "fpillar":
         refine_pillar(out_pre, ns, alpha, 0,ext_fem)
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------
     return ()
@@ -1914,6 +2524,72 @@ def stl_file(vertices, faces, out_pre):
     write_stl(out_pre + ".stl", vertices, np.array(faces))
     return
 
+
+def stl_rotate_euler(input_file, output_file, angles_deg, order='zyx'):
+    """
+    Rotate STL input_file into STL ouput_file using Euler rotations
+
+    :param input_file: name of the STL file to rotate
+    :type input_file: string
+    :param output_file: name of the output STL file
+    :type output_file: string
+    :param angles_deg: list of 3 angles
+    :type angles_deg: list
+    """
+    vertices = []
+    facets = []
+
+    # STL reading
+    with open(input_file, 'r') as f:
+        lines = f.readlines()
+
+    i = 0
+    while i < len(lines):
+        line = lines[i].strip()
+        if line.startswith('facet normal'):
+            normal = list(map(float, line.split()[2:]))
+            vert = []
+            i += 2  # skip "outer loop"
+            for _ in range(3):
+                v = list(map(float, lines[i].strip().split()[1:]))
+                vert.append(v)
+                i += 1
+            facets.append((normal, vert))
+        i += 1
+
+    vertices = np.array([v for _, verts in facets for v in verts])
+
+    # Euler rotations
+    alpha, beta, gamma = np.deg2rad(angles_deg)
+    Rx = np.array([[1,0,0],[0,np.cos(alpha),-np.sin(alpha)],[0,np.sin(alpha),np.cos(alpha)]])
+    Ry = np.array([[np.cos(beta),0,np.sin(beta)],[0,1,0],[-np.sin(beta),0,np.cos(beta)]])
+    Rz = np.array([[np.cos(gamma),-np.sin(gamma),0],[np.sin(gamma),np.cos(gamma),0],[0,0,1]])
+    mat_map = {'x': Rx, 'y': Ry, 'z': Rz}
+    R = np.eye(3)
+    for ax in order:
+        R = mat_map[ax] @ R
+    vertices_rot = vertices @ R.T
+
+    # STL rewritting
+    out_lines = ["solid rotated_by_euler\n"]
+    idx = 0
+    for normal, _ in facets:
+        v1, v2, v3 = vertices_rot[idx], vertices_rot[idx+1], vertices_rot[idx+2]
+        idx += 3
+        out_lines.append(f"facet normal {normal[0]} {normal[1]} {normal[2]}\n")
+        out_lines.append("  outer loop\n")
+        out_lines.append(f"    vertex {v1[0]} {v1[1]} {v1[2]}\n")
+        out_lines.append(f"    vertex {v2[0]} {v2[1]} {v2[2]}\n")
+        out_lines.append(f"    vertex {v3[0]} {v3[1]} {v3[2]}\n")
+        out_lines.append("  endloop\n")
+        out_lines.append("endfacet\n")
+    out_lines.append("endsolid rotated_by_euler\n")
+
+    with open(output_file, 'w') as f:
+        f.writelines(out_lines)
+
+
+
 def strain_file1_to_file2(file1, file2):
     """
     Strain file1 to match file2 dimensions
@@ -2127,223 +2803,90 @@ def wulff(points, faces, ns):
     print("====== > Done creating the Mesh")
     return (vertices, faces)
 
-#-----------------------------------------------------------------------------------------------------------------------
-
-def make_rough_pillar(type_sample, z1, z2, nodesurf1 , nodesurf2 , node_edge , vertices, angles):
+def xyz_rotate_euler(input_file, output_file, angles_deg, order='zyx'):
     """
-    Applies roughness to a sample with Pillar shape.
+    Rotate an XYZ atomic file using Euler rotations (rigid rotation).
 
-    :type type_sample: str
-    :param z1: Lateral surface roughness to apply on the sample
-    :type z1: array
-    :param z2: Topside surface roughness to apply on the sample
-    :type z2: array
-    :param nodesurf1: List of nodes on the lateral surface to be moved
-    :type nodesurf1: array
-    :param nodesurf2: List of nodes on the topside surface to be moved
-    :type nodesurf2: array
-    :param node_edge: List of nodes on the edge which are moved tw    :param type_sample: The type of the sample
-ice
-    :type node_edge: array
-    :param vertices: Nodes of the sample
-    :type vertices: array
-    :param angles: List of angles to be followed by roughness (Only in the case of a faceted wire)
-    :type angles: array
-
-    :return: Rough sample
-    """
-    min_dz1 = abs(z1.min())
-    min_dz2 = abs(z2.min())
-    if type_sample == "pillar":
-        #Box roughness application on the topside surface
-        for i in range(len(z2)):
-            dz2 = z2[i] + min_dz2
-            node = nodesurf2[i]
-            index = node[3]
-            poss = np.where(vertices[:, 3] == index)
-            vertices[poss, 2] = vertices[poss, 2] + dz2
-            #edge case
-            for k in range(len(node_edge)):
-                if index == node_edge[k]:
-                    vertices[poss, 2] = vertices[poss, 2] - dz2 + (dz2 / 2)
-
-        #Wire roughness application on the lateral surface
-        for i in range(len(z1)):
-            dz1 = z1[i] + min_dz1
-            node = nodesurf1[i]
-            thetaa = node[1]
-            index = node[3]
-            poss = np.where(vertices[:, 3] == index)
-            vertices[poss, 0] = vertices[poss, 0] + dz1 * np.cos(thetaa)
-            vertices[poss, 1] = vertices[poss, 1] + dz1 * np.sin(thetaa)
-            #Edge case
-            for k in range(len(node_edge)):
-                if index == node_edge[k]:
-                    vertices[poss, 0] = vertices[poss, 0] - dz1 * np.cos(thetaa) + (dz1 * np.cos(thetaa))/2
-                    vertices[poss, 1] = vertices[poss, 1] - dz1 * np.sin(thetaa) + (dz1 * np.sin(thetaa))/2
-
-    elif type_sample == "poly_pillar":
-
-        #Box roughness application on the topside surface
-        for i in range(len(z2)):
-            dz2 = z2[i] + min_dz2
-            node = nodesurf2[i]
-            index = node[3]
-            poss = np.where(vertices[:, 3] == index)
-            vertices[poss, 2] = vertices[poss, 2] + dz2
-            #Edge case
-            for k in range(len(node_edge)):
-                if index == node_edge[k]:
-                    vertices[poss, 2] = vertices[poss, 2] - dz2 + (dz2 / 2)
-
-        #Faceted wire roughness application on the lateral surface
-        k = 0
-        for i in range(np.shape(z1)[0]):
-            for j in range(np.shape(z1)[1]):
-                dz1 = z1[i, j] + min_dz1
-                node = nodesurf1[k]
-                index = int(node[3])
-                thetaa = np.arctan2(node[1], node[0])
-                if thetaa < 0:
-                    thetaa = thetaa + 2 * np.pi
-                theta_min = np.abs(np.array(angles) - thetaa)
-                possi = np.where(abs(theta_min - np.amin(theta_min)) <= 0.01)[0]
-                if len(possi) > 1:
-                    angle = 0.5 * (angles[int(possi[0])] + angles[int(possi[1])])
-                    dz1 = 0.5 * dz1
-                elif thetaa == 0:
-                    angle = 0
-                    dz1 = 0.5 * dz1
-                else:
-                    angle = angles[int(possi)]
-                poss = int(np.where(vertices[:, 3] == index)[0])
-                vertices[poss, 0] = vertices[poss, 0] + dz1 * np.cos(angle)
-                vertices[poss, 1] = vertices[poss, 1] + dz1 * np.sin(angle)
-                k += 1
-    return vertices
-
-#-----------------------------------------------------------------------------------------------------------------------
-def multi_layered(h,width, length, height, ns):
-    """
-    Creates a box mesh with a minimal height = h, z_min == h
-    :param h: initial height of the box
-    :type h: float
-    :param width: Width of the box
-    :type width: float
-    :param length: Length of the box
-    :type length: float
-    :param height: Height of the box
-    :type height: float
-    :param ns: Mesh size
-    :type ns: float
-
-    :return: vertices and faces of box mesh
-    """
-    print("====== > Creating the Mesh")
-    print(h)
-    # Initialize Gmsh
-    gmsh.initialize()
-    # Silence Gmsh's output
-    gmsh.option.setNumber("General.Terminal", 0)
-    # Create a new model
-    gmsh.model.add("Box")
-    # Define the box's vertices
-    p1 = gmsh.model.geo.addPoint(0, 0, h)
-    p2 = gmsh.model.geo.addPoint(length, 0, h)
-    p3 = gmsh.model.geo.addPoint(length, width, h)
-    p4 = gmsh.model.geo.addPoint(0, width, h)
-    p5 = gmsh.model.geo.addPoint(0, 0, h+height)
-    p6 = gmsh.model.geo.addPoint(length, 0, h+height)
-    p7 = gmsh.model.geo.addPoint(length, width, h+height)
-    p8 = gmsh.model.geo.addPoint(0, width, h+height)
-    # Connect the points to form the edges
-    lines = [
-        gmsh.model.geo.addLine(p1, p2),
-        gmsh.model.geo.addLine(p2, p3),
-        gmsh.model.geo.addLine(p3, p4),
-        gmsh.model.geo.addLine(p4, p1),
-        gmsh.model.geo.addLine(p5, p6),
-        gmsh.model.geo.addLine(p6, p7),
-        gmsh.model.geo.addLine(p7, p8),
-        gmsh.model.geo.addLine(p8, p5),
-        gmsh.model.geo.addLine(p1, p5),
-        gmsh.model.geo.addLine(p2, p6),
-        gmsh.model.geo.addLine(p3, p7),
-        gmsh.model.geo.addLine(p4, p8),
-    ]
-    # Connect the edges to form the faces
-    faces = [
-        gmsh.model.geo.addPlaneSurface(
-            [gmsh.model.geo.addCurveLoop([lines[0], lines[1], lines[2], lines[3]])]
-        ),
-        gmsh.model.geo.addPlaneSurface(
-            [gmsh.model.geo.addCurveLoop([lines[4], lines[5], lines[6], lines[7]])]
-        ),
-        gmsh.model.geo.addPlaneSurface(
-            [gmsh.model.geo.addCurveLoop([lines[0], lines[9], -lines[4], -lines[8]])]
-        ),
-        gmsh.model.geo.addPlaneSurface(
-            [gmsh.model.geo.addCurveLoop([-lines[2], lines[10], lines[6], -lines[11]])]
-        ),
-        gmsh.model.geo.addPlaneSurface(
-            [gmsh.model.geo.addCurveLoop([lines[1], lines[10], -lines[5], -lines[9]])]
-        ),
-        gmsh.model.geo.addPlaneSurface(
-            [gmsh.model.geo.addCurveLoop([-lines[3], lines[11], lines[7], -lines[8]])]
-        ),
-    ]
-    # Define a uniform mesh size
-    f = gmsh.model.mesh.field.add("MathEval")
-    gmsh.model.mesh.field.setString(f, "F", str(ns))
-    gmsh.model.mesh.field.setAsBackgroundMesh(f)
-    # Synchronize the model
-    gmsh.model.geo.synchronize()
-    # Generate the 3D mesh
-    gmsh.model.mesh.generate(2)
-    # Save the mesh to a file
-    # Extract node information
-    node_tags, node_coords, _ = gmsh.model.mesh.getNodes()
-    # Extract 2D surface element types and connectivity
-    element_types, element_tags, element_nodes = gmsh.model.mesh.getElements(dim=2)
-    gmsh.finalize()
-    # Reshape the node coordinates into a more user-friendly format
-    vertices = node_coords.reshape(-1, 3)
-    # Find the triangles from the extracted elements
-    triangle_idx = np.where(element_types == 2)[0][0]  # 2 corresponds to triangles
-    faces = element_nodes[triangle_idx].reshape(-1, 3) - 1
-    print("====== > Done creating the Mesh")
-    return (vertices, faces)
-
-def av_length_and_strain(list_supercell, Height):
-    """
-    Calcul the average dimension of each supercell, and strain all supercell to match these dimensions
-    :param list_supercell: list of all supercell file
-    :type list_supercell: List
-    :param list_distance: list of dimensions of all supercell
-    :type list_distance: List
+    Parameters
+    ----------
+    input_file : str
+        Input XYZ file
+    output_file : str
+        Output rotated XYZ file
+    angles_deg : list or tuple of 3 floats
+        Euler angles in degrees [alpha, beta, gamma]
+    order : str
+        Rotation order, e.g. 'zyx'
     """
 
-    #print("list_supercell_out : {}".format(list_supercell_out))
-    atoms = []
-    cells = []
-    for i in range(len(list_supercell)):
-        atoms.append(read(list_supercell[i]))
-        cells.append(atoms[i].get_cell())
-    #print("atoms : {}".format(atoms))
-    #print("cells : {}".format(cells))
+    # =========================
+    # Read XYZ file
+    # =========================
+    with open(input_file, "r") as f:
+        lines = f.readlines()
 
-    cell_moyx = 0
-    cell_moyy = 0
-    cell_moyz = Height 
-    for j in range(len(cells)):
-        cell_moyx = cell_moyx + (cells[j][0][0])/(len(cells))
-        #print("cells[j][0][0] : {}".format(cells[j][0][0]))
-        cell_moyy = cell_moyy + (cells[j][1][1])/(len(cells))
+    natoms = int(lines[0].strip())
+    comment = lines[1]
 
-    cell_moy =  Cell.new([[cell_moyx,0,0],[0,cell_moyy,0],[0,0,cell_moyz]])
+    symbols = []
+    positions = []
 
-    #print("cell_moy : {}".format(cell_moy))
+    for line in lines[2:2 + natoms]:
+        fields = line.split()
+        symbols.append(fields[0])
+        positions.append([float(fields[1]),
+                          float(fields[2]),
+                          float(fields[3])])
 
-    for k in range(len(atoms)):
-        atoms[k].set_cell(cell_moy, scale_atoms=True)
-        write(list_supercell[k], atoms[k])
+    positions = np.array(positions, dtype=float)
+
+    # =========================
+    # Center positions
+    # =========================
+    center = positions.mean(axis=0)
+    positions -= center
+
+    # =========================
+    # Euler rotation matrix
+    # =========================
+    alpha, beta, gamma = np.deg2rad(angles_deg)
+
+    Rx = np.array([
+        [1, 0, 0],
+        [0, np.cos(alpha), -np.sin(alpha)],
+        [0, np.sin(alpha),  np.cos(alpha)]
+    ])
+
+    Ry = np.array([
+        [ np.cos(beta), 0, np.sin(beta)],
+        [0, 1, 0],
+        [-np.sin(beta), 0, np.cos(beta)]
+    ])
+
+    Rz = np.array([
+        [np.cos(gamma), -np.sin(gamma), 0],
+        [np.sin(gamma),  np.cos(gamma), 0],
+        [0, 0, 1]
+    ])
+
+    mat_map = {'x': Rx, 'y': Ry, 'z': Rz}
+    R = np.eye(3)
+    for ax in order:
+        R = mat_map[ax] @ R
+
+    # =========================
+    # Rotate positions
+    # =========================
+    positions_rot = positions @ R.T
+    positions_rot += center
+
+    # =========================
+    # Write rotated XYZ
+    # =========================
+    with open(output_file, "w") as f:
+        f.write(f"{natoms}\n")
+        f.write(comment)
+
+        for sym, pos in zip(symbols, positions_rot):
+            f.write(f"{sym} {pos[0]:.8f} {pos[1]:.8f} {pos[2]:.8f}\n")
+

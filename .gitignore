@@ -1,5 +1,6 @@
 # Ignorer tous les fichiers dans multi_layered
 examples/multi_layered/
+examples/png/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

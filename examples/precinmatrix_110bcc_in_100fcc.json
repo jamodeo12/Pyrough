@@ -2,7 +2,7 @@
     {"Spec": "precinmatrix"},
 
 "Cube":
-    {"eta": 0.9,
+    {"eta": 9.0,
     "RMS": 1,
     "N": 30,
     "M": 30,

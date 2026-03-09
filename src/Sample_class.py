@@ -44,6 +44,7 @@ class Sample:
         material,
         orien_x,
         orien_z,
+        angles,
         out_pre,
         ext_fem,
     ):
@@ -99,6 +100,8 @@ class Sample:
         :type orien_x: list
         :param orien_z: Orientation along z-axis
         :type orien_z: list
+        :param angles: list of angles
+        :type angles: list
         :param out_pre: Prefix of the output files
         :type out_pre: str
         :param ext_fem: Output FEM formats list
@@ -106,8 +109,8 @@ class Sample:
 
         :returns: List of nodes and stl file name
         """
-        if type_sample == "wire":
-            vertices, stl = make_wire(
+        if type_sample == "cwire":
+            vertices, stl, rot_stl = make_cwire(
                 type_sample,
                 2 * (1 + eta),
                 C1,
@@ -119,14 +122,15 @@ class Sample:
                 ns,
                 alpha,
                 raw_stl,
+                angles,
                 out_pre,
                 ext_fem,
             )
 
-            return (vertices, stl)
+            return (vertices, stl, rot_stl)
 
         elif type_sample == "box":
-            vertices, stl = make_box(
+            vertices, stl, rot_stl = make_box(
                 type_sample,
                 2 * (1 + eta),
                 C1,
@@ -139,14 +143,15 @@ class Sample:
                 ns,
                 alpha,
                 raw_stl,
+                angles,
                 out_pre,
                 ext_fem,
             )
 
-            return (vertices, stl)
+            return (vertices, stl, rot_stl)
 
         elif type_sample == "sphere":
-            vertices, stl = make_sphere(
+            vertices, stl, rot_stl = make_sphere(
                 type_sample,
                 4 * eta,
                 C1,
@@ -155,14 +160,15 @@ class Sample:
                 ns,
                 alpha,
                 raw_stl,
+                angles,
                 out_pre,
                 ext_fem,
             )
 
-            return (vertices, stl)
+            return (vertices, stl, rot_stl)
 
-        elif type_sample == "poly":
-            vertices, stl = make_poly(
+        elif type_sample == "fwire":
+            vertices, stl, rot_stl = make_fwire(
                 type_sample,
                 2 * (1 + eta),
                 C1,
@@ -175,15 +181,16 @@ class Sample:
                 ns,
                 alpha,
                 raw_stl,
+                angles,
                 out_pre,
                 ext_fem,
             )
-            return (vertices, stl)
+            return (vertices, stl, rot_stl)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------
-        elif type_sample == "poly_pillar":
+        elif type_sample == "fpillar":
             if type(eta) == int or type(eta) == float :
-                vertices, stl = make_poly_pillar(
+                vertices, stl, rot_stl = make_fpillar(
                         type_sample,
                         2*(1+eta),
                         2*(1+eta),
@@ -199,11 +206,12 @@ class Sample:
                         ns,
                         alpha,
                         raw_stl,
+                        angles,
                         out_pre,
                         ext_fem,
                 )
             else :
-                vertices, stl = make_poly_pillar(
+                vertices, stl, rot_stl = make_fpillar(
                         type_sample,
                         2*(1+eta[0]),
                         2*(1+eta[1]),
@@ -219,15 +227,16 @@ class Sample:
                         ns,
                         alpha,
                         raw_stl,
+                        angles,
                         out_pre,
                         ext_fem,
                 )
 
-            return (vertices, stl)
+            return (vertices, stl, rot_stl)
 
-        elif type_sample == "pillar":
+        elif type_sample == "cpillar":
             if type(eta) == int or type(eta) == float :
-                vertices, stl = make_pillar(
+                vertices, stl, rot_stl = make_cpillar(
                         type_sample,
                         2*(1+eta),
                         2*(1+eta),
@@ -243,11 +252,12 @@ class Sample:
                         ns,
                         alpha,
                         raw_stl,
+                        angles,
                         out_pre,
                         ext_fem,
                 )
             else :
-                vertices, stl = make_pillar(
+                vertices, stl, rot_stl = make_cpillar(
                     type_sample,
                     2 * (1 + eta[0]),
                     2 * (1 + eta[1]),
@@ -263,16 +273,17 @@ class Sample:
                     ns,
                     alpha,
                     raw_stl,
+                    angles,
                     out_pre,
                     ext_fem,
                 )
-            return (vertices, stl)
+            return (vertices, stl, rot_stl)
 
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------
 
         elif type_sample == "wulff":
-            vertices, stl = make_wulff(
+            vertices, stl, rot_stl= make_wulff(
                 type_sample,
                 2 * (1 + eta),
                 C1,
@@ -290,14 +301,15 @@ class Sample:
                 material,
                 orien_x,
                 orien_z,
+                angles,
                 out_pre,
                 ext_fem,
             )
 
-            return (vertices, stl)
+            return (vertices, stl, rot_stl)
 
         elif type_sample == "cube":
-            vertices, stl = make_cube(
+            vertices, stl, rot_stl = make_cube(
                 type_sample,
                 2 * (1 + eta),
                 C1,
@@ -308,11 +320,12 @@ class Sample:
                 ns,
                 alpha,
                 raw_stl,
+                angles,
                 out_pre,
                 ext_fem,
             )
 
-            return (vertices, stl)
+            return (vertices, stl, rot_stl)
 
     def make_atom(
         self,
@@ -324,6 +337,7 @@ class Sample:
         orien_y,
         orien_z,
         vertices,
+        angles2,
         out_pre,
         ext_ato,
     ):
@@ -349,6 +363,8 @@ class Sample:
         :type orien_z: list
         :param vertices: List of nodes
         :type vertices: array
+        :param angles2: list of angles for Euler rotations
+        :type angles2: list
         :param out_pre: Prefix of the output files
         :type out_pre: str
         """
@@ -396,7 +412,7 @@ class Sample:
                 "-rmatom",
                 "select",
                 out_pre + ".lmp",
-                " ".join([x for x in ext_ato[0:] if x != "lmp"]),
+                #" ".join([x for x in ext_ato[0:] if x != "lmp"]),
                 "-v ",
                 "2",
             ]
@@ -406,6 +422,21 @@ class Sample:
         subprocess.call(["rm", "material_supercell.lmp"])
 
         fp.rebox(out_pre + ".lmp", 0.001)
+
+        # Euler rotation
+        fp.lmp_rotate_euler(out_pre + ".lmp", out_pre + "_rot.lmp", angles2, order='zyx')
+
+        fp.rebox(out_pre + "_rot.lmp", 0.001)
+
+        subprocess.call(["mv", out_pre + "_rot.lmp", out_pre + ".lmp"])
+
+        if ext_ato != ['lmp']:
+            cmd = ["atomsk",
+                   out_pre + ".lmp",
+                   " ".join([x for x in ext_ato[0:] if x != "lmp"])
+                   ]
+            subprocess.call(cmd)
+
 
     def make_precipitate(
         self,
@@ -419,6 +450,8 @@ class Sample:
         dim_mat_x,
         dim_mat_y,
         dim_mat_z,
+        angles2,
+        precpos,
     ):
         """
         Creates an atom position file sample_with_atoms.lmp. This requires a .stl file with rough surfaces
@@ -444,12 +477,15 @@ class Sample:
         :type out_pre: str
         :param dim_mat_x: Dimensions of the matrix
         :type dim_mat_x: float
+        :param angles2: list of angles for zyx Euler rotation
+        :type angles2: list
         """
 
         dis_x, dup_x, orien_x = fp.duplicate(dim_mat_x, orien_x, lattice_par, lattice_str)
         dis_y, dup_y, orien_y = fp.duplicate(dim_mat_y, orien_y, lattice_par, lattice_str)
         dis_z, dup_z, orien_z = fp.duplicate(dim_mat_z, orien_z, lattice_par, lattice_str)
 
+        # Creation of a matrix of atoms i.e., a large orthogonal block of atoms
         cmd = [
             "atomsk",
             "--create",
@@ -468,12 +504,11 @@ class Sample:
             "-v ",
             "2",
         ]
-
-        #print("Atomsk call:", " ".join(map(str, cmd)))
         subprocess.call(cmd)
 
-        # Then the STL file is used as a stencil over precipitate_supercell.lmp and extra atoms are removed
-        cmd = [
+        # Then the STL file is used as a stencil over material_supercell.lmp and extra atoms are removed
+        if precpos == 'center':
+            cmd = [
                 "atomsk",
                 "precipitate_supercell.xyz",
                 "-select",
@@ -487,15 +522,23 @@ class Sample:
                 "precipitate.xyz",
                 "-v",
                 "2",
-        ]
-        #print("Atomsk call:", " ".join(map(str, cmd)))
-        subprocess.call(cmd)
+            ]
+            # print("Atomsk call:", " ".join(map(str, cmd)))
+            subprocess.call(cmd)
+        else:
+            fp.atomsk_select_stl_local_cutout("precipitate_supercell.xyz", STL, "precipitate.xyz", precpos)
 
-        subprocess.call(["rm", "precipitate_supercell.xyz"])
+        subprocess.call(["rm", "precipitate_supercell.xyz", STL])
+
+        # Precipitate rotation : Euler rotation
+        fp.xyz_rotate_euler("precipitate.xyz", "precipitate_rot.xyz", angles2, order='zyx')
+        subprocess.call(["mv", "precipitate_rot.xyz", "precipitate.xyz"])
+        subprocess.call(["rm",STL])
+
 
     def make_atom_matrix(
         self,
-        STL,
+        ROTSTL,
         length_x,
         length_y,
         length_z,
@@ -505,6 +548,7 @@ class Sample:
         orien_x,
         orien_y,
         orien_z,
+        precpos,
     ):
         """
         Creates an orthogonal matrix made of atoms.
@@ -531,6 +575,7 @@ class Sample:
         :type out_pre: str
         """
 
+
         dis_x, dup_x, orien_x = fp.duplicate(length_x, orien_x, lattice_par, lattice_str)
         dis_y, dup_y, orien_y = fp.duplicate(length_y, orien_y, lattice_par, lattice_str)
         dis_z, dup_z, orien_z = fp.duplicate(length_z, orien_z, lattice_par, lattice_str)
@@ -550,7 +595,7 @@ class Sample:
                 dup_x,
                 dup_y,
                 dup_z,
-                "matrix_tmp.xyz",
+                "matrix.lmp",
                 "-v",
                 "2",
             ]
@@ -558,24 +603,27 @@ class Sample:
         subprocess.call(cmd)
 
         # Then the STL file is used as a stencil over material_supercell.lmp and extra atoms are removed
-        cmd = [
-            "atomsk",
-            "matrix_tmp.xyz",
-            "-select",
-            "stl",
-            "center",
-            STL,
-            "-rmatom",
-            "select",
-            "matrix.xyz",
-            "-v",
-            "2",
+        if precpos == 'center':
+            cmd = [
+                "atomsk",
+                "matrix.lmp",
+                "-select",
+                "stl",
+                "center",
+                ROTSTL,
+                "-rmatom",
+                "select",
+                "matrix_w_inprint.lmp",
+                "-v",
+                "2",
+            ]
 
-        ]
-        #print("Atomsk call:", " ".join(map(str, cmd)))
-        subprocess.call(cmd)
+            # print("Atomsk call:", " ".join(map(str, cmd)))
+            subprocess.call(cmd)
+        else:
+            fp.atomsk_select_stl_local_cutin("matrix.lmp", ROTSTL, "matrix_w_inprint.lmp", precpos)
 
-        subprocess.call(["rm", "matrix_tmp.xyz"])
+        subprocess.call(["rm", "matrix.lmp",ROTSTL])
 
     def put_prec_in_matrix(
             self,
@@ -598,7 +646,8 @@ class Sample:
             "atomsk",
             "--merge",
             "2",
-            "matrix.xyz",
+            #"matrix_w_inprint.xyz",
+            "matrix_w_inprint.lmp",
             "precipitate.xyz",
              out_pre + ".xyz",
             "-v",
@@ -613,10 +662,10 @@ class Sample:
             if e != "lmp":
                 subprocess.call(["atomsk", out_pre + ".lmp", out_pre + "." + e, "-v","2"])
 
-        subprocess.call(["rm", "matrix.xyz", "precipitate.xyz", out_pre + ".xyz"])
+        #subprocess.call(["rm", "matrix.xyz", "precipitate.xyz", out_pre + ".xyz"])
 
 
-def make_wire(type_sample, B, C1, RMS, N, M, radius, length, ns, alpha, raw_stl, out_pre, ext_fem):
+def make_cwire(type_sample, B, C1, RMS, N, M, radius, length, ns, alpha, raw_stl, angles, out_pre, ext_fem):
     """
     Creates an stl file of a rough wire
 
@@ -690,7 +739,9 @@ def make_wire(type_sample, B, C1, RMS, N, M, radius, length, ns, alpha, raw_stl,
     fp.stl_file(vertices, faces, out_pre)
     fp.refine_3Dmesh(type_sample, out_pre, ns, alpha, ext_fem)
 
-    return vertices, out_pre + ".stl"
+    fp.stl_rotate_euler(out_pre + ".stl", out_pre + "_rot.stl", angles, order='zyx')
+
+    return (vertices, out_pre + ".stl", out_pre + "_rot.stl")
 
 
 def make_box(
@@ -706,6 +757,7 @@ def make_box(
     ns,
     alpha,
     raw_stl,
+    angles,
     out_pre,
     ext_fem,
 ):
@@ -771,10 +823,13 @@ def make_box(
     # creates an stl file of the box with roughness on the surface
     fp.stl_file(vertices, faces, out_pre)
     fp.refine_3Dmesh(type_sample, out_pre, ns, alpha, ext_fem)
-    return vertices, out_pre + ".stl"
+
+    fp.stl_rotate_euler(out_pre + ".stl", out_pre + "_rot.stl", angles, order='zyx')
+
+    return vertices, out_pre + ".stl", out_pre + "_rot.stl"
 
 
-def make_sphere(type_sample, B, C1, N, radius, ns, alpha, raw_stl, out_pre, ext_fem):
+def make_sphere(type_sample, B, C1, N, radius, ns, alpha, raw_stl, angles, out_pre, ext_fem):
     """
     Creates an stl file of a rough sphere
 
@@ -821,10 +876,13 @@ def make_sphere(type_sample, B, C1, N, radius, ns, alpha, raw_stl, out_pre, ext_
     # creates an stl file of the sphere with roughness on the surface
     fp.stl_file(new_vertex, faces, out_pre)
     fp.refine_3Dmesh(type_sample, out_pre, ns, alpha, ext_fem)
-    return vertices, out_pre + ".stl"
+
+    fp.stl_rotate_euler(out_pre + ".stl", out_pre + "_rot.stl", angles, order='zyx')
+
+    return vertices, out_pre + ".stl", out_pre + "_rot.stl"
 
 
-def make_poly(
+def make_fwire(
     type_sample,
     B,
     C1,
@@ -837,6 +895,7 @@ def make_poly(
     ns,
     alpha,
     raw_stl,
+    angles,
     out_pre,
     ext_fem,
 ):
@@ -867,6 +926,8 @@ def make_poly(
     :type alpha: float
     :param raw_stl: Name of the input stl file
     :type raw_stl: str
+    :param angles: list of angles for Euler rotations
+    :type angles: list
     :param out_pre: Prefix of the output files
     :type out_pre: str
     :param ext_fem: List of FEM extension files
@@ -874,7 +935,7 @@ def make_poly(
 
     :return: List of nodes and STL file name
     """
-    points, angles = fp.base(radius, nfaces)
+    points, anglesfac = fp.base(radius, nfaces)
 
     vertices, faces = fp.read_stl(type_sample, raw_stl, 0, length, 0, radius, ns, points)
 
@@ -908,17 +969,19 @@ def make_poly(
     # Returns an array with the Z values that will replace the previous z values in the vertices
     # array these represent the rougness on the surface
     z = fp.random_surf2(type_sample, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, RMS, out_pre)
-    vertices = fp.make_rough(type_sample, z, nodesurf, vertices, angles)
+    vertices = fp.make_rough(type_sample, z, nodesurf, vertices, anglesfac)
 
     # gets rid of the index column because stl file generator takes only a matrix with 3 columns
     vertices = vertices[:, :3]
-    vertices = fp.align_poly(vertices, angles)
+    vertices = fp.align_f(vertices, anglesfac)
 
     # creates an stl file of the box with roughness on the surface
     fp.stl_file(vertices, faces, out_pre)
     fp.refine_3Dmesh(type_sample, out_pre, ns, alpha, ext_fem)
 
-    return vertices, out_pre + ".stl"
+    fp.stl_rotate_euler(out_pre + ".stl", out_pre + "_rot.stl", angles, order='zyx')
+
+    return vertices, out_pre + ".stl", out_pre + "_rot.stl"
 
 def make_wulff(
     type_sample,
@@ -938,6 +1001,7 @@ def make_wulff(
     material,
     orien_x,
     orien_z,
+    angles,
     out_pre,
     ext_fem,
 ):
@@ -978,6 +1042,8 @@ def make_wulff(
     :type orien_x: list
     :param orien_z: Orientation along z-axis
     :type orien_z: list
+    :param angles: list of angles for Euler rotations
+    :type angles: list
     :param out_pre: Prefix for output files
     :type out_pre: str
     :param ext_fem: List of FEM extension files
@@ -1017,10 +1083,13 @@ def make_wulff(
     fp.stl_file(vertices, faces, out_pre)
     fp.refine_3Dmesh(type_sample, out_pre, ns, alpha, ext_fem)
 
-    return vertices, out_pre + ".stl"
+    fp.stl_rotate_euler(out_pre + ".stl", out_pre + "_rot.stl", angles, order='zyx')
+
+    return vertices, out_pre + ".stl", out_pre + "_rot.stl"
 
 
-def make_cube(type_sample, B, C1, RMS, N, M, length, ns, alpha, raw_stl, out_pre, ext_fem):
+def make_cube(type_sample, B, C1, RMS, N, M, length, ns, alpha, raw_stl, angles, out_pre, ext_fem):
+
     """
     Creates an stl file of a cubic NP
 
@@ -1044,12 +1113,15 @@ def make_cube(type_sample, B, C1, RMS, N, M, length, ns, alpha, raw_stl, out_pre
     :type alpha: float
     :param raw_stl: Name of the input stl file
     :type raw_stl: str
+    :param angles: list of angles for Euler rotations
+    :type angles: list
     :param out_pre: Prefix of the output files
     :type out_pre: str
     :param ext_fem: List of FEM extension files
     :type ext_fem: list
 
-    :return: List of nodes and STL file name
+
+    :return: List of nodes and STL files with and without rotations
     """
 
     obj_points, obj_faces = fp.cube_faces(length)
@@ -1071,7 +1143,9 @@ def make_cube(type_sample, B, C1, RMS, N, M, length, ns, alpha, raw_stl, out_pre
 
     fp.refine_3Dmesh(type_sample, out_pre, ns, alpha, ext_fem)
 
-    return (vertices, out_pre + ".stl")
+    fp.stl_rotate_euler(out_pre + ".stl", out_pre + "_rot.stl", angles, order='zyx')
+
+    return vertices, out_pre + ".stl", out_pre + "_rot.stl"
 
 def make_atom_grain(
     STL,
@@ -1247,7 +1321,7 @@ def make_atom_grain(
 
 #------------------------------------------------------------------------------------------------------------------------------------------------------
 
-def make_poly_pillar(
+def make_fpillar(
         type_sample,
         B1,
         B2,
@@ -1263,6 +1337,7 @@ def make_poly_pillar(
         ns,
         alpha,
         raw_stl,
+        angles,
         out_pre,
         ext_fem,
 ):
@@ -1296,6 +1371,8 @@ def make_poly_pillar(
     :type alpha: float
     :param raw_stl: Name of the input stl file
     :type raw_stl: str
+    :param angles: list of angles for Euler rotations
+    :type angles: list
     :param out_pre: Prefix of the output files
     :type out_pre: str
     :param ext_fem: List of FEM extension files
@@ -1304,7 +1381,7 @@ def make_poly_pillar(
     :return: List of nodes and STL file name for a Faceted Pillar
     """
     #create the base of the faceted Pillar
-    points, angles = fp.base(radius,nfaces)
+    points, anglesfac = fp.base(radius,nfaces)
 
     vertices, faces = fp.read_stl(type_sample,raw_stl,0,length,0,radius,ns,points)
 
@@ -1315,7 +1392,7 @@ def make_poly_pillar(
 
     #nodes at the surface of the object. These nodes will have the surface roughness applied to it
     #nodesurf 1 is the faceted wire surface, and nodesurf2 is the topside surface
-    nodesurf1 = fp.node_surface("poly",vertices,nodenumber,points,0)
+    nodesurf1 = fp.node_surface("fwire",vertices,nodenumber,points,0)
     nodesurf2 = fp.node_surface("box",vertices,nodenumber,0,0)
 
    #Save the index of nodes which are on the edge of the pillar
@@ -1343,23 +1420,26 @@ def make_poly_pillar(
 
     #Returns an array with the Z values that will replace the previous z values in the vertices
     #Array these represent the roughness on the surface
-    z1 = fp.random_surf2("poly",m1,n1,N,M,B1,xv1,yv1,sfrM,sfrN,C1,RMS1,out_pre)
+    z1 = fp.random_surf2("fwire",m1,n1,N,M,B1,xv1,yv1,sfrM,sfrN,C1,RMS1,out_pre)
     z2 = fp.random_surf2("box",m2,n2,N,M,B2,xv2,yv2,sfrM,sfrN,C2,RMS2,out_pre)
 
     #Displace nodes to make surfaces rough, nodes on the edge are displace 2 times so these displacement should be normalised
-    vertices = fp.make_rough_pillar(type_sample,z1,z2,nodesurf1,nodesurf2,node_edge,vertices,angles)
+    vertices = fp.make_rough_pillar(type_sample,z1,z2,nodesurf1,nodesurf2,node_edge,vertices,anglesfac)
     #gets rid of the index column because stl file generator takes only a matrix with 3 columns
     vertices = vertices[:,:3]
 
-    vertices = fp.align_poly(vertices,angles)
+    vertices = fp.align_f(vertices,anglesfac)
     fp.stl_file(vertices,faces,out_pre)
     fp.refine_3Dmesh(type_sample,out_pre,ns,alpha,ext_fem)
-    return (vertices, out_pre + ".stl")
+
+    fp.stl_rotate_euler(out_pre + ".stl", out_pre + "_rot.stl", angles, order='zyx')
+
+    return vertices, out_pre + ".stl", out_pre + "_rot.stl"
 
     
 
     #------------------------------------------------------------------------------------------------------------------------------------------------------
-def make_pillar(
+def make_cpillar(
         type_sample,
         B1,
         B2,
@@ -1375,6 +1455,7 @@ def make_pillar(
         ns,
         alpha,
         raw_stl,
+        angles,
         out_pre,
         ext_fem,
 ):
@@ -1408,6 +1489,8 @@ def make_pillar(
     :type alpha: float
     :param raw_stl: Name of the input stl file
     :type raw_stl: str
+    :param angles: list of angles for Euler rotations
+    :type angles: list
     :param out_pre: Prefix of the output files
     :type out_pre: str
     :param ext_fem: List of FEM extension files
@@ -1424,7 +1507,7 @@ def make_pillar(
 
     #Nodes at the surface of the object. These nodes will have the surface roughness applied to it
     #nodesurf 1 is the wire surface, and nodesurf2 is the topside surface
-    nodesurf1 = fp.node_surface("wire", vertices, nodenumber, 0, 0)
+    nodesurf1 = fp.node_surface("cwire", vertices, nodenumber, 0, 0)
     nodesurf2 = fp.node_surface("box", vertices, nodenumber, 0, 0)
 
     #Getting the index of nodes on the edge
@@ -1458,7 +1541,7 @@ def make_pillar(
 
     #Returns an array with the Z values that will replace the previous z values in the vertices
     #Array these represent the roughness on the surface
-    z1 = fp.random_surf2("wire", m1, n1, N, M, B1, xv1, yv1, sfrM, sfrN, C1, RMS1, out_pre)
+    z1 = fp.random_surf2("cwire", m1, n1, N, M, B1, xv1, yv1, sfrM, sfrN, C1, RMS1, out_pre)
     z2 = fp.random_surf2("box", m2, n2, N, M, B2, xv2, yv2, sfrM, sfrN, C2, RMS2, out_pre)
 
     vertices = fp.make_rough_pillar(type_sample,z1,z2,cy_nodesurf1,nodesurf2,node_edge,vertices,0)
@@ -1470,7 +1553,9 @@ def make_pillar(
     fp.stl_file(vertices, faces, out_pre)
     fp.refine_3Dmesh(type_sample, out_pre, ns, alpha, ext_fem)
 
-    return vertices, out_pre + ".stl"
+    fp.stl_rotate_euler(out_pre + ".stl", out_pre + "_rot.stl", angles, order='zyx')
+
+    return vertices, out_pre + ".stl", out_pre + "_rot.stl"
 
 
 

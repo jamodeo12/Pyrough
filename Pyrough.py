@@ -95,7 +95,7 @@ else:
         )
         # call make it md to create atomsk file
         print("JOB DONE!" + "  File name: " + out_pre + ".lmp")
-#-----------------------------------------------------------------------------------------------------------------------------------------
+
     elif param.type_S == "multi_layered" :
         # If grain, we first create the mesh of a rough box
         # the STL file will be used to make grain 1, while its negative will be used for grain 2
@@ -127,14 +127,13 @@ else:
             param.ext_fem,
             param.ext_ato,
         )
-#---------------------------------------------------------------------------------------------------------------------------------------------
 
     else:
         print("====== > Pyrough.py : {} option treatment running...".format(param.type_S))
         sample = Sample_class.Sample(param.type_S)
 
         print("====== > Pyrough.py : sample.make_stl running...")
-        vertices, FEM_stl = sample.make_stl(
+        vertices, FEM_stl, rot_FEM_stl = sample.make_stl(
             param.type_S,
             param.eta,
             param.C1,
@@ -157,6 +156,7 @@ else:
             param.material,
             param.orien_x,
             param.orien_z,
+            param.angles,
             out_pre,
             param.ext_fem,
         )
@@ -170,6 +170,7 @@ else:
 
         if param.output(Param_file) == "ATOM" and not hasattr(param, "spec"):
             print("====== > Pyrough.py : sample.make_atom running...")
+            subprocess.call(["rm", rot_FEM_stl])
             sample.make_atom(
                 FEM_stl,
                 param.lattice_structure,
@@ -179,9 +180,11 @@ else:
                 param.orien_y,
                 param.orien_z,
                 vertices,
+                param.angles2,
                 out_pre,
                 param.ext_ato,
             )
+
 
             # call make it md to create atomsk file
             print("====== > ATOM OBJECT JOB DONE !")
@@ -205,11 +208,13 @@ else:
                     param.length_x2,
                     param.length_y2,
                     param.length_z2,
+                    param.angles2,
+                    param.precpos,
                 )
 
                 print("====== > sample.make_atom_matrix running")
                 sample.make_atom_matrix(
-                FEM_stl,
+                rot_FEM_stl,
                 param.length_x2,
                 param.length_y2,
                 param.length_z2,
@@ -219,6 +224,7 @@ else:
                 param.orien_x2,
                 param.orien_y2,
                 param.orien_z2,
+                param.precpos,
                 )
 
                 print("====== > sample.put_prec_in_matrix running...")

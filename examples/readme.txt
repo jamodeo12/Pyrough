@@ -10,6 +10,7 @@ cube.json           : typical example of Cube keyword for the design of a cube w
 
 cwire.json          : typical example of cWire keyword for the design of a rough wire w/ a circular cross section, here applied to FCC Au
 fWire.json          : typical example of fWire keyword for the design of a rough wire w/ a facetted cross section, here applied to FCC Au
+fwire_with_rot.json : same with rotations
 
 grain.json          : typical example of Grain keyword to design rough grain boundaries, here applied to FCC/FCC <001>/<001> interface
 grain_fcc100_bcc100.json  : same, but applied to FCC/BCC <001>/<001> interface
@@ -19,6 +20,7 @@ sphere.json         :  typical example of sphere keyword, to design a rough sphe
 wulff.json          : typical example of Wulff keyword, to design a Wulff-shaped particle with rough surfaces, here applied to FCC Au
 
 precinmatrix_110bcc_in_100fcc.json      : typical example of precinmatrix keyword to design a nanostructured sample (matrix + precipitate ourgh or not) at the atomic scale. Here is a <110>-oriented BCC Fe cube inserted into a an <100>-oriented FCC Ag matrix
+precinmatrix_110bcc_in_100fcc_with_rot_with_shift.json : same but with selected location and orientation of the precipitate within the matrix
 precinmatrix_bcc_sphere_in_hcp.json     : same, but inserting a (rough or not)  BCC Fe sphere into an HCP Mg matrix
 
 surface/            : this folder contains an example of the -surface option application

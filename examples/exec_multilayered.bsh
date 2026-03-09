@@ -1,3 +1,0 @@
-#! /bin/bash
-
-python3.10 ../Pyrough.py multi_layered.json

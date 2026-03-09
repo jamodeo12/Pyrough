@@ -36,6 +36,10 @@ class Parameter:
             self.orien_x2 = read_param["MATRIX_Param"]["Orien_x"]
             self.orien_y2 = read_param["MATRIX_Param"]["Orien_y"]
             self.orien_z2 = read_param["MATRIX_Param"]["Orien_z"]
+            try:
+                self.precpos = read_param["MATRIX_Param"]["Precpos"]
+            except KeyError:
+                self.precpos = 'center'
 
         if "Grain" in read_param:
             self.type_S = "grain"
@@ -130,7 +134,7 @@ class Parameter:
 
         else:
             if "cWire" in read_param:
-                self.type_S = "wire"
+                self.type_S = "cwire"
                 self.eta = read_param["cWire"]["eta"]
                 try:
                     self.C1 = read_param["cWire"]["C1"]
@@ -152,6 +156,10 @@ class Parameter:
                 self.height = 0
                 self.width = 0
                 self.raw_stl = read_param["cWire"]["Raw_stl"]
+                try:
+                    self.angles = read_param["cWire"]["Angles"]
+                except KeyError:
+                    self.angles = [0,0,0]
                 self.nfaces = 0
                 self.surfaces = 0
                 self.energies = 0
@@ -182,6 +190,10 @@ class Parameter:
                     self.alpha = 1
                 self.radius = 0
                 self.raw_stl = read_param["Box"]["Raw_stl"]
+                try:
+                    self.angles = read_param["Box"]["Angles"]
+                except KeyError:
+                    self.angles = [0,0,0]
                 self.nfaces = 0
                 self.surfaces = 0
                 self.energies = 0
@@ -206,6 +218,10 @@ class Parameter:
                 self.length = 0
                 self.width = 0
                 self.raw_stl = read_param["Sphere"]["Raw_stl"]
+                try:
+                    self.angles = read_param["Sphere"]["Angles"]
+                except KeyError:
+                    self.angles = [0,0,0]
                 self.nfaces = 0
                 self.surfaces = 0
                 self.energies = 0
@@ -214,7 +230,7 @@ class Parameter:
                 self.ext_ato = read_param["Output"]["ATOM"]
 
             elif "fWire" in read_param:
-                self.type_S = "poly"
+                self.type_S = "fwire"
                 self.eta = read_param["fWire"]["eta"]
                 try:
                     self.C1 = read_param["fWire"]["C1"]
@@ -237,6 +253,10 @@ class Parameter:
                 self.height = 0
                 self.width = 0
                 self.raw_stl = read_param["fWire"]["Raw_stl"]
+                try:
+                    self.angles = read_param["fWire"]["Angles"]
+                except KeyError:
+                    self.angles = [0,0,0]
                 self.surfaces = 0
                 self.energies = 0
                 self.n_at = 0
@@ -270,6 +290,10 @@ class Parameter:
                 self.height = 0
                 self.width = 0
                 self.raw_stl = read_param["Wulff"]["Raw_stl"]
+                try:
+                    self.angles = read_param["Wulff"]["Angles"]
+                except KeyError:
+                    self.angles = [0,0,0]
                 self.ext_fem = read_param["Output"]["FEM"]
                 self.ext_ato = read_param["Output"]["ATOM"]
 
@@ -300,13 +324,18 @@ class Parameter:
                 self.height = read_param["Cube"]["Length"]
                 self.width = read_param["Cube"]["Length"]
                 self.raw_stl = read_param["Cube"]["Raw_stl"]
+                try:
+                    self.angles = read_param["Cube"]["Angles"]
+                except KeyError:
+                    self.angles = [0,0,0]
+                #self.angles = read_param["Cube"]["Angles"]
                 self.ext_fem = read_param["Output"]["FEM"]
                 self.ext_ato = read_param["Output"]["ATOM"]
 
 #------------------------------------------------------------------------------------------------------------------------------
 ### Pillar part: under development
             elif "fPillar" in read_param:
-                self.type_S = "poly_pillar"
+                self.type_S = "fpillar"
                 self.eta = read_param["fPillar"]["eta"]
                 try:
                     self.C1 = read_param["fPillar"]["C1"]
@@ -329,36 +358,44 @@ class Parameter:
                 self.height = 0
                 self.width = 0
                 self.raw_stl = read_param["fPillar"]["Raw_stl"]
+                try:
+                    self.angles = read_param["fPillar"]["Angles"]
+                except KeyError:
+                    self.angles = [0,0,0]
                 self.surfaces = 0
                 self.energies = 0
                 self.n_at = 0
                 self.ext_fem = read_param["Output"]["FEM"]
                 self.ext_ato = read_param["Output"]["ATOM"]
 
-            elif "Pillar" in read_param:
-                self.type_S = "pillar"
-                self.eta = read_param["Pillar"]["eta"]
+            elif "cPillar" in read_param:
+                self.type_S = "cpillar"
+                self.eta = read_param["cPillar"]["eta"]
                 try:
-                    self.C1 = read_param["Pillar"]["C1"]
+                    self.C1 = read_param["cPillar"]["C1"]
                 except KeyError:
                     self.C1 =["",""]
                 try:
-                    self.RMS = read_param["Pillar"]["RMS"]
+                    self.RMS = read_param["cPillar"]["RMS"]
                 except KeyError:
                     self.RMS =["",""]
-                self.N = read_param["Pillar"]["N"]
-                self.M = read_param["Pillar"]["M"]
-                self.length = read_param["Pillar"]["Length"]
-                self.nfaces = read_param["Pillar"]["N_Faces"]
-                self.radius = read_param["Pillar"]["Radius"]
-                self.ns = read_param["Pillar"]["Mesh_size"]
+                self.N = read_param["cPillar"]["N"]
+                self.M = read_param["cPillar"]["M"]
+                self.length = read_param["cPillar"]["Length"]
+                self.nfaces = read_param["cPillar"]["N_Faces"]
+                self.radius = read_param["cPillar"]["Radius"]
+                self.ns = read_param["cPillar"]["Mesh_size"]
                 try:
-                    self.alpha = read_param["Pillar"]["Refine_factor"]
+                    self.alpha = read_param["cPillar"]["Refine_factor"]
                 except KeyError:
                     self.alpha = 1
                 self.height = 0
                 self.width = 0
-                self.raw_stl = read_param["Pillar"]["Raw_stl"]
+                self.raw_stl = read_param["cPillar"]["Raw_stl"]
+                try:
+                    self.angles = read_param["cPillar"]["Angles"]
+                except KeyError:
+                    self.angles = [0,0,0]
                 self.surfaces = 0
                 self.energies = 0
                 self.n_at = 0
@@ -374,6 +411,10 @@ class Parameter:
             self.orien_x = read_param["ATOM_Param"]["Orien_x"]
             self.orien_y = read_param["ATOM_Param"]["Orien_y"]
             self.orien_z = read_param["ATOM_Param"]["Orien_z"]
+            try:
+                self.angles2 = read_param["ATOM_Param"]["Angles"]
+            except KeyError:
+                self.angles2 = [0, 0, 0]
 
     def output(self, json_file):
         """
