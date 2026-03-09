@@ -1,0 +1,26 @@
+fwire_rot.json{"fWire":
+    {"Length": 200,
+    "N_Faces" : 6,
+    "Radius": 30,
+    "N": 30,
+    "M": 30, 
+    "RMS": 0.001,
+    "eta": 500,
+    "Mesh_size": 5,
+    "Refine_factor": 0.5,
+    "Raw_stl": "na",
+    "Angles": [30,30,0]},
+
+"Output":
+    {"ATOM": ["lmp"],
+    "FEM": ["stl"]},
+
+"ATOM_Param": 
+    {"Lattice_parameter": 4.07,
+    "Material": "Au",
+    "Orien_x": [1,0,0],
+    "Orien_y":[0,1,0] ,
+    "Orien_z": [0,0,1],
+    "Lattice_structure": "fcc",
+    "Angles": [30,30,0]}
+}
