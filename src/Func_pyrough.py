@@ -1000,6 +1000,7 @@ def make_obj(
     """
     surface_energies = {tuple(surfaces[i]): float(energies[i]) for i in range(0, len(surfaces))}
     prim = bulk(''.join(material), lattice_structure,  ', '.join(str(lattice_parameter)) if len(lattice_parameter)>1 else float(lattice_parameter[0]))
+    print("prim is {}".format(prim))
     particle = SingleCrystal(surface_energies, primitive_structure=prim, natoms=n_at)
     #spg_cell = ase_to_spglib_cell(prim)
     #print("spg_cell type {} : {}".format(type(spg_cell), spg_cell))
@@ -1515,7 +1516,7 @@ def node_surface(sample_type, vertices, nodenumber, points, faces):
     :return: Surface nodes
     """
     stay = []
-    if sample_type == "wire":
+    if sample_type == "cwire":
         max_height = max(vertices[:, 1])
         for x in range(0, len(vertices)):
             if rho(vertices[x, 0], vertices[x, 1]) > (max_height - 0.1):
@@ -1523,9 +1524,7 @@ def node_surface(sample_type, vertices, nodenumber, points, faces):
         no_need = np.delete(nodenumber, stay)  # delete from nodenumbers the ones in the surface
         nodesurf = np.delete(vertices, no_need, 0)
         return nodesurf
-#-----------------------------------------------------------------------------------------------------------------------
     elif sample_type == "box" or sample_type == "grain" or sample_type == "multi_layered":
-#---------------------------------------------------------------------------------------------------------------------------
         eps = 0.000001
         max_height = max(vertices[:, 2])
         for index in range(0, len(vertices)):
@@ -1534,7 +1533,6 @@ def node_surface(sample_type, vertices, nodenumber, points, faces):
         no_need = np.delete(nodenumber, stay)  # delete from nodenumbers the ones in the surface
         nodesurf = np.delete(vertices, no_need, 0)
         return nodesurf
-
     elif sample_type == ("fwire"):
         eps = 0.0001
         face = []
@@ -1558,7 +1556,6 @@ def node_surface(sample_type, vertices, nodenumber, points, faces):
         n_faces = len(face)
         nodesurf = np.reshape(face, [int(n_faces / 4), 4])
         return np.array(remove_duplicates_2d_ordered(nodesurf))
-
     elif sample_type == "wulff" or sample_type == "cube":
         nodesurf = []
         for F in faces:
@@ -1934,7 +1931,7 @@ def refine_3Dmesh(type_sample, out_pre, ns, alpha, ext_fem):
     if (type_sample == "box") or (type_sample == "grain") or (type_sample == "multi_layered"):
 #-----------------------------------------------------------------------------------------------------------------------
         refine_box(out_pre, ns, alpha, 45, ext_fem)
-    elif type_sample == "cwire" or type_sample == "fwore" :
+    elif type_sample == "cwire" or type_sample == "fwire" :
         refine_wire(out_pre, ns, alpha, 0, ext_fem)
     elif type_sample == "sphere":
         refine_sphere(out_pre, ns, alpha, 0, ext_fem)

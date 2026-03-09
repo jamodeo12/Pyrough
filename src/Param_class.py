@@ -63,6 +63,10 @@ class Parameter:
             except KeyError:
                 self.alpha = 1
             self.raw_stl = read_param["Grain"]["Raw_stl"]
+            try:
+                self.angles = read_param["Grain"]["Angles"]
+            except KeyError:
+                self.angles = [0, 0, 0]
             self.lattice_structure1 = read_param["ATOM1_Param"]["Lattice_structure"]
             self.lattice_parameter1 = read_param["ATOM1_Param"]["Lattice_parameter"]
             self.lattice_parameter1 = fp.convert_in_list_of_string(self.lattice_parameter1)

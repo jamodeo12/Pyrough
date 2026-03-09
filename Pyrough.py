@@ -57,7 +57,7 @@ else:
         # the STL file will be used to make grain 1, while its negative will be used for grain 2
         print("====== > Pyrough.py : grain option treatment running...")
         print("====== > Pyrough.py : Sample_class.make_box running...")
-        vertices, FEM_stl = Sample_class.make_box(
+        vertices, FEM_stl, rot_FEM_stl = Sample_class.make_box(
             param.type_S,
             2 * (1 + param.eta),
             param.C1,
@@ -70,9 +70,11 @@ else:
             param.ns,
             param.alpha,
             param.raw_stl,
+            param.angles,
             out_pre,
             param.ext_fem,
         )
+        subprocess.call(["rm", rot_FEM_stl])
 
         print("====== > Pyrough.py : Sample_class.make_atom_grain running...")
         Sample_class.make_atom_grain(
@@ -184,7 +186,6 @@ else:
                 out_pre,
                 param.ext_ato,
             )
-
 
             # call make it md to create atomsk file
             print("====== > ATOM OBJECT JOB DONE !")
