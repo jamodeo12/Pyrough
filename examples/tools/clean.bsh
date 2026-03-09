@@ -1,7 +1,0 @@
-#! /bin/bash
-# script to clean the folder 
-
-filetype=$1
-
-rm -rf ${filetype}.{lmp,xyz,msh,stl} ${filetype}_stat.txt material_supercell.lmp *supercellm.cfg  ${file_type}*.stl cell*.cfg atomsk.log pattern*.cfg Multi_layered.cfg Multi_layered*.cfg final* *.xyz matrix.lmp temp.lmp matrix_w_inprint.lmp precinmatrix_110bcc_in_100fcc_rot.lmp 
-
