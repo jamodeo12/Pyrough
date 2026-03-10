@@ -20,6 +20,44 @@ class Sample:
     def __init__(self, type_sample):
         self.sample = type_sample
 
+    def make_stl(self, param, out_pre):
+        """
+        Creates an stl file based on the parameters chosen by the user. Based on the type of sample
+        entered, the code will sort through the options of type of samples and if true then the
+        code under the type of sample will be executed. The type of sample affects the type of stl
+        file returned. The code executed requires the parameters to create the object stl and to
+        apply surface roughness onto the object. ...; In continuation will add that a separate
+        files will be stored if they want to redo the code.
+
+        :param param: the object containing all the parameters defined by the user in the JSON input file
+        :type param: Parameter class object
+        :param out_pre: Prefix of the output files
+        :type out_pre: str
+
+        :returns: List of nodes and stl file name
+        """
+        if param.type_S == "wire":
+            vertices, _, stl = make_wire(param, out_pre)
+        elif param.type_S == "box":
+            vertices, stl = make_box(param, out_pre)
+        elif param.type_S == "sphere":
+            vertices, stl = make_sphere(param, out_pre)
+        elif param.type_S == "poly":
+            vertices, _, stl = make_poly(param, out_pre)
+        elif param.type_S == "poly_pillar":
+            vertices, stl = make_poly_pillar(param, out_pre)
+        elif param.type_S == "pillar":
+            vertices, stl = make_pillar(param, out_pre)
+        elif param.type_S == "wulff":
+            vertices, stl = make_wulff(param, out_pre)
+        elif param.type_S == "cube":
+            vertices, _, stl = make_cube(param, out_pre)
+        elif param.type_S == "lattice":
+            vertices, stl = make_lattice(param, out_pre)
+        else:
+            raise ValueError("No valid sample type found in the JSON file.")
+        return vertices, stl
+    
     def make_stl(
         self,
         type_sample,
