@@ -1056,9 +1056,7 @@ def make_rough(type_sample, z, nodesurf, vertices, angles):
     :return: Rough sample
     """
     min_dz = abs(z.min())
-    #----------------------------------------------------------------------------------------------------------------------
     if type_sample == "box" or type_sample == "grain" or type_sample == "multi_layered":
-        #------------------------------------------------------------------------------------------------------------------------
         for i in range(len(z)):
             dz = z[i] + min_dz
             node = nodesurf[i]
@@ -1083,25 +1081,24 @@ def make_rough(type_sample, z, nodesurf, vertices, angles):
                 index = int(node[3])
                 thetaa = np.arctan2(node[1], node[0])
                 if thetaa < 0:
-                    thetaa = thetaa + 2 * np.pi
+                    thetaa += 2 * np.pi
                 theta_min = np.abs(np.array(angles) - thetaa)
                 possi = np.where(abs(theta_min - np.amin(theta_min)) <= 0.01)[0]
                 if len(possi) > 1:
                     angle = 0.5 * (angles[int(possi[0])] + angles[int(possi[1])])
-                    dz = 0.5 * dz
+                    dz *= 0.5
                 elif thetaa == 0:
                     angle = 0
-                    dz = 0.5 * dz
+                    dz *= 0.5
                 else:
-                    angle = angles[int(possi)]
-                poss = int(np.where(vertices[:, 3] == index)[0])
+                    angle = angles[int(possi[0])]
+                poss = int(np.where(vertices[:, 3] == index)[0][0])
                 vertices[poss, 0] = vertices[poss, 0] + dz * np.cos(angle)
                 vertices[poss, 1] = vertices[poss, 1] + dz * np.sin(angle)
                 k += 1
     return vertices
 
 
-#-----------------------------------------------------------------------------------------------------------------------
 def make_rough_pillar(type_sample, z1, z2, nodesurf1, nodesurf2, node_edge, vertices, anglesfac):
     """
     Applies roughness to a sample with Pillar shape.
@@ -1188,8 +1185,8 @@ ice
                     angle = 0
                     dz1 = 0.5 * dz1
                 else:
-                    angle = anglesfac[int(possi)]
-                poss = int(np.where(vertices[:, 3] == index)[0])
+                    angle = anglesfac[int(possi[0])]
+                poss = int(np.where(vertices[:, 3] == index)[0][0])
                 vertices[poss, 0] = vertices[poss, 0] + dz1 * np.cos(angle)
                 vertices[poss, 1] = vertices[poss, 1] + dz1 * np.sin(angle)
                 k += 1

@@ -519,13 +519,13 @@ def make_fwire(param, out_pre):
 
     # gets rid of the index column because stl file generator takes only a matrix with 3 columns
     vertices = vertices[:, :3]
-    vertices = fp.align_poly(vertices, angles)
+    vertices = fp.align_f(vertices, angles)
 
     # creates an stl file of the box with roughness on the surface
     fp.stl_file(vertices, faces, out_pre)
     fp.refine_3Dmesh(param.type_S, out_pre, param.ns, param.alpha, param.ext_fem)
 
-    fp.stl_rotate_euler(out_pre + ".stl", out_pre + "_rot.stl", angles, order='zyx')
+    fp.stl_rotate_euler(out_pre + ".stl", out_pre + "_rot.stl", param.angles, order='zyx')
 
     return vertices, faces, out_pre + ".stl", out_pre + "_rot.stl"
 
@@ -1121,16 +1121,9 @@ def make_atom_grain(
         subprocess.call(["atomsk", "temp2.cfg", out_pre + "." + e, "-v", "2"])
 
     # Cleaning
-    subprocess.call(
-        [
-            "rm",
-            "mat1_supercell.cfg",
-            "mat2_supercell.cfg",
-            "mat1_out.cfg",
-            "mat2_out.cfg",
-            "temp2.cfg",
-        ]
-    )
+    for f in ["mat1_supercell.cfg", "mat2_supercell.cfg", "mat1_out.cfg", "mat2_out.cfg", "temp2.cfg"]:
+        if os.path.exists(f):
+            os.remove(f)
 
 
 def make_fpillar(param, out_pre):
@@ -1725,7 +1718,7 @@ def make_atom_multilayered(
                         #######################
 
                         # Register the cell file
-                        subprocess.call(["mv", "matf_outm.cfg", "cell" + str(n) + ".cfg"])
+                        shutil.move("matf_outm.cfg", "cell" + str(n) + ".cfg")
                         List_cells = List_cells + ["cell" + str(n) + ".cfg"]
 
                         # SECURITY ##############
@@ -2180,8 +2173,9 @@ def make_atom_multilayered(
         print(f"ERROR: {ex}")
         print("Detailed error traceback:")
         traceback.print_exc()
-        #Supprime tous les fichiers créés depuis le début
-        for file in file_create:
-            subprocess.call(["rm", file])
-            print(f"File deleted: {file}")
+        #Delete all files created before the error
+        for f in file_create:
+            if os.path.exists(f):
+                os.remove(f)
+            print(f"File deleted: {f}")
         print("Cleaning File Done")
