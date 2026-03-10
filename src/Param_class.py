@@ -52,6 +52,7 @@ class Parameter:
         self.energies = read_param[self.key].get("Energies", [])
         self.n_at = read_param[self.key].get("n_atoms", 0)
         self.ns = read_param[self.key].get("Mesh_size", 0.0)
+        self.angles = read_param[self.key].get("Angles", [0, 0, 0])
         self.alpha = read_param[self.key].get("Refine_factor", 1)
         self.beam_type = read_param[self.key].get("beam_type", "")
         self.raw_stl = read_param[self.key].get("Raw_stl", "")

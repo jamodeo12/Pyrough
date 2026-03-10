@@ -11,6 +11,7 @@
 # The parameters for generating the .lmp file are determined by the user's input.
 # ---------------------------------------------------------------------------
 #from tqdm import tqdm
+import os
 import time
 import subprocess
 import numpy as np
@@ -138,7 +139,7 @@ class Sample:
         fp.rebox(out_pre + ".lmp", 0.001)
 
         # Euler rotation
-        fp.lmp_rotate_euler(out_pre + ".lmp", out_pre + "_rot.lmp", angles2, order='zyx')
+        fp.lmp_rotate_euler(out_pre + ".lmp", out_pre + "_rot.lmp", param.angles2, order='zyx')
 
         fp.rebox(out_pre + "_rot.lmp", 0.001)
 
