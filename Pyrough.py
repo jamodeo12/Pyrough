@@ -113,7 +113,8 @@ else:
 
         if param.output(Param_file) == "ATOM" and not hasattr(param, "spec"):
             print("====== > Pyrough.py : sample.make_atom running...")
-            subprocess.call(["rm", rot_FEM_stl])
+            if os.path.exists(rot_FEM_stl):
+                os.remove(rot_FEM_stl)
             sample.make_atom(FEM_stl, param, vertices, out_pre)
 
             # call make it md to create atomsk file

@@ -12,6 +12,7 @@
 # ---------------------------------------------------------------------------
 #from tqdm import tqdm
 import os
+import shutil
 import time
 import subprocess
 import numpy as np
@@ -143,7 +144,7 @@ class Sample:
 
         fp.rebox(out_pre + "_rot.lmp", 0.001)
 
-        subprocess.call(["mv", out_pre + "_rot.lmp", out_pre + ".lmp"])
+        shutil.move(out_pre + "_rot.lmp", out_pre + ".lmp")
 
         if param.ext_ato != ['lmp']:
             cmd = ["atomsk",

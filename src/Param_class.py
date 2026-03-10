@@ -68,6 +68,7 @@ class Parameter:
             self.orien_x = read_param["ATOM_Param"]["Orien_x"]
             self.orien_y = read_param["ATOM_Param"]["Orien_y"]
             self.orien_z = read_param["ATOM_Param"]["Orien_z"]
+            self.angles2 = read_param["ATOM_Param"].get("Angles", [0, 0, 0])
         elif "ATOM1_Param" in read_param and "ATOM2_Param" in read_param:
             self.lattice_structure1 = read_param["ATOM1_Param"]["Lattice_structure"]
             self.lattice_parameter1 = read_param["ATOM1_Param"]["Lattice_parameter"]
@@ -85,6 +86,7 @@ class Parameter:
             self.orien_x2 = read_param["ATOM2_Param"]["Orien_x"]
             self.orien_y2 = read_param["ATOM2_Param"]["Orien_y"]
             self.orien_z2 = read_param["ATOM2_Param"]["Orien_z"]
+            self.angles2 = read_param["ATOM1_Param"].get("Angles", [0, 0, 0])
         elif "ATOMS_Param" in read_param:
             self.lattice_structure = read_param["ATOMS_Param"]["Lattice_structure"]
             self.lattice_parameter = read_param["ATOMS_Param"]["Lattice_parameter"]

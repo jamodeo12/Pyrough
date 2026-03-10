@@ -2689,7 +2689,7 @@ def test_pyrough_execution(dir):
             else:
                 print(f"{input_file} runs correctly")
         except subprocess.CalledProcessError as e:
-            print(f"Pyrough.py can not process {input_file_path} : {e.stderr.decode()}")
+            print(f"Pyrough.py can not process {input_file_path} : {e.stderr.decode(errors='replace')}")
 
         files_after = set(os.listdir(output_dir)) if os.path.exists(output_dir) else set()
         new_files = files_after - files_before
