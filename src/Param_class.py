@@ -96,6 +96,7 @@ class Parameter:
             self.orien_x = read_param["ATOMS_Param"]["Orien_x"]
             self.orien_y = read_param["ATOMS_Param"]["Orien_y"]
             self.orien_z = read_param["ATOMS_Param"]["Orien_z"]
+            self.angles2 = read_param["ATOMS_Param"].get("Angles", [0, 0, 0])
 
         if "Multi_layered" in read_param:
             try:

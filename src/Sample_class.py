@@ -145,10 +145,10 @@ class Sample:
 
         subprocess.call(["mv", out_pre + "_rot.lmp", out_pre + ".lmp"])
 
-        if ext_ato != ['lmp']:
+        if param.ext_ato != ['lmp']:
             cmd = ["atomsk",
                    out_pre + ".lmp",
-                   " ".join([x for x in ext_ato[0:] if x != "lmp"])
+                   " ".join([x for x in param.ext_ato[0:] if x != "lmp"])
                    ]
             subprocess.call(cmd)
 
@@ -161,8 +161,8 @@ class Sample:
         Creates an atom position file sample_with_atoms.lmp. This requires a .stl file with rough surfaces
         used as a stencil over a larger block of atoms from which out-of-the-mesh atoms are removed
 
-        :param type_sample: Sample type
-        :type type_sample: str
+        :param STL: The stl file with an object that has surface roughness applied to it
+        :type STL: str
         :param param: the object containing all the parameters defined by the user in the JSON input file
         :type param: Parameter class object
         """
@@ -226,14 +226,14 @@ class Sample:
 
     def make_atom_matrix(
             self,
-            STL,
+            ROTSTL,
             param
     ):
         """
         Creates an orthogonal matrix made of atoms.
 
-        :param STL: The stl file with an object that has surface roughness applied to it
-        :type STL: str
+        :param ROTSTL: The stl file with an object that has surface roughness applied to it and rotated with Euler angles
+        :type ROTSTL: str
         :param param: the object containing all the parameters defined by the user in the JSON input file
         :type param: Parameter class object
         """
@@ -268,7 +268,7 @@ class Sample:
         subprocess.call(cmd)
 
         # Then the STL file is used as a stencil over material_supercell.lmp and extra atoms are removed
-        if precpos == 'center':
+        if param.precpos == 'center':
             cmd = [
                 "atomsk",
                 "matrix.lmp",
@@ -286,7 +286,7 @@ class Sample:
             # print("Atomsk call:", " ".join(map(str, cmd)))
             subprocess.call(cmd)
         else:
-            fp.atomsk_select_stl_local_cutin("matrix.lmp", ROTSTL, "matrix_w_inprint.lmp", precpos)
+            fp.atomsk_select_stl_local_cutin("matrix.lmp", ROTSTL, "matrix_w_inprint.lmp", param.precpos)
 
         subprocess.call(["rm", "matrix.lmp", ROTSTL])
 
