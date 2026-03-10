@@ -11,8 +11,10 @@
 # The parameters for generating the .lmp file are determined by the user's input.
 # ---------------------------------------------------------------------------
 #from tqdm import tqdm
+import json
 import os
 import shutil
+import tempfile
 import time
 import subprocess
 import numpy as np
@@ -339,8 +341,8 @@ def make_cwire(param, out_pre):
     :type param: Parameter class object
     :param out_pre: Prefix of the output files
     :type out_pre: str
-
-    :return: List of nodes and STL file name
+    
+    :return: List of vertices, faces, STL file name, and rotated STL file name
     """
     vertices, faces = fp.read_stl(param.type_S, param.raw_stl, 0, param.length, 0, param.radius, param.ns, 0)
 
@@ -397,7 +399,7 @@ def make_box(param, out_pre):
     :param out_pre: Prefix of the output files
     :type out_pre: str
 
-    :return: List of nodes and STL file name
+    :return: List of vertices, faces, STL file name, and rotated STL file name
     """
     vertices, faces = fp.read_stl(param.type_S, param.raw_stl, param.width, param.length, param.height, 0, param.ns, 0)
 
@@ -442,7 +444,7 @@ def make_sphere(param, out_pre):
     :param out_pre: Prefix of the output files
     :type out_pre: str
 
-    :return: List of nodes and STL file name
+    :return: List of vertices, faces, STL file name, and rotated STL file name
     """
     vertices, faces = fp.read_stl(param.type_S, param.raw_stl, 0, 0, 0, param.radius, param.ns, 0)
     nbPoint = len(vertices)
@@ -479,7 +481,7 @@ def make_fwire(param, out_pre):
     :param out_pre: Prefix of the output files
     :type out_pre: str
 
-    :return: List of nodes and STL file name
+    :return: List of vertices, faces, STL file name, and rotated STL file name
     """
     points, angles = fp.base(param.radius, param.nfaces)
 
@@ -539,7 +541,7 @@ def make_wulff(param, out_pre):
     :param out_pre: Prefix for output files
     :type out_pre: str
 
-    :return: List of nodes and STL file name
+    :return: List of vertices, faces, STL file name, and rotated STL file name
     """
     obj_points, obj_faces = fp.make_obj(
         param.surfaces,
@@ -587,7 +589,7 @@ def make_cube(param, out_pre):
     :param out_pre: Prefix of the output files
     :type out_pre: str
 
-    :return: List of nodes and STL file name
+    :return: List of vertices, faces, STL file name, and rotated STL file name
     """
 
     obj_points, obj_faces = fp.cube_faces(param.width, param.length, param.height)
@@ -623,88 +625,23 @@ def make_lattice(param, out_pre):
     :param out_pre: Prefix of the output files
     :type out_pre: str
 
-    :return: List of nodes and STL file name
+    :return: List of vertices, faces, STL file name, and rotated STL file name
     """
-
-    def rotation_matrix(axis: np.ndarray, angle: float) -> np.ndarray:
-        """
-        Generate a rotation matrix for rotating around a given axis by a specified angle.
-
-        Parameters:
-        -----------
-        axis: np.ndarray
-            A 3D vector representing the axis of rotation.
-        angle: float
-            The angle of rotation in radians.
-
-        Returns:
-        --------
-        np.ndarray
-        """
-        axis = axis / np.linalg.norm(axis)
-        x, y, z = axis
-        c = np.cos(angle)
-        s = np.sin(angle)
-        C = 1.0 - c
-
-        return np.array([
-            [c + x * x * C, x * y * C - z * s, x * z * C + y * s],
-            [y * x * C + z * s, c + y * y * C, y * z * C - x * s],
-            [z * x * C - y * s, z * y * C + x * s, c + z * z * C]
-        ])
-
-    def apply_rigid_transform(vertices: np.ndarray,
-                              R: np.ndarray,
-                              t: np.ndarray) -> np.ndarray:
-        """
-        Apply a rigid transformation to a set of vertices.
-
-        Parameters:
-        -----------
-        vertices: np.ndarray
-            An array of shape (N, 3) representing the vertices to transform.
-        R: np.ndarray
-            A 3x3 rotation matrix.
-        t: np.ndarray
-            A translation vector of shape (3,).
-
-        Returns:
-        --------
-        np.ndarray
-        """
-        return (R @ vertices.T).T + t
-
-    def rotation_from_z_axis(target_direction: np.ndarray) -> np.ndarray:
-        """
-        Generate a rotation matrix that aligns the z-axis with the target direction.
-
-        Parameters:
-        -----------
-        target_direction: np.ndarray
-            A 3D vector representing the target direction.
-
-        Returns:
-        --------
-        np.ndarray
-        """
-        z_axis = np.array([0.0, 0.0, 1.0])
-        v = target_direction / np.linalg.norm(target_direction)
-
-        axis = np.cross(z_axis, v)
-        norm_axis = np.linalg.norm(axis)
-
-        if norm_axis < 1e-12:
-            return np.eye(3)
-
-        axis /= norm_axis
-        angle = np.arccos(np.clip(np.dot(z_axis, v), -1.0, 1.0))
-
-        return rotation_matrix(axis, angle)
 
     try:
         import manifold3d as manifold
     except ImportError:
-        raise ImportError("manifold3d library is not installed. Please install it to use this feature.")
+        raise ImportError("manifold3d library is not installed. Please install it with: pip install manifold3d")
+
+    try:
+        import trimesh
+    except ImportError:
+        raise ImportError("trimesh library is not installed. Please install it with: pip install trimesh")
+
+    try:
+        import pymeshlab
+    except ImportError:
+        raise ImportError("pymeshlab library is not installed. Please install it with: pip install pymeshlab")
 
     try:
         from pyLatticeDSO.src.pyLatticeDesign.lattice import Lattice
@@ -713,18 +650,16 @@ def make_lattice(param, out_pre):
                           "Please install it to use this feature. See documentation.")
 
     def numpy_to_manifold(vertices, faces):
-        import trimesh
+        """
+        Converts numpy arrays of vertices and faces into a manifold3d Manifold object.
+        This includes repairing the mesh to ensure it is watertight and suitable for boolean operations.
+        """
         tmp = trimesh.Trimesh(vertices=vertices, faces=faces)
-        print("Initial manifold status:")
-        print("Is watertight:", tmp.is_watertight)
         tmp.remove_unreferenced_vertices()
         tmp.fix_normals()
         trimesh.repair.fix_winding(tmp)
         trimesh.repair.fix_normals(tmp)
         trimesh.repair.fill_holes(tmp)
-
-        print("After repair manifold status:")
-        print("Is watertight:", tmp.is_watertight)
 
         return manifold.Manifold(
             mesh=manifold.Mesh(
@@ -753,83 +688,28 @@ def make_lattice(param, out_pre):
         radius = beam.initial_radius if getattr(beam, "initial_radius", None) is not None else beam.radius
         param.radius = radius
         param.length = beam.length
-        if param.beam_type == "wire":
-            param.type_S = "wire"
+        if param.beam_type == "cwire":
+            param.type_S = "cwire"
             vertices, faces, _, _ = make_cwire(param, out_pre)
-        elif param.beam_type == "poly":
-            param.type_S = "poly"
+        elif param.beam_type == "cpillar":
+            param.type_S = "cpillar"
             vertices, faces, _, _ = make_cpillar(param, out_pre)
         else:
             raise ValueError("No valid beam type found in the JSON file.")
 
         # Positioning the wire at the correct location
         direction = p2 - p1
-        R = rotation_from_z_axis(direction)
-        vertices = apply_rigid_transform(vertices, R, np.zeros(3))
+        R = fp.rotation_from_z_axis(direction)
+        vertices = fp.apply_rigid_transform(vertices, R, np.zeros(3))
         vertices += p1
 
-        print("Generated beam with {} vertices and {} faces".format(len(vertices), len(faces)))
         beam_manifold = numpy_to_manifold(vertices, faces)
-        print("Manifold status:", beam_manifold.status())
-        print("Manifold is empty:", beam_manifold.is_empty())
-        print("Manifold num verts:", beam_manifold.num_vert())
-        print("Manifold num tri:", beam_manifold.num_tri())
         all_manifolds.append(beam_manifold)
 
     # Perform boolean union of all beam manifolds
     union_manifold = all_manifolds[0]
     for m in all_manifolds[1:]:
-        union_manifold = union_manifold + m  # union operator
-
-    import trimesh
-    rough_box_mesh_data = union_manifold.to_mesh()
-    rough_box_trimesh = trimesh.Trimesh(
-        vertices=rough_box_mesh_data.vert_properties,
-        faces=rough_box_mesh_data.tri_verts
-    )
-    rough_box_trimesh.export(out_pre + "_uncut.stl")
-
-    # if param.trim_boundary_beams:
-    #     x0, y0, z0 = lattice_object.x_min, lattice_object.y_min, lattice_object.z_min
-    #     dx, dy, dz = lattice_object.x_max - x0, lattice_object.y_max - y0, lattice_object.z_max - z0
-    #
-    #     # Create bounding box as manifold
-    #     box_manifold = manifold.Manifold.cube(
-    #         size=[dx, dy, dz],
-    #         center=False
-    #     ).translate([x0, y0, z0])
-    #
-    #     union_manifold = union_manifold ^ box_manifold  # intersection operator
-
-    # if param.trim_boundary_beams:
-    #     x0, y0, z0 = lattice_object.x_min, lattice_object.y_min, lattice_object.z_min
-    #     dx, dy, dz = (lattice_object.x_max - x0,
-    #                   lattice_object.y_max - y0,
-    #                   lattice_object.z_max - z0)
-    #
-    #     param.type_S = "cube"
-    #     param.width = dy
-    #     param.length = dx
-    #     param.height = dz
-    #     vertices_cube, faces_cube, _ = make_cube(param, out_pre)
-    #     rough_box = manifold.Manifold(
-    #         mesh=manifold.Mesh(
-    #             vert_properties=np.array(vertices_cube, dtype=np.float32),
-    #             tri_verts=np.array(faces_cube, dtype=np.uint32)
-    #         )
-    #     )
-    #
-    #     # Export rough box for debug
-    #     import trimesh
-    #     rough_box_mesh_data = rough_box.to_mesh()
-    #     rough_box_trimesh = trimesh.Trimesh(
-    #         vertices=rough_box_mesh_data.vert_properties,
-    #         faces=rough_box_mesh_data.tri_verts
-    #     )
-    #     rough_box_trimesh.export(out_pre + "_rough_box.stl")
-    #
-    #     union_manifold = union_manifold ^ rough_box  # intersection operator
-    #     print("====== > Rough bounding box applied.")
+        union_manifold = union_manifold + m
 
     if param.trim_boundary_beams:
         x0, y0, z0 = lattice_object.x_min, lattice_object.y_min, lattice_object.z_min
@@ -837,8 +717,8 @@ def make_lattice(param, out_pre):
                       lattice_object.y_max - y0,
                       lattice_object.z_max - z0)
 
-        # Pipeline make_cube SANS center_3d_dataset
-        obj_points, obj_faces = fp.cube_faces(dy, dx, dz)  # cube de taille dx
+        # Generate a rough box mesh that will be used to trim the beams at the lattice boundaries
+        obj_points, obj_faces = fp.cube_faces(dy, dx, dz)
         list_n = fp.faces_normals(obj_points, obj_faces)
 
         box_vertices, box_faces = fp.read_stl("cube", param.raw_stl, dy, dx, dz, 0, param.ns, 0)
@@ -857,18 +737,16 @@ def make_lattice(param, out_pre):
             nodesurf, node_edge, node_corner, list_n
         )
 
-        # PAS de center_3d_dataset — on translate vers la position du lattice
+        # Translate the box to the correct position
         box_vertices = box_vertices[:, :3]
         box_vertices += np.array([x0, y0, z0])
 
-        import trimesh
         rough_box_trimesh = trimesh.Trimesh(vertices=box_vertices, faces=box_faces)
         rough_box_trimesh.remove_unreferenced_vertices()
         rough_box_trimesh.fix_normals()
         trimesh.repair.fix_winding(rough_box_trimesh)
         trimesh.repair.fill_holes(rough_box_trimesh)
         rough_box_trimesh.export(out_pre + "_rough_box.stl")
-        print(f"Rough box bounds: {rough_box_trimesh.bounds}")
 
         rough_box = manifold.Manifold(
             mesh=manifold.Mesh(
@@ -887,32 +765,32 @@ def make_lattice(param, out_pre):
                 f"Lattice: x=[{x0},{x0 + dx}], y=[{y0},{y0 + dy}], z=[{z0},{z0 + dz}]"
             )
 
-    # Conversion en trimesh pour remaillage
+    # Convert the final manifold back to a mesh and export as STL
     mesh = union_manifold.to_mesh()
-    import trimesh, pymeshlab
 
     tmp = trimesh.Trimesh(
         vertices=mesh.vert_properties,
         faces=mesh.tri_verts
     )
 
-    name_mesh = out_pre + "temp.stl"
-    tmp.export(name_mesh)
+    # name_mesh = out_pre + "temp.stl"
+    # tmp.export(name_mesh)
 
-    # Calcul d'une taille de maille cible basée sur la taille moyenne des arêtes existantes
+    # Determine target edge length for remeshing based on the average edge length of the current mesh
     edge_lengths = tmp.edges_unique_length
-    target_len = float(np.mean(edge_lengths))  # ou np.percentile(edge_lengths, 25) pour plus fin
+    target_len = float(np.mean(edge_lengths))
 
-    print(f"Target edge length: {target_len:.4f}")
+    # print(f"Target edge length: {target_len:.4f}")
 
     bbox_diagonal = np.linalg.norm(tmp.bounds[1] - tmp.bounds[0])
     target_percentage = (target_len / bbox_diagonal) * 100
 
-    print(f"Target edge length: {target_len:.4f}")
-    print(f"Bbox diagonal: {bbox_diagonal:.4f}")
-    print(f"Target percentage: {target_percentage:.4f}%")
+    # print(f"Target edge length: {target_len:.4f}")
+    # print(f"Bbox diagonal: {bbox_diagonal:.4f}")
+    # print(f"Target percentage: {target_percentage:.4f}%")
     target_percentage /= 2.0
 
+    # Remesh the mesh using PyMeshLab to achieve a more uniform distribution of vertices
     ms = pymeshlab.MeshSet()
     ms.add_mesh(pymeshlab.Mesh(
         vertex_matrix=tmp.vertices,
@@ -925,31 +803,6 @@ def make_lattice(param, out_pre):
     )
 
     remeshed = ms.current_mesh()
-    #
-    # # # creates a column that has an assigned index number for each row in vertices; returns vertices
-    # # # with the addition of this new column and also returns the nodenumbers which is an array
-    # # # filled from 0 - length of the vertices
-    # vertices, nodenumber = fp.node_indexing(remeshed.vertex_matrix())
-    # #
-    # # # nodes at the surface of the object. These nodes will have the surface roughness applied to it
-    # nodesurf = fp.node_surface("lattice_boundary", vertices, nodenumber, 0, 0)
-    # print("Number of surface nodes:", len(nodesurf))
-    # nodesurf = nodesurf[np.lexsort((nodesurf[:, 0], nodesurf[:, 1]))]
-    #
-    # xv = nodesurf[:, 0] / max(nodesurf[:, 0])
-    # yv = nodesurf[:, 1] / max(nodesurf[:, 1])
-    #
-    # sfrN, sfrM = fp.vectors(param.N, param.M)  # creating vectors for M and N
-    # m, n = fp.random_numbers(sfrN, sfrM)  # normal gaussian for the amplitude
-    #
-    # # Returns an array with the Z values that will replace the previous z values in the vertices
-    # # array these represent the rougness on the surface
-    # z = fp.random_surf2("lattice_boundary", m, n, param.N, param.M, param.B, xv, yv, sfrM, sfrN, param.C1, param.RMS,
-    #                     out_pre)
-    #
-    # print("Generated roughness with mean:", np.mean(z), "and std:", np.std(z))
-    # print("Number of roughness values:", len(z))
-    # vertices = fp.make_rough("lattice_boundary", z, nodesurf, vertices, 0)
 
     final_mesh = trimesh.Trimesh(
         vertices=remeshed.vertex_matrix(),
@@ -959,42 +812,12 @@ def make_lattice(param, out_pre):
     name_mesh = out_pre + ".stl"
     final_mesh.export(name_mesh)
 
-    #
-    # xv = nodesurf[:, 0] / max(nodesurf[:, 0])
-    # yv = nodesurf[:, 1] / max(nodesurf[:, 1])
-    #
-    # sfrN, sfrM = fp.vectors(param.N, param.M)  # creating vectors for M and N
-    # m, n = fp.random_numbers(sfrN, sfrM)  # normal gaussian for the amplitude
-    #
-    # # Returns an array with the Z values that will replace the previous z values in the vertices
-    # # array these represent the rougness on the surface
-    # z = fp.random_surf2("box", m, n, param.N, param.M, param.B, xv, yv, sfrM, sfrN, param.C1, param.RMS,
-    #                     out_pre)
-    # vertices = fp.make_rough("box", z, nodesurf, vertices, 0)
-    #
-    # # gets rid of the index column because stl file generator takes only a matrix with 3 columns
-    # vertices = vertices[:, :3]
-    #
-    # fp.stl_file(vertices, faces, out_pre)
-    #
-    # # if print_volume:
-    # #     # Print the volume of the generated mesh
-    # #     print("Lattice volume (pyrough mesh): ", union_mesh.volume)
-    #
-    #
-    # # Save the final mesh
-    # name_mesh = out_pre + ".stl"
-    # union_mesh.export(name_mesh)
-
+    # Reset param.type_S to its original value for downstream processing
     param.type_S = param_type_S_backup
 
-    # fp.refine_lattice(out_pre, param.ns, param.alpha, 45, param.ext_fem,
-    #                   z_min_bound=lattice_object.z_min,
-    #                   z_max_bound=lattice_object.z_max)
+    # fp.stl_rotate_euler(out_pre + ".stl", out_pre + "_rot.stl", param.angles, order='zyx')
 
-    # fp.refine_3Dmesh(param.type_S, out_pre, param.ns, param.alpha, param.ext_fem)
-
-    return mesh.vert_properties, name_mesh
+    return mesh.vert_properties, mesh.tri_verts, out_pre + ".stl", out_pre + "_rot.stl"
 
 
 def make_atom_grain(
@@ -1135,7 +958,7 @@ def make_fpillar(param, out_pre):
     :param out_pre: Prefix of the output files
     :type out_pre: str
 
-    :return: List of nodes and STL file name for a Faceted Pillar
+    :return: List of vertices, faces, STL file name, and rotated STL file name for a Faceted Pillar
     """
     # create the base of the faceted Pillar
     points, anglesfac = fp.base(param.radius, param.nfaces)
@@ -1204,7 +1027,7 @@ def make_cpillar(
     :param out_pre: Prefix of the output files
     :type out_pre: str
 
-    :return: List of nodes and STL file name for a circular Pillar
+    :return: List of vertices, faces, STL file name, and rotated STL file name for a circular Pillar
     """
     if len(param.eta == 1):
         B = [param.B, param.B]
@@ -1327,7 +1150,7 @@ def make_multi_layered(
     :param ext_fem: List of FEM extension files
     :type ext_fem: list
 
-    :return: List of nodes and STL file name
+    :return: List of vertices, faces, STL file name, and rotated STL file name
     """
     #Create a box perfect mesh at an initial height h
     vertices, faces = fp.multi_layered(h, width, length, height, ns)

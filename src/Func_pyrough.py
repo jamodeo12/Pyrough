@@ -539,13 +539,13 @@ def cube_faces(width, length, height):
     :return: Points and faces
     """
     obj_points = np.array([
-        [0,      0,     0     ],
-        [length, 0,     0     ],
-        [0,      width, 0     ],
-        [length, width, 0     ],
-        [0,      0,     height],
-        [length, 0,     height],
-        [0,      width, height],
+        [0, 0, 0],
+        [length, 0, 0],
+        [0, width, 0],
+        [length, width, 0],
+        [0, 0, height],
+        [length, 0, height],
+        [0, width, height],
         [length, width, height],
     ])
     obj_faces = np.array([
@@ -1836,7 +1836,6 @@ def read_stl(sample_type, raw_stl, width, length, height, radius, ns, points):
     vertices = []
     faces = []
     if raw_stl == "na":
-        #----------------------------------------------------------------------------------------------------------------------
         if sample_type == "box" or sample_type == "grain" or sample_type == "multi_layered":
             vertices, faces = box(width, length, height, ns)
         elif sample_type == "cwire" or sample_type == "cpillar":
@@ -1845,9 +1844,8 @@ def read_stl(sample_type, raw_stl, width, length, height, radius, ns, points):
             vertices, faces = sphere(radius, ns)
         elif sample_type == "fwire" or sample_type == "fpillar":
             vertices, faces = fwire(length, points, ns)
-        #-----------------------------------------------------------------------------------------------------------------------
         elif sample_type == "cube":
-            vertices, faces = cube(length, ns)
+            vertices, faces = cube(width, length, height, ns)
     else:
         mesh = meshio.read(raw_stl)
         vertices, faces = mesh.points, mesh.cells
@@ -2938,3 +2936,63 @@ def xyz_rotate_euler(input_file, output_file, angles_deg, order='zyx'):
 
         for sym, pos in zip(symbols, positions_rot):
             f.write(f"{sym} {pos[0]:.8f} {pos[1]:.8f} {pos[2]:.8f}\n")
+
+
+def apply_rigid_transform(vertices: np.ndarray,
+                          R: np.ndarray,
+                          t: np.ndarray) -> np.ndarray:
+    """
+    Apply a rigid transformation to a set of vertices.
+
+    Parameters:
+    -----------
+    vertices: np.ndarray
+        An array of shape (N, 3) representing the vertices to transform.
+    R: np.ndarray
+        A 3x3 rotation matrix.
+    t: np.ndarray
+        A translation vector of shape (3,).
+
+    Returns:
+    --------
+    np.ndarray
+    """
+    return (R @ vertices.T).T + t
+
+
+def rotation_from_z_axis(target_direction: np.ndarray) -> np.ndarray:
+    """
+    Generate a rotation matrix that aligns the z-axis with the target direction.
+
+    Parameters:
+    -----------
+    target_direction: np.ndarray
+        A 3D vector representing the target direction.
+
+    Returns:
+    --------
+    np.ndarray
+    """
+    z_axis = np.array([0.0, 0.0, 1.0])
+    v = target_direction / np.linalg.norm(target_direction)
+
+    axis = np.cross(z_axis, v)
+    norm_axis = np.linalg.norm(axis)
+
+    if norm_axis < 1e-12:
+        return np.eye(3)
+
+    axis /= norm_axis
+    angle = np.arccos(np.clip(np.dot(z_axis, v), -1.0, 1.0))
+
+    axis = axis / np.linalg.norm(axis)
+    x, y, z = axis
+    c = np.cos(angle)
+    s = np.sin(angle)
+    C = 1.0 - c
+
+    return np.array([
+        [c + x * x * C, x * y * C - z * s, x * z * C + y * s],
+        [y * x * C + z * s, c + y * y * C, y * z * C - x * s],
+        [z * x * C - y * s, z * y * C + x * s, c + z * z * C]
+    ])
