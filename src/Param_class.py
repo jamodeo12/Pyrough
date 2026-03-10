@@ -132,6 +132,7 @@ class Parameter:
                 self.orien_x2 = read_param["MATRIX_Param"]["Orien_x"]
                 self.orien_y2 = read_param["MATRIX_Param"]["Orien_y"]
                 self.orien_z2 = read_param["MATRIX_Param"]["Orien_z"]
+                self.precpos = read_param["MATRIX_Param"].get("Precpos", 'center')
 
         if self.type_S == "lattice":
             try:

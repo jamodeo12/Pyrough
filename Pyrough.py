@@ -57,48 +57,15 @@ else:
         # the STL file will be used to make grain 1, while its negative will be used for grain 2
         print("====== > Pyrough.py : grain option treatment running...")
         print("====== > Pyrough.py : Sample_class.make_box running...")
-        vertices, FEM_stl, rot_FEM_stl = Sample_class.make_box(
-            param.type_S,
-            2 * (1 + param.eta),
-            param.C1,
-            param.RMS,
-            param.N,
-            param.M,
-            param.length,
-            param.height,
-            param.width,
-            param.ns,
-            param.alpha,
-            param.raw_stl,
-            param.angles,
-            out_pre,
-            param.ext_fem,
-        )
+        vertices, FEM_stl, rot_FEM_stl = Sample_class.make_box(param, out_pre)
         subprocess.call(["rm", rot_FEM_stl])
 
         print("====== > Pyrough.py : Sample_class.make_atom_grain running...")
-        Sample_class.make_atom_grain(
-            FEM_stl,
-            param.lattice_structure1,
-            param.lattice_parameter1,
-            param.material1,
-            param.orien_x1,
-            param.orien_y1,
-            param.orien_z1,
-            param.lattice_structure2,
-            param.lattice_parameter2,
-            param.material2,
-            param.orien_x2,
-            param.orien_y2,
-            param.orien_z2,
-            vertices,
-            out_pre,
-            param.ext_ato,
-        )
+        Sample_class.make_atom_grain(FEM_stl, param, vertices, out_pre)
         # call make it md to create atomsk file
         print("JOB DONE!" + "  File name: " + out_pre + ".lmp")
 
-    elif param.type_S == "multi_layered" :
+    elif param.type_S == "multi_layered":
         # If grain, we first create the mesh of a rough box
         # the STL file will be used to make grain 1, while its negative will be used for grain 2
         print("====== > Pyrough.py : multi_layered option treatment running...")
@@ -135,33 +102,7 @@ else:
         sample = Sample_class.Sample(param.type_S)
 
         print("====== > Pyrough.py : sample.make_stl running...")
-        vertices, FEM_stl, rot_FEM_stl = sample.make_stl(
-            param.type_S,
-            param.eta,
-            param.C1,
-            param.RMS,
-            param.N,
-            param.M,
-            param.radius,
-            param.length,
-            param.height,
-            param.width,
-            param.ns,
-            param.alpha,
-            param.raw_stl,
-            param.nfaces,
-            param.surfaces,
-            param.energies,
-            param.n_at,
-            param.lattice_structure,
-            param.lattice_parameter,
-            param.material,
-            param.orien_x,
-            param.orien_z,
-            param.angles,
-            out_pre,
-            param.ext_fem,
-        )
+        vertices, FEM_stl, rot_FEM_stl = sample.make_stl(param, out_pre)
 
         print("====== > FEM JOB DONE !")
         for ext in param.ext_fem:
@@ -173,65 +114,25 @@ else:
         if param.output(Param_file) == "ATOM" and not hasattr(param, "spec"):
             print("====== > Pyrough.py : sample.make_atom running...")
             subprocess.call(["rm", rot_FEM_stl])
-            sample.make_atom(
-                FEM_stl,
-                param.lattice_structure,
-                param.lattice_parameter,
-                param.material,
-                param.orien_x,
-                param.orien_y,
-                param.orien_z,
-                vertices,
-                param.angles2,
-                out_pre,
-                param.ext_ato,
-            )
+            sample.make_atom(FEM_stl, param, vertices, out_pre)
 
             # call make it md to create atomsk file
             print("====== > ATOM OBJECT JOB DONE !")
             for ext in param.ext_ato:
                 print("====== > File name: " + out_pre + "." + str(ext))
 
-        if  hasattr(param, "spec"):
-             if param.spec == "precinmatrix":
+        if hasattr(param, "spec"):
+            if param.spec == "precinmatrix":
                 print("====== > Pyrough.py : precinmatric option treatment running...")
 
                 print("====== > sample.make_precipitate running")
                 # Generate the precipitate centered in the matrix-sized supercell : precipitate.lmp
-                sample.make_precipitate(
-                    FEM_stl,
-                    param.lattice_structure,
-                    param.lattice_parameter,
-                    param.material,
-                    param.orien_x,
-                    param.orien_y,
-                    param.orien_z,
-                    param.length_x2,
-                    param.length_y2,
-                    param.length_z2,
-                    param.angles2,
-                    param.precpos,
-                )
+                sample.make_precipitate(FEM_stl, param)
 
                 print("====== > sample.make_atom_matrix running")
-                sample.make_atom_matrix(
-                rot_FEM_stl,
-                param.length_x2,
-                param.length_y2,
-                param.length_z2,
-                param.lattice_structure2,
-                param.lattice_parameter2,
-                param.material2,
-                param.orien_x2,
-                param.orien_y2,
-                param.orien_z2,
-                param.precpos,
-                )
+                sample.make_atom_matrix(FEM_stl, param)
 
                 print("====== > sample.put_prec_in_matrix running...")
-                sample.put_prec_in_matrix(
-                    out_pre,
-                    param.ext_ato
-                 )
+                sample.put_prec_in_matrix(out_pre, param.ext_ato)
 
                 print("====== > ATOM PRECIPITATE IN MATRIX JOB DONE !")

@@ -382,7 +382,7 @@ def make_cwire(param, out_pre):
     fp.stl_file(vertices, faces, out_pre)
     fp.refine_3Dmesh(param.type_S, out_pre, param.ns, param.alpha, param.ext_fem)
 
-    fp.stl_rotate_euler(out_pre + ".stl", out_pre + "_rot.stl", angles, order='zyx')
+    fp.stl_rotate_euler(out_pre + ".stl", out_pre + "_rot.stl", param.angles, order='zyx')
 
     return vertices, faces, out_pre + ".stl", out_pre + "_rot.stl"
 
@@ -427,9 +427,9 @@ def make_box(param, out_pre):
     fp.stl_file(vertices, faces, out_pre)
     fp.refine_3Dmesh(param.type_S, out_pre, param.ns, param.alpha, param.ext_fem)
 
-    fp.stl_rotate_euler(out_pre + ".stl", out_pre + "_rot.stl", angles, order='zyx')
+    fp.stl_rotate_euler(out_pre + ".stl", out_pre + "_rot.stl", param.angles, order='zyx')
 
-    return vertices, out_pre + ".stl", out_pre + "_rot.stl"
+    return vertices, faces, out_pre + ".stl", out_pre + "_rot.stl"
 
 
 def make_sphere(param, out_pre):
@@ -464,9 +464,9 @@ def make_sphere(param, out_pre):
     fp.stl_file(new_vertex, faces, out_pre)
     fp.refine_3Dmesh(param.type_S, out_pre, param.ns, param.alpha, param.ext_fem)
 
-    fp.stl_rotate_euler(out_pre + ".stl", out_pre + "_rot.stl", angles, order='zyx')
+    fp.stl_rotate_euler(out_pre + ".stl", out_pre + "_rot.stl", param.angles, order='zyx')
 
-    return vertices, out_pre + ".stl", out_pre + "_rot.stl"
+    return vertices, faces, out_pre + ".stl", out_pre + "_rot.stl"
 
 
 def make_fwire(param, out_pre):
@@ -526,12 +526,10 @@ def make_fwire(param, out_pre):
 
     fp.stl_rotate_euler(out_pre + ".stl", out_pre + "_rot.stl", angles, order='zyx')
 
-    return vertices, out_pre + ".stl", out_pre + "_rot.stl"
+    return vertices, faces, out_pre + ".stl", out_pre + "_rot.stl"
 
 
-def make_wulff(
-        param,
-        out_pre):
+def make_wulff(param, out_pre):
     """
     Creates an stl file of a rough Wulff-shaped nanoparticle
 
@@ -574,9 +572,9 @@ def make_wulff(
     fp.stl_file(vertices, faces, out_pre)
     fp.refine_3Dmesh(param.type_S, out_pre, param.ns, param.alpha, param.ext_fem)
 
-    fp.stl_rotate_euler(out_pre + ".stl", out_pre + "_rot.stl", angles, order='zyx')
+    fp.stl_rotate_euler(out_pre + ".stl", out_pre + "_rot.stl", param.angles, order='zyx')
 
-    return vertices, out_pre + ".stl", out_pre + "_rot.stl"
+    return vertices, faces, out_pre + ".stl", out_pre + "_rot.stl"
 
 
 def make_cube(param, out_pre):
@@ -610,9 +608,9 @@ def make_cube(param, out_pre):
     fp.stl_file(vertices, faces, out_pre)
     fp.refine_3Dmesh(param.type_S, out_pre, param.ns, param.alpha, param.ext_fem)
 
-    fp.stl_rotate_euler(out_pre + ".stl", out_pre + "_rot.stl", angles, order='zyx')
+    fp.stl_rotate_euler(out_pre + ".stl", out_pre + "_rot.stl", param.angles, order='zyx')
 
-    return vertices, out_pre + ".stl", out_pre + "_rot.stl"
+    return vertices, faces, out_pre + ".stl", out_pre + "_rot.stl"
 
 
 def make_lattice(param, out_pre):
@@ -756,10 +754,10 @@ def make_lattice(param, out_pre):
         param.length = beam.length
         if param.beam_type == "wire":
             param.type_S = "wire"
-            vertices, faces, _ = make_wire(param, out_pre)
+            vertices, faces, _, _ = make_cwire(param, out_pre)
         elif param.beam_type == "poly":
             param.type_S = "poly"
-            vertices, faces, _ = make_poly(param, out_pre)
+            vertices, faces, _, _ = make_cpillar(param, out_pre)
         else:
             raise ValueError("No valid beam type found in the JSON file.")
 
@@ -1199,87 +1197,47 @@ def make_fpillar(param, out_pre):
 
     fp.stl_rotate_euler(out_pre + ".stl", out_pre + "_rot.stl", param.angles, order='zyx')
 
-    return vertices, out_pre + ".stl", out_pre + "_rot.stl"
-
-    #------------------------------------------------------------------------------------------------------------------------------------------------------
+    return vertices, faces, out_pre + ".stl", out_pre + "_rot.stl"
 
 
 def make_cpillar(
-        type_sample,
-        B1,
-        B2,
-        C1,
-        C2,
-        RMS1,
-        RMS2,
-        N,
-        M,
-        length,
-        nfaces,
-        radius,
-        ns,
-        alpha,
-        raw_stl,
-        angles,
+        param,
         out_pre,
-        ext_fem,
 ):
     """
-    :type type_sample: str
-    :param B1: The degree the roughness is dependent on for the lateral surface
-    :type B1: float
-    :param B2: The degree the roughness is dependent on for the upside surface
-    :type B2: float
-    :param C1: Roughness normalization factor for the lateral surface
-    :type C1: float
-    :param C2: Roughness normalization factor for the upside surface
-    :type C2: float
-    :param RMS1: RMS1
-    :type RMS1: float
-    :param RMS2: RMS2
-    :type RMS2: float
-    :param N: Scaling cartesian position
-    :type N: int
-    :param M: Scaling cartesian position
-    :type M: int
-    :param length: Length of the wire
-    :type length: float
-    :param nfaces: Number of faces of the wire
-    :type nfaces: int
-    :param radius: Radius of the wire
-    :type radius: float
-    :param ns: The number of segments desired
-    :type ns: int
-    :param alpha: Refine mesh factor
-    :type alpha: float
-    :param raw_stl: Name of the input stl file
-    :type raw_stl: str
-    :param angles: list of angles for Euler rotations
-    :type angles: list
+    :param param: the object containing all the parameters defined by the user in the JSON input file
+    :type param: Parameter class object
     :param out_pre: Prefix of the output files
     :type out_pre: str
-    :param ext_fem: List of FEM extension files
-    :type ext_fem: list
 
     :return: List of nodes and STL file name for a circular Pillar
     """
-    vertices, faces = fp.read_stl(type_sample, raw_stl, 0, length, 0, radius, ns, 0)
+    if len(param.eta == 1):
+        B = [param.B, param.B]
+        C1 = [param.C1, param.C1]
+        RMS = [param.RMS, param.RMS]
+    else:
+        B = [param.B[0], param.B[1]]
+        C1 = [param.C1[0], param.C1[1]]
+        RMS = [param.RMS[0], param.RMS[1]]
+
+    vertices, faces = fp.read_stl(param.type_S, param.raw_stl, 0, param.length, 0, param.radius, param.ns, 0)
 
     # Creates a column that has an assigned index number for each row in vertices; returns vertices
     # with the addition of this new column and also returns the nodenumber which is an array file
     # from 0 - length of the vertices
     vertices, nodenumber = fp.node_indexing(vertices)
 
-    #Nodes at the surface of the object. These nodes will have the surface roughness applied to it
-    #nodesurf 1 is the wire surface, and nodesurf2 is the topside surface
+    # Nodes at the surface of the object. These nodes will have the surface roughness applied to it
+    # nodesurf 1 is the wire surface, and nodesurf2 is the topside surface
     nodesurf1 = fp.node_surface("cwire", vertices, nodenumber, 0, 0)
     nodesurf2 = fp.node_surface("box", vertices, nodenumber, 0, 0)
 
-    #Getting the index of nodes on the edge
+    # Getting the index of nodes on the edge
     nodesurftot = [nodesurf1] + [nodesurf2]
     node_edge, node_corner = fp.node_corner(nodesurftot)
 
-    #Convert to cylindrics coordinates (Rho Theta Z nodenumber)
+    # Convert to cylindrics coordinates (Rho Theta Z nodenumber)
     cy_nodesurf1 = np.array(
         [
             fp.rho(nodesurf1[:, 0], nodesurf1[:, 1]),
@@ -1291,34 +1249,34 @@ def make_cpillar(
 
     cy_nodesurf1 = cy_nodesurf1[np.lexsort((cy_nodesurf1[:, 1], cy_nodesurf1[:, 2]))]
 
-    #Creating X and Y vector (Connection matrix size) going to make one line code
+    # Creating X and Y vector (Connection matrix size) going to make one line code
     xv1 = (cy_nodesurf1[:, 1] / max(cy_nodesurf1[:, 1]) + 1) / 2
     yv1 = (cy_nodesurf1[:, 2] / max(cy_nodesurf1[:, 2]) + 1) / 2
 
-    sfrN, sfrM = fp.vectors(N, M)  # creating vectors for M and N
+    sfrN, sfrM = fp.vectors(param.N, param.M)  # creating vectors for M and N
     m1, n1 = fp.random_numbers(sfrN, sfrM)  # normal gaussian for the amplitude
 
     xv2 = nodesurf2[:, 0] / max(nodesurf2[:, 0])
     yv2 = nodesurf2[:, 1] / max(nodesurf2[:, 1])
     m2, n2 = fp.random_numbers(sfrN, sfrM)
 
-    #Returns an array with the Z values that will replace the previous z values in the vertices
-    #Array these represent the roughness on the surface
-    z1 = fp.random_surf2("cwire", m1, n1, N, M, B1, xv1, yv1, sfrM, sfrN, C1, RMS1, out_pre)
-    z2 = fp.random_surf2("box", m2, n2, N, M, B2, xv2, yv2, sfrM, sfrN, C2, RMS2, out_pre)
+    # Returns an array with the Z values that will replace the previous z values in the vertices
+    # Array these represent the roughness on the surface
+    z1 = fp.random_surf2("cwire", m1, n1, param.N, param.M, B[0], xv1, yv1, sfrM, sfrN, C1[0], RMS[0], out_pre)
+    z2 = fp.random_surf2("box", m2, n2, param.N, param.M, B[1], xv2, yv2, sfrM, sfrN, C1[1], RMS[1], out_pre)
 
-    vertices = fp.make_rough_pillar(type_sample, z1, z2, cy_nodesurf1, nodesurf2, node_edge, vertices, 0)
+    vertices = fp.make_rough_pillar(param.type_S, z1, z2, cy_nodesurf1, nodesurf2, node_edge, vertices, 0)
 
     # gets rid of the index column because stl file generator takes only a matrix with 3 columns
     vertices = vertices[:, :3]
 
     # creates a stl file of the cylinder with roughness on the surface
     fp.stl_file(vertices, faces, out_pre)
-    fp.refine_3Dmesh(type_sample, out_pre, ns, alpha, ext_fem)
+    fp.refine_3Dmesh(param.type_S, out_pre, param.ns, param.alpha, param.ext_fem)
 
-    fp.stl_rotate_euler(out_pre + ".stl", out_pre + "_rot.stl", angles, order='zyx')
+    fp.stl_rotate_euler(out_pre + ".stl", out_pre + "_rot.stl", param.angles, order='zyx')
 
-    return vertices, out_pre + ".stl", out_pre + "_rot.stl"
+    return vertices, faces, out_pre + ".stl", out_pre + "_rot.stl"
 
 
 def make_multi_layered(
