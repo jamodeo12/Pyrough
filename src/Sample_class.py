@@ -221,7 +221,7 @@ class Sample:
             os.remove(temp_file)
 
         # Precipitate rotation : Euler rotation
-        fp.xyz_rotate_euler("precipitate.xyz", "precipitate_rot.xyz", angles2, order='zyx')
+        fp.xyz_rotate_euler("precipitate.xyz", "precipitate_rot.xyz", param.angles2, order='zyx')
         subprocess.call(["mv", "precipitate_rot.xyz", "precipitate.xyz"])
         subprocess.call(["rm", STL])
 
@@ -1726,14 +1726,10 @@ def make_atom_multilayered(
                         #######################
 
                         # Cleaning all undesirable file
-                        subprocess.call(
-                            [
-                                "rm",
-                                FEM_STL1,
-                                "mat" + str(index_layer2) + "_outm.cfg",
-                                out_pre + "_stat.txt",
-                            ]
-                        )
+                        for f in [FEM_STL2, "mat" + str(index_layer2) + "_supercellm.cfg", "mat" + str(index_layer2) + "_outm.cfg"]:
+                            if os.path.exists(f):
+                                os.remove(f)
+
                         print("bottom roughness is ok")
                         h = h + height_layern
 
@@ -1772,7 +1768,8 @@ def make_atom_multilayered(
                         file_create.append(out_pre + str(index_layer1) + ".msh")
                         #######################
 
-                        subprocess.call(["rm", out_pre + str(index_layer1) + ".msh"])
+                        if os.path.exists(out_pre + str(index_layer1) + ".msh"):
+                            os.remove(out_pre + str(index_layer1) + ".msh")
                         a = str(n)
 
                         # Bottom roughness treatment (with fresh .stl1):
