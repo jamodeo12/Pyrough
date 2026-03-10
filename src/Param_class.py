@@ -22,7 +22,7 @@ class Parameter:
         with open(json_file) as json_file:
             read_param = json.load(json_file)
 
-        type_allowed = ["grain", "multi_layered", "cwire", "fwire", "box", "sphere", "poly", "wulff", "cube",
+        type_allowed = ["grain", "multi_layered", "cwire", "fwire", "box", "sphere", "poly", "wulff", "cube", "fpillar",
                         "pillar", "poly_pillar", "lattice"]
 
         if not any(key.lower() in type_allowed for key in read_param):
@@ -30,14 +30,7 @@ class Parameter:
         else:
             for key in read_param:
                 if key.lower() in type_allowed:
-                    if key.lower() == "cwire":
-                        self.type_S = "wire"
-                    elif key.lower() == "fwire":
-                        self.type_S = "poly"
-                    elif key.lower() == "fpillar":
-                        self.type_S = "poly_pillar"
-                    else:
-                        self.type_S = key.lower()
+                    self.type_S = key.lower()
                     self.key = key
 
         self.N = read_param[self.key].get("N", 0)

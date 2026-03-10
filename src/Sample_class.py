@@ -16,6 +16,7 @@ import subprocess
 import numpy as np
 from src import Func_pyrough as fp
 
+
 class Sample:
     def __init__(self, type_sample):
         self.sample = type_sample
@@ -36,373 +37,46 @@ class Sample:
 
         :returns: List of nodes and stl file name
         """
-        if param.type_S == "wire":
-            vertices, _, stl = make_wire(param, out_pre)
+        if param.type_S == "cwire":
+            vertices, _, stl, rot_stl = make_cwire(param, out_pre)
         elif param.type_S == "box":
-            vertices, stl = make_box(param, out_pre)
+            vertices, _, stl, rot_stl = make_box(param, out_pre)
         elif param.type_S == "sphere":
-            vertices, stl = make_sphere(param, out_pre)
-        elif param.type_S == "poly":
-            vertices, _, stl = make_poly(param, out_pre)
-        elif param.type_S == "poly_pillar":
-            vertices, stl = make_poly_pillar(param, out_pre)
-        elif param.type_S == "pillar":
-            vertices, stl = make_pillar(param, out_pre)
+            vertices, _, stl, rot_stl = make_sphere(param, out_pre)
+        elif param.type_S == "fwire":
+            vertices, _, stl, rot_stl = make_fwire(param, out_pre)
+        elif param.type_S == "fpillar":
+            ############# Gérer les entrées avec B1 B2 C1 C2
+            vertices, _, stl, rot_stl = make_fpillar(param, out_pre)
+        elif param.type_S == "cpillar":
+            vertices, _, stl, rot_stl = make_cpillar(param, out_pre)
         elif param.type_S == "wulff":
-            vertices, stl = make_wulff(param, out_pre)
+            vertices, _, stl, rot_stl = make_wulff(param, out_pre)
         elif param.type_S == "cube":
-            vertices, _, stl = make_cube(param, out_pre)
+            vertices, _, stl, rot_stl = make_cube(param, out_pre)
         elif param.type_S == "lattice":
-            vertices, stl = make_lattice(param, out_pre)
+            vertices, _, stl, rot_stl = make_lattice(param, out_pre)
         else:
             raise ValueError("No valid sample type found in the JSON file.")
-        return vertices, stl
-    
-    def make_stl(
-        self,
-        type_sample,
-        eta,
-        C1,
-        RMS,
-        N,
-        M,
-        radius,
-        length,
-        height,
-        width,
-        ns,
-        alpha,
-        raw_stl,
-        nfaces,
-        surfaces,
-        energies,
-        n_at,
-        lattice_structure,
-        lattice_parameter,
-        material,
-        orien_x,
-        orien_z,
-        angles,
-        out_pre,
-        ext_fem,
-    ):
-        """
-        Creates an stl file based on the parameters chosen by the user. Based on the type of sample
-        entered, the code will sort through the options of type of samples and if true then the
-        code under the type of sample will be executed. The type of sample affects the type of stl
-        file returned. The code executed requires the parameters to create the object stl and to
-        apply surface roughness onto the object. ...; In continuation will add that a separate
-        files will be stored if they want to redo the code.
-
-        :param type_sample: Type of the sample
-        :type type_sample: str
-        :param eta: Roughness exponent
-        :type eta: float
-        :param C1: Roughness normalization factor
-        :type C1: float
-        :param RMS: RMS
-        :type RMS: float
-        :param N: Length of the random numbers matrix
-        :type N: int
-        :param M: Length of the random numbers matrix
-        :type M: int
-        :param radius: The radius of the nanowire or the sphere
-        :type radius: float
-        :param length: The length of the box
-        :type length: float
-        :param height: The height of the box
-        :type height: float
-        :param width: The width of the box
-        :type width: float
-        :param ns: Mesh size
-        :type ns: float
-        :param alpha: Refine mesh factor
-        :type alpha: float
-        :param raw_stl: Input STL file
-        :type raw_stl: stl
-        :param nfaces: Number of faces in the case of a faceted wire
-        :type nfaces: int
-        :param surfaces: List of surfaces used for Wulff theory
-        :type surfaces: list
-        :param energies: List of energies for each associated surface
-        :type energies: list
-        :param n_at: Number of atoms in the case of a faceted NP
-        :type n_at: int
-        :param lattice_structure: Crystallographic structure of the material
-        :type lattice_structure: str
-        :param lattice_parameter: Lattice parameter of the material
-        :type lattice_parameter: float
-        :param material: Type of material
-        :type material: str
-        :param orien_x: Orientation along x-axis
-        :type orien_x: list
-        :param orien_z: Orientation along z-axis
-        :type orien_z: list
-        :param angles: list of angles
-        :type angles: list
-        :param out_pre: Prefix of the output files
-        :type out_pre: str
-        :param ext_fem: Output FEM formats list
-        :type ext_fem: list
-
-        :returns: List of nodes and stl file name
-        """
-        if type_sample == "cwire":
-            vertices, stl, rot_stl = make_cwire(
-                type_sample,
-                2 * (1 + eta),
-                C1,
-                RMS,
-                N,
-                M,
-                radius,
-                length,
-                ns,
-                alpha,
-                raw_stl,
-                angles,
-                out_pre,
-                ext_fem,
-            )
-
-            return (vertices, stl, rot_stl)
-
-        elif type_sample == "box":
-            vertices, stl, rot_stl = make_box(
-                type_sample,
-                2 * (1 + eta),
-                C1,
-                RMS,
-                N,
-                M,
-                length,
-                height,
-                width,
-                ns,
-                alpha,
-                raw_stl,
-                angles,
-                out_pre,
-                ext_fem,
-            )
-
-            return (vertices, stl, rot_stl)
-
-        elif type_sample == "sphere":
-            vertices, stl, rot_stl = make_sphere(
-                type_sample,
-                4 * eta,
-                C1,
-                N,
-                radius,
-                ns,
-                alpha,
-                raw_stl,
-                angles,
-                out_pre,
-                ext_fem,
-            )
-
-            return (vertices, stl, rot_stl)
-
-        elif type_sample == "fwire":
-            vertices, stl, rot_stl = make_fwire(
-                type_sample,
-                2 * (1 + eta),
-                C1,
-                RMS,
-                N,
-                M,
-                length,
-                nfaces,
-                radius,
-                ns,
-                alpha,
-                raw_stl,
-                angles,
-                out_pre,
-                ext_fem,
-            )
-            return (vertices, stl, rot_stl)
-
-#---------------------------------------------------------------------------------------------------------------------------------------------------------
-        elif type_sample == "fpillar":
-            if type(eta) == int or type(eta) == float :
-                vertices, stl, rot_stl = make_fpillar(
-                        type_sample,
-                        2*(1+eta),
-                        2*(1+eta),
-                        C1,
-                        C1,
-                        RMS,
-                        RMS,
-                        N,
-                        M,
-                        length,
-                        nfaces,
-                        radius,
-                        ns,
-                        alpha,
-                        raw_stl,
-                        angles,
-                        out_pre,
-                        ext_fem,
-                )
-            else :
-                vertices, stl, rot_stl = make_fpillar(
-                        type_sample,
-                        2*(1+eta[0]),
-                        2*(1+eta[1]),
-                        C1[0],
-                        C1[1],
-                        RMS[0],
-                        RMS[1],
-                        N,
-                        M,
-                        length,
-                        nfaces,
-                        radius,
-                        ns,
-                        alpha,
-                        raw_stl,
-                        angles,
-                        out_pre,
-                        ext_fem,
-                )
-
-            return (vertices, stl, rot_stl)
-
-        elif type_sample == "cpillar":
-            if type(eta) == int or type(eta) == float :
-                vertices, stl, rot_stl = make_cpillar(
-                        type_sample,
-                        2*(1+eta),
-                        2*(1+eta),
-                        C1,
-                        C1,
-                        RMS,
-                        RMS,
-                        N,
-                        M,
-                        length,
-                        nfaces,
-                        radius,
-                        ns,
-                        alpha,
-                        raw_stl,
-                        angles,
-                        out_pre,
-                        ext_fem,
-                )
-            else :
-                vertices, stl, rot_stl = make_cpillar(
-                    type_sample,
-                    2 * (1 + eta[0]),
-                    2 * (1 + eta[1]),
-                    C1[0],
-                    C1[1],
-                    RMS[0],
-                    RMS[1],
-                    N,
-                    M,
-                    length,
-                    nfaces,
-                    radius,
-                    ns,
-                    alpha,
-                    raw_stl,
-                    angles,
-                    out_pre,
-                    ext_fem,
-                )
-            return (vertices, stl, rot_stl)
-
-
-#---------------------------------------------------------------------------------------------------------------------------------------------------------
-
-        elif type_sample == "wulff":
-            vertices, stl, rot_stl= make_wulff(
-                type_sample,
-                2 * (1 + eta),
-                C1,
-                RMS,
-                N,
-                M,
-                surfaces,
-                energies,
-                n_at,
-                ns,
-                alpha,
-                raw_stl,
-                lattice_structure,
-                lattice_parameter,
-                material,
-                orien_x,
-                orien_z,
-                angles,
-                out_pre,
-                ext_fem,
-            )
-
-            return (vertices, stl, rot_stl)
-
-        elif type_sample == "cube":
-            vertices, stl, rot_stl = make_cube(
-                type_sample,
-                2 * (1 + eta),
-                C1,
-                RMS,
-                N,
-                M,
-                length,
-                ns,
-                alpha,
-                raw_stl,
-                angles,
-                out_pre,
-                ext_fem,
-            )
-
-            return (vertices, stl, rot_stl)
+        return vertices, stl, rot_stl
 
     def make_atom(
-        self,
-        STL,
-        lattice_str,
-        lattice_par,
-        material,
-        orien_x,
-        orien_y,
-        orien_z,
-        vertices,
-        angles2,
-        out_pre,
-        ext_ato,
-    ):
+            self,
+            STL,
+            param,
+            vertices,
+            out_pre):
         """
         Creates an atom position file sample_with_atoms.lmp. This requires a .stl file with rough surfaces
         used as a stencil over a larger block of atoms from which out-of-the-mesh atoms are removed
 
-        :param type_sample: Sample type
-        :type type_sample: str
+
         :param STL: The stl file with an object that has surface roughness applied to it
         :type STL: str
-        :param lattice_str: The lattice structure of the crystal
-        :type lattice_str: str
-        :param lattice_par: The lattice parameter of the crystal in Angstrom
-        :type lattice_par: float
-        :param material: The chemical symbol of the desired element
-        :type material: str
-        :param orien_x: The orientation of the crystal in the x direction
-        :type orien_x: list
-        :param orien_y: The orientation of the crystal in the y direction
-        :type orien_y: list
-        :param orien_z: The orientation of the crystal in the z direction
-        :type orien_z: list
+        :param param: the object containing all the parameters defined by the user in the JSON input file
+        :type param: Parameter class object
         :param vertices: List of nodes
         :type vertices: array
-        :param angles2: list of angles for Euler rotations
-        :type angles2: list
         :param out_pre: Prefix of the output files
         :type out_pre: str
         """
@@ -410,17 +84,17 @@ class Sample:
         dim_x = max(vertices[:, 0]) - min(vertices[:, 0])
         dim_y = max(vertices[:, 1]) - min(vertices[:, 1])
         dim_z = max(vertices[:, 2]) - min(vertices[:, 2])
-        dis_x, dup_x, orien_x = fp.duplicate(dim_x, orien_x, lattice_par, lattice_str)
-        dis_y, dup_y, orien_y = fp.duplicate(dim_y, orien_y, lattice_par, lattice_str)
-        dis_z, dup_z, orien_z = fp.duplicate(dim_z, orien_z, lattice_par, lattice_str)
+        dis_x, dup_x, orien_x = fp.duplicate(dim_x, param.orien_x, param.lattice_parameter, param.lattice_structure)
+        dis_y, dup_y, orien_y = fp.duplicate(dim_y, param.orien_y, param.lattice_parameter, param.lattice_structure)
+        dis_z, dup_z, orien_z = fp.duplicate(dim_z, param.orien_z, param.lattice_parameter, param.lattice_structure)
 
         # Here we create a large block of atoms material_supercell.lmp
         cmd = [
             "atomsk",
             "--create",
-            lattice_str,
-            *lattice_par,
-            *material,
+            param.lattice_structure,
+            *param.lattice_parameter,
+            *param.material,
             "orient",
             orien_x,
             orien_y,
@@ -439,25 +113,27 @@ class Sample:
 
         # Then the STL file is used as a stencil over material_supercell.lmp and extra atoms are removed
         cmd = [
-                "atomsk",
-                "material_supercell.lmp",
-                "-select",
-                "stl",
-                "center",
-                STL,
-                "-select",
-                "invert",
-                "-rmatom",
-                "select",
-                out_pre + ".lmp",
-                #" ".join([x for x in ext_ato[0:] if x != "lmp"]),
-                "-v ",
-                "2",
-            ]
+            "atomsk",
+            "material_supercell.lmp",
+            "-select",
+            "stl",
+            "center",
+            STL,
+            "-select",
+            "invert",
+            "-rmatom",
+            "select",
+            out_pre + ".lmp",
+            " ".join([x for x in param.ext_ato[0:] if x != "lmp"]),
+            "-v ",
+            "2",
+        ]
         #print("Atomsk call:", " ".join(map(str, cmd)))
         subprocess.call(cmd)
 
-        subprocess.call(["rm", "material_supercell.lmp"])
+        temp_file = "material_supercell.lmp"
+        if os.path.exists(temp_file):
+            os.remove(temp_file)
 
         fp.rebox(out_pre + ".lmp", 0.001)
 
@@ -475,21 +151,10 @@ class Sample:
                    ]
             subprocess.call(cmd)
 
-
     def make_precipitate(
-        self,
-        STL,
-        lattice_str,
-        lattice_par,
-        material,
-        orien_x,
-        orien_y,
-        orien_z,
-        dim_mat_x,
-        dim_mat_y,
-        dim_mat_z,
-        angles2,
-        precpos,
+            self,
+            STL,
+            param
     ):
         """
         Creates an atom position file sample_with_atoms.lmp. This requires a .stl file with rough surfaces
@@ -497,39 +162,23 @@ class Sample:
 
         :param type_sample: Sample type
         :type type_sample: str
-        :param STL: The stl file with an object that has surface roughness applied to it
-        :type STL: str
-        :param lattice_str: The lattice structure of the crystal
-        :type lattice_str: str
-        :param lattice_par: The lattice parameter of the crystal in Angstrom
-        :type lattice_par: float
-        :param material: The chemical symbol of the desired element
-        :type material: str
-        :param orien_x: The orientation of the crystal in the x direction
-        :type orien_x: list
-        :param orien_y: The orientation of the crystal in the y direction
-        :type orien_y: list
-        :param orien_z: The orientation of the crystal in the z direction
-        :type orien_z: list
-        :param out_pre: Prefix of the output files
-        :type out_pre: str
-        :param dim_mat_x: Dimensions of the matrix
-        :type dim_mat_x: float
-        :param angles2: list of angles for zyx Euler rotation
-        :type angles2: list
+        :param param: the object containing all the parameters defined by the user in the JSON input file
+        :type param: Parameter class object
         """
 
-        dis_x, dup_x, orien_x = fp.duplicate(dim_mat_x, orien_x, lattice_par, lattice_str)
-        dis_y, dup_y, orien_y = fp.duplicate(dim_mat_y, orien_y, lattice_par, lattice_str)
-        dis_z, dup_z, orien_z = fp.duplicate(dim_mat_z, orien_z, lattice_par, lattice_str)
+        dis_x, dup_x, orien_x = fp.duplicate(param.dim_mat_x, param.orien_x, param.lattice_parameter,
+                                             param.lattice_structure)
+        dis_y, dup_y, orien_y = fp.duplicate(param.dim_mat_y, param.orien_y, param.lattice_parameter,
+                                             param.lattice_structure)
+        dis_z, dup_z, orien_z = fp.duplicate(param.dim_mat_z, param.orien_z, param.lattice_parameter,
+                                             param.lattice_structure)
 
-        # Creation of a matrix of atoms i.e., a large orthogonal block of atoms
         cmd = [
             "atomsk",
             "--create",
-            lattice_str,
-            *lattice_par,
-            *material,
+            param.lattice_structure,
+            *param.lattice_parameter,
+            *param.material,
             "orient",
             orien_x,
             orien_y,
@@ -542,101 +191,78 @@ class Sample:
             "-v ",
             "2",
         ]
+
+        #print("Atomsk call:", " ".join(map(str, cmd)))
         subprocess.call(cmd)
 
-        # Then the STL file is used as a stencil over material_supercell.lmp and extra atoms are removed
-        if precpos == 'center':
-            cmd = [
-                "atomsk",
-                "precipitate_supercell.xyz",
-                "-select",
-                "stl",
-                "center",
-                STL,
-                "-select",
-                "invert",
-                "-rmatom",
-                "select",
-                "precipitate.xyz",
-                "-v",
-                "2",
-            ]
-            # print("Atomsk call:", " ".join(map(str, cmd)))
-            subprocess.call(cmd)
-        else:
-            fp.atomsk_select_stl_local_cutout("precipitate_supercell.xyz", STL, "precipitate.xyz", precpos)
+        # Then the STL file is used as a stencil over precipitate_supercell.lmp and extra atoms are removed
+        cmd = [
+            "atomsk",
+            "precipitate_supercell.xyz",
+            "-select",
+            "stl",
+            "center",
+            STL,
+            "-select",
+            "invert",
+            "-rmatom",
+            "select",
+            "precipitate.xyz",
+            "-v",
+            "2",
+        ]
+        #print("Atomsk call:", " ".join(map(str, cmd)))
+        subprocess.call(cmd)
 
-        subprocess.call(["rm", "precipitate_supercell.xyz", STL])
+        temp_file = "precipitate_supercell.xyz"
+        if os.path.exists(temp_file):
+            os.remove(temp_file)
 
         # Precipitate rotation : Euler rotation
         fp.xyz_rotate_euler("precipitate.xyz", "precipitate_rot.xyz", angles2, order='zyx')
         subprocess.call(["mv", "precipitate_rot.xyz", "precipitate.xyz"])
-        subprocess.call(["rm",STL])
-
+        subprocess.call(["rm", STL])
 
     def make_atom_matrix(
-        self,
-        ROTSTL,
-        length_x,
-        length_y,
-        length_z,
-        lattice_str,
-        lattice_par,
-        material,
-        orien_x,
-        orien_y,
-        orien_z,
-        precpos,
+            self,
+            STL,
+            param
     ):
         """
         Creates an orthogonal matrix made of atoms.
 
-        :param length_x: Sample dimension
-        :type length_x: float
-        :param length_y: Sample dimension
-        :type length_y: float
-        :param length_z: Sample dimension
-        :type length_z: float
-        :param lattice_str: The lattice structure of the crystal
-        :type lattice_str: str
-        :param lattice_par: The lattice parameter of the crystal in Angstrom
-        :type lattice_par: float
-        :param material: The chemical symbol of the desired element
-        :type material: str
-        :param orien_x: The orientation of the crystal in the x direction
-        :type orien_x: list
-        :param orien_y: The orientation of the crystal in the y direction
-        :type orien_y: list
-        :param orien_z: The orientation of the crystal in the z direction
-        :type orien_z: list
-        :param out_pre: Prefix of the output files
-        :type out_pre: str
+        :param STL: The stl file with an object that has surface roughness applied to it
+        :type STL: str
+        :param param: the object containing all the parameters defined by the user in the JSON input file
+        :type param: Parameter class object
         """
 
-
-        dis_x, dup_x, orien_x = fp.duplicate(length_x, orien_x, lattice_par, lattice_str)
-        dis_y, dup_y, orien_y = fp.duplicate(length_y, orien_y, lattice_par, lattice_str)
-        dis_z, dup_z, orien_z = fp.duplicate(length_z, orien_z, lattice_par, lattice_str)
+        dis_x, dup_x, orien_x = fp.duplicate(param.length_x, param.orien_x, param.lattice_parameter,
+                                             param.lattice_structure)
+        dis_y, dup_y, orien_y = fp.duplicate(param.length_y, param.orien_y, param.lattice_parameter,
+                                             param.lattice_structure)
+        dis_z, dup_z, orien_z = fp.duplicate(param.length_z, param.orien_z, param.lattice_parameter,
+                                             param.lattice_structure)
 
         # Creation of a matrix of atoms i.e., a large orthogonal block of atoms
-        cmd =  [
-                "atomsk",
-                "--create",
-                lattice_str,
-                *lattice_par,
-                *material,
-                "orient",
-                orien_x,
-                orien_y,
-                orien_z,
-                "-duplicate",
-                dup_x,
-                dup_y,
-                dup_z,
-                "matrix.lmp",
-                "-v",
-                "2",
-            ]
+        cmd = [
+            "atomsk",
+            "--create",
+            param.lattice_structure,
+            *param.lattice_parameter,
+            *param.material,
+            "orient",
+            orien_x,
+            orien_y,
+            orien_z,
+            "-duplicate",
+            dup_x,
+            dup_y,
+            dup_z,
+            "matrix_tmp.xyz",
+            "-v",
+            "2",
+        ]
         #print("Atomsk call:", " ".join(map(str, cmd)))
         subprocess.call(cmd)
 
@@ -661,7 +287,7 @@ class Sample:
         else:
             fp.atomsk_select_stl_local_cutin("matrix.lmp", ROTSTL, "matrix_w_inprint.lmp", precpos)
 
-        subprocess.call(["rm", "matrix.lmp",ROTSTL])
+        subprocess.call(["rm", "matrix.lmp", ROTSTL])
 
     def put_prec_in_matrix(
             self,
@@ -687,7 +313,7 @@ class Sample:
             #"matrix_w_inprint.xyz",
             "matrix_w_inprint.lmp",
             "precipitate.xyz",
-             out_pre + ".xyz",
+            out_pre + ".xyz",
             "-v",
             "2",
         ]
@@ -698,45 +324,23 @@ class Sample:
 
         for e in ext_ato:
             if e != "lmp":
-                subprocess.call(["atomsk", out_pre + ".lmp", out_pre + "." + e, "-v","2"])
+                subprocess.call(["atomsk", out_pre + ".lmp", out_pre + "." + e, "-v", "2"])
 
         #subprocess.call(["rm", "matrix.xyz", "precipitate.xyz", out_pre + ".xyz"])
 
 
-def make_cwire(type_sample, B, C1, RMS, N, M, radius, length, ns, alpha, raw_stl, angles, out_pre, ext_fem):
+def make_cwire(param, out_pre):
     """
     Creates an stl file of a rough wire
 
-    :param type_sample: The name of the sample
-    :type type_sample: str
-    :param B: The degree the roughness is dependent on
-    :type B: float
-    :param C1: Roughness normalization factor
-    :type C1: float
-    :param RMS: RMS
-    :type RMS: float
-    :param N: Scaling cartesian position
-    :type N: int
-    :param M: Scaling cartesian position
-    :type M: int
-    :param radius: Radius of the wire
-    :type radius: float
-    :param length: Length of the box
-    :type length: float
-    :param ns: The number of segments desired
-    :type ns: int
-    :param alpha: Refine mesh factor
-    :type alpha: float
-    :param raw_stl: Name of the input stl file
-    :type raw_stl: str
+    :param param: the object containing all the parameters defined by the user in the JSON input file
+    :type param: Parameter class object
     :param out_pre: Prefix of the output files
     :type out_pre: str
-    :param ext_fem: List of FEM extension files
-    :type ext_fem: list
 
     :return: List of nodes and STL file name
     """
-    vertices, faces = fp.read_stl(type_sample, raw_stl, 0, length, 0, radius, ns, 0)
+    vertices, faces = fp.read_stl(param.type_S, param.raw_stl, 0, param.length, 0, param.radius, param.ns, 0)
 
     # creates a column that has an assigned index number for each row in vertices; returns vertices
     # with the addition of this new column and also returns the nodenumbers which is an array file
@@ -744,7 +348,7 @@ def make_cwire(type_sample, B, C1, RMS, N, M, radius, length, ns, alpha, raw_stl
     vertices, nodenumber = fp.node_indexing(vertices)
 
     # nodes at the surface of the object. These nodes will have the surface roughness applied to it
-    nodesurf = fp.node_surface(type_sample, vertices, nodenumber, 0, 0)
+    nodesurf = fp.node_surface(param.type_S, vertices, nodenumber, 0, 0)
 
     # convert to cylindrics coordinates (Rho Theta Z nodenumb)
     cy_nodesurf = np.array(
@@ -762,78 +366,38 @@ def make_cwire(type_sample, B, C1, RMS, N, M, radius, length, ns, alpha, raw_stl
     xv = (cy_nodesurf[:, 1] / max(cy_nodesurf[:, 1]) + 1) / 2
     yv = (cy_nodesurf[:, 2] / max(cy_nodesurf[:, 2]) + 1) / 2
 
-    sfrN, sfrM = fp.vectors(N, M)  # creating vectors for M and N
+    sfrN, sfrM = fp.vectors(param.N, param.M)  # creating vectors for M and N
     m, n = fp.random_numbers(sfrN, sfrM)  # normal gaussian for the amplitude
 
     # Returns an array with the Z values that will replace the previous z values in the vertices
     # array these represent the rougness on the surface
-    z = fp.random_surf2(type_sample, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, RMS, out_pre)
-    vertices = fp.make_rough(type_sample, z, cy_nodesurf, vertices, 0)
+    z = fp.random_surf2(param.type_S, m, n, param.N, param.M, param.B, xv, yv, sfrM, sfrN, param.C1, param.RMS, out_pre)
+    vertices = fp.make_rough(param.type_S, z, cy_nodesurf, vertices, 0)
 
     # gets ride of the index column because stl file generator takes only a matrix with 3 columns
     vertices = vertices[:, :3]
 
     # creates an stl file of the cylinder with roughness on the surface
     fp.stl_file(vertices, faces, out_pre)
-    fp.refine_3Dmesh(type_sample, out_pre, ns, alpha, ext_fem)
+    fp.refine_3Dmesh(param.type_S, out_pre, param.ns, param.alpha, param.ext_fem)
 
     fp.stl_rotate_euler(out_pre + ".stl", out_pre + "_rot.stl", angles, order='zyx')
 
-    return (vertices, out_pre + ".stl", out_pre + "_rot.stl")
+    return vertices, faces, out_pre + ".stl", out_pre + "_rot.stl"
 
 
-def make_box(
-    type_sample,
-    B,
-    C1,
-    RMS,
-    N,
-    M,
-    length,
-    height,
-    width,
-    ns,
-    alpha,
-    raw_stl,
-    angles,
-    out_pre,
-    ext_fem,
-):
+def make_box(param, out_pre):
     """
     Creates an stl file of a rough box
 
-    :param type_sample: The name of the sample
-    :type type_sample: str
-    :param B: The degree the roughness is dependent on
-    :type B: float
-    :param C1: Roughness normalization factor
-    :type C1: float
-    :param RMS: RMS
-    :type RMS: float
-    :param N: Scaling cartesian position
-    :type N: int
-    :param M: Scaling cartesian position
-    :type M: int
-    :param length: Length of the box
-    :type length: float
-    :param height: Height of the box
-    :type height: float
-    :param width: Width of the box
-    :type width: float
-    :param ns: The number of segments desired
-    :type ns: int
-    :param alpha: Refine mesh factor
-    :type alpha: float
-    :param raw_stl: Name of the input stl file
-    :type raw_stl: str
+    :param param: the object containing all the parameters defined by the user in the JSON input file
+    :type param: Parameter class object
     :param out_pre: Prefix of the output files
     :type out_pre: str
-    :param ext_fem: List of FEM extension files
-    :type ext_fem: list
 
     :return: List of nodes and STL file name
     """
-    vertices, faces = fp.read_stl(type_sample, raw_stl, width, length, height, 0, ns, 0)
+    vertices, faces = fp.read_stl(param.type_S, param.raw_stl, param.width, param.length, param.height, 0, param.ns, 0)
 
     # creates a column that has an assigned index number for each row in vertices; returns vertices
     # with the addition of this new column and also returns the nodenumbers which is an array
@@ -841,60 +405,44 @@ def make_box(
     vertices, nodenumber = fp.node_indexing(vertices)
 
     # nodes at the surface of the object. These nodes will have the surface roughness applied to it
-    nodesurf = fp.node_surface(type_sample, vertices, nodenumber, 0, 0)
+    nodesurf = fp.node_surface(param.type_S, vertices, nodenumber, 0, 0)
     nodesurf = nodesurf[np.lexsort((nodesurf[:, 0], nodesurf[:, 1]))]
 
     xv = nodesurf[:, 0] / max(nodesurf[:, 0])
     yv = nodesurf[:, 1] / max(nodesurf[:, 1])
 
-    sfrN, sfrM = fp.vectors(N, M)  # creating vectors for M and N
+    sfrN, sfrM = fp.vectors(param.N, param.M)  # creating vectors for M and N
     m, n = fp.random_numbers(sfrN, sfrM)  # normal gaussian for the amplitude
 
     # Returns an array with the Z values that will replace the previous z values in the vertices
     # array these represent the rougness on the surface
-    z = fp.random_surf2(type_sample, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, RMS, out_pre)
-    vertices = fp.make_rough(type_sample, z, nodesurf, vertices, 0)
+    z = fp.random_surf2(param.type_S, m, n, param.N, param.M, param.B, xv, yv, sfrM, sfrN, param.C1, param.RMS, out_pre)
+    vertices = fp.make_rough(param.type_S, z, nodesurf, vertices, 0)
 
     # gets rid of the index column because stl file generator takes only a matrix with 3 columns
     vertices = vertices[:, :3]
 
     # creates an stl file of the box with roughness on the surface
     fp.stl_file(vertices, faces, out_pre)
-    fp.refine_3Dmesh(type_sample, out_pre, ns, alpha, ext_fem)
+    fp.refine_3Dmesh(param.type_S, out_pre, param.ns, param.alpha, param.ext_fem)
 
     fp.stl_rotate_euler(out_pre + ".stl", out_pre + "_rot.stl", angles, order='zyx')
 
     return vertices, out_pre + ".stl", out_pre + "_rot.stl"
 
 
-def make_sphere(type_sample, B, C1, N, radius, ns, alpha, raw_stl, angles, out_pre, ext_fem):
+def make_sphere(param, out_pre):
     """
     Creates an stl file of a rough sphere
 
-    :param type_sample: The name of the sample
-    :type type_sample: str
-    :param B: The degree the roughness is dependent on
-    :type B: float
-    :param C1: Roughness normalization factor
-    :type C1: float
-    :param N: Scaling cartesian position
-    :type N: int
-    :param radius: Radius of the sphere
-    :type radius: float
-    :param ns: The number of segments desired
-    :type ns: int
-    :param alpha: Refine mesh factor
-    :type alpha: float
-    :param raw_stl: Name of the input stl file
-    :type raw_stl: str
+    :param param: the object containing all the parameters defined by the user in the JSON input file
+    :type param: Parameter class object
     :param out_pre: Prefix of the output files
     :type out_pre: str
-    :param ext_fem: List of FEM extension files
-    :type ext_fem: list
 
     :return: List of nodes and STL file name
     """
-    vertices, faces = fp.read_stl(type_sample, raw_stl, 0, 0, 0, radius, ns, 0)
+    vertices, faces = fp.read_stl(param.type_S, param.raw_stl, 0, 0, 0, param.radius, param.ns, 0)
     nbPoint = len(vertices)
 
     r = np.zeros(nbPoint)
@@ -905,77 +453,35 @@ def make_sphere(type_sample, B, C1, N, radius, ns, alpha, raw_stl, angles, out_p
     phii = fp.phi(t, z)
 
     # creates the displacement values of the nodes on the surface of the sphere
-    r = fp.rough_matrix_sphere(nbPoint, B, thetaa, phii, vert_phi_theta, r)
+    r = fp.rough_matrix_sphere(nbPoint, param.B, thetaa, phii, vert_phi_theta, r)
 
     # creates a new matrix with x, y, z in cartesian coordinates
-    C2 = 1.0 / nbPoint / N / 2.0
-    new_vertex = fp.coord_cart_sphere(C1, C2, r, vertices, t, z, y, x)
+    C2 = 1.0 / nbPoint / param.N / 2.0
+    new_vertex = fp.coord_cart_sphere(param.C1, C2, r, vertices, t, z, y, x)
 
     # creates an stl file of the sphere with roughness on the surface
     fp.stl_file(new_vertex, faces, out_pre)
-    fp.refine_3Dmesh(type_sample, out_pre, ns, alpha, ext_fem)
+    fp.refine_3Dmesh(param.type_S, out_pre, param.ns, param.alpha, param.ext_fem)
 
     fp.stl_rotate_euler(out_pre + ".stl", out_pre + "_rot.stl", angles, order='zyx')
 
     return vertices, out_pre + ".stl", out_pre + "_rot.stl"
 
 
-def make_fwire(
-    type_sample,
-    B,
-    C1,
-    RMS,
-    N,
-    M,
-    length,
-    nfaces,
-    radius,
-    ns,
-    alpha,
-    raw_stl,
-    angles,
-    out_pre,
-    ext_fem,
-):
+def make_fwire(param, out_pre):
     """
     Creates an stl file of a rough faceted wire
 
-    :param type_sample: The name of the sample
-    :type type_sample: str
-    :param B: The degree the roughness is dependent on
-    :type B: float
-    :param C1: Roughness normalization factor
-    :type C1: float
-    :param RMS: RMS
-    :type RMS: float
-    :param N: Scaling cartesian position
-    :type N: int
-    :param M: Scaling cartesian position
-    :type M: int
-    :param length: Length of the wire
-    :type length: float
-    :param nfaces: Number of faces of the wire
-    :type nfaces: int
-    :param radius: Radius of the wire
-    :type radius: float
-    :param ns: The number of segments desired
-    :type ns: int
-    :param alpha: Refine mesh factor
-    :type alpha: float
-    :param raw_stl: Name of the input stl file
-    :type raw_stl: str
-    :param angles: list of angles for Euler rotations
-    :type angles: list
+    :param param: the object containing all the parameters defined by the user in the JSON input file
+    :type param: Parameter class object
     :param out_pre: Prefix of the output files
     :type out_pre: str
-    :param ext_fem: List of FEM extension files
-    :type ext_fem: list
 
     :return: List of nodes and STL file name
     """
-    points, anglesfac = fp.base(radius, nfaces)
+    points, angles = fp.base(param.radius, param.nfaces)
 
-    vertices, faces = fp.read_stl(type_sample, raw_stl, 0, length, 0, radius, ns, points)
+    vertices, faces = fp.read_stl(param.type_S, param.raw_stl, 0, param.length, 0, param.radius, param.ns, points)
 
     # creates a column that has an assigned index number for each row in vertices; returns vertices
     # with the addition of this new column and also returns the nodenumbers which is an array
@@ -984,7 +490,7 @@ def make_fwire(
 
     # nodes at the surface of the object. These nodes will have the surface roughness applied to it
     nodesurf = fp.node_surface(
-        type_sample,
+        param.type_S,
         vertices,
         nodenumber,
         points,
@@ -1001,106 +507,52 @@ def make_fwire(
 
     xv, yv = np.meshgrid(xv, yv)
 
-    sfrN, sfrM = fp.vectors(N, M)  # creating vectors for M and N
+    sfrN, sfrM = fp.vectors(param.N, param.M)  # creating vectors for M and N
     m, n = fp.random_numbers(sfrN, sfrM)  # normal gaussian for the amplitude
 
     # Returns an array with the Z values that will replace the previous z values in the vertices
     # array these represent the rougness on the surface
-    z = fp.random_surf2(type_sample, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, RMS, out_pre)
-    vertices = fp.make_rough(type_sample, z, nodesurf, vertices, anglesfac)
+    z = fp.random_surf2(param.type_S, m, n, param.N, param.M, param.B, xv, yv, sfrM, sfrN, param.C1, param.RMS, out_pre)
+    vertices = fp.make_rough(param.type_S, z, nodesurf, vertices, angles)
 
     # gets rid of the index column because stl file generator takes only a matrix with 3 columns
     vertices = vertices[:, :3]
-    vertices = fp.align_f(vertices, anglesfac)
+    vertices = fp.align_poly(vertices, angles)
 
     # creates an stl file of the box with roughness on the surface
     fp.stl_file(vertices, faces, out_pre)
-    fp.refine_3Dmesh(type_sample, out_pre, ns, alpha, ext_fem)
+    fp.refine_3Dmesh(param.type_S, out_pre, param.ns, param.alpha, param.ext_fem)
 
     fp.stl_rotate_euler(out_pre + ".stl", out_pre + "_rot.stl", angles, order='zyx')
 
     return vertices, out_pre + ".stl", out_pre + "_rot.stl"
 
+
 def make_wulff(
-    type_sample,
-    B,
-    C1,
-    RMS,
-    N,
-    M,
-    surfaces,
-    energies,
-    n_at,
-    ns,
-    alpha,
-    raw_stl,
-    lattice_structure,
-    lattice_parameter,
-    material,
-    orien_x,
-    orien_z,
-    angles,
-    out_pre,
-    ext_fem,
-):
+        param,
+        out_pre):
     """
     Creates an stl file of a rough Wulff-shaped nanoparticle
 
-    :param type_sample: The name of the sample
-    :type type_sample: str
-    :param B: The degree the roughness is dependent on
-    :type B: float
-    :param C1: Roughness normalization factor
-    :type C1: float
-    :param RMS: RMS
-    :type RMS: float
-    :param N: Scaling cartesian position
-    :type N: int
-    :param M: Scaling cartesian position
-    :type M: int
-    :param surfaces: Orientation of surfaces used for Wulff theory
-    :type surfaces: list
-    :param energies: Energies of associated surfaces for Wulff theory
-    :type energies: list
-    :param n_at: Number of atoms
-    :type n_at: int
-    :param ns: The number of segments desired
-    :type ns: int
-    :param alpha: Refine mesh factor
-    :type alpha: float
-    :param raw_stl: Name of the input stl file
-    :type raw_stl: str
-    :param lattice_structure: The lattice structure of the crystal
-    :type lattice_structure: str
-    :param lattice_parameter: The lattice parameter of the crystal in Angstrom
-    :type lattice_parameter: float
-    :param material: The chemical symbol of the desired element
-    :type material: str
-    :param orien_x: Orientation along x-axis
-    :type orien_x: list
-    :param orien_z: Orientation along z-axis
-    :type orien_z: list
-    :param angles: list of angles for Euler rotations
-    :type angles: list
+    :param param: the object containing all the parameters defined by the user in the JSON input file
+    :type param: Parameter class object
     :param out_pre: Prefix for output files
     :type out_pre: str
-    :param ext_fem: List of FEM extension files
-    :type ext_fem: list
 
     :return: List of nodes and STL file name
     """
     obj_points, obj_faces = fp.make_obj(
-        surfaces,
-        energies,
-        n_at,
-        lattice_structure,
-        lattice_parameter,
-        material,
-        orien_x,
-        orien_z,
+        param.surfaces,
+        param.energies,
+        param.n_at,
+        param.lattice_structure,
+        param.lattice_parameter,
+        param.material,
+        param.orien_x,
+        param.orien_z,
         out_pre,
     )
-    vertices, faces = fp.read_stl_wulff(raw_stl, obj_points, obj_faces, ns)
+    vertices, faces = fp.read_stl_wulff(param.raw_stl, obj_points, obj_faces, param.ns)
     subprocess.call(["rm", out_pre + ".obj"])
     list_n = fp.faces_normals(obj_points, obj_faces)
 
@@ -1108,157 +560,482 @@ def make_wulff(
     # with the addition of this new column and also returns the nodenumbers which is an array
     # filled from 0 - length of the vertices
     vertices, nodenumber = fp.node_indexing(vertices)
-    nodesurf = fp.node_surface(type_sample, vertices, nodenumber, obj_points, obj_faces)
+    nodesurf = fp.node_surface(param.type_S, vertices, nodenumber, obj_points, obj_faces)
 
     node_edge, node_corner = fp.node_corner(nodesurf)
 
     vertices = fp.make_rough_wulff(
-        vertices, B, C1, RMS, N, M, nodesurf, node_edge, node_corner, list_n
+        vertices, param.B, param.C1, param.RMS, param.N, param.M, nodesurf, node_edge, node_corner, list_n
     )
 
     vertices = vertices[:, :3]
 
     fp.stl_file(vertices, faces, out_pre)
-    fp.refine_3Dmesh(type_sample, out_pre, ns, alpha, ext_fem)
+    fp.refine_3Dmesh(param.type_S, out_pre, param.ns, param.alpha, param.ext_fem)
 
     fp.stl_rotate_euler(out_pre + ".stl", out_pre + "_rot.stl", angles, order='zyx')
 
     return vertices, out_pre + ".stl", out_pre + "_rot.stl"
 
 
-def make_cube(type_sample, B, C1, RMS, N, M, length, ns, alpha, raw_stl, angles, out_pre, ext_fem):
-
+def make_cube(param, out_pre):
     """
     Creates an stl file of a cubic NP
 
-    :param type_sample: The name of the sample
-    :type type_sample: str
-    :param B: The degree the roughness is dependent on
-    :type B: float
-    :param C1: Roughness normalization factor
-    :type C1: float
-    :param RMS: RMS
-    :type RMS: float
-    :param N: Scaling cartesian position
-    :type N: int
-    :param M: Scaling cartesian position
-    :type M: int
-    :param length: Dimension of the cube
-    :type length: float
-    :param ns: The number of segments desired
-    :type ns: int
-    :param alpha: Refine mesh factor
-    :type alpha: float
-    :param raw_stl: Name of the input stl file
-    :type raw_stl: str
-    :param angles: list of angles for Euler rotations
-    :type angles: list
+    :param param: the object containing all the parameters defined by the user in the JSON input file
+    :type param: Parameter class object
     :param out_pre: Prefix of the output files
     :type out_pre: str
-    :param ext_fem: List of FEM extension files
-    :type ext_fem: list
 
-
-    :return: List of nodes and STL files with and without rotations
+    :return: List of nodes and STL file name
     """
 
-    obj_points, obj_faces = fp.cube_faces(length)
+    obj_points, obj_faces = fp.cube_faces(param.width, param.length, param.height)
     list_n = fp.faces_normals(obj_points, obj_faces)
 
-    vertices, faces = fp.read_stl(type_sample, raw_stl, 0, length, 0, 0, ns, 0)
+    vertices, faces = fp.cube(param.width, param.length, param.height, param.ns)
     vertices, nodenumber = fp.node_indexing(vertices)
 
-    nodesurf = fp.node_surface(type_sample, vertices, nodenumber, obj_points, obj_faces)
+    nodesurf = fp.node_surface(param.type_S, vertices, nodenumber, obj_points, obj_faces)
     node_edge, node_corner = fp.node_corner(nodesurf)
 
     vertices = fp.make_rough_wulff(
-        vertices, B, C1, RMS, N, M, nodesurf, node_edge, node_corner, list_n
+        vertices, param.B, param.C1, param.RMS, param.N, param.M,
+        nodesurf, node_edge, node_corner, list_n
     )
 
     vertices = fp.center_3d_dataset(vertices[:, :3])
 
     fp.stl_file(vertices, faces, out_pre)
-
-    fp.refine_3Dmesh(type_sample, out_pre, ns, alpha, ext_fem)
+    fp.refine_3Dmesh(param.type_S, out_pre, param.ns, param.alpha, param.ext_fem)
 
     fp.stl_rotate_euler(out_pre + ".stl", out_pre + "_rot.stl", angles, order='zyx')
 
     return vertices, out_pre + ".stl", out_pre + "_rot.stl"
 
+
+def make_lattice(param, out_pre):
+    """
+    Creates an stl file of a lattice structure
+
+    :param param: the object containing all the parameters defined by the user in the JSON input file
+    :type param: Parameter class object
+    :param out_pre: Prefix of the output files
+    :type out_pre: str
+
+    :return: List of nodes and STL file name
+    """
+
+    def rotation_matrix(axis: np.ndarray, angle: float) -> np.ndarray:
+        """
+        Generate a rotation matrix for rotating around a given axis by a specified angle.
+
+        Parameters:
+        -----------
+        axis: np.ndarray
+            A 3D vector representing the axis of rotation.
+        angle: float
+            The angle of rotation in radians.
+
+        Returns:
+        --------
+        np.ndarray
+        """
+        axis = axis / np.linalg.norm(axis)
+        x, y, z = axis
+        c = np.cos(angle)
+        s = np.sin(angle)
+        C = 1.0 - c
+
+        return np.array([
+            [c + x * x * C, x * y * C - z * s, x * z * C + y * s],
+            [y * x * C + z * s, c + y * y * C, y * z * C - x * s],
+            [z * x * C - y * s, z * y * C + x * s, c + z * z * C]
+        ])
+
+    def apply_rigid_transform(vertices: np.ndarray,
+                              R: np.ndarray,
+                              t: np.ndarray) -> np.ndarray:
+        """
+        Apply a rigid transformation to a set of vertices.
+
+        Parameters:
+        -----------
+        vertices: np.ndarray
+            An array of shape (N, 3) representing the vertices to transform.
+        R: np.ndarray
+            A 3x3 rotation matrix.
+        t: np.ndarray
+            A translation vector of shape (3,).
+
+        Returns:
+        --------
+        np.ndarray
+        """
+        return (R @ vertices.T).T + t
+
+    def rotation_from_z_axis(target_direction: np.ndarray) -> np.ndarray:
+        """
+        Generate a rotation matrix that aligns the z-axis with the target direction.
+
+        Parameters:
+        -----------
+        target_direction: np.ndarray
+            A 3D vector representing the target direction.
+
+        Returns:
+        --------
+        np.ndarray
+        """
+        z_axis = np.array([0.0, 0.0, 1.0])
+        v = target_direction / np.linalg.norm(target_direction)
+
+        axis = np.cross(z_axis, v)
+        norm_axis = np.linalg.norm(axis)
+
+        if norm_axis < 1e-12:
+            return np.eye(3)
+
+        axis /= norm_axis
+        angle = np.arccos(np.clip(np.dot(z_axis, v), -1.0, 1.0))
+
+        return rotation_matrix(axis, angle)
+
+    try:
+        import manifold3d as manifold
+    except ImportError:
+        raise ImportError("manifold3d library is not installed. Please install it to use this feature.")
+
+    try:
+        from pyLatticeDSO.src.pyLatticeDesign.lattice import Lattice
+    except ImportError:
+        raise ImportError("pyLatticeDSO library is not installed as submodule."
+                          "Please install it to use this feature. See documentation.")
+
+    def numpy_to_manifold(vertices, faces):
+        import trimesh
+        tmp = trimesh.Trimesh(vertices=vertices, faces=faces)
+        print("Initial manifold status:")
+        print("Is watertight:", tmp.is_watertight)
+        tmp.remove_unreferenced_vertices()
+        tmp.fix_normals()
+        trimesh.repair.fix_winding(tmp)
+        trimesh.repair.fix_normals(tmp)
+        trimesh.repair.fill_holes(tmp)
+
+        print("After repair manifold status:")
+        print("Is watertight:", tmp.is_watertight)
+
+        return manifold.Manifold(
+            mesh=manifold.Mesh(
+                vert_properties=np.array(tmp.vertices, dtype=np.float32),
+                tri_verts=np.array(tmp.faces, dtype=np.uint32)
+            )
+        )
+
+    # Lattice object creation
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as tmp:
+        json.dump(param.geometry_lattice, tmp, indent=2)
+        tmp_path = tmp.name
+
+    try:
+        lattice_object = Lattice(tmp_path)
+    finally:
+        os.remove(tmp_path)
+
+    param_type_S_backup = param.type_S
+    all_manifolds = []
+
+    # Generate the rough wire mesh for each beam
+    for beam in lattice_object.beams:
+        p1 = np.array(beam.point1.coordinates)
+        p2 = np.array(beam.point2.coordinates)
+        radius = beam.initial_radius if getattr(beam, "initial_radius", None) is not None else beam.radius
+        param.radius = radius
+        param.length = beam.length
+        if param.beam_type == "wire":
+            param.type_S = "wire"
+            vertices, faces, _ = make_wire(param, out_pre)
+        elif param.beam_type == "poly":
+            param.type_S = "poly"
+            vertices, faces, _ = make_poly(param, out_pre)
+        else:
+            raise ValueError("No valid beam type found in the JSON file.")
+
+        # Positioning the wire at the correct location
+        direction = p2 - p1
+        R = rotation_from_z_axis(direction)
+        vertices = apply_rigid_transform(vertices, R, np.zeros(3))
+        vertices += p1
+
+        print("Generated beam with {} vertices and {} faces".format(len(vertices), len(faces)))
+        beam_manifold = numpy_to_manifold(vertices, faces)
+        print("Manifold status:", beam_manifold.status())
+        print("Manifold is empty:", beam_manifold.is_empty())
+        print("Manifold num verts:", beam_manifold.num_vert())
+        print("Manifold num tri:", beam_manifold.num_tri())
+        all_manifolds.append(beam_manifold)
+
+    # Perform boolean union of all beam manifolds
+    union_manifold = all_manifolds[0]
+    for m in all_manifolds[1:]:
+        union_manifold = union_manifold + m  # union operator
+
+    import trimesh
+    rough_box_mesh_data = union_manifold.to_mesh()
+    rough_box_trimesh = trimesh.Trimesh(
+        vertices=rough_box_mesh_data.vert_properties,
+        faces=rough_box_mesh_data.tri_verts
+    )
+    rough_box_trimesh.export(out_pre + "_uncut.stl")
+
+    # if param.trim_boundary_beams:
+    #     x0, y0, z0 = lattice_object.x_min, lattice_object.y_min, lattice_object.z_min
+    #     dx, dy, dz = lattice_object.x_max - x0, lattice_object.y_max - y0, lattice_object.z_max - z0
+    #
+    #     # Create bounding box as manifold
+    #     box_manifold = manifold.Manifold.cube(
+    #         size=[dx, dy, dz],
+    #         center=False
+    #     ).translate([x0, y0, z0])
+    #
+    #     union_manifold = union_manifold ^ box_manifold  # intersection operator
+
+    # if param.trim_boundary_beams:
+    #     x0, y0, z0 = lattice_object.x_min, lattice_object.y_min, lattice_object.z_min
+    #     dx, dy, dz = (lattice_object.x_max - x0,
+    #                   lattice_object.y_max - y0,
+    #                   lattice_object.z_max - z0)
+    #
+    #     param.type_S = "cube"
+    #     param.width = dy
+    #     param.length = dx
+    #     param.height = dz
+    #     vertices_cube, faces_cube, _ = make_cube(param, out_pre)
+    #     rough_box = manifold.Manifold(
+    #         mesh=manifold.Mesh(
+    #             vert_properties=np.array(vertices_cube, dtype=np.float32),
+    #             tri_verts=np.array(faces_cube, dtype=np.uint32)
+    #         )
+    #     )
+    #
+    #     # Export rough box for debug
+    #     import trimesh
+    #     rough_box_mesh_data = rough_box.to_mesh()
+    #     rough_box_trimesh = trimesh.Trimesh(
+    #         vertices=rough_box_mesh_data.vert_properties,
+    #         faces=rough_box_mesh_data.tri_verts
+    #     )
+    #     rough_box_trimesh.export(out_pre + "_rough_box.stl")
+    #
+    #     union_manifold = union_manifold ^ rough_box  # intersection operator
+    #     print("====== > Rough bounding box applied.")
+
+    if param.trim_boundary_beams:
+        x0, y0, z0 = lattice_object.x_min, lattice_object.y_min, lattice_object.z_min
+        dx, dy, dz = (lattice_object.x_max - x0,
+                      lattice_object.y_max - y0,
+                      lattice_object.z_max - z0)
+
+        # Pipeline make_cube SANS center_3d_dataset
+        obj_points, obj_faces = fp.cube_faces(dy, dx, dz)  # cube de taille dx
+        list_n = fp.faces_normals(obj_points, obj_faces)
+
+        box_vertices, box_faces = fp.read_stl("cube", param.raw_stl, dy, dx, dz, 0, param.ns, 0)
+        box_vertices, box_nodenumber = fp.node_indexing(box_vertices)
+
+        nodesurf = fp.node_surface("cube", box_vertices, box_nodenumber, obj_points, obj_faces)
+        node_edge, node_corner = fp.node_corner(nodesurf)
+
+        B_box = param.cube_trimmer_param.get("B", param.B)
+        C1_box = param.cube_trimmer_param.get("C1", param.C1)
+        RMS_box = param.cube_trimmer_param.get("RMS", param.RMS)
+        N_box = param.cube_trimmer_param.get("N", param.N)
+        M_box = param.cube_trimmer_param.get("M", param.M)
+        box_vertices = fp.make_rough_wulff(
+            box_vertices, B_box, C1_box, RMS_box, N_box, M_box,
+            nodesurf, node_edge, node_corner, list_n
+        )
+
+        # PAS de center_3d_dataset — on translate vers la position du lattice
+        box_vertices = box_vertices[:, :3]
+        box_vertices += np.array([x0, y0, z0])
+
+        import trimesh
+        rough_box_trimesh = trimesh.Trimesh(vertices=box_vertices, faces=box_faces)
+        rough_box_trimesh.remove_unreferenced_vertices()
+        rough_box_trimesh.fix_normals()
+        trimesh.repair.fix_winding(rough_box_trimesh)
+        trimesh.repair.fill_holes(rough_box_trimesh)
+        rough_box_trimesh.export(out_pre + "_rough_box.stl")
+        print(f"Rough box bounds: {rough_box_trimesh.bounds}")
+
+        rough_box = manifold.Manifold(
+            mesh=manifold.Mesh(
+                vert_properties=np.array(rough_box_trimesh.vertices, dtype=np.float32),
+                tri_verts=np.array(rough_box_trimesh.faces, dtype=np.uint32)
+            )
+        )
+
+        union_manifold = union_manifold ^ rough_box
+        print("====== > Rough bounding box applied.")
+
+        if union_manifold.is_empty():
+            raise ValueError(
+                f"Intersection vide !\n"
+                f"Rough box bounds: {rough_box_trimesh.bounds}\n"
+                f"Lattice: x=[{x0},{x0 + dx}], y=[{y0},{y0 + dy}], z=[{z0},{z0 + dz}]"
+            )
+
+    # Conversion en trimesh pour remaillage
+    mesh = union_manifold.to_mesh()
+    import trimesh, pymeshlab
+
+    tmp = trimesh.Trimesh(
+        vertices=mesh.vert_properties,
+        faces=mesh.tri_verts
+    )
+
+    name_mesh = out_pre + "temp.stl"
+    tmp.export(name_mesh)
+
+    # Calcul d'une taille de maille cible basée sur la taille moyenne des arêtes existantes
+    edge_lengths = tmp.edges_unique_length
+    target_len = float(np.mean(edge_lengths))  # ou np.percentile(edge_lengths, 25) pour plus fin
+
+    print(f"Target edge length: {target_len:.4f}")
+
+    bbox_diagonal = np.linalg.norm(tmp.bounds[1] - tmp.bounds[0])
+    target_percentage = (target_len / bbox_diagonal) * 100
+
+    print(f"Target edge length: {target_len:.4f}")
+    print(f"Bbox diagonal: {bbox_diagonal:.4f}")
+    print(f"Target percentage: {target_percentage:.4f}%")
+    target_percentage /= 2.0
+
+    ms = pymeshlab.MeshSet()
+    ms.add_mesh(pymeshlab.Mesh(
+        vertex_matrix=tmp.vertices,
+        face_matrix=tmp.faces
+    ))
+
+    ms.meshing_isotropic_explicit_remeshing(
+        targetlen=pymeshlab.PercentageValue(target_percentage),
+        iterations=5
+    )
+
+    remeshed = ms.current_mesh()
+    #
+    # # # creates a column that has an assigned index number for each row in vertices; returns vertices
+    # # # with the addition of this new column and also returns the nodenumbers which is an array
+    # # # filled from 0 - length of the vertices
+    # vertices, nodenumber = fp.node_indexing(remeshed.vertex_matrix())
+    # #
+    # # # nodes at the surface of the object. These nodes will have the surface roughness applied to it
+    # nodesurf = fp.node_surface("lattice_boundary", vertices, nodenumber, 0, 0)
+    # print("Number of surface nodes:", len(nodesurf))
+    # nodesurf = nodesurf[np.lexsort((nodesurf[:, 0], nodesurf[:, 1]))]
+    #
+    # xv = nodesurf[:, 0] / max(nodesurf[:, 0])
+    # yv = nodesurf[:, 1] / max(nodesurf[:, 1])
+    #
+    # sfrN, sfrM = fp.vectors(param.N, param.M)  # creating vectors for M and N
+    # m, n = fp.random_numbers(sfrN, sfrM)  # normal gaussian for the amplitude
+    #
+    # # Returns an array with the Z values that will replace the previous z values in the vertices
+    # # array these represent the rougness on the surface
+    # z = fp.random_surf2("lattice_boundary", m, n, param.N, param.M, param.B, xv, yv, sfrM, sfrN, param.C1, param.RMS,
+    #                     out_pre)
+    #
+    # print("Generated roughness with mean:", np.mean(z), "and std:", np.std(z))
+    # print("Number of roughness values:", len(z))
+    # vertices = fp.make_rough("lattice_boundary", z, nodesurf, vertices, 0)
+
+    final_mesh = trimesh.Trimesh(
+        vertices=remeshed.vertex_matrix(),
+        faces=remeshed.face_matrix()
+    )
+
+    name_mesh = out_pre + ".stl"
+    final_mesh.export(name_mesh)
+
+    #
+    # xv = nodesurf[:, 0] / max(nodesurf[:, 0])
+    # yv = nodesurf[:, 1] / max(nodesurf[:, 1])
+    #
+    # sfrN, sfrM = fp.vectors(param.N, param.M)  # creating vectors for M and N
+    # m, n = fp.random_numbers(sfrN, sfrM)  # normal gaussian for the amplitude
+    #
+    # # Returns an array with the Z values that will replace the previous z values in the vertices
+    # # array these represent the rougness on the surface
+    # z = fp.random_surf2("box", m, n, param.N, param.M, param.B, xv, yv, sfrM, sfrN, param.C1, param.RMS,
+    #                     out_pre)
+    # vertices = fp.make_rough("box", z, nodesurf, vertices, 0)
+    #
+    # # gets rid of the index column because stl file generator takes only a matrix with 3 columns
+    # vertices = vertices[:, :3]
+    #
+    # fp.stl_file(vertices, faces, out_pre)
+    #
+    # # if print_volume:
+    # #     # Print the volume of the generated mesh
+    # #     print("Lattice volume (pyrough mesh): ", union_mesh.volume)
+    #
+    #
+    # # Save the final mesh
+    # name_mesh = out_pre + ".stl"
+    # union_mesh.export(name_mesh)
+
+    param.type_S = param_type_S_backup
+
+    # fp.refine_lattice(out_pre, param.ns, param.alpha, 45, param.ext_fem,
+    #                   z_min_bound=lattice_object.z_min,
+    #                   z_max_bound=lattice_object.z_max)
+
+    # fp.refine_3Dmesh(param.type_S, out_pre, param.ns, param.alpha, param.ext_fem)
+
+    return mesh.vert_properties, name_mesh
+
+
 def make_atom_grain(
-    STL,
-    lattice_structure1,
-    lattice_parameter1,
-    material1,
-    orien_x1,
-    orien_y1,
-    orien_z1,
-    lattice_structure2,
-    lattice_parameter2,
-    material2,
-    orien_x2,
-    orien_y2,
-    orien_z2,
-    vertices,
-    out_pre,
-    ext_ato,
-):
+        STL,
+        param,
+        vertices,
+        out_pre):
     """
     Generates an atomic positions file for the grain object.
 
     :param STL: The stl file with an object that has surface roughness applied to it
     :type STL: str
-    :param lattice_structure1: The lattice structure of the crystal 1
-    :type lattice_structure1: str
-    :param lattice_parameter1: The lattice parameter of the crystal 1 in Angstrom
-    :type lattice_parameter1: float
-    :param material1: The chemical symbol of the desired element 1
-    :type material1: str
-    :param orien_x1: The orientation of the crystal 1 in the x direction
-    :type orien_x1: list
-    :param orien_y1: The orientation of the crystal 1 in the y direction
-    :type orien_y1: list
-    :param orien_z1: The orientation of the crystal 1 in the z direction
-    :type orien_z1: list
-    :param lattice_structure2: The lattice structure of the crystal 2
-    :type lattice_structure2: str
-    :param lattice_parameter2: The lattice parameter of the crystal 2 in Angstrom
-    :type lattice_parameter2: float
-    :param material2: The chemical symbol of the desired element 2
-    :type material2: str
-    :param orien_x2: The orientation of the crystal 2 in the x direction
-    :type orien_x2: list
-    :param orien_y2: The orientation of the crystal 2 in the y direction
-    :type orien_y2: list
-    :param orien_z2: The orientation of the crystal 2 in the z direction
-    :type orien_z2: list
+    :param param: the object containing all the parameters defined by the user in the JSON input file
+    :type param: Parameter class object
     :param vertices: List of nodes
     :type vertices: array
     :param out_pre: Prefix of output file
     :type out_pre: str
-    :param ext_ato: Atomic position file format list
-    :type ext_ato: list
 
     :return:
     """
     dim_x = max(vertices[:, 0]) - min(vertices[:, 0])
     dim_y = max(vertices[:, 1]) - min(vertices[:, 1])
     dim_z = max(vertices[:, 2]) - min(vertices[:, 2])
-    dis_x1, dup_x1, orien_x1 = fp.duplicate(dim_x, orien_x1, lattice_parameter1, lattice_structure1)
-    dis_y1, dup_y1, orien_y1 = fp.duplicate(dim_y, orien_y1, lattice_parameter1, lattice_structure1)
-    dis_z1, dup_z1, orien_z1 = fp.duplicate(2 * dim_z, orien_z1, lattice_parameter1, lattice_structure1)
-    dis_x2, dup_x2, orien_x2 = fp.duplicate(dim_x, orien_x2, lattice_parameter2, lattice_structure2)
-    dis_y2, dup_y2, orien_y2 = fp.duplicate(dim_y, orien_y2, lattice_parameter2, lattice_structure2)
-    dis_z2, dup_z2, orien_z2 = fp.duplicate(2 * dim_z, orien_z2, lattice_parameter2, lattice_structure2)
+    dis_x1, dup_x1, orien_x1 = fp.duplicate(dim_x, param.orien_x1, param.lattice_parameter1, param.lattice_structure1)
+    dis_y1, dup_y1, orien_y1 = fp.duplicate(dim_y, param.orien_y1, param.lattice_parameter1, param.lattice_structure1)
+    dis_z1, dup_z1, orien_z1 = fp.duplicate(2 * dim_z, param.orien_z1, param.lattice_parameter1,
+                                            param.lattice_structure1)
+    dis_x2, dup_x2, orien_x2 = fp.duplicate(dim_x, param.orien_x2, param.lattice_parameter2, param.lattice_structure2)
+    dis_y2, dup_y2, orien_y2 = fp.duplicate(dim_y, param.orien_y2, param.lattice_parameter2, param.lattice_structure2)
+    dis_z2, dup_z2, orien_z2 = fp.duplicate(2 * dim_z, param.orien_z2, param.lattice_parameter2,
+                                            param.lattice_structure2)
 
     # Here we generate the main block : mat1_supercell.cfg
     subprocess.call(
         [
             "atomsk",
             "--create",
-            lattice_structure1,
-            *lattice_parameter1,
-            *material1,
+            param.lattice_structure1,
+            *param.lattice_parameter1,
+            *param.material1,
             "orient",
             orien_x1,
             orien_y1,
@@ -1280,9 +1057,9 @@ def make_atom_grain(
         [
             "atomsk",
             "--create",
-            lattice_structure2,
-            *lattice_parameter2,
-            *material2,
+            param.lattice_structure2,
+            *param.lattice_parameter2,
+            *param.material2,
             "orient",
             orien_x2,
             orien_y2,
@@ -1300,7 +1077,7 @@ def make_atom_grain(
     )
 
     # We deform mat2_supercell.cfg to match mat1_supercell.cfg dimensions and preserve PBCs
-    fp.strain_file1_to_file2("mat2_supercell.cfg","mat1_supercell.cfg")
+    fp.strain_file1_to_file2("mat2_supercell.cfg", "mat1_supercell.cfg")
 
     # Atomsk uses the .stl file to carve out a part of mat1_supercell.cfg that becomes a rough block (mat1_out.cfg)
     subprocess.call(
@@ -1338,10 +1115,10 @@ def make_atom_grain(
     )
 
     # Merging of mat1_out.cfg and mat2_out.cfg
-    subprocess.call(["atomsk", "--merge", "2", "mat1_out.cfg", "mat2_out.cfg", "temp2.cfg", "-v","2"])
+    subprocess.call(["atomsk", "--merge", "2", "mat1_out.cfg", "mat2_out.cfg", "temp2.cfg", "-v", "2"])
 
-    for e in ext_ato:
-        subprocess.call(["atomsk", "temp2.cfg", out_pre + "." + e, "-v","2"])
+    for e in param.ext_ato:
+        subprocess.call(["atomsk", "temp2.cfg", out_pre + "." + e, "-v", "2"])
 
     # Cleaning
     subprocess.call(
@@ -1356,127 +1133,76 @@ def make_atom_grain(
     )
 
 
+def make_fpillar(param, out_pre):
+    """
+    Creates an stl file of a rough faceted pillar
 
-#------------------------------------------------------------------------------------------------------------------------------------------------------
-
-def make_fpillar(
-        type_sample,
-        B1,
-        B2,
-        C1,
-        C2,
-        RMS1,
-        RMS2,
-        N,
-        M,
-        length,
-        nfaces,
-        radius,
-        ns,
-        alpha,
-        raw_stl,
-        angles,
-        out_pre,
-        ext_fem,
-):
-    """        
-    :type type_sample: str
-    :param B1: The degree the roughness is dependent on for the lateral surface
-    :type B1: float
-    :param B2: The degree the roughness is dependent on for the upside surface
-    :type B2: float
-    :param C1: Roughness normalization factor for the lateral surface
-    :type C1: float
-    :param C2: Roughness normalization factor for the upside surface
-    :type C2: float
-    :param RMS1: RMS1
-    :type RMS1: float
-    :param RMS2: RMS2
-    :type RMS2: float
-    :param N: Scaling cartesian position
-    :type N: int
-    :param M: Scaling cartesian position
-    :type M: int
-    :param length: Length of the wire
-    :type length: float
-    :param nfaces: Number of faces of the wire
-    :type nfaces: int
-    :param radius: Radius of the wire
-    :type radius: float
-    :param ns: The number of segments desired
-    :type ns: int
-    :param alpha: Refine mesh factor
-    :type alpha: float
-    :param raw_stl: Name of the input stl file
-    :type raw_stl: str
-    :param angles: list of angles for Euler rotations
-    :type angles: list
+    :param param: the object containing all the parameters defined by the user in the JSON input file
+    :type param: Parameter class object
     :param out_pre: Prefix of the output files
     :type out_pre: str
-    :param ext_fem: List of FEM extension files
-    :type ext_fem: list
 
     :return: List of nodes and STL file name for a Faceted Pillar
     """
-    #create the base of the faceted Pillar
-    points, anglesfac = fp.base(radius,nfaces)
+    # create the base of the faceted Pillar
+    points, anglesfac = fp.base(param.radius, param.nfaces)
 
-    vertices, faces = fp.read_stl(type_sample,raw_stl,0,length,0,radius,ns,points)
+    vertices, faces = fp.read_stl(param.type_S, param.raw_stl, 0, param.length, 0, param.radius, param.ns, points)
 
     # creates a column that has an assigned index number for each row in vertices; returns vertices
     # with the addition of this new column and also returns the nodenumber which is an array
     # filled from 0 - length of the vertices
-    vertices , nodenumber = fp.node_indexing(vertices)
+    vertices, nodenumber = fp.node_indexing(vertices)
 
-    #nodes at the surface of the object. These nodes will have the surface roughness applied to it
-    #nodesurf 1 is the faceted wire surface, and nodesurf2 is the topside surface
-    nodesurf1 = fp.node_surface("fwire",vertices,nodenumber,points,0)
-    nodesurf2 = fp.node_surface("box",vertices,nodenumber,0,0)
+    # nodes at the surface of the object. These nodes will have the surface roughness applied to it
+    # nodesurf 1 is the faceted wire surface, and nodesurf2 is the topside surface
+    nodesurf1 = fp.node_surface("fwire", vertices, nodenumber, points, 0)
+    nodesurf2 = fp.node_surface("box", vertices, nodenumber, 0, 0)
 
-   #Save the index of nodes which are on the edge of the pillar
+    # Save the index of nodes which are on the edge of the pillar
     nodesurftot = [nodesurf1] + [nodesurf2]
     node_edge, node_corner = fp.node_corner(nodesurftot)
 
     # convert to cylindrics coordinates (Rho Theta Z nodenumber)
     cy_nodesurf1 = fp.cart2cyl(nodesurf1)
-    sorted_cy_nodesurf1 = cy_nodesurf1[np.lexsort((cy_nodesurf1[:,1],cy_nodesurf1[:,2]))]
+    sorted_cy_nodesurf1 = cy_nodesurf1[np.lexsort((cy_nodesurf1[:, 1], cy_nodesurf1[:, 2]))]
     nodesurf1 = fp.cyl2cart(sorted_cy_nodesurf1)
 
-    Z = len(np.where(sorted_cy_nodesurf1[:,2] ==0)[0])
-    T = len(np.unique(sorted_cy_nodesurf1[:,2]))
+    Z = len(np.where(sorted_cy_nodesurf1[:, 2] == 0)[0])
+    T = len(np.unique(sorted_cy_nodesurf1[:, 2]))
 
-    xv1 = np.linspace(0,1,Z)
-    yv1 = np.linspace(0,1,T)
-    xv1, yv1 = np.meshgrid(xv1,yv1)
-    sfrN, sfrM = fp.vectors(N,M) # creating vectors for M and N
-    m1,n1 = fp.random_numbers(sfrN, sfrM) # normal gaussian for the amplitude
-
+    xv1 = np.linspace(0, 1, Z)
+    yv1 = np.linspace(0, 1, T)
+    xv1, yv1 = np.meshgrid(xv1, yv1)
+    sfrN, sfrM = fp.vectors(param.N, param.M)  # creating vectors for M and N
+    m1, n1 = fp.random_numbers(sfrN, sfrM)  # normal gaussian for the amplitude
 
     xv2 = nodesurf2[:, 0] / max(nodesurf2[:, 0])
     yv2 = nodesurf2[:, 1] / max(nodesurf2[:, 1])
-    m2, n2 = fp.random_numbers(sfrN,sfrM) # normal gaussian for the amplitude
+    m2, n2 = fp.random_numbers(sfrN, sfrM)  # normal gaussian for the amplitude
 
-    #Returns an array with the Z values that will replace the previous z values in the vertices
-    #Array these represent the roughness on the surface
-    z1 = fp.random_surf2("fwire",m1,n1,N,M,B1,xv1,yv1,sfrM,sfrN,C1,RMS1,out_pre)
-    z2 = fp.random_surf2("box",m2,n2,N,M,B2,xv2,yv2,sfrM,sfrN,C2,RMS2,out_pre)
+    # Returns an array with the Z values that will replace the previous z values in the vertices
+    # Array these represent the roughness on the surface
+    z1 = fp.random_surf2("fwire", m1, n1, param.N, param.M, param.B1, xv1, yv1, sfrM, sfrN, param.C1, param.RMS1, out_pre)
+    z2 = fp.random_surf2("box", m2, n2, param.N, param.M, param.B2, xv2, yv2, sfrM, sfrN, param.C2, param.RMS2, out_pre)
 
-    #Displace nodes to make surfaces rough, nodes on the edge are displace 2 times so these displacement should be normalised
-    vertices = fp.make_rough_pillar(type_sample,z1,z2,nodesurf1,nodesurf2,node_edge,vertices,anglesfac)
-    #gets rid of the index column because stl file generator takes only a matrix with 3 columns
-    vertices = vertices[:,:3]
+    # Displace nodes to make surfaces rough, nodes on the edge are displace 2 times so these displacement should be
+    # normalised
+    vertices = fp.make_rough_pillar(param.type_S, z1, z2, nodesurf1, nodesurf2, node_edge, vertices, anglesfac)
+    # gets rid of the index column because stl file generator takes only a matrix with 3 columns
+    vertices = vertices[:, :3]
 
-    vertices = fp.align_f(vertices,anglesfac)
-    fp.stl_file(vertices,faces,out_pre)
-    fp.refine_3Dmesh(type_sample,out_pre,ns,alpha,ext_fem)
+    vertices = fp.align_f(vertices, anglesfac)
+    fp.stl_file(vertices, faces, out_pre)
+    fp.refine_3Dmesh(param.type_S, out_pre, param.ns, param.alpha, param.ext_fem)
 
-    fp.stl_rotate_euler(out_pre + ".stl", out_pre + "_rot.stl", angles, order='zyx')
+    fp.stl_rotate_euler(out_pre + ".stl", out_pre + "_rot.stl", param.angles, order='zyx')
 
     return vertices, out_pre + ".stl", out_pre + "_rot.stl"
 
-    
-
     #------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 def make_cpillar(
         type_sample,
         B1,
@@ -1571,18 +1297,16 @@ def make_cpillar(
     sfrN, sfrM = fp.vectors(N, M)  # creating vectors for M and N
     m1, n1 = fp.random_numbers(sfrN, sfrM)  # normal gaussian for the amplitude
 
-
     xv2 = nodesurf2[:, 0] / max(nodesurf2[:, 0])
     yv2 = nodesurf2[:, 1] / max(nodesurf2[:, 1])
-    m2, n2 = fp.random_numbers(sfrN,sfrM)
-
+    m2, n2 = fp.random_numbers(sfrN, sfrM)
 
     #Returns an array with the Z values that will replace the previous z values in the vertices
     #Array these represent the roughness on the surface
     z1 = fp.random_surf2("cwire", m1, n1, N, M, B1, xv1, yv1, sfrM, sfrN, C1, RMS1, out_pre)
     z2 = fp.random_surf2("box", m2, n2, N, M, B2, xv2, yv2, sfrM, sfrN, C2, RMS2, out_pre)
 
-    vertices = fp.make_rough_pillar(type_sample,z1,z2,cy_nodesurf1,nodesurf2,node_edge,vertices,0)
+    vertices = fp.make_rough_pillar(type_sample, z1, z2, cy_nodesurf1, nodesurf2, node_edge, vertices, 0)
 
     # gets rid of the index column because stl file generator takes only a matrix with 3 columns
     vertices = vertices[:, :3]
@@ -1594,7 +1318,6 @@ def make_cpillar(
     fp.stl_rotate_euler(out_pre + ".stl", out_pre + "_rot.stl", angles, order='zyx')
 
     return vertices, out_pre + ".stl", out_pre + "_rot.stl"
-
 
 
 def make_multi_layered(
@@ -1654,14 +1377,13 @@ def make_multi_layered(
     :return: List of nodes and STL file name
     """
     #Create a box perfect mesh at an initial height h
-    vertices, faces = fp.multi_layered(h,width, length, height, ns)
+    vertices, faces = fp.multi_layered(h, width, length, height, ns)
 
     #Creates a column that has an assigned index number for each row in vertices
     #with the addition of this new column and also returns the nodenumber which is an array
     #filled from 0 - length of the vertices
 
     vertices, nodenumber = fp.node_indexing(vertices)
-
 
     #Nodes at the surface of the object. These nodes will have the surface roughness applied to it
     nodesurf = fp.node_surface(type_sample, vertices, nodenumber, 0, 0)
@@ -1682,7 +1404,7 @@ def make_multi_layered(
     vertices = vertices[:, :3]
 
     # creates a stl file of the box with roughness on the surface
-    fp.stl_file(vertices, faces, out_pre+ str(j)  )
+    fp.stl_file(vertices, faces, out_pre + str(j))
     #fp.refine_3Dmesh(type_sample, out_pre+str(j) , ns, alpha, ext_fem)
 
     return vertices, out_pre + str(j) + ".stl",
@@ -1776,16 +1498,17 @@ def make_atom_multilayered(
     #Size check: height_pattern vs. user-defined size (Height, in the .json file) of the multi-layered object
     #Keep in mind that the pattern layer is periodically repeated : true_height = n_pattern x height_pattern
     n_pattern = int(height // height_pattern)
-    if height % height_pattern != 0 :
-        print("!!!WARNING!!!,To keep the periodicity, The height of the device will be truncated to this Height:" +str(n_pattern * height_pattern))
+    if height % height_pattern != 0:
+        print("!!!WARNING!!!,To keep the periodicity, The height of the device will be truncated to this Height:" + str(
+            n_pattern * height_pattern))
 
     #SECURITY ##############
-    file_create = [out_pre+"_stat.txt"]
+    file_create = [out_pre + "_stat.txt"]
     #######################
 
     # CREATION OF ALL SUPERCELLS
     # 1 SUPERCELL PER MATERIAL, ALL WITH THE WHOLE SIZE OF THE SAMPLE
-    try :
+    try:
         #Initialise dimension of the supercell
         dim_x = length
         dim_y = width
@@ -1811,12 +1534,14 @@ def make_atom_multilayered(
                                                      lattice_structure[atoms][0])
                 dis_z, dup_z, orien_z = fp.duplicate(dim_z, orien_z0[atoms], lattice_parameter[atoms],
                                                      lattice_structure[atoms][0])
-                cmd = ["atomsk", "--create", str(lattice_structure[atoms][0]), str(*lattice_parameter[atoms]), str(material[atoms][0]),
-                     "orient", str(orien_x), str(orien_y), str(orien_z),
-                     "-duplicate", str(dup_x), str(dup_y), str(dup_z),
-                     "-select", "random", str(lattice_structure[atoms][1])+"%", str(material[atoms][0]), "-substitute",
-                     str(material[atoms][0]), str(material[atoms][1]),
-                     "-center", "com", "mat" + str(atoms) + "_supercellm.cfg", "-v", "1"]
+                cmd = ["atomsk", "--create", str(lattice_structure[atoms][0]), str(*lattice_parameter[atoms]),
+                       str(material[atoms][0]),
+                       "orient", str(orien_x), str(orien_y), str(orien_z),
+                       "-duplicate", str(dup_x), str(dup_y), str(dup_z),
+                       "-select", "random", str(lattice_structure[atoms][1]) + "%", str(material[atoms][0]),
+                       "-substitute",
+                       str(material[atoms][0]), str(material[atoms][1]),
+                       "-center", "com", "mat" + str(atoms) + "_supercellm.cfg", "-v", "1"]
                 print("Atomsk binary solution {}".format(cmd))
                 subprocess.call(cmd)
                 print("last file create is {}:".format("mat" + str(str(atoms)) + "_supercellm.cfg"))
@@ -1831,9 +1556,9 @@ def make_atom_multilayered(
                                                      lattice_structure[atoms])
                 #print("lattice_structure[atoms] : 0 = {}, 1 = {}, 2 = {}".format(lattice_structure[atoms][0], lattice_structure[atoms][1], lattice_structure[atoms][2]))
                 cmd = ["atomsk", "--create", str(lattice_structure[atoms]), *lattice_parameter[atoms], *material[atoms],
-                 "orient", str(orien_x), str(orien_y), str(orien_z),
-                 "-duplicate", str(dup_x), str(dup_y), str(dup_z),
-                 "-center", "com", "mat" + str(atoms) + "_supercellm.cfg", "-v", "1"]
+                       "orient", str(orien_x), str(orien_y), str(orien_z),
+                       "-duplicate", str(dup_x), str(dup_y), str(dup_z),
+                       "-center", "com", "mat" + str(atoms) + "_supercellm.cfg", "-v", "1"]
                 print("cmd : {}".format(cmd))
                 subprocess.call(cmd)
 
@@ -1845,7 +1570,7 @@ def make_atom_multilayered(
             #######################
 
         # We deform each supercells to match their dimensions and preserve PBCs
-        fp.av_length_and_strain(list_supercell,dim_z)
+        fp.av_length_and_strain(list_supercell, dim_z)
 
         # n is the index of a cell in a pattern of the Multi_layer, h is the initial height of the cell
         n, h = 0, 0
@@ -1855,12 +1580,13 @@ def make_atom_multilayered(
         for j in range(n_pattern):
             # Loop on the number of repetition of the main pattern (e.g., we want to repet 3x the pattern_layer=[0,1,2,1])
             if j == 0:
-            # 1st pattern : the first slice is only half-height
-                List_cells = []                     # list of material slices
+                # 1st pattern : the first slice is only half-height
+                List_cells = []  # list of material slices
                 for n in range(len(pattern_layer)):
                     #In the j_th pattern, loop on each slice of material
                     #We define the geometry of the material, create an .stl file and remove exceeding atoms
-                    print("#### SLICE n={}/{} in pattern j={}/{} under process...".format(n, len(pattern_layer)-1,j,n_pattern-1))
+                    print("#### SLICE n={}/{} in pattern j={}/{} under process...".format(n, len(pattern_layer) - 1, j,
+                                                                                          n_pattern - 1))
                     if n == 0:
                         # WARNING: the 1st slice of material (n=0) in the 1st pattern (j=0) has only a half-height
                         # the second-half will be pasted at the end of the sample to ensure periodicity
@@ -1935,7 +1661,7 @@ def make_atom_multilayered(
                     elif n % 2 != 0:
                         # ODD SLICE (1, 3, 5, .... slice starts at 0) : they have the negative bottom roughness of the n-1 layer (no new .stl1) but a new top roughness (new .stl2)
                         # e.g., slice n=1 has the negative bottom roughness of slice n=0 (re-use of .stl1 file) but a new top roughness (new .stl2 file)
-                        print("We are in the odd slice j={}, n={}".format(j,n))
+                        print("We are in the odd slice j={}, n={}".format(j, n))
 
                         # Determine which material is concerned
                         index_layer2 = pattern_layer[n]
@@ -1968,7 +1694,8 @@ def make_atom_multilayered(
                         #######################
 
                         # Top roughness treatment:
-                        print("Atomsk run invert selection (rough top surface - flat bottom) : it cuts what is out of the STL")
+                        print(
+                            "Atomsk run invert selection (rough top surface - flat bottom) : it cuts what is out of the STL")
                         subprocess.call(
                             [
                                 "atomsk",
@@ -2013,8 +1740,9 @@ def make_atom_multilayered(
 
                         #print("roughness_or_not_test : {}".format(roughness_or_not_test))
                         if roughness_or_not_test:
-                            print("Atomsk run a regular selection (bottom surface) : it cuts what is in the previous STL (no invert)")
-                            cmd=[
+                            print(
+                                "Atomsk run a regular selection (bottom surface) : it cuts what is in the previous STL (no invert)")
+                            cmd = [
                                 "atomsk",
                                 "mat" + str(index_layer2) + "_outm.cfg",
                                 "-select",
@@ -2120,7 +1848,7 @@ def make_atom_multilayered(
                         # Top roughness treatment (with fresh .stl1):
                         # Atomsk uses the .stl file to Remove all atoms which are not in the stl file
                         subprocess.call(
-                                [
+                            [
                                 "atomsk",
                                 "mat" + str(index_layer1) + "_supercellm" + a + ".cfg",
                                 "-select",
@@ -2133,7 +1861,7 @@ def make_atom_multilayered(
                                 "mat" + str(index_layer1) + "_outm.cfg",
                                 "-v",
                                 "2"
-                                ]
+                            ]
                         )
                         #else:
                         #    print("Perfectly-flat multi-layer, we skip the surface treatment")
@@ -2161,7 +1889,8 @@ def make_atom_multilayered(
 
                 List_cells = []
                 for n in range(len(pattern_layer)):
-                    print("#### SLICE n={}/{} in pattern j={}/{} under process...".format(n, len(pattern_layer)-1,j,n_pattern-1))
+                    print("#### SLICE n={}/{} in pattern j={}/{} under process...".format(n, len(pattern_layer) - 1, j,
+                                                                                          n_pattern - 1))
 
                     if n % 2 != 0:
                         # Determine which material is concerned
@@ -2233,20 +1962,21 @@ def make_atom_multilayered(
 
                             subprocess.call(
                                 [
-                                "atomsk",
-                                "mat" + str(index_layer2) + "_outm.cfg",
-                                "-select",
-                                "stl",
-                                FEM_STL1,
-                                "-rmatom",
-                                "select",
-                                "matf_outm.cfg",
-                                "-v",
-                                "2"
+                                    "atomsk",
+                                    "mat" + str(index_layer2) + "_outm.cfg",
+                                    "-select",
+                                    "stl",
+                                    FEM_STL1,
+                                    "-rmatom",
+                                    "select",
+                                    "matf_outm.cfg",
+                                    "-v",
+                                    "2"
                                 ]
-                             )
+                            )
                         else:
-                            print("Perfectly-flat multi-layer, we skip the bottom surface treatment to avoid Atomsk problem with empty region")
+                            print(
+                                "Perfectly-flat multi-layer, we skip the bottom surface treatment to avoid Atomsk problem with empty region")
                             subprocess.call(['cp', "mat" + str(index_layer2) + "_outm.cfg", "matf_outm.cfg"])
 
                         # SECURITY ##############
@@ -2318,7 +2048,7 @@ def make_atom_multilayered(
                                 "-v",
                                 "2"
                             ]
-                            )
+                        )
 
                         # SECURITY ##############
                         file_create.append("mat" + str(index_layer1) + "_supercellm" + a + ".cfg")
@@ -2376,7 +2106,7 @@ def make_atom_multilayered(
                     if merge == 0:
                         subprocess.call(
                             ["atomsk", "--merge", "2", List_cells[0], List_cells[1], "celltot" + str(0) + ".cfg", "-v",
-                                "2"])
+                             "2"])
 
                         # SECURITY ##############
                         file_create.append("celltot" + str(0) + ".cfg")
@@ -2387,12 +2117,12 @@ def make_atom_multilayered(
                     else:
                         subprocess.call(
                             ["atomsk", "--merge", "2", "celltot" + str(merge - 1) + ".cfg", List_cells[merge + 1],
-                                "celltot" + str(merge) + ".cfg", "-v", "2"])
+                             "celltot" + str(merge) + ".cfg", "-v", "2"])
                         #Cleaning
                         subprocess.call(["rm", "celltot" + str(merge - 1) + ".cfg", ])
 
                         # SECURITY ##############
-                        file_create.append( "celltot" + str(merge) + ".cfg")
+                        file_create.append("celltot" + str(merge) + ".cfg")
                         #######################
 
                 subprocess.call(
@@ -2402,24 +2132,24 @@ def make_atom_multilayered(
                 file_create.append("pattern" + str(j) + ".cfg")
                 #######################
 
-
-            subprocess.call(["rm", out_pre+"_stat.txt"])
+            subprocess.call(["rm", out_pre + "_stat.txt"])
             List_patterns.append("pattern" + str(j) + ".cfg")
 
             for m in range(len(List_cells)):
                 # Cleaning all cells .cfg
-                subprocess.call(["rm",List_cells[m],])
+                subprocess.call(["rm", List_cells[m], ])
 
         # MERGING OF THE PATTERNS
         # Case with 1 pattern :
         if len(List_patterns) == 1:
-            subprocess.call(["mv", List_patterns[0], out_pre+"0.cfg"])
+            subprocess.call(["mv", List_patterns[0], out_pre + "0.cfg"])
         # Case with many patterns : Merge all patterns together
         else:
             for merge in range(len(List_patterns) - 1):
                 if merge == 0:
                     subprocess.call(
-                        ["atomsk", "--merge", "2", List_patterns[0], List_patterns[1], "patterntot" + str(0) + ".cfg", "-v","2"])
+                        ["atomsk", "--merge", "2", List_patterns[0], List_patterns[1], "patterntot" + str(0) + ".cfg",
+                         "-v", "2"])
 
                     # SECURITY ##############
                     file_create.append("patterntot" + str(0) + ".cfg")
@@ -2427,8 +2157,8 @@ def make_atom_multilayered(
 
                 else:
                     subprocess.call(
-                    ["atomsk", "--merge", "2", "patterntot" + str(merge - 1) + ".cfg", List_patterns[merge + 1],
-                    "patterntot" + str(merge) + ".cfg", "-v", "2"])
+                        ["atomsk", "--merge", "2", "patterntot" + str(merge - 1) + ".cfg", List_patterns[merge + 1],
+                         "patterntot" + str(merge) + ".cfg", "-v", "2"])
                     #Cleaning
                     subprocess.call(["rm", "patterntot" + str(merge - 1) + ".cfg", ])
 
@@ -2436,46 +2166,51 @@ def make_atom_multilayered(
                     file_create.append("patterntot" + str(merge) + ".cfg")
                     #######################
 
-            subprocess.call(["mv", "patterntot" + str(len(List_patterns) - 1 - 1) + ".cfg", out_pre+"0.cfg"])
+            subprocess.call(["mv", "patterntot" + str(len(List_patterns) - 1 - 1) + ".cfg", out_pre + "0.cfg"])
 
         # SECURITY ##############
-        file_create.append(out_pre+"0.cfg")
+        file_create.append(out_pre + "0.cfg")
         #######################
 
         # ADD OF THE ENDING-SAMPLE HALF-HEIGHT OF THE FIRST SLICE OF MATERIAL (PBCs)
         #Complete the final empty part with the first material used to keep the vertical periodicity
-        vertices, END = make_box("box", B, C1, RMS, N, M, length+50, h-height_layern, width+50, ns, alpha, raw_stl, "final",ext_fem)
-        subprocess.call(["atomsk", "mat"+str(pattern_layer[0])+"_supercellm.cfg", "-select", "stl", FEM_STL2, "-rmatom", "select", "end0.cfg", "-v", "2"])
+        vertices, END = make_box("box", B, C1, RMS, N, M, length + 50, h - height_layern, width + 50, ns, alpha,
+                                 raw_stl, "final", ext_fem)
+        subprocess.call(
+            ["atomsk", "mat" + str(pattern_layer[0]) + "_supercellm.cfg", "-select", "stl", FEM_STL2, "-rmatom",
+             "select", "end0.cfg", "-v", "2"])
         subprocess.call(["atomsk", "end0.cfg", "-select", "stl", END, "-rmatom", "select", "final0.cfg", "-v", "2"])
-        subprocess.call(["atomsk", "--merge", "2", out_pre+"0.cfg", "final0.cfg", out_pre+".cfg", "-v","2"])  # merge the end to the object create
+        subprocess.call(["atomsk", "--merge", "2", out_pre + "0.cfg", "final0.cfg", out_pre + ".cfg", "-v",
+                         "2"])  # merge the end to the object create
 
         # SECURITY ##############
         file_create.append("end0.cfg")
-        file_create.append( END)
+        file_create.append(END)
         file_create.append("final0.cfg")
-        file_create.append(out_pre+".cfg")
+        file_create.append(out_pre + ".cfg")
         file_create.append("final_stat.txt")
         file_create.append("final_stat.msh")
         #######################
-    
+
         #Create the lmp file
         for e in ext_ato:
             if e != "cfg":
-                subprocess.call(["atomsk", out_pre+".cfg", out_pre + "." + e, "-v", "2"])
+                subprocess.call(["atomsk", out_pre + ".cfg", out_pre + "." + e, "-v", "2"])
 
         #Remove all files
-        subprocess.call(["rm", "patterntot" + str(len(List_patterns)-1-1) + ".cfg", "final0.cfg", out_pre+".cfg",out_pre+"0.cfg",out_pre+"1.cfg", END, "end0.cfg","final.msh", "final_stat.txt",])
+        subprocess.call(["rm", "patterntot" + str(len(List_patterns) - 1 - 1) + ".cfg", "final0.cfg", out_pre + ".cfg",
+                         out_pre + "0.cfg", out_pre + "1.cfg", END, "end0.cfg", "final.msh", "final_stat.txt", ])
 
         #Clean all patterns files
         for m in range(len(List_patterns)):
             # Cleaning all cells .cfg
-            subprocess.call(["rm",List_patterns[m]])
+            subprocess.call(["rm", List_patterns[m]])
 
         #Clean the rest of files :
-        subprocess.call(["rm", FEM_STL2,out_pre+"_stat.txt"])
+        subprocess.call(["rm", FEM_STL2, out_pre + "_stat.txt"])
         for suppr in range(len(list_supercell)):
             # Cleaning all cells .cfg
-            subprocess.call(["rm",list_supercell[suppr]])
+            subprocess.call(["rm", list_supercell[suppr]])
 
         subprocess.call(["clear", ])
         print("JOB DONE!" + "  File name: " + out_pre + ".lmp")
