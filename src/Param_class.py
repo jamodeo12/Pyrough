@@ -1,6 +1,6 @@
 # ---------------------------------------------------------------------------
 # Title: PARAM CLASS
-# Authors: Jonathan Amodeo, Hugo Iteney, Javier Gonzalez, Jennifer Izaguirre, Christophe Le Bourlot
+# Authors: Jonathan Amodeo, Hugo Iteney, Javier Gonzalez, Jennifer Izaguirre, Christophe Le Bourlot, Thomas Cadart
 # Date: June 01, 2022
 #
 # The PARAM class is responsible for reading/storing user parameters from a JSON file.

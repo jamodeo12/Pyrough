@@ -1,5 +1,5 @@
 # Title: Main code Pyrough
-# Authors: Jonathan Amodeo, Hugo Iteney, Javier Gonzalez, Jennifer Izaguirre, Christophe Le Bourlot
+# Authors: Jonathan Amodeo, Hugo Iteney, Javier Gonzalez, Jennifer Izaguirre, Christophe Le Bourlot, Thomas Cadart
 # Date: June 01, 2022
 #
 # Pyrough generates 3D virtual samples with rough surfaces for atomistic and finite-element simulations.

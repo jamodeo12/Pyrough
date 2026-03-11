@@ -1,9 +1,9 @@
 {"lattice":
     {"beam_type": "cwire",
-      "C1": 0.0001,
+      "C1": 0.1,
       "eta": 0.1,
-      "N": 30,
-      "M": 30,
+      "N": 300,
+      "M": 300,
       "Mesh_size": 5,
       "Refine_factor": 0.75,
       "Raw_stl": "na"},
@@ -16,9 +16,9 @@
         "z": 200
       },
       "number_of_cells": {
-        "x": 2,
-        "y": 2,
-        "z": 2
+        "x": 1,
+        "y": 1,
+        "z": 1
       },
       "radii": [
         20.0
@@ -29,8 +29,8 @@
     },
     "trim_boundary_beams": true,
     "cube_trimmer_parameters": {
-      "eta": 0.5,
-      "RMS": 5,
+      "eta": 0.1,
+      "RMS": 2,
       "N": 30,
       "M": 30
       }

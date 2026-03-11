@@ -1,6 +1,6 @@
 # ---------------------------------------------------------------------------
 # Title: Func_pyrough
-# Authors: Jonathan Amodeo, Hugo Iteney, Javier Gonzalez, Jennifer Izaguirre, Christophe Le Bourlot
+# Authors: Jonathan Amodeo, Hugo Iteney, Javier Gonzalez, Jennifer Izaguirre, Christophe Le Bourlot, Thomas Cadart
 # Date: June 01, 2022
 #
 # The 'Func_pyrough' module contains all the functions utilized within Pyrough.
