@@ -12,6 +12,7 @@
 import json
 from src import Func_pyrough as fp
 
+
 class Parameter:
     """
     This class stores the parameters defined by the user using the JSON input file.
@@ -147,7 +148,6 @@ class Parameter:
                 if self.cube_trimmer_param is None:
                     print("No cube_trimmer_parameters key found in the JSON file for lattice sample type. The Wire "
                           "parameters will be used as default values for the cube trimmer.")
-
 
     def output(self, json_file):
         """

@@ -627,7 +627,6 @@ def make_lattice(param, out_pre):
 
     :return: List of vertices, faces, STL file name, and rotated STL file name
     """
-
     try:
         import manifold3d as manifold
     except ImportError:
@@ -691,9 +690,9 @@ def make_lattice(param, out_pre):
         if param.beam_type == "cwire":
             param.type_S = "cwire"
             vertices, faces, _, _ = make_cwire(param, out_pre)
-        elif param.beam_type == "cpillar":
-            param.type_S = "cpillar"
-            vertices, faces, _, _ = make_cpillar(param, out_pre)
+        elif param.beam_type == "fwire":
+            param.type_S = "fwire"
+            vertices, faces, _, _ = make_fwire(param, out_pre)
         else:
             raise ValueError("No valid beam type found in the JSON file.")
 
@@ -797,17 +796,14 @@ def make_lattice(param, out_pre):
         face_matrix=tmp.faces
     ))
 
+    # Remesh the mesh using isotropic explicit remeshing to achieve a more uniform distribution of vertices
     ms.meshing_isotropic_explicit_remeshing(
         targetlen=pymeshlab.PercentageValue(target_percentage),
         iterations=5
     )
 
     remeshed = ms.current_mesh()
-
-    final_mesh = trimesh.Trimesh(
-        vertices=remeshed.vertex_matrix(),
-        faces=remeshed.face_matrix()
-    )
+    final_mesh = trimesh.Trimesh(vertices=remeshed.vertex_matrix(), faces=remeshed.face_matrix())
 
     name_mesh = out_pre + ".stl"
     final_mesh.export(name_mesh)
