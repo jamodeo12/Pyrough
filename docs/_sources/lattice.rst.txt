@@ -1,0 +1,154 @@
+Lattice structures
+==================
+
+Pyrough supports the generation of rough lattice structures through its integration with
+`pyLatticeDSO <https://github.com/Tcadart/pyLatticeDSO>`_, available as a Git submodule.
+This feature allows the creation of atomic-scale lattice geometries (BCC, FCC, octet-truss, etc.)
+with controlled surface roughness on each beam.
+
+Installation
+------------
+
+Assuming Pyrough is already installed, add pyLatticeDSO as a submodule from the root
+of the Pyrough repository:
+
+.. code-block:: bash
+
+   cd Pyrough
+   git submodule add https://github.com/Tcadart/pyLatticeDSO.git
+   git submodule update --init --recursive
+
+This will populate the ``pyLatticeDSO/`` directory inside the Pyrough repository.
+
+Additional dependencies
+-----------------------
+
+The lattice feature requires three additional Python libraries that are not needed
+for standard Pyrough usage:
+
+.. code-block:: bash
+
+   pip install manifold3d trimesh pymeshlab
+
+- **manifold3d** — boolean mesh operations (union, intersection) between beam meshes
+- **trimesh** — mesh repair, export, and geometry utilities
+- **pymeshlab** — isotropic remeshing of the final lattice mesh
+
+How it works
+------------
+
+The lattice generation pipeline proceeds as follows:
+
+1. A JSON lattice geometry is passed to pyLatticeDSO, which defines the unit cell, cell
+   repetitions, beam radii, and topology (e.g. BCC).
+2. Each beam of the lattice is extracted and a rough cylindrical or faceted wire mesh
+   is generated using the standard Pyrough surface roughness algorithms (``make_cwire``
+   or ``make_fwire``).
+3. Each beam mesh is rigidly transformed (rotated and translated) to match its position
+   and orientation in the lattice.
+4. All beam meshes are merged into a single mesh via boolean union using manifold3d.
+5. Optionally, a rough bounding box is intersected with the union mesh to trim beams
+   at the lattice boundary (``trim_boundary_beams``).
+6. The final mesh is remeshed using PyMeshLab for a uniform triangle distribution.
+7. The resulting STL is exported and used as a stencil for atomic position generation
+   via Atomsk, as in all other Pyrough sample types.
+
+JSON input format
+-----------------
+
+The lattice sample type requires two dedicated JSON blocks in addition to the standard
+``Output``, ``ATOM_Param``, and roughness parameter blocks (``C1``, ``eta``, ``N``, ``M``, etc.).
+
+The ``"lattice"`` block requires one lattice-specific parameter:
+
+.. list-table::
+   :widths: 20 15 65
+   :header-rows: 1
+
+   * - Parameter
+     - Type
+     - Description
+   * - ``beam_type``
+     - string
+     - Shape of each beam: ``"cwire"`` (cylindrical) or ``"fwire"`` (faceted).
+
+The ``"geometry_lattice"`` block is passed directly to pyLatticeDSO and controls the
+lattice topology and dimensions:
+
+.. list-table::
+   :widths: 25 15 60
+   :header-rows: 1
+
+   * - Parameter
+     - Type
+     - Description
+   * - ``geometry.cell_size``
+     - dict
+     - Size of one unit cell in x, y, z (in Angströms).
+   * - ``geometry.number_of_cells``
+     - dict
+     - Number of unit cell repetitions in x, y, z.
+   * - ``geometry.radii``
+     - list
+     - Beam radius (or list of radii) in Angströms.
+   * - ``geometry.geom_types``
+     - list
+     - Lattice topology. Supported values depend on pyLatticeDSO (e.g. ``"BCC", "Kelvin""``).
+   * - ``trim_boundary_beams``
+     - bool
+     - If ``true``, intersects the lattice with a rough bounding box to trim protruding beams.
+   * - ``cube_trimmer_parameters``
+     - dict
+     - Roughness parameters (``eta``, ``RMS``, ``N``, ``M``) for the trimming bounding box.
+
+Example input file
+------------------
+
+.. code-block:: json
+
+   {
+     "lattice": {
+       "beam_type": "cwire",
+       "C1": 0.1,
+       "eta": 0.1,
+       "N": 300,
+       "M": 300,
+       "Mesh_size": 5,
+       "Refine_factor": 0.75,
+       "Raw_stl": "na"
+     },
+
+     "geometry_lattice": {
+       "geometry": {
+         "cell_size": { "x": 200, "y": 200, "z": 200 },
+         "number_of_cells": { "x": 1, "y": 1, "z": 1 },
+         "radii": [20.0],
+         "geom_types": ["BCC"]
+       },
+       "trim_boundary_beams": true,
+       "cube_trimmer_parameters": {
+         "eta": 0.1,
+         "RMS": 2,
+         "N": 30,
+         "M": 30
+       }
+     },
+
+     "Output": {
+       "ATOM": ["lmp"],
+       "FEM": ["stl"]
+     },
+
+     "ATOM_Param": {
+       "Lattice_parameter": 4.07,
+       "Material": "Au",
+       "Orien_x": [1, 0, 0],
+       "Orien_y": [0, 1, 0],
+       "Orien_z": [0, 0, 1],
+       "Lattice_structure": "fcc"
+     }
+   }
+
+This example generates a single BCC unit cell of 200 × 200 × 200 Å with cylindrical
+beams of radius 20 Å, using a gold FCC crystal oriented along the standard cubic axes.
+The beams are trimmed at the boundary using a rough bounding box.

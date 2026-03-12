@@ -50,7 +50,6 @@ class Sample:
         elif param.type_S == "fwire":
             vertices, _, stl, rot_stl = make_fwire(param, out_pre)
         elif param.type_S == "fpillar":
-            ############# Gérer les entrées avec B1 B2 C1 C2
             vertices, _, stl, rot_stl = make_fpillar(param, out_pre)
         elif param.type_S == "cpillar":
             vertices, _, stl, rot_stl = make_cpillar(param, out_pre)
@@ -1801,7 +1800,8 @@ def make_atom_multilayered(
                         file_create.append(out_pre + str(index_layer1) + ".msh")
                         #######################
 
-                        subprocess.call(["rm", out_pre + str(index_layer1) + ".msh"])
+                        if os.path.exists(out_pre + str(index_layer1) + ".msh"):
+                            os.remove(out_pre + str(index_layer1) + ".msh")
                         a = str(n)
                         # Remove atoms which are already in the previous cell
                         subprocess.call(
@@ -1824,7 +1824,8 @@ def make_atom_multilayered(
                         #######################
 
                         # Cleaning the STL of the previous cell
-                        subprocess.call(["rm", FEM_STL2, ])
+                        if os.path.exists(FEM_STL2):
+                            os.remove(FEM_STL2)
 
                         # Atomsk uses the .stl file to Remove all atoms which are not in the stl file
                         subprocess.call(
@@ -1849,8 +1850,9 @@ def make_atom_multilayered(
                         #######################
 
                         # Register the file in the cells file
-                        subprocess.call(["mv", "mat" + str(index_layer1) + "_outm.cfg", "cell" + str(n) + ".cfg"])
-                        subprocess.call(["rm", "mat" + str(index_layer1) + "_supercellm" + a + ".cfg", ])
+                        shutil.move("mat" + str(index_layer1) + "_outm.cfg", "cell" + str(n) + ".cfg")
+                        if os.path.exists("mat" + str(index_layer1) + "_supercellm" + a + ".cfg"):
+                            os.remove("mat" + str(index_layer1) + "_supercellm" + a + ".cfg")
 
                         # SECURITY ##############
                         file_create.append("cell" + str(n) + ".cfg")
@@ -1863,7 +1865,7 @@ def make_atom_multilayered(
             # MERGING OF THE MATERIAL SLICES FOR EACH PATTERN
             #Case with 1 cell/slice of material : register the cell/slice as the pattern
             if len(List_cells) == 1:
-                subprocess.call(["mv", List_cells[0], "pattern" + str(j) + ".cfg"])
+                shutil.move(List_cells[0], "pattern" + str(j) + ".cfg")
 
                 # SECURITY ##############
                 file_create.append("pattern" + str(j) + ".cfg")
@@ -1888,30 +1890,32 @@ def make_atom_multilayered(
                             ["atomsk", "--merge", "2", "celltot" + str(merge - 1) + ".cfg", List_cells[merge + 1],
                              "celltot" + str(merge) + ".cfg", "-v", "2"])
                         #Cleaning
-                        subprocess.call(["rm", "celltot" + str(merge - 1) + ".cfg", ])
+                        if os.path.exists("celltot" + str(merge - 1) + ".cfg"):
+                            os.remove("celltot" + str(merge - 1) + ".cfg")
 
                         # SECURITY ##############
                         file_create.append("celltot" + str(merge) + ".cfg")
                         #######################
 
-                subprocess.call(
-                    ["mv", "celltot" + str(len(List_cells) - 1 - 1) + ".cfg", "pattern" + str(j) + ".cfg"])
+                shutil.move("celltot" + str(len(List_cells) - 1 - 1) + ".cfg", "pattern" + str(j) + ".cfg")
 
                 #SECURITY ##############
                 file_create.append("pattern" + str(j) + ".cfg")
                 #######################
 
-            subprocess.call(["rm", out_pre + "_stat.txt"])
+            if os.path.exists(out_pre + "_stat.txt"):
+                os.remove(out_pre + "_stat.txt")
             List_patterns.append("pattern" + str(j) + ".cfg")
 
             for m in range(len(List_cells)):
                 # Cleaning all cells .cfg
-                subprocess.call(["rm", List_cells[m], ])
+                if os.path.exists(List_cells[m]):
+                    os.remove(List_cells[m])
 
         # MERGING OF THE PATTERNS
         # Case with 1 pattern :
         if len(List_patterns) == 1:
-            subprocess.call(["mv", List_patterns[0], out_pre + "0.cfg"])
+            shutil.move(List_patterns[0], out_pre + "0.cfg")
         # Case with many patterns : Merge all patterns together
         else:
             for merge in range(len(List_patterns) - 1):
@@ -1929,13 +1933,14 @@ def make_atom_multilayered(
                         ["atomsk", "--merge", "2", "patterntot" + str(merge - 1) + ".cfg", List_patterns[merge + 1],
                          "patterntot" + str(merge) + ".cfg", "-v", "2"])
                     #Cleaning
-                    subprocess.call(["rm", "patterntot" + str(merge - 1) + ".cfg", ])
+                    if os.path.exists("patterntot" + str(merge - 1) + ".cfg"):
+                        os.remove("patterntot" + str(merge - 1) + ".cfg")
 
                     # SECURITY ##############
                     file_create.append("patterntot" + str(merge) + ".cfg")
                     #######################
 
-            subprocess.call(["mv", "patterntot" + str(len(List_patterns) - 1 - 1) + ".cfg", out_pre + "0.cfg"])
+            shutil.move("patterntot" + str(len(List_patterns) - 1 - 1) + ".cfg", out_pre + "0.cfg")
 
         # SECURITY ##############
         file_create.append(out_pre + "0.cfg")
@@ -1967,19 +1972,27 @@ def make_atom_multilayered(
                 subprocess.call(["atomsk", out_pre + ".cfg", out_pre + "." + e, "-v", "2"])
 
         #Remove all files
-        subprocess.call(["rm", "patterntot" + str(len(List_patterns) - 1 - 1) + ".cfg", "final0.cfg", out_pre + ".cfg",
-                         out_pre + "0.cfg", out_pre + "1.cfg", END, "end0.cfg", "final.msh", "final_stat.txt", ])
+        list_files_to_remove = ["patterntot" + str(i) + ".cfg" for i in range(len(List_patterns) - 1)] + [
+            "final0.cfg", out_pre + "0.cfg", out_pre + "1.cfg", END, "end0.cfg", "final.msh", "final_stat.txt"]
+        for f in list_files_to_remove:
+            if os.path.exists(f):
+                os.remove(f)
 
         #Clean all patterns files
         for m in range(len(List_patterns)):
             # Cleaning all cells .cfg
-            subprocess.call(["rm", List_patterns[m]])
+            if os.path.exists(List_patterns[m]):
+                os.remove(List_patterns[m])
 
         #Clean the rest of files :
-        subprocess.call(["rm", FEM_STL2, out_pre + "_stat.txt"])
+        if os.path.exists(FEM_STL2):
+             os.remove(FEM_STL2)
+        if os.path.exists(out_pre + "_stat.txt"):
+            os.remove(out_pre + "_stat.txt")
         for suppr in range(len(list_supercell)):
             # Cleaning all cells .cfg
-            subprocess.call(["rm", list_supercell[suppr]])
+            if os.path.exists(list_supercell[suppr]):
+                os.remove(list_supercell[suppr])
 
         subprocess.call(["clear", ])
         print("JOB DONE!" + "  File name: " + out_pre + ".lmp")
