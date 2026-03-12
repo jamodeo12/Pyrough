@@ -61,45 +61,20 @@ class Parameter:
         self.ext_ato = read_param["Output"]["ATOM"]
 
         if "ATOM_Param" in read_param:
-            self.lattice_structure = read_param["ATOM_Param"]["Lattice_structure"]
-            self.lattice_parameter = read_param["ATOM_Param"]["Lattice_parameter"]
-            self.lattice_parameter = fp.convert_in_list_of_string(self.lattice_parameter)
-            self.material = read_param["ATOM_Param"]["Material"]
-            self.material = fp.convert_in_list_of_string(self.material)
-            self.orien_x = read_param["ATOM_Param"]["Orien_x"]
-            self.orien_y = read_param["ATOM_Param"]["Orien_y"]
-            self.orien_z = read_param["ATOM_Param"]["Orien_z"]
-            self.angles2 = read_param["ATOM_Param"].get("Angles", [0, 0, 0])
-        elif "ATOM1_Param" in read_param and "ATOM2_Param" in read_param:
-            self.lattice_structure1 = read_param["ATOM1_Param"]["Lattice_structure"]
-            self.lattice_parameter1 = read_param["ATOM1_Param"]["Lattice_parameter"]
-            self.lattice_parameter1 = fp.convert_in_list_of_string(self.lattice_parameter1)
-            self.material1 = read_param["ATOM1_Param"]["Material"]
-            self.material1 = fp.convert_in_list_of_string(self.material1)
-            self.orien_x1 = read_param["ATOM1_Param"]["Orien_x"]
-            self.orien_y1 = read_param["ATOM1_Param"]["Orien_y"]
-            self.orien_z1 = read_param["ATOM1_Param"]["Orien_z"]
-            self.lattice_structure2 = read_param["ATOM2_Param"]["Lattice_structure"]
-            self.lattice_parameter2 = read_param["ATOM2_Param"]["Lattice_parameter"]
-            self.lattice_parameter2 = fp.convert_in_list_of_string(self.lattice_parameter2)
-            self.material2 = read_param["ATOM2_Param"]["Material"]
-            self.material2 = fp.convert_in_list_of_string(self.material2)
-            self.orien_x2 = read_param["ATOM2_Param"]["Orien_x"]
-            self.orien_y2 = read_param["ATOM2_Param"]["Orien_y"]
-            self.orien_z2 = read_param["ATOM2_Param"]["Orien_z"]
-            self.angles2 = read_param["ATOM1_Param"].get("Angles", [0, 0, 0])
-        elif "ATOMS_Param" in read_param:
-            self.lattice_structure = read_param["ATOMS_Param"]["Lattice_structure"]
-            self.lattice_parameter = read_param["ATOMS_Param"]["Lattice_parameter"]
-            for lp in range(len(self.lattice_parameter)):
-                self.lattice_parameter[lp] = fp.convert_in_list_of_string(self.lattice_parameter[lp])
-            self.material = read_param["ATOMS_Param"]["Material"]
-            for mat in range(len(self.material)):
-                self.material[mat] = fp.convert_in_list_of_string(self.material[mat])
-            self.orien_x = read_param["ATOMS_Param"]["Orien_x"]
-            self.orien_y = read_param["ATOMS_Param"]["Orien_y"]
-            self.orien_z = read_param["ATOMS_Param"]["Orien_z"]
-            self.angles2 = read_param["ATOMS_Param"].get("Angles", [0, 0, 0])
+            atom_param = read_param["ATOM_Param"]
+
+            # Normalize to list to handle both single and multi-material cases uniformly
+            def to_list(val):
+                return val if isinstance(val, list) else [val]
+
+            self.lattice_structure = to_list(atom_param["Lattice_structure"])
+            self.lattice_parameter = [fp.convert_in_list_of_string(lp) for lp in
+                                      to_list(atom_param["Lattice_parameter"])]
+            self.material = [fp.convert_in_list_of_string(m) for m in to_list(atom_param["Material"])]
+            self.orien_x = to_list(atom_param["Orien_x"])
+            self.orien_y = to_list(atom_param["Orien_y"])
+            self.orien_z = to_list(atom_param["Orien_z"])
+            self.angles2 = atom_param.get("Angles", [0, 0, 0])
 
         if "Multi_layered" in read_param:
             try:

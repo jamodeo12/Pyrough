@@ -17,6 +17,8 @@ import shutil
 import tempfile
 import time
 import subprocess
+from pathlib import Path
+
 import numpy as np
 from src import Func_pyrough as fp
 
@@ -832,116 +834,61 @@ def make_atom_grain(
     :param out_pre: Prefix of output file
     :type out_pre: str
 
-    :return:
+    :return: None, but generates an atomic positions file for the grain object in the same directory as the script
+    with the name out_pre.lmp
     """
+
     dim_x = max(vertices[:, 0]) - min(vertices[:, 0])
     dim_y = max(vertices[:, 1]) - min(vertices[:, 1])
     dim_z = max(vertices[:, 2]) - min(vertices[:, 2])
-    dis_x1, dup_x1, orien_x1 = fp.duplicate(dim_x, param.orien_x1, param.lattice_parameter1, param.lattice_structure1)
-    dis_y1, dup_y1, orien_y1 = fp.duplicate(dim_y, param.orien_y1, param.lattice_parameter1, param.lattice_structure1)
-    dis_z1, dup_z1, orien_z1 = fp.duplicate(2 * dim_z, param.orien_z1, param.lattice_parameter1,
-                                            param.lattice_structure1)
-    dis_x2, dup_x2, orien_x2 = fp.duplicate(dim_x, param.orien_x2, param.lattice_parameter2, param.lattice_structure2)
-    dis_y2, dup_y2, orien_y2 = fp.duplicate(dim_y, param.orien_y2, param.lattice_parameter2, param.lattice_structure2)
-    dis_z2, dup_z2, orien_z2 = fp.duplicate(2 * dim_z, param.orien_z2, param.lattice_parameter2,
-                                            param.lattice_structure2)
 
-    # Here we generate the main block : mat1_supercell.cfg
-    subprocess.call(
-        [
-            "atomsk",
-            "--create",
-            param.lattice_structure1,
-            *param.lattice_parameter1,
-            *param.material1,
-            "orient",
-            orien_x1,
-            orien_y1,
-            orien_z1,
-            "-duplicate",
-            dup_x1,
-            dup_y1,
-            dup_z1,
-            "-center",
-            "com",
-            "mat1_supercell.cfg",
-            "-v",
-            "2",
-        ]
-    )
+    supercell_files = []
 
-    # Here we generate the second block : mat2_supercell.cfg
-    subprocess.call(
-        [
-            "atomsk",
-            "--create",
-            param.lattice_structure2,
-            *param.lattice_parameter2,
-            *param.material2,
-            "orient",
-            orien_x2,
-            orien_y2,
-            orien_z2,
-            "-duplicate",
-            dup_x2,
-            dup_y2,
-            dup_z2,
-            "-center",
-            "com",
-            "mat2_supercell.cfg",
-            "-v",
-            "2",
-        ]
-    )
+    for i in range(len(param.material)):
+        dis_x, dup_x, orien_x = fp.duplicate(dim_x, param.orien_x[i], param.lattice_parameter[i], param.lattice_structure[i])
+        dis_y, dup_y, orien_y = fp.duplicate(dim_y, param.orien_y[i], param.lattice_parameter[i], param.lattice_structure[i])
+        dis_z, dup_z, orien_z = fp.duplicate(2 * dim_z, param.orien_z[i], param.lattice_parameter[i], param.lattice_structure[i])
 
-    # We deform mat2_supercell.cfg to match mat1_supercell.cfg dimensions and preserve PBCs
-    fp.strain_file1_to_file2("mat2_supercell.cfg", "mat1_supercell.cfg")
+        outfile = f"mat{i+1}_supercell.cfg"
+        subprocess.call([
+            "atomsk", "--create",
+            param.lattice_structure[i],
+            *param.lattice_parameter[i],
+            *param.material[i],
+            "orient", orien_x, orien_y, orien_z,
+            "-duplicate", dup_x, dup_y, dup_z,
+            "-center", "com", outfile, "-v", "2",
+        ])
+        supercell_files.append(outfile)
 
-    # Atomsk uses the .stl file to carve out a part of mat1_supercell.cfg that becomes a rough block (mat1_out.cfg)
-    subprocess.call(
-        [
-            "atomsk",
-            "mat1_supercell.cfg",
-            "-select",
-            "stl",
-            STL,
-            "-rmatom",
-            "select",
-            "mat1_out.cfg",
-            "-v",
-            "2",
-        ]
-    )
+    # Deform all materials to match mat1 dimensions
+    for i in range(1, len(supercell_files)):
+        fp.strain_file1_to_file2(supercell_files[i], supercell_files[0])
 
-    # Here we use the same .stl file to carve out part of mat2_supercell.cfg that becomes a rough block (mat2_out.cfg)
-    # Thus, mat2_out.cfg is the negative of mat1_out.cfg
-    subprocess.call(
-        [
-            "atomsk",
-            "mat2_supercell.cfg",
-            "-select",
-            "stl",
-            STL,
-            "-select",
-            "invert",
-            "-rmatom",
-            "select",
-            "mat2_out.cfg",
-            "-v",
-            "2",
-        ]
-    )
+    # Carve mat1 with STL (keep inside)
+    subprocess.call([
+        "atomsk", supercell_files[0],
+        "-select", "stl", STL,
+        "-rmatom", "select", "mat1_out.cfg", "-v", "2",
+    ])
 
-    # Merging of mat1_out.cfg and mat2_out.cfg
+    # Carve mat2 with STL inverted (keep outside)
+    subprocess.call([
+        "atomsk", supercell_files[1],
+        "-select", "stl", STL,
+        "-select", "invert",
+        "-rmatom", "select", "mat2_out.cfg", "-v", "2",
+    ])
+
+    # Merge
     subprocess.call(["atomsk", "--merge", "2", "mat1_out.cfg", "mat2_out.cfg", "temp2.cfg", "-v", "2"])
 
     for e in param.ext_ato:
         subprocess.call(["atomsk", "temp2.cfg", out_pre + "." + e, "-v", "2"])
 
     # Cleaning
-    for f in ["mat1_supercell.cfg", "mat2_supercell.cfg", "mat1_out.cfg", "mat2_out.cfg", "temp2.cfg"]:
-        if os.path.exists(f):
-            os.remove(f)
+    for f in supercell_files + ["mat1_out.cfg", "mat2_out.cfg", "temp2.cfg"]:
+        Path(f).unlink(missing_ok=True)
 
 
 def make_fpillar(param, out_pre):

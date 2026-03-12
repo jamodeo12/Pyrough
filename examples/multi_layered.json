@@ -16,7 +16,7 @@
   {"ATOM": ["lmp", "cfg"],
   "FEM": ["stl","msh"]},
 
-"ATOMS_Param":
+"ATOM_Param":
     {"Lattice_parameter": [3.54,[2.71,4.2]],
     "Material": [["Ni","Fe"],"Ru"],
     "Orien_x": [[1,0,0],[0,0,0,1]],
