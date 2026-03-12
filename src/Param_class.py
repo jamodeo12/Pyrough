@@ -57,8 +57,10 @@ class Parameter:
         self.alpha = read_param[self.key].get("Refine_factor", 1)
         self.beam_type = read_param[self.key].get("beam_type", "")
         self.raw_stl = read_param[self.key].get("Raw_stl", "")
-        self.ext_fem = read_param["Output"]["FEM"]
-        self.ext_ato = read_param["Output"]["ATOM"]
+
+        if "Output" in read_param:
+            self.ext_fem = read_param["Output"].get("FEM", "")
+            self.ext_ato = read_param["Output"].get("ATOM", "")
 
         if "ATOM_Param" in read_param:
             atom_param = read_param["ATOM_Param"]
@@ -133,20 +135,22 @@ class Parameter:
                 self.orien_z2 = read_param["MATRIX_Param"]["Orien_z"]
                 self.precpos = read_param["MATRIX_Param"].get("Precpos", 'center')
 
-        if self.type_S == "lattice":
+        if self.type_S == "lattice" and "Output" in read_param:
             try:
                 self.geometry_lattice = read_param["geometry_lattice"]
             except KeyError:
                 raise ValueError("No geometry_lattice key found in the JSON file for lattice sample type.")
-            self.trim_boundary_beams = read_param["geometry_lattice"].get("trim_boundary_beams", False)
+        if self.type_S == "lattice":
+            self.trim_boundary_beams = read_param.get("trim_boundary_beams", False)
             if self.trim_boundary_beams:
-                self.cube_trimmer_param = read_param["geometry_lattice"].get("cube_trimmer_parameters", None)
+                self.cube_trimmer_param = read_param.get("cube_trimmer_parameters", None)
                 if self.cube_trimmer_param is None:
                     print("No cube_trimmer_parameters key found in the JSON file for lattice sample type. The Wire "
                           "parameters will be used as default values for the cube trimmer.")
 
         # Check that all required parameters are present for the given sample type
-        self._check_required_params()
+        if "Output" in read_param:
+            self._check_required_params()
 
     def output(self, json_file):
         """
