@@ -63,17 +63,38 @@ class Parameter:
         if "ATOM_Param" in read_param:
             atom_param = read_param["ATOM_Param"]
 
-            # Normalize to list to handle both single and multi-material cases uniformly
             def to_list(val):
+                """Normalize to list: scalar → [scalar], single item → [item]"""
                 return val if isinstance(val, list) else [val]
 
+            def to_list_of_lists(val):
+                """Normalize orientations/parameters to always be a list of lists.
+                [1,0,0]        → [[1,0,0]]        (single orientation)
+                [[1,0,0],[...]]→ [[1,0,0],[...]]  (multiple orientations, unchanged)
+                3.615          → [[3.615]]        (single scalar parameter)
+                [3.615, 4.07]  → [[3.615],[4.07]] (multiple scalar parameters)
+                """
+                if not isinstance(val, list):
+                    return [[val]]
+                if len(val) == 0:
+                    return [val]
+                # If first element is a list → already list of lists
+                if isinstance(val[0], list):
+                    return val
+                # If first element is a number and length matches an orientation (3 or 4)
+                if isinstance(val[0], (int, float)) and len(val) in (3, 4):
+                    return [val]  # single orientation vector
+                # Otherwise it's a list of scalar parameters → wrap each
+                return [[v] if not isinstance(v, list) else v for v in val]
+
             self.lattice_structure = to_list(atom_param["Lattice_structure"])
-            self.lattice_parameter = [fp.convert_in_list_of_string(lp) for lp in
-                                      to_list(atom_param["Lattice_parameter"])]
-            self.material = [fp.convert_in_list_of_string(m) for m in to_list(atom_param["Material"])]
-            self.orien_x = to_list(atom_param["Orien_x"])
-            self.orien_y = to_list(atom_param["Orien_y"])
-            self.orien_z = to_list(atom_param["Orien_z"])
+            self.lattice_parameter = [fp.convert_in_list_of_string(lp)
+                                      for lp in to_list_of_lists(atom_param["Lattice_parameter"])]
+            self.material = [fp.convert_in_list_of_string(m)
+                             for m in to_list_of_lists(atom_param["Material"])]
+            self.orien_x = to_list_of_lists(atom_param["Orien_x"])
+            self.orien_y = to_list_of_lists(atom_param["Orien_y"])
+            self.orien_z = to_list_of_lists(atom_param["Orien_z"])
             self.angles2 = atom_param.get("Angles", [0, 0, 0])
 
         if "Multi_layered" in read_param:
@@ -124,6 +145,9 @@ class Parameter:
                     print("No cube_trimmer_parameters key found in the JSON file for lattice sample type. The Wire "
                           "parameters will be used as default values for the cube trimmer.")
 
+        # Check that all required parameters are present for the given sample type
+        self._check_required_params()
+
     def output(self, json_file):
         """
         This function obtains the desired file type of the user. Having the option to obtain an stl
@@ -136,3 +160,54 @@ class Parameter:
             read_param = json.load(f)
         if len(read_param["Output"]["ATOM"]) > 0:
             return "ATOM"
+
+    def _check_required_params(self):
+        """
+        Checks that all required parameters are present for the given sample type.
+
+        :raises ValueError: If any required parameter is missing or has a default/empty value
+        """
+
+        required_sample_params = {
+            "box": ["N", "M", "eta", "height", "width", "length", "ns", "alpha"],
+            "cube": ["N", "M", "eta", "height", "width", "length", "ns", "alpha"],
+            "cwire": ["N", "M", "eta", "length", "radius", "ns", "alpha"],
+            "fwire": ["N", "M", "eta", "length", "radius", "nfaces", "ns", "alpha"],
+            "fpillar": ["N", "M", "eta", "length", "radius", "nfaces", "ns", "alpha"],
+            "cpillar": ["N", "M", "eta", "length", "radius", "ns", "alpha"],
+            "pillar": ["N", "M", "eta", "length", "radius", "ns", "alpha"],
+            "sphere": ["N", "M", "eta", "radius", "ns", "alpha"],
+            "wulff": ["N", "M", "eta", "n_at", "surfaces", "energies", "ns", "alpha"],
+            "grain": ["N", "M", "eta", "height", "width", "length", "ns", "alpha"],
+            "multi_layered": ["N", "M", "eta", "height", "width", "length", "ns", "alpha",
+                              "pattern_layer", "height_layer"],
+            "lattice": ["N", "M", "eta", "ns", "alpha", "beam_type"],
+        }
+
+        required_atom_params = ["lattice_structure", "lattice_parameter", "material",
+                                "orien_x", "orien_y", "orien_z"]
+
+        required_lattice_params = ["geometry_lattice"]
+
+        errors = []
+
+        # Check sample parameters
+        missing_sample = [p for p in required_sample_params.get(self.type_S, [])
+                          if not getattr(self, p, None)]
+        if missing_sample:
+            errors.append(f"  - '{self.key}' block: {', '.join(missing_sample)}")
+
+        # Check atom parameters
+        missing_atom = [p for p in required_atom_params if not getattr(self, p, None)]
+        if missing_atom:
+            errors.append(f"  - 'ATOM_Param' block: {', '.join(missing_atom)}")
+
+        # Check lattice-specific parameters
+        if self.type_S == "lattice":
+            missing_lattice = [p for p in required_lattice_params if not getattr(self, p, None)]
+            if missing_lattice:
+                errors.append(f"  - 'geometry_lattice' block: {', '.join(missing_lattice)}")
+
+        if errors:
+            raise ValueError("Missing parameters in JSON file:\n" + "\n".join(errors))
+

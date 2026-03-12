@@ -89,56 +89,36 @@ class Sample:
         dim_x = max(vertices[:, 0]) - min(vertices[:, 0])
         dim_y = max(vertices[:, 1]) - min(vertices[:, 1])
         dim_z = max(vertices[:, 2]) - min(vertices[:, 2])
-        dis_x, dup_x, orien_x = fp.duplicate(dim_x, param.orien_x, param.lattice_parameter, param.lattice_structure)
-        dis_y, dup_y, orien_y = fp.duplicate(dim_y, param.orien_y, param.lattice_parameter, param.lattice_structure)
-        dis_z, dup_z, orien_z = fp.duplicate(dim_z, param.orien_z, param.lattice_parameter, param.lattice_structure)
+
+        dis_x, dup_x, orien_x = fp.duplicate(dim_x, param.orien_x[0], param.lattice_parameter[0],
+                                             param.lattice_structure[0])
+        dis_y, dup_y, orien_y = fp.duplicate(dim_y, param.orien_y[0], param.lattice_parameter[0],
+                                             param.lattice_structure[0])
+        dis_z, dup_z, orien_z = fp.duplicate(dim_z, param.orien_z[0], param.lattice_parameter[0],
+                                             param.lattice_structure[0])
 
         # Here we create a large block of atoms material_supercell.lmp
-        cmd = [
-            "atomsk",
-            "--create",
-            param.lattice_structure,
-            *param.lattice_parameter,
-            *param.material,
-            "orient",
-            orien_x,
-            orien_y,
-            orien_z,
-            "-duplicate",
-            dup_x,
-            dup_y,
-            dup_z,
-            "material_supercell.lmp",
-            "-v ",
-            "2",
-        ]
-
-        #print("Atomsk call:", " ".join(map(str, cmd)))
-        subprocess.call(cmd)
+        subprocess.call([
+            "atomsk", "--create",
+            param.lattice_structure[0],
+            *param.lattice_parameter[0],
+            *param.material[0],
+            "orient", orien_x, orien_y, orien_z,
+            "-duplicate", dup_x, dup_y, dup_z,
+            "material_supercell.lmp", "-v", "2",
+        ])
 
         # Then the STL file is used as a stencil over material_supercell.lmp and extra atoms are removed
-        cmd = [
-            "atomsk",
-            "material_supercell.lmp",
-            "-select",
-            "stl",
-            "center",
-            STL,
-            "-select",
-            "invert",
-            "-rmatom",
-            "select",
+        subprocess.call([
+            "atomsk", "material_supercell.lmp",
+            "-select", "stl", "center", STL,
+            "-select", "invert", "-rmatom", "select",
             out_pre + ".lmp",
-            " ".join([x for x in param.ext_ato[0:] if x != "lmp"]),
-            "-v ",
-            "2",
-        ]
-        #print("Atomsk call:", " ".join(map(str, cmd)))
-        subprocess.call(cmd)
+            " ".join([x for x in param.ext_ato if x != "lmp"]),
+            "-v", "2",
+        ])
 
-        temp_file = "material_supercell.lmp"
-        if os.path.exists(temp_file):
-            os.remove(temp_file)
+        Path("material_supercell.lmp").unlink(missing_ok=True)
 
         fp.rebox(out_pre + ".lmp", 0.001)
 
@@ -548,15 +528,17 @@ def make_wulff(param, out_pre):
         param.surfaces,
         param.energies,
         param.n_at,
-        param.lattice_structure,
-        param.lattice_parameter,
-        param.material,
-        param.orien_x,
-        param.orien_z,
+        param.lattice_structure[0],
+        param.lattice_parameter[0],
+        param.material[0],
+        param.orien_x[0],
+        param.orien_z[0],
         out_pre,
     )
     vertices, faces = fp.read_stl_wulff(param.raw_stl, obj_points, obj_faces, param.ns)
-    subprocess.call(["rm", out_pre + ".obj"])
+
+    if os.path.exists(out_pre + ".obj"):
+        os.remove(out_pre + ".obj")
     list_n = fp.faces_normals(obj_points, obj_faces)
 
     # creates a column that has an assigned index number for each row in vertices; returns vertices
