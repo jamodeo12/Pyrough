@@ -709,8 +709,9 @@ def make_lattice(param, out_pre):
         nodesurf = fp.node_surface("cube", box_vertices, box_nodenumber, obj_points, obj_faces)
         node_edge, node_corner = fp.node_corner(nodesurf)
 
-        B_box = param.cube_trimmer_param.get("B", param.B)
         C1_box = param.cube_trimmer_param.get("C1", param.C1)
+        eta_box = param.cube_trimmer_param.get("eta", param.eta)
+        B_box = 2 * (1 + eta_box)
         RMS_box = param.cube_trimmer_param.get("RMS", param.RMS)
         N_box = param.cube_trimmer_param.get("N", param.N)
         M_box = param.cube_trimmer_param.get("M", param.M)

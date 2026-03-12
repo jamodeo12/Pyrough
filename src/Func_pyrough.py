@@ -1063,7 +1063,7 @@ def make_rough(type_sample, z, nodesurf, vertices, angles):
             index = node[3]
             poss = np.where(vertices[:, 3] == index)
             vertices[poss, 2] = vertices[poss, 2] + dz
-    elif type_sample == "wire":
+    elif type_sample == "cwire":
         for i in range(len(z)):
             dz = z[i] + min_dz
             node = nodesurf[i]
