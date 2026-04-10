@@ -132,7 +132,7 @@ class Parameter:
                 while j < (len(self.material)):
                     self.height_layer.append(self.height/len(self.pattern_layer))
                     j=j+1
-
+            self.angles = [0, 0, 0]
             self.ext_fem = read_param["Output"]["FEM"]
             self.ext_ato = read_param["Output"]["ATOM"]
 

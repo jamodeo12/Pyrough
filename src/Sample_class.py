@@ -1672,6 +1672,7 @@ def make_atom_multilayered(
         orien_y0,
         orien_z0,
         out_pre,
+        angles,
         ext_fem,
         ext_ato,
 ):
@@ -2406,7 +2407,7 @@ def make_atom_multilayered(
 
         # ADD OF THE ENDING-SAMPLE HALF-HEIGHT OF THE FIRST SLICE OF MATERIAL (PBCs)
         #Complete the final empty part with the first material used to keep the vertical periodicity
-        vertices, END = make_box("box", B, C1, RMS, N, M, length+50, h-height_layern, width+50, ns, alpha, raw_stl, "final",ext_fem)
+        vertices, END, rot_stl = make_box("box", B, C1, RMS, N, M, length+50, h-height_layern, width+50, ns, alpha, raw_stl, angles,"final",ext_fem)
         subprocess.call(["atomsk", "mat"+str(pattern_layer[0])+"_supercellm.cfg", "-select", "stl", FEM_STL2, "-rmatom", "select", "end0.cfg", "-v", "2"])
         subprocess.call(["atomsk", "end0.cfg", "-select", "stl", END, "-rmatom", "select", "final0.cfg", "-v", "2"])
         subprocess.call(["atomsk", "--merge", "2", out_pre+"0.cfg", "final0.cfg", out_pre+".cfg", "-v","2"])  # merge the end to the object create
@@ -2426,7 +2427,7 @@ def make_atom_multilayered(
                 subprocess.call(["atomsk", out_pre+".cfg", out_pre + "." + e, "-v", "2"])
 
         #Remove all files
-        subprocess.call(["rm", "patterntot" + str(len(List_patterns)-1-1) + ".cfg", "final0.cfg", out_pre+".cfg",out_pre+"0.cfg",out_pre+"1.cfg", END, "end0.cfg","final.msh", "final_stat.txt",])
+        subprocess.call(["rm", "patterntot" + str(len(List_patterns)-1-1) + ".cfg", rot_stl, "final0.cfg", out_pre+".cfg",out_pre+"0.cfg",out_pre+"1.cfg", END, "end0.cfg","final.msh", "final_stat.txt",])
 
         #Clean all patterns files
         for m in range(len(List_patterns)):
