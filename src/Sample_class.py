@@ -1108,7 +1108,7 @@ def make_multi_layered(
 
     # creates a stl file of the box with roughness on the surface
     fp.stl_file(vertices, faces, out_pre + str(j))
-    #fp.refine_3Dmesh(type_sample, out_pre+str(j) , ns, alpha, ext_fem)
+    fp.refine_3Dmesh(type_sample, out_pre + str(j), ns, alpha, ext_fem)
 
     return vertices, out_pre + str(j) + ".stl",
 
@@ -1695,14 +1695,8 @@ def make_atom_multilayered(
                         #######################
 
                         # Cleaning all undesirable file
-                        subprocess.call(
-                            [
-                                "rm",
-                                FEM_STL1,
-                                "mat" + str(index_layer2) + "_outm.cfg",
-                                out_pre + "_stat.txt",
-                            ]
-                        )
+                        for f in [FEM_STL1, "mat" + str(index_layer2) + "_outm.cfg", out_pre + "_stat.txt"]:
+                            Path(f).unlink(missing_ok=True)
                         h = h + height_layern
 
                     elif n % 2 == 0:
@@ -1926,8 +1920,6 @@ def make_atom_multilayered(
                 os.remove(List_patterns[m])
 
         #Clean the rest of files :
-        if os.path.exists(FEM_STL2):
-             os.remove(FEM_STL2)
         if os.path.exists(out_pre + "_stat.txt"):
             os.remove(out_pre + "_stat.txt")
         for suppr in range(len(list_supercell)):
@@ -1935,7 +1927,7 @@ def make_atom_multilayered(
             if os.path.exists(list_supercell[suppr]):
                 os.remove(list_supercell[suppr])
 
-        os.system("cls" if os.name == "nt" else "clear")
+        # os.system("cls" if os.name == "nt" else "clear")
         print("JOB DONE!" + "  File name: " + out_pre + ".lmp")
 
     except Exception as ex:
