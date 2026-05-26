@@ -28,11 +28,14 @@ for standard Pyrough usage:
 
 .. code-block:: bash
 
-   pip install manifold3d trimesh pymeshlab
+   pip install manifold3d trimesh pymeshlab colorama sympy networkx
 
 - **manifold3d** — boolean mesh operations (union, intersection) between beam meshes
 - **trimesh** — mesh repair, export, and geometry utilities
 - **pymeshlab** — isotropic remeshing of the final lattice mesh
+- **colorama** — colored terminal output for progress and status messages
+- **sympy** — symbolic mathematics for lattice geometry and unit cell definitions
+- **networkx** — graph-based representation and traversal of lattice node/edge topology
 
 How it works
 ------------

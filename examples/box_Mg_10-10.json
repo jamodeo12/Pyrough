@@ -14,11 +14,11 @@
     {"ATOM": ["lmp"],
     "FEM": ["stl"]},
 
-"ATOM_Param": 
-    {"Lattice_parameter": ["3.23", "5.25"],
+"ATOM_Param":
+    {"Lattice_parameter": [["3.23", "5.25"]],
     "Material": ["Mg"],
-    "Orien_x": [1,0,-1,0], 
-    "Orien_y":[-1,2,-1,0] , 
-    "Orien_z": [0,0,0,1], 
+    "Orien_x": [1,0,-1,0],
+    "Orien_y":[-1,2,-1,0] ,
+    "Orien_z": [0,0,0,1],
     "Lattice_structure": "hcp"}
 }

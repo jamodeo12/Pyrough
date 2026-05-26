@@ -114,7 +114,6 @@ class Sample:
             "-select", "stl", "center", STL,
             "-select", "invert", "-rmatom", "select",
             out_pre + ".lmp",
-            " ".join([x for x in param.ext_ato if x != "lmp"]),
             "-v", "2",
         ])
 
@@ -205,8 +204,8 @@ class Sample:
 
         # Precipitate rotation : Euler rotation
         fp.xyz_rotate_euler("precipitate.xyz", "precipitate_rot.xyz", param.angles2, order='zyx')
-        subprocess.call(["mv", "precipitate_rot.xyz", "precipitate.xyz"])
-        subprocess.call(["rm", STL])
+        shutil.move("precipitate_rot.xyz", "precipitate.xyz")
+        Path(STL).unlink(missing_ok=True)
 
     def make_atom_matrix(
             self,
@@ -272,7 +271,8 @@ class Sample:
         else:
             fp.atomsk_select_stl_local_cutin("matrix.lmp", ROTSTL, "matrix_w_inprint.lmp", param.precpos)
 
-        subprocess.call(["rm", "matrix.lmp", ROTSTL])
+        Path("matrix.lmp").unlink(missing_ok=True)
+        Path(ROTSTL).unlink(missing_ok=True)
 
     def put_prec_in_matrix(
             self,
@@ -664,6 +664,8 @@ def make_lattice(param, out_pre):
     all_manifolds = []
 
     # Generate the rough wire mesh for each beam
+    if lattice_object.beams is None or len(lattice_object.beams) == 0:
+        raise ValueError("No beams found in the lattice structure. Please check the input JSON file.")
     for beam in lattice_object.beams:
         p1 = np.array(beam.point1.coordinates)
         p2 = np.array(beam.point2.coordinates)
@@ -743,7 +745,7 @@ def make_lattice(param, out_pre):
 
         if union_manifold.is_empty():
             raise ValueError(
-                f"Intersection vide !\n"
+                f"Empty intersection !\n"
                 f"Rough box bounds: {rough_box_trimesh.bounds}\n"
                 f"Lattice: x=[{x0},{x0 + dx}], y=[{y0},{y0 + dy}], z=[{z0},{z0 + dz}]"
             )
@@ -1459,7 +1461,7 @@ def make_atom_multilayered(
                             subprocess.call(cmd)
                         else:
                             print("Perfectly-flat multi-layer, we skip the bottom surface treatment for n=2k+1")
-                            subprocess.call(['cp', "mat" + str(index_layer2) + "_outm.cfg", "matf_outm.cfg"])
+                            shutil.copy("mat" + str(index_layer2) + "_outm.cfg", "matf_outm.cfg")
 
                         # SECURITY ##############
                         file_create.append("matf_outm.cfg")
@@ -1473,8 +1475,10 @@ def make_atom_multilayered(
                         file_create.append("cell" + str(n) + ".cfg")
                         #######################
 
-                        # Cleaning all undesirable file
-                        for f in [FEM_STL2, "mat" + str(index_layer2) + "_supercellm.cfg", "mat" + str(index_layer2) + "_outm.cfg"]:
+                        # Only delete the per-slice output; keep the supercell and FEM_STL2:
+                        # - supercell may be reused if the same material index appears later in the pattern
+                        # - FEM_STL2 is needed by the next even slice as its bottom-roughness stencil
+                        for f in ["mat" + str(index_layer2) + "_outm.cfg"]:
                             if os.path.exists(f):
                                 os.remove(f)
 
@@ -1541,7 +1545,7 @@ def make_atom_multilayered(
                         #######################
 
                         # Cleaning the STL of the previous cell
-                        subprocess.call(["rm", FEM_STL2, ])
+                        Path(FEM_STL2).unlink(missing_ok=True)
 
                         # Top roughness treatment (with fresh .stl1):
                         # Atomsk uses the .stl file to Remove all atoms which are not in the stl file
@@ -1570,8 +1574,8 @@ def make_atom_multilayered(
                         #######################
 
                         # Register the file in the cells file
-                        subprocess.call(["mv", "mat" + str(index_layer1) + "_outm.cfg", "cell" + str(n) + ".cfg"])
-                        subprocess.call(["rm", "mat" + str(index_layer1) + "_supercellm" + a + ".cfg", ])
+                        shutil.move("mat" + str(index_layer1) + "_outm.cfg", "cell" + str(n) + ".cfg")
+                        Path("mat" + str(index_layer1) + "_supercellm" + a + ".cfg").unlink(missing_ok=True)
 
                         # SECURITY ##############
                         file_create.append("cell" + str(n) + ".cfg")
@@ -1675,14 +1679,14 @@ def make_atom_multilayered(
                         else:
                             print(
                                 "Perfectly-flat multi-layer, we skip the bottom surface treatment to avoid Atomsk problem with empty region")
-                            subprocess.call(['cp', "mat" + str(index_layer2) + "_outm.cfg", "matf_outm.cfg"])
+                            shutil.copy("mat" + str(index_layer2) + "_outm.cfg", "matf_outm.cfg")
 
                         # SECURITY ##############
                         file_create.append("matf_outm.cfg")
                         #######################
 
                         # Register the cell file
-                        subprocess.call(["mv", "matf_outm.cfg", "cell" + str(n) + ".cfg"])
+                        shutil.move("matf_outm.cfg", "cell" + str(n) + ".cfg")
                         List_cells = List_cells + ["cell" + str(n) + ".cfg"]
 
                         # SECURITY ##############
@@ -1878,8 +1882,14 @@ def make_atom_multilayered(
 
         # ADD OF THE ENDING-SAMPLE HALF-HEIGHT OF THE FIRST SLICE OF MATERIAL (PBCs)
         #Complete the final empty part with the first material used to keep the vertical periodicity
-        vertices, END = make_box("box", B, C1, RMS, N, M, length + 50, h - height_layern, width + 50, ns, alpha,
-                                 raw_stl, "final", ext_fem)
+        # vertices, END = make_box("box", B, C1, RMS, N, M, length + 50, h - height_layern, width + 50, ns, alpha,
+        #                         raw_stl, "final", ext_fem)
+        vertices, END = make_multi_layered(
+            type_sample, pattern_layer[0], h,
+            B, C1, RMS, N, M,
+            length + 50, height_layer[pattern_layer[0]] / 2, width + 50,
+            ns, alpha, raw_stl, "final", ext_fem,
+        )
         subprocess.call(
             ["atomsk", "mat" + str(pattern_layer[0]) + "_supercellm.cfg", "-select", "stl", FEM_STL2, "-rmatom",
              "select", "end0.cfg", "-v", "2"])
@@ -1924,7 +1934,7 @@ def make_atom_multilayered(
             if os.path.exists(list_supercell[suppr]):
                 os.remove(list_supercell[suppr])
 
-        subprocess.call(["clear", ])
+        os.system("cls" if os.name == "nt" else "clear")
         print("JOB DONE!" + "  File name: " + out_pre + ".lmp")
 
     except Exception as ex:
