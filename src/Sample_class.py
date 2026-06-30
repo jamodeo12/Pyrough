@@ -150,19 +150,19 @@ class Sample:
         :type param: Parameter class object
         """
 
-        dis_x, dup_x, orien_x = fp.duplicate(param.dim_mat_x, param.orien_x, param.lattice_parameter,
-                                             param.lattice_structure)
-        dis_y, dup_y, orien_y = fp.duplicate(param.dim_mat_y, param.orien_y, param.lattice_parameter,
-                                             param.lattice_structure)
-        dis_z, dup_z, orien_z = fp.duplicate(param.dim_mat_z, param.orien_z, param.lattice_parameter,
-                                             param.lattice_structure)
+        dis_x, dup_x, orien_x = fp.duplicate(param.length_x2, param.orien_x[0], param.lattice_parameter[0],
+                                             param.lattice_structure[0])
+        dis_y, dup_y, orien_y = fp.duplicate(param.length_y2, param.orien_y[0], param.lattice_parameter[0],
+                                             param.lattice_structure[0])
+        dis_z, dup_z, orien_z = fp.duplicate(param.length_z2, param.orien_z[0], param.lattice_parameter[0],
+                                             param.lattice_structure[0])
 
         cmd = [
             "atomsk",
             "--create",
-            param.lattice_structure,
-            *param.lattice_parameter,
-            *param.material,
+            param.lattice_structure[0],
+            *param.lattice_parameter[0],
+            *param.material[0],
             "orient",
             orien_x,
             orien_y,
@@ -221,20 +221,20 @@ class Sample:
         :type param: Parameter class object
         """
 
-        dis_x, dup_x, orien_x = fp.duplicate(param.length_x, param.orien_x, param.lattice_parameter,
-                                             param.lattice_structure)
-        dis_y, dup_y, orien_y = fp.duplicate(param.length_y, param.orien_y, param.lattice_parameter,
-                                             param.lattice_structure)
-        dis_z, dup_z, orien_z = fp.duplicate(param.length_z, param.orien_z, param.lattice_parameter,
-                                             param.lattice_structure)
+        dis_x, dup_x, orien_x = fp.duplicate(param.length_x2, param.orien_x2, param.lattice_parameter2,
+                                             param.lattice_structure2)
+        dis_y, dup_y, orien_y = fp.duplicate(param.length_y2, param.orien_y2, param.lattice_parameter2,
+                                             param.lattice_structure2)
+        dis_z, dup_z, orien_z = fp.duplicate(param.length_z2, param.orien_z2, param.lattice_parameter2,
+                                             param.lattice_structure2)
 
         # Creation of a matrix of atoms i.e., a large orthogonal block of atoms
         cmd = [
             "atomsk",
             "--create",
-            param.lattice_structure,
-            *param.lattice_parameter,
-            *param.material,
+            param.lattice_structure2,
+            *param.lattice_parameter2,
+            *param.material2,
             "orient",
             orien_x,
             orien_y,
@@ -243,7 +243,7 @@ class Sample:
             dup_x,
             dup_y,
             dup_z,
-            "matrix_tmp.xyz",
+            "matrix.lmp",
             "-v",
             "2",
         ]
@@ -1888,7 +1888,7 @@ def make_atom_multilayered(
         subprocess.call(
             ["atomsk", "mat" + str(pattern_layer[0]) + "_supercellm.cfg", "-select", "stl", FEM_STL2, "-rmatom",
              "select", "end0.cfg", "-v", "2"])
-        subprocess.call(["atomsk", "end0.cfg", "-select", "stl", END, "-rmatom", "select", "final0.cfg", "-v", "2"])
+        subprocess.call(["atomsk", "end0.cfg", "-select", "stl", END, "-select", "invert", "-rmatom", "select", "final0.cfg", "-v", "2"])
         subprocess.call(["atomsk", "--merge", "2", out_pre + "0.cfg", "final0.cfg", out_pre + ".cfg", "-v",
                          "2"])  # merge the end to the object create
 

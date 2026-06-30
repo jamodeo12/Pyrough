@@ -119,21 +119,20 @@ class Parameter:
                 self.C1 = ["", ""]
                 self.RMS = ["", ""]
 
-            if "Precinmatrix" in read_param:
-                self.spec = read_param["Precinmatrix"]["Spec"]
-                self.length_x2 = read_param["MATRIX_Param"]["Length_x"]
-                self.length_y2 = read_param["MATRIX_Param"]["Length_y"]
-                self.length_z2 = read_param["MATRIX_Param"]["Length_z"]
-                self.lattice_structure2 = read_param["MATRIX_Param"]["Lattice_structure"]
-                # self.lattice_structure2 = fp.convert_in_list_of_string(self.lattice_structure2)
-                self.lattice_parameter2 = read_param["MATRIX_Param"]["Lattice_parameter"]
-                self.lattice_parameter2 = fp.convert_in_list_of_string(self.lattice_parameter2)
-                self.material2 = read_param["MATRIX_Param"]["Material"]
-                self.material2 = fp.convert_in_list_of_string(self.material2)
-                self.orien_x2 = read_param["MATRIX_Param"]["Orien_x"]
-                self.orien_y2 = read_param["MATRIX_Param"]["Orien_y"]
-                self.orien_z2 = read_param["MATRIX_Param"]["Orien_z"]
-                self.precpos = read_param["MATRIX_Param"].get("Precpos", 'center')
+        if "Precinmatrix" in read_param:
+            self.spec = read_param["Precinmatrix"]["Spec"]
+            self.length_x2 = read_param["MATRIX_Param"]["Length_x"]
+            self.length_y2 = read_param["MATRIX_Param"]["Length_y"]
+            self.length_z2 = read_param["MATRIX_Param"]["Length_z"]
+            self.lattice_structure2 = read_param["MATRIX_Param"]["Lattice_structure"]
+            self.lattice_parameter2 = read_param["MATRIX_Param"]["Lattice_parameter"]
+            self.lattice_parameter2 = fp.convert_in_list_of_string(self.lattice_parameter2)
+            self.material2 = read_param["MATRIX_Param"]["Material"]
+            self.material2 = fp.convert_in_list_of_string(self.material2)
+            self.orien_x2 = read_param["MATRIX_Param"]["Orien_x"]
+            self.orien_y2 = read_param["MATRIX_Param"]["Orien_y"]
+            self.orien_z2 = read_param["MATRIX_Param"]["Orien_z"]
+            self.precpos = read_param["MATRIX_Param"].get("Precpos", 'center')
 
         if self.type_S == "lattice" and "Output" in read_param:
             try:
