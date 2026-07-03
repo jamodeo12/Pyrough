@@ -17,7 +17,6 @@ import shutil
 import tempfile
 import time
 import subprocess
-from pathlib import Path
 
 import numpy as np
 from src import Func_pyrough as fp
@@ -117,7 +116,7 @@ class Sample:
             "-v", "2",
         ])
 
-        Path("material_supercell.lmp").unlink(missing_ok=True)
+        fp.remove_file("material_supercell.lmp")
 
         fp.rebox(out_pre + ".lmp", 0.001)
 
@@ -126,7 +125,7 @@ class Sample:
 
         fp.rebox(out_pre + "_rot.lmp", 0.001)
 
-        shutil.move(out_pre + "_rot.lmp", out_pre + ".lmp")
+        fp.move_file(out_pre + "_rot.lmp", out_pre + ".lmp")
 
         if param.ext_ato != ['lmp']:
             cmd = ["atomsk",
@@ -199,13 +198,12 @@ class Sample:
         subprocess.call(cmd)
 
         temp_file = "precipitate_supercell.xyz"
-        if os.path.exists(temp_file):
-            os.remove(temp_file)
+        fp.remove_file(temp_file)
 
         # Precipitate rotation : Euler rotation
         fp.xyz_rotate_euler("precipitate.xyz", "precipitate_rot.xyz", param.angles2, order='zyx')
-        shutil.move("precipitate_rot.xyz", "precipitate.xyz")
-        Path(STL).unlink(missing_ok=True)
+        fp.move_file("precipitate_rot.xyz", "precipitate.xyz")
+        fp.remove_file(STL)
 
     def make_atom_matrix(
             self,
@@ -271,8 +269,8 @@ class Sample:
         else:
             fp.atomsk_select_stl_local_cutin("matrix.lmp", ROTSTL, "matrix_w_inprint.lmp", param.precpos)
 
-        Path("matrix.lmp").unlink(missing_ok=True)
-        Path(ROTSTL).unlink(missing_ok=True)
+        fp.remove_file("matrix.lmp")
+        fp.remove_file(ROTSTL)
 
     def put_prec_in_matrix(
             self,
@@ -537,8 +535,7 @@ def make_wulff(param, out_pre):
     )
     vertices, faces = fp.read_stl_wulff(param.raw_stl, obj_points, obj_faces, param.ns)
 
-    if os.path.exists(out_pre + ".obj"):
-        os.remove(out_pre + ".obj")
+    fp.remove_file(out_pre + ".obj")
     list_n = fp.faces_normals(obj_points, obj_faces)
 
     # creates a column that has an assigned index number for each row in vertices; returns vertices
@@ -658,7 +655,7 @@ def make_lattice(param, out_pre):
     try:
         lattice_object = Lattice(tmp_path)
     finally:
-        os.remove(tmp_path)
+        fp.remove_file(tmp_path)
 
     param_type_S_backup = param.type_S
     all_manifolds = []
@@ -873,7 +870,7 @@ def make_atom_grain(
 
     # Cleaning
     for f in supercell_files + ["mat1_out.cfg", "mat2_out.cfg", "temp2.cfg"]:
-        Path(f).unlink(missing_ok=True)
+        fp.remove_file(f)
 
 
 def make_fpillar(param, out_pre):
@@ -1023,911 +1020,173 @@ def make_cpillar(
     return vertices, faces, out_pre + ".stl", out_pre + "_rot.stl"
 
 
-def make_multi_layered(
-        type_sample,
-        j,
-        h,
-        B,
-        C1,
-        RMS,
-        N,
-        M,
-        length,
-        height,
-        width,
-        ns,
-        alpha,
-        raw_stl,
-        out_pre,
-        ext_fem,
-):
+def make_multi_layered(param, out_pre, index_layer, h, height):
     """
-    Creates an stl file of a rough box using to make a multi_layered grain
+    Creates an stl file of a rough box slice used to build one layer of a multi_layered sample.
 
-    :param type_sample: The name of the sample
-    :type type_sample: str
-    :param j : the index of the box stl used to build the final Multi_layered Device
-    :type j : int
-    :param h : Initial height z_min == h
-    :type h : float
-    :param B: The degree the roughness is dependent on
-    :type B: float
-    :param C1: Roughness normalization factor
-    :type C1: float
-    :param RMS: RMS
-    :type RMS: float
-    :param N: Scaling cartesian position
-    :type N: int
-    :param M: Scaling cartesian position
-    :type M: int
-    :param length: Length of the box
-    :type length: float
-    :param height: Height of the box
-    :type height: float
-    :param width: Width of the box
-    :type width: float
-    :param ns: The number of segments desired
-    :type ns: int
-    :param alpha: Refine mesh factor
-    :type alpha: float
-    :param raw_stl: Name of the input stl file
-    :type raw_stl: str
-    :param out_pre: Prefix of the output files
+    :param param: the object containing all the parameters defined by the user in the JSON input file
+    :type param: Parameter class object
+    :param out_pre: Prefix of the output files (also the roughness stat file, appended to at every call)
     :type out_pre: str
-    :param ext_fem: List of FEM extension files
-    :type ext_fem: list
+    :param index_layer: Index of the material/layer, used to name the output stl file
+    :type index_layer: int
+    :param h: Initial height (z_min) of the slice
+    :type h: float
+    :param height: Height of the slice
+    :type height: float
 
-    :return: List of vertices, faces, STL file name, and rotated STL file name
+    :return: List of vertices and STL file name
     """
-    #Create a box perfect mesh at an initial height h
-    vertices, faces = fp.multi_layered(h, width, length, height, ns)
+    # NOTE: the stencil's lateral (X/Y) size must NOT be padded beyond the atomic system's real
+    # dimensions. Atomsk's "-select stl" rescales the whole STL model (X, Y, *and* Z) by a single
+    # uniform factor equal to the smallest ratio between an atomic box dimension and the
+    # corresponding STL dimension. An oversized X/Y footprint therefore silently compresses the Z
+    # window too, shrinking every slice's actual height (e.g. a requested 25 became ~10 when this
+    # box was padded by +50 in X/Y). Keeping X/Y equal to the real sample size keeps that ratio
+    # close to 1, so the Z window is applied as designed, at the cost of a few-Angstrom lateral
+    # edge clipping where atomsk's lattice duplication slightly overshoots the requested size.
+    vertices, faces = fp.multi_layered(h, param.width, param.length, height, param.ns)
 
-    #Creates a column that has an assigned index number for each row in vertices
-    #with the addition of this new column and also returns the nodenumber which is an array
-    #filled from 0 - length of the vertices
-
+    # Creates a column that has an assigned index number for each row in vertices
+    # with the addition of this new column and also returns the nodenumber which is an array
+    # filled from 0 - length of the vertices
     vertices, nodenumber = fp.node_indexing(vertices)
 
-    #Nodes at the surface of the object. These nodes will have the surface roughness applied to it
-    nodesurf = fp.node_surface(type_sample, vertices, nodenumber, 0, 0)
+    # Nodes at the surface of the object. These nodes will have the surface roughness applied to it
+    nodesurf = fp.node_surface(param.type_S, vertices, nodenumber, 0, 0)
     nodesurf = nodesurf[np.lexsort((nodesurf[:, 0], nodesurf[:, 1]))]
 
     xv = nodesurf[:, 0] / max(nodesurf[:, 0])
     yv = nodesurf[:, 1] / max(nodesurf[:, 1])
 
-    sfrN, sfrM = fp.vectors(N, M)  # creating vectors for M and N
+    sfrN, sfrM = fp.vectors(param.N, param.M)  # creating vectors for M and N
     m, n = fp.random_numbers(sfrN, sfrM)  # normal gaussian for the amplitude
 
     # Returns an array with the Z values that will replace the previous z values in the vertices
-    # array these represent the rougness on the surface
-    z = fp.random_surf2(type_sample, m, n, N, M, B, xv, yv, sfrM, sfrN, C1, RMS, out_pre)
-    vertices = fp.make_rough(type_sample, z, nodesurf, vertices, 0)
+    # array these represent the roughness on the surface
+    z = fp.random_surf2(param.type_S, m, n, param.N, param.M, param.B, xv, yv, sfrM, sfrN, param.C1, param.RMS, out_pre)
+    vertices = fp.make_rough(param.type_S, z, nodesurf, vertices, 0)
 
     # gets rid of the index column because stl file generator takes only a matrix with 3 columns
     vertices = vertices[:, :3]
 
     # creates a stl file of the box with roughness on the surface
-    fp.stl_file(vertices, faces, out_pre + str(j))
-    fp.refine_3Dmesh(type_sample, out_pre + str(j), ns, alpha, ext_fem)
+    stl_pre = out_pre + str(index_layer)
+    fp.stl_file(vertices, faces, stl_pre)
+    fp.refine_3Dmesh(param.type_S, stl_pre, param.ns, param.alpha, param.ext_fem)
 
-    return vertices, out_pre + str(j) + ".stl",
+    return vertices, stl_pre + ".stl"
 
 
-def make_atom_multilayered(
-        type_sample,
-        height_layer,
-        pattern_layer,
-        B,
-        C1,
-        RMS,
-        N,
-        M,
-        length,
-        height,
-        width,
-        ns,
-        alpha,
-        raw_stl,
-        lattice_structure,
-        lattice_parameter,
-        material,
-        orien_x0,
-        orien_y0,
-        orien_z0,
-        out_pre,
-        angles,
-        ext_fem,
-        ext_ato,
-):
+def make_atom_multilayered(param, out_pre):
     """
-    Generates an atomic positions file for the multi_layer grain object.
+    Generates an atomic positions file for the multi_layered grain object: an alternating stack of
+    material slices (param.pattern_layer / param.height_layer), each cut against the rough top
+    surface of the slice below it and given its own rough top surface, then merged together. The
+    pattern is repeated periodically to reach param.height.
 
-    :param type_sample: The name of the sample
-    :type type_sample: str
-    :param pattern_layer: pattern of materials deposition
-    :type pattern_layer: list
-    :param height_layer: height of each layer
-    :type height_layer: list
-    :param B: The degree the roughness is dependent on
-    :type B: float
-    :param C1: Roughness normalization factor
-    :type C1: float
-    :param RMS: RMS
-    :type RMS: float
-    :param N: Scaling cartesian position
-    :type N: int
-    :param M: Scaling cartesian position
-    :type M: int
-    :param length: Dimension of the Multi_layer
-    :type length: float
-    :param height: Dimension of the Multi_layer
-    :type height: float
-    :param width: Dimension of the Multi_layer
-    :type width: float
-    :param ns: The number of segments desired
-    :type ns: int
-    :param alpha: Refine mesh factor
-    :type alpha: float
-    :param raw_stl: Name of the input stl file
-    :type raw_stl: str
-    :param lattice_structure: list which contains The lattice structure of crystals
-    :type lattice_structure: list
-    :param lattice_parameter: list which contains The lattice parameter of crystals in Angstrom
-    :type lattice_parameter: list
-    :param material: List of The chemical symbol of desired elements
-    :type material: list
-    :param orien_x: The orientation of crystals in the x direction, list of sublist
-    :type orien_x: list
-    :param orien_y: The orientation of crystals in the y direction, list of sublist
-    :type orien_y: list
-    :param orien_z: The orientation of crystals in the z direction, list of sublist
-    :type orien_z: list
+    The first material is split into two half-height slices, one at the very bottom and one at the
+    very top of the sample: since the sample is periodic in z, this makes the periodic seam fall
+    inside a single homogeneous material instead of at a rough interface between two materials, so
+    neither end of the box needs a cut against a neighbour.
+
+    :param param: the object containing all the parameters defined by the user in the JSON input file
+    :type param: Parameter class object
     :param out_pre: Prefix of output file
     :type out_pre: str
-    :param ext_fem: List of FEM extension files
-    :type ext_fem: list
-    :param ext_ato: Atomic position file format list
-    :type ext_ato: list
 
-    :return: A Multi_layered NanoDevices
+    :return: A Multi_layered NanoDevice, written to out_pre + ".<ext>" for every param.ext_ato extension
     """
+    pattern_layer = param.pattern_layer
+    height_layer = param.height_layer
 
-    #Compute the height of the multi-layered object (height_pattern), using the height of each layer
-    # global roughness_or_not_test
-    height_pattern = 0
-    for hl in range(len(pattern_layer)):
-        index_layer = pattern_layer[hl]
-        height_pattern = height_pattern + height_layer[index_layer]
+    # Keep in mind that the pattern layer is periodically repeated: true_height = n_pattern x height_pattern
+    height_pattern = sum(height_layer[m] for m in pattern_layer)
+    n_pattern = int(param.height // height_pattern)
+    if param.height % height_pattern != 0:
+        print("!!!WARNING!!!,To keep the periodicity, The height of the device will be truncated to this Height:" +
+              str(n_pattern * height_pattern))
 
-    #Size check: height_pattern vs. user-defined size (Height, in the .json file) of the multi-layered object
-    #Keep in mind that the pattern layer is periodically repeated : true_height = n_pattern x height_pattern
-    n_pattern = int(height // height_pattern)
-    if height % height_pattern != 0:
-        print("!!!WARNING!!!,To keep the periodicity, The height of the device will be truncated to this Height:" + str(
-            n_pattern * height_pattern))
+    # Flatten the pattern repetitions into one ordered list of (material_index, height) slices
+    # spanning the whole sample, with the first material split into two half-height slices (see
+    # docstring above).
+    first_material = pattern_layer[0]
+    half_height = height_layer[first_material] / 2
+    slices = [(first_material, half_height)]
+    for j in range(n_pattern):
+        for k, m in enumerate(pattern_layer):
+            if j == 0 and k == 0:
+                continue
+            slices.append((m, height_layer[m]))
+    slices.append((first_material, half_height))
 
-    #SECURITY ##############
+    # SECURITY: files created so far, deleted on error
     file_create = [out_pre + "_stat.txt"]
-    #######################
 
-    # CREATION OF ALL SUPERCELLS
-    # 1 SUPERCELL PER MATERIAL, ALL WITH THE WHOLE SIZE OF THE SAMPLE
     try:
-        #Initialise dimension of the supercell
-        dim_x = length
-        dim_y = width
-        dim_z = n_pattern * height_pattern
+        # CREATION OF ALL SUPERCELLS
+        # 1 SUPERCELL PER MATERIAL, ALL WITH THE WHOLE SIZE OF THE SAMPLE
+        dim_x, dim_y, dim_z = param.length, param.width, n_pattern * height_pattern
 
-        #Create supercells and register their file in a list
-        list_supercell = []
-        for atoms in range(len(material)):
-            #dis_x, dup_x, orien_x = fp.duplicate(dim_x, orien_x0[atoms], lattice_parameter[atoms], lattice_structure[atoms])
-            #dis_y, dup_y, orien_y = fp.duplicate(dim_y, orien_y0[atoms], lattice_parameter[atoms], lattice_structure[atoms])
-            #dis_z, dup_z, orien_z = fp.duplicate(dim_z, orien_z0[atoms], lattice_parameter[atoms], lattice_structure[atoms])
-            #print("atoms : {}, dim_z {}, orien_z0[atoms] {}".format(atoms, dim_z, orien_z0[atoms]))
+        list_supercell = [fp._atomsk_create_supercell(atoms, param, dim_x, dim_y, dim_z)
+                           for atoms in range(len(param.material))]
+        file_create.extend(list_supercell)
 
-            #print("atoms / material : {} {}".format(atoms, len(material)))
-            #print("len(lattice_structure[atoms]) : {}".format(len(lattice_structure[atoms])))
-            #Here we generate blocks of atoms : mats_supercells.cfg
-            if isinstance(lattice_structure[atoms], list) and len(lattice_structure[atoms]) > 1:
-                # Binary random solid solution
-                #print("if case")
-                dis_x, dup_x, orien_x = fp.duplicate(dim_x, orien_x0[atoms], lattice_parameter[atoms],
-                                                     lattice_structure[atoms][0])
-                dis_y, dup_y, orien_y = fp.duplicate(dim_y, orien_y0[atoms], lattice_parameter[atoms],
-                                                     lattice_structure[atoms][0])
-                dis_z, dup_z, orien_z = fp.duplicate(dim_z, orien_z0[atoms], lattice_parameter[atoms],
-                                                     lattice_structure[atoms][0])
-                cmd = ["atomsk", "--create", str(lattice_structure[atoms][0]), str(*lattice_parameter[atoms]),
-                       str(material[atoms][0]),
-                       "orient", str(orien_x), str(orien_y), str(orien_z),
-                       "-duplicate", str(dup_x), str(dup_y), str(dup_z),
-                       "-select", "random", str(lattice_structure[atoms][1]) + "%", str(material[atoms][0]),
-                       "-substitute",
-                       str(material[atoms][0]), str(material[atoms][1]),
-                       "-center", "com", "mat" + str(atoms) + "_supercellm.cfg", "-v", "1"]
-                print("Atomsk binary solution {}".format(cmd))
-                subprocess.call(cmd)
-                print("last file create is {}:".format("mat" + str(str(atoms)) + "_supercellm.cfg"))
-            else:
-                # Regular crystalline structure (as usually defined in Atomsk)
-                #print("else case")
-                dis_x, dup_x, orien_x = fp.duplicate(dim_x, orien_x0[atoms], lattice_parameter[atoms],
-                                                     lattice_structure[atoms])
-                dis_y, dup_y, orien_y = fp.duplicate(dim_y, orien_y0[atoms], lattice_parameter[atoms],
-                                                     lattice_structure[atoms])
-                dis_z, dup_z, orien_z = fp.duplicate(dim_z, orien_z0[atoms], lattice_parameter[atoms],
-                                                     lattice_structure[atoms])
-                #print("lattice_structure[atoms] : 0 = {}, 1 = {}, 2 = {}".format(lattice_structure[atoms][0], lattice_structure[atoms][1], lattice_structure[atoms][2]))
-                cmd = ["atomsk", "--create", str(lattice_structure[atoms]), *lattice_parameter[atoms], *material[atoms],
-                       "orient", str(orien_x), str(orien_y), str(orien_z),
-                       "-duplicate", str(dup_x), str(dup_y), str(dup_z),
-                       "-center", "com", "mat" + str(atoms) + "_supercellm.cfg", "-v", "1"]
-                print("cmd : {}".format(cmd))
-                subprocess.call(cmd)
-
-            list_supercell.append("mat" + str(atoms) + "_supercellm.cfg")
-            #list_supercell_out.append("toto" + str(atoms) + "_supercellm.cfg")
-
-            # SECURITY ##############
-            file_create.append("mat" + str(atoms) + "_supercellm.cfg")
-            #######################
-
-        # We deform each supercells to match their dimensions and preserve PBCs
+        # We deform each supercell to match its dimensions and preserve PBCs
         fp.av_length_and_strain(list_supercell, dim_z)
 
-        # n is the index of a cell in a pattern of the Multi_layer, h is the initial height of the cell
-        n, h = 0, 0
-
-        # Initialise a list which will contain all patterns of the multi-layered object
-        List_patterns = []
-        for j in range(n_pattern):
-            # Loop on the number of repetition of the main pattern (e.g., we want to repet 3x the pattern_layer=[0,1,2,1])
-            if j == 0:
-                # 1st pattern : the first slice is only half-height
-                List_cells = []  # list of material slices
-                for n in range(len(pattern_layer)):
-                    #In the j_th pattern, loop on each slice of material
-                    #We define the geometry of the material, create an .stl file and remove exceeding atoms
-                    print("#### SLICE n={}/{} in pattern j={}/{} under process...".format(n, len(pattern_layer) - 1, j,
-                                                                                          n_pattern - 1))
-                    if n == 0:
-                        # WARNING: the 1st slice of material (n=0) in the 1st pattern (j=0) has only a half-height
-                        # the second-half will be pasted at the end of the sample to ensure periodicity
-
-                        # Determine which material is concerned at the beginning
-                        index_layer1 = pattern_layer[n]
-                        # Use the Height of the material concerned at the beginning
-                        height_layern = height_layer[index_layer1]
-                        print("FEM_STL1, height_layern is {}, will be divided by 2 as n=j={}".format(height_layern, n))
-
-                        vertices, FEM_STL1 = make_multi_layered(
-                            type_sample,
-                            index_layer1,
-                            h,
-                            B,
-                            C1,
-                            RMS,
-                            N,
-                            M,
-                            length + 50,
-                            height_layern / 2,
-                            width + 50,
-                            ns,
-                            alpha,
-                            raw_stl,
-                            out_pre,
-                            ext_fem,
-                        )
-
-                        # SECURITY ##############
-                        file_create.append(FEM_STL1)
-                        #file_create.append(out_pre + str(index_layer1) + ".msh")
-                        #######################
-
-                        #a = ""
-                        #subprocess.call(["rm", out_pre + str(index_layer1) + ".msh"])
-                        # Atomsk uses the .stl file to remove all atoms which are not in the position of the stl file
-                        print("Atomsk run invert selection (top surface) : it cuts what is out of the STL")
-                        subprocess.call(
-                            [
-                                "atomsk",
-                                "mat" + str(index_layer1) + "_supercellm.cfg",
-                                "-select",
-                                "stl",
-                                FEM_STL1,
-                                "-select",
-                                "invert",
-                                "-rmatom",
-                                "select",
-                                "cell" + str(n) + ".cfg",
-                                "-v",
-                                "1"
-                            ]
-                        )
-
-                        # SECURITY ##############
-                        #file_create.append("mat" + str(index_layer1) + "_outm.cfg")
-                        #######################
-
-                        # Register the first cell in the merge list
-                        #subprocess.call(["mv", "mat" + str(index_layer1) + "_outm.cfg", "cell" + str(n) + ".cfg"])
-                        #List_cells = List_cells + ["cell" + str(0) + ".cfg"]
-                        List_cells = List_cells + ["cell" + str(n) + ".cfg"]
-
-                        # SECURITY ##############
-                        #file_create.append("cell" + str(0) + ".cfg")
-                        file_create.append("cell" + str(n) + ".cfg")
-                        #######################
-
-                        h = 0 + height_layern / 2
-
-                    elif n % 2 != 0:
-                        # ODD SLICE (1, 3, 5, .... slice starts at 0) : they have the negative bottom roughness of the n-1 layer (no new .stl1) but a new top roughness (new .stl2)
-                        # e.g., slice n=1 has the negative bottom roughness of slice n=0 (re-use of .stl1 file) but a new top roughness (new .stl2 file)
-                        print("We are in the odd slice j={}, n={}".format(j, n))
-
-                        # Determine which material is concerned
-                        index_layer2 = pattern_layer[n]
-                        # Use the Height of the material concerned
-                        height_layern = height_layer[index_layer2]
-
-                        print("FEM_STL2, height_layern is {}".format(height_layern))
-
-                        vertices, FEM_STL2 = make_multi_layered(
-                            type_sample,
-                            index_layer2,
-                            h,
-                            B,
-                            C1,
-                            RMS,
-                            N,
-                            M,
-                            length + 50,
-                            height_layern,
-                            width + 50,
-                            ns,
-                            alpha,
-                            raw_stl,
-                            out_pre,
-                            ext_fem,
-                        )
-
-                        # SECURITY ##############
-                        file_create.append(FEM_STL2)
-                        #######################
-
-                        # Top roughness treatment:
-                        print(
-                            "Atomsk run invert selection (rough top surface - flat bottom) : it cuts what is out of the STL")
-                        subprocess.call(
-                            [
-                                "atomsk",
-                                "mat" + str(index_layer2) + "_supercellm.cfg",
-                                "-select",
-                                "stl",
-                                FEM_STL2,
-                                "-select",
-                                "invert",
-                                "-rmatom",
-                                "select",
-                                "mat" + str(index_layer2) + "_outm.cfg",
-                                "-v",
-                                "1"
-                            ]
-                        )
-                        #subprocess.call(cmd)
-                        print("top roughness is ok")
-
-                        # SECURITY ##############
-                        file_create.append("mat" + str(index_layer2) + "_outm.cfg")
-                        #######################
-
-                        # Bottom roughness treatment:
-                        # use n-1 .stl file to generate the bottom roughness
-                        #subprocess.call(
-                        #print("C1 = {}, {} : eta = {}, {}, RMS = {}, {}".format(C1, type(C1), (B/2)-1, type(B), RMS, type(RMS)))
-
-                        #if not C1:
-                        #    print("C1 vide")
-                        #if C1 is None:
-                        #    print("C1 None")
-                        #print("eta : {}, B {}".format((B/2)-1, B))
-
-                        # Here we test if the multilayered systems has rough GBs or purely flat via eta, C1 and RMS, but they have to be defined
-                        if 'C1' in locals() and C1:
-                            print("C1 test")
-                            roughness_or_not_test = (B / 2) - 1 < 10.0 and float(C1) > 0.001
-                        if 'RMS' in locals() and RMS:
-                            print("RMS test")
-                            roughness_or_not_test = (B / 2) - 1 < 10.0 and float(RMS) > 0.01
-
-                        #print("roughness_or_not_test : {}".format(roughness_or_not_test))
-                        if roughness_or_not_test:
-                            print(
-                                "Atomsk run a regular selection (bottom surface) : it cuts what is in the previous STL (no invert)")
-                            cmd = [
-                                "atomsk",
-                                "mat" + str(index_layer2) + "_outm.cfg",
-                                "-select",
-                                "stl",
-                                FEM_STL1,
-                                "-rmatom",
-                                "select",
-                                "matf_outm.cfg",
-                                "-v",
-                                "1"
-                            ]
-                            print("atomsk cmd = {}".format(cmd))
-                            subprocess.call(cmd)
-                        else:
-                            print("Perfectly-flat multi-layer, we skip the bottom surface treatment for n=2k+1")
-                            shutil.copy("mat" + str(index_layer2) + "_outm.cfg", "matf_outm.cfg")
-
-                        # SECURITY ##############
-                        file_create.append("matf_outm.cfg")
-                        #######################
-
-                        # Register the cell file
-                        shutil.move("matf_outm.cfg", "cell" + str(n) + ".cfg")
-                        List_cells = List_cells + ["cell" + str(n) + ".cfg"]
-
-                        # SECURITY ##############
-                        file_create.append("cell" + str(n) + ".cfg")
-                        #######################
-
-                        # Only delete the per-slice output; keep the supercell and FEM_STL2:
-                        # - supercell may be reused if the same material index appears later in the pattern
-                        # - FEM_STL2 is needed by the next even slice as its bottom-roughness stencil
-                        for f in ["mat" + str(index_layer2) + "_outm.cfg"]:
-                            if os.path.exists(f):
-                                os.remove(f)
-
-                        print("bottom roughness is ok")
-                        h = h + height_layern
-
-                    elif n % 2 == 0:
-                        # Even SLICE (2, 4, 6,...) : they have the negative bottom roughness of the n-1 layer but a new top roughness
-                        # e.g., slice n=2 the .stl2 file negative of n=1 for bottom roughness, but need a new top roughness called .stl1 again
-                        print("We are in the even slice n={}".format(n))
-
-                        # Top roughness treatment:
-                        # Determine which material is concerned
-                        index_layer1 = pattern_layer[n]
-                        height_layern = height_layer[index_layer1]
-
-                        # Use the Height of the material concerned
-                        vertices, FEM_STL1 = make_multi_layered(
-                            type_sample,
-                            index_layer1,
-                            h,
-                            B,
-                            C1,
-                            RMS,
-                            N,
-                            M,
-                            length + 50,
-                            height_layern,
-                            width + 50,
-                            ns,
-                            alpha,
-                            raw_stl,
-                            out_pre,
-                            ext_fem,
-                        )
-
-                        # SECURITY ##############
-                        file_create.append(FEM_STL1)
-                        file_create.append(out_pre + str(index_layer1) + ".msh")
-                        #######################
-
-                        if os.path.exists(out_pre + str(index_layer1) + ".msh"):
-                            os.remove(out_pre + str(index_layer1) + ".msh")
-                        a = str(n)
-
-                        # Bottom roughness treatment (with fresh .stl1):
-                        subprocess.call(
-                            [
-                                "atomsk",
-                                "mat" + str(index_layer1) + "_supercellm.cfg",
-                                "-select",
-                                "stl",
-                                FEM_STL2,
-                                "-rmatom",
-                                "select",
-                                "mat" + str(index_layer1) + "_supercellm" + a + ".cfg",
-                                "-v",
-                                "2",
-                            ]
-                        )
-
-                        # SECURITY ##############
-                        file_create.append("mat" + str(index_layer1) + "_supercellm" + a + ".cfg")
-                        #######################
-
-                        # Cleaning the STL of the previous cell
-                        Path(FEM_STL2).unlink(missing_ok=True)
-
-                        # Top roughness treatment (with fresh .stl1):
-                        # Atomsk uses the .stl file to Remove all atoms which are not in the stl file
-                        subprocess.call(
-                            [
-                                "atomsk",
-                                "mat" + str(index_layer1) + "_supercellm" + a + ".cfg",
-                                "-select",
-                                "stl",
-                                FEM_STL1,
-                                "-select",
-                                "invert",
-                                "-rmatom",
-                                "select",
-                                "mat" + str(index_layer1) + "_outm.cfg",
-                                "-v",
-                                "2"
-                            ]
-                        )
-                        #else:
-                        #    print("Perfectly-flat multi-layer, we skip the surface treatment")
-                        #    subprocess.call(['cp', "mat" + str(index_layer1) + "_supercellm" + a + ".cfg", "mat" + str(index_layer1) + "_outm.cfg"])
-
-                        # SECURITY ##############
-                        file_create.append("mat" + str(index_layer1) + "_outm.cfg")
-                        #######################
-
-                        # Register the file in the cells file
-                        shutil.move("mat" + str(index_layer1) + "_outm.cfg", "cell" + str(n) + ".cfg")
-                        Path("mat" + str(index_layer1) + "_supercellm" + a + ".cfg").unlink(missing_ok=True)
-
-                        # SECURITY ##############
-                        file_create.append("cell" + str(n) + ".cfg")
-                        #######################
-
-                        FEM_STL2 = FEM_STL1
-                        List_cells = List_cells + ["cell" + str(n) + ".cfg"]
-                        h = h + height_layern
-
-
-            elif j != 0:
-                # For next patterns, we dont manage the half-height first slice of material
-
-                List_cells = []
-                for n in range(len(pattern_layer)):
-                    print("#### SLICE n={}/{} in pattern j={}/{} under process...".format(n, len(pattern_layer) - 1, j,
-                                                                                          n_pattern - 1))
-
-                    if n % 2 != 0:
-                        # Determine which material is concerned
-                        index_layer2 = pattern_layer[n]
-                        # Use the Height of the material concerned
-                        height_layern = height_layer[index_layer2]
-
-                        vertices, FEM_STL2 = make_multi_layered(
-                            type_sample,
-                            index_layer2,
-                            h,
-                            B,
-                            C1,
-                            RMS,
-                            N,
-                            M,
-                            length + 50,
-                            height_layern,
-                            width + 50,
-                            ns,
-                            alpha,
-                            raw_stl,
-                            out_pre,
-                            ext_fem,
-                        )
-
-                        # SECURITY ##############
-                        file_create.append(FEM_STL2)
-                        #file_create.append(out_pre + str(index_layer2) + ".msh")
-                        #######################
-
-                        # Atomsk uses the .stl file to remove all toms which are not in the STL file
-                        # located cut-out : top surface rough but flat bottom surface that will be process afterwards using
-                        # previous .stl
-                        subprocess.call(
-                            [
-                                "atomsk",
-                                "mat" + str(index_layer2) + "_supercellm.cfg",
-                                "-select",
-                                "stl",
-                                FEM_STL2,
-                                "-select",
-                                "invert",
-                                "-rmatom",
-                                "select",
-                                "mat" + str(index_layer2) + "_outm.cfg",
-                                "-v",
-                                "2"
-                            ]
-                        )
-
-                        # SECURITY ##############
-                        file_create.append("mat" + str(index_layer2) + "_outm.cfg")
-                        #######################
-
-                        # Remove all atoms which are already in the previous cell
-                        #if float(C1) > 0.01 and float(B) < 10.0 and float(RMS) > 0.01:
-                        if 'C1' in locals() and C1:
-                            print("C1 test")
-                            roughness_or_not_test = (B / 2) - 1 < 10.0 and float(C1) > 0.001
-                        if 'RMS' in locals() and RMS:
-                            print("RMS test")
-                            roughness_or_not_test = (B / 2) - 1 < 10.0 and float(RMS) > 0.01
-
-                        #print("roughness_or_not_test : {}".format(roughness_or_not_test))
-                        if roughness_or_not_test:
-                            print(
-                                "Atomsk run a regular selection (bottom surface) : it cuts what is in the previous STL (no invert)")
-
-                            subprocess.call(
-                                [
-                                    "atomsk",
-                                    "mat" + str(index_layer2) + "_outm.cfg",
-                                    "-select",
-                                    "stl",
-                                    FEM_STL1,
-                                    "-rmatom",
-                                    "select",
-                                    "matf_outm.cfg",
-                                    "-v",
-                                    "2"
-                                ]
-                            )
-                        else:
-                            print(
-                                "Perfectly-flat multi-layer, we skip the bottom surface treatment to avoid Atomsk problem with empty region")
-                            shutil.copy("mat" + str(index_layer2) + "_outm.cfg", "matf_outm.cfg")
-
-                        # SECURITY ##############
-                        file_create.append("matf_outm.cfg")
-                        #######################
-
-                        # Register the cell file
-                        shutil.move("matf_outm.cfg", "cell" + str(n) + ".cfg")
-                        List_cells = List_cells + ["cell" + str(n) + ".cfg"]
-
-                        # SECURITY ##############
-                        file_create.append("cell" + str(n) + ".cfg")
-                        #######################
-
-                        # Cleaning all undesirable file
-                        for f in [FEM_STL1, "mat" + str(index_layer2) + "_outm.cfg", out_pre + "_stat.txt"]:
-                            Path(f).unlink(missing_ok=True)
-                        h = h + height_layern
-
-                    elif n % 2 == 0:
-                        # Determine which material is concerned
-                        index_layer1 = pattern_layer[n]
-                        height_layern = height_layer[index_layer1]
-                        # Use the Height of the material concerned
-
-                        vertices, FEM_STL1 = make_multi_layered(
-                            type_sample,
-                            index_layer1,
-                            h,
-                            B,
-                            C1,
-                            RMS,
-                            N,
-                            M,
-                            length + 50,
-                            height_layern,
-                            width + 50,
-                            ns,
-                            alpha,
-                            raw_stl,
-                            out_pre,
-                            ext_fem,
-                        )
-
-                        # SECURITY ##############
-                        file_create.append(FEM_STL1)
-                        file_create.append(out_pre + str(index_layer1) + ".msh")
-                        #######################
-
-                        if os.path.exists(out_pre + str(index_layer1) + ".msh"):
-                            os.remove(out_pre + str(index_layer1) + ".msh")
-                        a = str(n)
-                        # Remove atoms which are already in the previous cell
-                        subprocess.call(
-                            [
-                                "atomsk",
-                                "mat" + str(index_layer1) + "_supercellm.cfg",
-                                "-select",
-                                "stl",
-                                FEM_STL2,
-                                "-rmatom",
-                                "select",
-                                "mat" + str(index_layer1) + "_supercellm" + a + ".cfg",
-                                "-v",
-                                "2"
-                            ]
-                        )
-
-                        # SECURITY ##############
-                        file_create.append("mat" + str(index_layer1) + "_supercellm" + a + ".cfg")
-                        #######################
-
-                        # Cleaning the STL of the previous cell
-                        if os.path.exists(FEM_STL2):
-                            os.remove(FEM_STL2)
-
-                        # Atomsk uses the .stl file to Remove all atoms which are not in the stl file
-                        subprocess.call(
-                            [
-                                "atomsk",
-                                "mat" + str(index_layer1) + "_supercellm" + a + ".cfg",
-                                "-select",
-                                "stl",
-                                FEM_STL1,
-                                "-select",
-                                "invert",
-                                "-rmatom",
-                                "select",
-                                "mat" + str(index_layer1) + "_outm.cfg",
-                                "-v",
-                                "2"
-                            ]
-                        )
-
-                        # SECURITY ##############
-                        file_create.append("mat" + str(index_layer1) + "_outm.cfg")
-                        #######################
-
-                        # Register the file in the cells file
-                        shutil.move("mat" + str(index_layer1) + "_outm.cfg", "cell" + str(n) + ".cfg")
-                        if os.path.exists("mat" + str(index_layer1) + "_supercellm" + a + ".cfg"):
-                            os.remove("mat" + str(index_layer1) + "_supercellm" + a + ".cfg")
-
-                        # SECURITY ##############
-                        file_create.append("cell" + str(n) + ".cfg")
-                        #######################
-
-                        FEM_STL2 = FEM_STL1
-                        List_cells = List_cells + ["cell" + str(n) + ".cfg"]
-                        h = h + height_layern
-
-            # MERGING OF THE MATERIAL SLICES FOR EACH PATTERN
-            #Case with 1 cell/slice of material : register the cell/slice as the pattern
-            if len(List_cells) == 1:
-                shutil.move(List_cells[0], "pattern" + str(j) + ".cfg")
-
-                # SECURITY ##############
-                file_create.append("pattern" + str(j) + ".cfg")
-                #######################
-
-            #Case with many cells/slices : merge all cells of the pattern then register the final file in the pattern list
+        # For each slice: generate its own rough top surface, then cut it out of its material's
+        # supercell using that top surface and the previous slice's top surface as its bottom (the
+        # very first slice has no bottom cut, since its bottom is the flat edge of the box)
+        h = 0
+        prev_top_stl = None
+        cells = []
+        for i, (material, height) in enumerate(slices):
+            print("#### SLICE {}/{} (material index={}, height={}) under process...".format(
+                i, len(slices) - 1, material, height))
+
+            _, top_stl = make_multi_layered(param, out_pre, material, h, height)
+            file_create.append(top_stl)
+            file_create.append(out_pre + str(material) + ".msh")
+            fp.remove_file(out_pre + str(material) + ".msh")
+            h += height
+
+            supercell = "mat{}_supercellm.cfg".format(material)
+            cell_file = "cell{}.cfg".format(i)
+            if prev_top_stl is None:
+                fp._cut_top(supercell, top_stl, cell_file)
             else:
-                for merge in range(len(List_cells) - 1):
-                    if merge == 0:
-                        subprocess.call(
-                            ["atomsk", "--merge", "2", List_cells[0], List_cells[1], "celltot" + str(0) + ".cfg", "-v",
-                             "2"])
+                outm = "mat{}_outm{}.cfg".format(material, i)
+                fp._cut_top(supercell, top_stl, outm)
+                file_create.append(outm)
+                fp._cut_bottom(outm, prev_top_stl, cell_file)
+                fp.remove_file(outm)
+                fp.remove_file(prev_top_stl)
 
-                        # SECURITY ##############
-                        file_create.append("celltot" + str(0) + ".cfg")
-                        #######################
+            file_create.append(cell_file)
+            cells.append(cell_file)
+            prev_top_stl = top_stl
 
+        # The last slice's own top surface is the flat top edge of the box (it wraps around to the
+        # first slice via periodicity), so it is never reused as anyone's bottom
+        fp.remove_file(prev_top_stl)
 
-
-                    else:
-                        subprocess.call(
-                            ["atomsk", "--merge", "2", "celltot" + str(merge - 1) + ".cfg", List_cells[merge + 1],
-                             "celltot" + str(merge) + ".cfg", "-v", "2"])
-                        #Cleaning
-                        if os.path.exists("celltot" + str(merge - 1) + ".cfg"):
-                            os.remove("celltot" + str(merge - 1) + ".cfg")
-
-                        # SECURITY ##############
-                        file_create.append("celltot" + str(merge) + ".cfg")
-                        #######################
-
-                shutil.move("celltot" + str(len(List_cells) - 1 - 1) + ".cfg", "pattern" + str(j) + ".cfg")
-
-                #SECURITY ##############
-                file_create.append("pattern" + str(j) + ".cfg")
-                #######################
-
-            if os.path.exists(out_pre + "_stat.txt"):
-                os.remove(out_pre + "_stat.txt")
-            List_patterns.append("pattern" + str(j) + ".cfg")
-
-            for m in range(len(List_cells)):
-                # Cleaning all cells .cfg
-                if os.path.exists(List_cells[m]):
-                    os.remove(List_cells[m])
-
-        # MERGING OF THE PATTERNS
-        # Case with 1 pattern :
-        if len(List_patterns) == 1:
-            shutil.move(List_patterns[0], out_pre + "0.cfg")
-        # Case with many patterns : Merge all patterns together
-        else:
-            for merge in range(len(List_patterns) - 1):
-                if merge == 0:
-                    subprocess.call(
-                        ["atomsk", "--merge", "2", List_patterns[0], List_patterns[1], "patterntot" + str(0) + ".cfg",
-                         "-v", "2"])
-
-                    # SECURITY ##############
-                    file_create.append("patterntot" + str(0) + ".cfg")
-                    #######################
-
-                else:
-                    subprocess.call(
-                        ["atomsk", "--merge", "2", "patterntot" + str(merge - 1) + ".cfg", List_patterns[merge + 1],
-                         "patterntot" + str(merge) + ".cfg", "-v", "2"])
-                    #Cleaning
-                    if os.path.exists("patterntot" + str(merge - 1) + ".cfg"):
-                        os.remove("patterntot" + str(merge - 1) + ".cfg")
-
-                    # SECURITY ##############
-                    file_create.append("patterntot" + str(merge) + ".cfg")
-                    #######################
-
-            shutil.move("patterntot" + str(len(List_patterns) - 1 - 1) + ".cfg", out_pre + "0.cfg")
-
-        # SECURITY ##############
-        file_create.append(out_pre + "0.cfg")
-        #######################
-
-        # ADD OF THE ENDING-SAMPLE HALF-HEIGHT OF THE FIRST SLICE OF MATERIAL (PBCs)
-        #Complete the final empty part with the first material used to keep the vertical periodicity
-        # vertices, END = make_box("box", B, C1, RMS, N, M, length + 50, h - height_layern, width + 50, ns, alpha,
-        #                         raw_stl, "final", ext_fem)
-        vertices, END = make_multi_layered(
-            type_sample, pattern_layer[0], h,
-            B, C1, RMS, N, M,
-            length + 50, height_layer[pattern_layer[0]] / 2, width + 50,
-            ns, alpha, raw_stl, "final", ext_fem,
-        )
-        subprocess.call(
-            ["atomsk", "mat" + str(pattern_layer[0]) + "_supercellm.cfg", "-select", "stl", FEM_STL2, "-rmatom",
-             "select", "end0.cfg", "-v", "2"])
-        subprocess.call(["atomsk", "end0.cfg", "-select", "stl", END, "-select", "invert", "-rmatom", "select", "final0.cfg", "-v", "2"])
-        subprocess.call(["atomsk", "--merge", "2", out_pre + "0.cfg", "final0.cfg", out_pre + ".cfg", "-v",
-                         "2"])  # merge the end to the object create
-
-        # SECURITY ##############
-        file_create.append("end0.cfg")
-        file_create.append(END)
-        file_create.append("final0.cfg")
+        # MERGING OF ALL SLICES
+        fp._merge_cfg_chain(cells, out_pre + ".cfg")
         file_create.append(out_pre + ".cfg")
-        file_create.append("final_stat.txt")
-        file_create.append("final_stat.msh")
-        #######################
 
-        #Create the lmp file
-        for e in ext_ato:
+        # Create the requested atomic position file(s)
+        for e in param.ext_ato:
             if e != "cfg":
                 subprocess.call(["atomsk", out_pre + ".cfg", out_pre + "." + e, "-v", "2"])
 
-        #Remove all files
-        list_files_to_remove = ["patterntot" + str(i) + ".cfg" for i in range(len(List_patterns) - 1)] + [
-            "final0.cfg", out_pre + "0.cfg", out_pre + "1.cfg", END, "end0.cfg", "final.msh", "final_stat.txt"]
-        for f in list_files_to_remove:
-            if os.path.exists(f):
-                os.remove(f)
+        # Remove all intermediate files
+        for f in cells:
+            fp.remove_file(f)
+        for f in list_supercell:
+            fp.remove_file(f)
+        fp.remove_file(out_pre + "_stat.txt")
 
-        #Clean all patterns files
-        for m in range(len(List_patterns)):
-            # Cleaning all cells .cfg
-            if os.path.exists(List_patterns[m]):
-                os.remove(List_patterns[m])
-
-        #Clean the rest of files :
-        if os.path.exists(out_pre + "_stat.txt"):
-            os.remove(out_pre + "_stat.txt")
-        for suppr in range(len(list_supercell)):
-            # Cleaning all cells .cfg
-            if os.path.exists(list_supercell[suppr]):
-                os.remove(list_supercell[suppr])
-
-        # os.system("cls" if os.name == "nt" else "clear")
         print("JOB DONE!" + "  File name: " + out_pre + ".lmp")
 
     except Exception as ex:
@@ -1935,9 +1194,8 @@ def make_atom_multilayered(
         print(f"ERROR: {ex}")
         print("Detailed error traceback:")
         traceback.print_exc()
-        #Delete all files created before the error
+        # Delete all files created before the error
         for f in file_create:
-            if os.path.exists(f):
-                os.remove(f)
+            fp.remove_file(f)
             print(f"File deleted: {f}")
         print("Cleaning File Done")

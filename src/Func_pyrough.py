@@ -7,7 +7,8 @@
 # These functions are essential for executing the main code of Pyrough.
 # ---------------------------------------------------------------------------
 
-import sys, os, math, subprocess
+import sys, os, math, subprocess, shutil
+from pathlib import Path
 from types import CellType
 
 import gmsh, meshio
@@ -22,6 +23,19 @@ from ase.io import read, write
 from ase.build import bulk
 from ase.cell import Cell
 from wulffpack import SingleCrystal
+
+
+def remove_file(path):
+    """Remove a file if it exists, silently ignoring missing files (cross-platform)."""
+    Path(path).unlink(missing_ok=True)
+
+
+def move_file(src, dst):
+    """Move a file cross-platform, overwriting destination if it already exists."""
+    dst_path = Path(dst)
+    if dst_path.exists():
+        dst_path.unlink()
+    shutil.move(str(src), str(dst))
 
 
 def align_f(vertices, angles):
@@ -2021,6 +2035,7 @@ def refine_box(out_pre, ns, alpha, angle, ext_fem):
     gmsh.write(out_pre + ".stl")
     for e in ext_fem:
         gmsh.write(out_pre + "." + e)
+    gmsh.finalize()
     return ()
 
 
@@ -2079,6 +2094,7 @@ def refine_sphere(out_pre, ns, alpha, angle, ext_fem):
     gmsh.write(out_pre + ".stl")
     for e in ext_fem:
         gmsh.write(out_pre + "." + e)
+    gmsh.finalize()
     return ()
 
 
@@ -2135,6 +2151,7 @@ def refine_wire(out_pre, ns, alpha, angle, ext_fem):
     gmsh.write(out_pre + ".stl")
     for e in ext_fem:
         gmsh.write(out_pre + "." + e)
+    gmsh.finalize()
     return ()
 
 
@@ -2206,6 +2223,7 @@ def refine_pillar(out_pre, ns, alpha, angle, ext_fem):
     gmsh.write(out_pre + ".stl")
     for e in ext_fem:
         gmsh.write(out_pre + "." + e)
+    gmsh.finalize()
     return ()
 
 
@@ -2691,7 +2709,7 @@ def test_pyrough_execution(dir):
         print("Cleaning files...")
         for file in new_files:
             file_path = os.path.join(output_dir, file)
-            os.remove(file_path)
+            remove_file(file_path)
 
 
 def theta(x, y):
@@ -2996,3 +3014,94 @@ def rotation_from_z_axis(target_direction: np.ndarray) -> np.ndarray:
         [y * x * C + z * s, c + y * y * C, y * z * C - x * s],
         [z * x * C - y * s, z * y * C + x * s, c + z * z * C]
     ])
+
+
+def _atomsk_create_supercell(index, param, dim_x, dim_y, dim_z):
+    """
+    Creates an atomsk supercell of param.material[index] spanning (dim_x, dim_y, dim_z), handling
+    both regular crystals and binary random solid solutions (Lattice_structure given as
+    [structure, substitution_percent]).
+
+    :return: Name of the .cfg file created
+    """
+    structure = param.lattice_structure[index]
+    is_binary = isinstance(structure, list) and len(structure) > 1
+    base_structure = structure[0] if is_binary else structure
+
+    dis_x, dup_x, orien_x = duplicate(dim_x, param.orien_x[index], param.lattice_parameter[index], base_structure)
+    dis_y, dup_y, orien_y = duplicate(dim_y, param.orien_y[index], param.lattice_parameter[index], base_structure)
+    dis_z, dup_z, orien_z = duplicate(dim_z, param.orien_z[index], param.lattice_parameter[index], base_structure)
+
+    outfile = "mat{}_supercellm.cfg".format(index)
+    if is_binary:
+        cmd = ["atomsk", "--create", str(base_structure), str(*param.lattice_parameter[index]),
+               str(param.material[index][0]),
+               "orient", str(orien_x), str(orien_y), str(orien_z),
+               "-duplicate", str(dup_x), str(dup_y), str(dup_z),
+               "-select", "random", str(structure[1]) + "%", str(param.material[index][0]),
+               "-substitute", str(param.material[index][0]), str(param.material[index][1]),
+               "-center", "com", outfile, "-v", "1"]
+        print("Atomsk binary solution {}".format(cmd))
+    else:
+        cmd = ["atomsk", "--create", str(base_structure), *param.lattice_parameter[index], *param.material[index],
+               "orient", str(orien_x), str(orien_y), str(orien_z),
+               "-duplicate", str(dup_x), str(dup_y), str(dup_z),
+               "-center", "com", outfile, "-v", "1"]
+        print("cmd : {}".format(cmd))
+
+    subprocess.call(cmd)
+    print("last file created is {}".format(outfile))
+    return outfile
+
+
+def _cut_top(input_cfg, stencil_stl, output_cfg):
+    """Keep only the atoms of input_cfg that fall inside stencil_stl (rough top surface)."""
+    print("Atomsk run invert selection (top surface) : it cuts what is out of the STL")
+    subprocess.call([
+        "atomsk", input_cfg,
+        "-select", "stl", stencil_stl,
+        "-select", "invert", "-rmatom", "select",
+        output_cfg, "-v", "2",
+    ])
+    print("top roughness is ok -> {}".format(output_cfg))
+
+
+def _cut_bottom(input_cfg, stencil_stl, output_cfg):
+    """
+    Remove the atoms of input_cfg that fall inside stencil_stl (rough bottom surface).
+
+    Atomsk bug: when the interface is flat, atoms already sit above the stencil, so the
+    selection can end up empty; atomsk then treats an empty selection as "select all" and
+    rmatom wipes out everything. If atomsk produces no output in that case, there was nothing
+    to remove, so we fall back to just copying the input through.
+    """
+    print("Atomsk run a regular selection (bottom surface) : it cuts what is in the previous STL (no invert)")
+    remove_file(output_cfg)
+    subprocess.call([
+        "atomsk", input_cfg,
+        "-select", "stl", stencil_stl,
+        "-rmatom", "select",
+        output_cfg, "-v", "2",
+    ])
+    if not os.path.exists(output_cfg):
+        print("FALLBACK: atomsk bottom cut produced no output (no atoms inside {}) — copying instead".format(stencil_stl))
+        shutil.copy(input_cfg, output_cfg)
+    print("bottom roughness is ok -> {}".format(output_cfg))
+
+def _merge_cfg_chain(files, out_name):
+    """
+    Merges a list of .cfg files pairwise into out_name (atomsk --merge only accepts 2 inputs at
+    a time), cleaning up intermediate merge results as it goes.
+    """
+    if len(files) == 1:
+        move_file(files[0], out_name)
+        return
+
+    merged = files[0]
+    for i in range(1, len(files)):
+        is_last = i == len(files) - 1
+        target = out_name if is_last else "{}_merge{}.cfg".format(out_name, i)
+        subprocess.call(["atomsk", "--merge", "2", merged, files[i], target, "-v", "2"])
+        if i > 1:
+            remove_file(merged)
+        merged = target

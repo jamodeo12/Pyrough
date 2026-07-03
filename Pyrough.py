@@ -72,32 +72,7 @@ else:
         print("====== > Pyrough.py : multi_layered option treatment running...")
         print("====== > Pyrough.py : Sample_class.make_atom_multi-layered running...")
 
-        Sample_class.make_atom_multilayered(
-            param.type_S,
-            param.height_layer,
-            param.pattern_layer,
-            2 * (1 + param.eta),
-            param.C1,
-            param.RMS,
-            param.N,
-            param.M,
-            param.length,
-            param.height,
-            param.width,
-            param.ns,
-            param.alpha,
-            param.raw_stl,
-            param.lattice_structure,
-            param.lattice_parameter,
-            param.material,
-            param.orien_x,
-            param.orien_y,
-            param.orien_z,
-            out_pre,
-            param.angles,
-            param.ext_fem,
-            param.ext_ato,
-        )
+        Sample_class.make_atom_multilayered(param, out_pre)
 
     else:
         print("====== > Pyrough.py : {} option treatment running...".format(param.type_S))
@@ -133,7 +108,7 @@ else:
                 sample.make_precipitate(FEM_stl, param)
 
                 print("====== > sample.make_atom_matrix running")
-                sample.make_atom_matrix(FEM_stl, param)
+                sample.make_atom_matrix(rot_FEM_stl, param)
 
                 print("====== > sample.put_prec_in_matrix running...")
                 sample.put_prec_in_matrix(out_pre, param.ext_ato)
