@@ -699,7 +699,9 @@ def duplicate(side_length, orien, lattice_par, cristallo):
             distance = norm(orien, lattice_par) / 2
     elif cristallo == "hcp" or cristallo == "wz" or cristallo == "wurtzite":
         distance = norm(orien, lattice_par) / 3 if needs_triple_correction(orien) else norm(orien, lattice_par)
-    dup = math.ceil(side_length / distance)
+    #dup = math.ceil(side_length / distance)
+    #JA: floor instead of ceil to avoid to bypass the stl file
+    dup = math.floor(side_length / distance)
     end_orien = [(concatenate_list_data(orien))]
     x = "[" + "".join([str(i) for i in end_orien]) + "]"
     dup = str(dup)
@@ -2665,6 +2667,90 @@ def strain_file1_to_file2(file1, file2):
     # Overwrite file1 with the modified structure
     write(file1, atoms1)
 
+def rescale_stl_xy_to_cfg(stl_file, cfg_file, delta=0.1):
+    import re
+
+    H = np.zeros((3, 3))
+
+    with open(cfg_file, "r") as f:
+        for line in f:
+            match = re.match(r"H0\((\d),(\d)\)\s*=\s*([-+0-9.eE]+)", line.strip())
+            if match:
+                i, j, value = match.groups()
+                H[int(i) - 1, int(j) - 1] = float(value)
+
+    cfg_dim = np.linalg.norm(H, axis=1)
+
+    target_dim = np.array([
+        cfg_dim[0] + delta,
+        cfg_dim[1] + delta,
+        stl_dim[2]
+    ])
+
+    with open(stl_file, "r") as f:
+        lines = f.readlines()
+
+    vertex_pattern = re.compile(
+        r"(\s*vertex\s+)([-+0-9.eE]+)(\s+)([-+0-9.eE]+)(\s+)([-+0-9.eE]+)(.*)"
+    )
+
+    vertices = []
+
+    for line in lines:
+        match = vertex_pattern.match(line)
+        if match:
+            vertices.append([
+                float(match.group(2)),
+                float(match.group(4)),
+                float(match.group(6))
+            ])
+
+    vertices = np.array(vertices)
+
+    vmin = vertices.min(axis=0)
+    vmax = vertices.max(axis=0)
+    stl_dim = vmax - vmin
+
+
+    scale = target_dim / stl_dim
+
+    new_lines = []
+
+    for line in lines:
+        match = vertex_pattern.match(line)
+
+        if match:
+            prefix = match.group(1)
+            sep1 = match.group(3)
+            sep2 = match.group(5)
+            suffix = match.group(7)
+
+            v = np.array([
+                float(match.group(2)),
+                float(match.group(4)),
+                float(match.group(6))
+            ])
+
+            v_scaled = (v - vmin) * scale
+
+            new_lines.append(
+                f"{prefix}"
+                f"{v_scaled[0]:.10f}{sep1}"
+                f"{v_scaled[1]:.10f}{sep2}"
+                f"{v_scaled[2]:.10f}"
+                f"{suffix}\n"
+            )
+        else:
+            new_lines.append(line)
+
+    with open(stl_file, "w") as f:
+        f.writelines(new_lines)
+
+    print("STL overwritten:", stl_file)
+    print("CFG box:", cfg_dim)
+    print("Original STL box:", stl_dim)
+    print("Target STL box:", target_dim)
+    print("Scale factors:", scale)
 
 def test_pyrough_execution(dir):
     """

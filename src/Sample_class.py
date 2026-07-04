@@ -820,9 +820,12 @@ def make_atom_grain(
     with the name out_pre.lmp
     """
 
+
     dim_x = max(vertices[:, 0]) - min(vertices[:, 0])
     dim_y = max(vertices[:, 1]) - min(vertices[:, 1])
     dim_z = max(vertices[:, 2]) - min(vertices[:, 2])
+
+    print("stl dim : {} {} {}".format(dim_x, dim_y, dim_z))
 
     supercell_files = []
 
@@ -846,6 +849,9 @@ def make_atom_grain(
     # Deform all materials to match mat1 dimensions
     for i in range(1, len(supercell_files)):
         fp.strain_file1_to_file2(supercell_files[i], supercell_files[0])
+
+    # Rescale stl file to newly deformed materials (else miscut can appear)
+    #fp.rescale_stl_xy_to_cfg(STL, supercell_files[0])
 
     # Carve mat1 with STL (keep inside)
     subprocess.call([
