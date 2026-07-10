@@ -825,7 +825,7 @@ def make_atom_grain(
     dim_y = max(vertices[:, 1]) - min(vertices[:, 1])
     dim_z = max(vertices[:, 2]) - min(vertices[:, 2])
 
-    print("stl dim : {} {} {}".format(dim_x, dim_y, dim_z))
+    #print("stl dim : {} {} {}".format(dim_x, dim_y, dim_z))
 
     supercell_files = []
 
@@ -834,7 +834,7 @@ def make_atom_grain(
         dis_y, dup_y, orien_y = fp.duplicate(dim_y, param.orien_y[i], param.lattice_parameter[i], param.lattice_structure[i])
         dis_z, dup_z, orien_z = fp.duplicate(2 * dim_z, param.orien_z[i], param.lattice_parameter[i], param.lattice_structure[i])
 
-        outfile = f"mat{i+1}_supercell.cfg"
+        outfile = f"mat{i + 1}_supercell.cfg"
         subprocess.call([
             "atomsk", "--create",
             param.lattice_structure[i],
@@ -842,13 +842,14 @@ def make_atom_grain(
             *param.material[i],
             "orient", orien_x, orien_y, orien_z,
             "-duplicate", dup_x, dup_y, dup_z,
-            "-center", "com", outfile, "-v", "2",
+            "-center", "com",
+            outfile, "-v", "2",
         ])
         supercell_files.append(outfile)
 
-    # Deform all materials to match mat1 dimensions
-    for i in range(1, len(supercell_files)):
-        fp.strain_file1_to_file2(supercell_files[i], supercell_files[0])
+    # Deform mat2 to match mat1 (arbitrary)
+    #for i in range(1, len(supercell_files)):
+    fp.strain_file1_to_file2(supercell_files[1], supercell_files[0])
 
     # Rescale stl file to newly deformed materials (else miscut can appear)
     #fp.rescale_stl_xy_to_cfg(STL, supercell_files[0])
@@ -868,9 +869,30 @@ def make_atom_grain(
         "-rmatom", "select", "mat2_out.cfg", "-v", "2",
     ])
 
+    # Shifting (optional)
+    for i in range(len(param.material)):
+        if any(float(value) != 0.0 for value in param.shift[i]):
+            print("Shift atoms processing..")
+            file = f"mat{i + 1}_out.cfg"
+            subprocess.call([
+                "atomsk",
+                file,
+                 "-shift", param.shift[i][0], param.shift[i][1], param.shift[i][2],
+                "temp.cfg", "-v", "2",
+            ])
+            os.rename("temp.cfg", file)
+
     # Merge
     subprocess.call(["atomsk", "--merge", "2", "mat1_out.cfg", "mat2_out.cfg", "temp2.cfg", "-v", "2"])
 
+    # Rebox (if shift)
+    for i in range(len(param.material)):
+        if any(float(value) != 0.0 for value in param.shift[i]):
+            print("After-shift rebox processing..")
+            fp.rebox_w_atomsk("temp2.cfg", "temp2_rebox.cfg")
+            os.rename("temp2_rebox.cfg", "temp2.cfg")
+
+    # Outfiles
     for e in param.ext_ato:
         subprocess.call(["atomsk", "temp2.cfg", out_pre + "." + e, "-v", "2"])
 

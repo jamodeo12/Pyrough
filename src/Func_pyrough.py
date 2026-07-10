@@ -1952,6 +1952,19 @@ def rebox(file_lmp, eps):
     fend.close()
     return
 
+def rebox_w_atomsk(infile, outfile):
+    """
+        Fits the box dimensions to atoms of .cfg or .lmp files via .xyz conversion
+
+        :param file: .lmp file containing the atom positions
+        :type file: str
+    """
+    xyzfile = infile.rsplit(".", 1)[0] + ".xyz"
+    subprocess.call(["atomsk", infile, xyzfile])
+    subprocess.call(["atomsk", xyzfile, "-rebox", outfile])
+    os.remove(xyzfile)
+
+
 
 def refine_3Dmesh(type_sample, out_pre, ns, alpha, ext_fem):
     """

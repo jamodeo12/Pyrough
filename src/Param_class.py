@@ -34,6 +34,7 @@ class Parameter:
                     self.type_S = key.lower()
                     self.key = key
 
+        # Reading of the stl parameters
         self.N = read_param[self.key].get("N", 0)
         self.M = read_param[self.key].get("M", 0)
         self.eta = read_param[self.key].get("eta", 0.0)
@@ -71,9 +72,9 @@ class Parameter:
 
             def to_list_of_lists(val):
                 """Normalize orientations/parameters to always be a list of lists.
+                3.615          → [[3.615]]        (single scalar parameter)
                 [1,0,0]        → [[1,0,0]]        (single orientation)
                 [[1,0,0],[...]]→ [[1,0,0],[...]]  (multiple orientations, unchanged)
-                3.615          → [[3.615]]        (single scalar parameter)
                 [3.615, 4.07]  → [[3.615],[4.07]] (multiple scalar parameters)
                 """
                 if not isinstance(val, list):
@@ -98,6 +99,10 @@ class Parameter:
             self.orien_y = to_list_of_lists(atom_param["Orien_y"])
             self.orien_z = to_list_of_lists(atom_param["Orien_z"])
             self.angles2 = atom_param.get("Angles", [0, 0, 0])
+            self.shift = [
+                fp.convert_in_list_of_string(s)
+                for s in to_list_of_lists(atom_param.get("Shift",[[0, 0, 0] for i in range(len(self.material))]))
+            ]
 
         if "Multi_layered" in read_param:
             try:
