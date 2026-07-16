@@ -2670,100 +2670,117 @@ def strain_file1_to_file2(file1, file2):
 
     :param file1:
     :param file2:
-    :return: reprocessed file1
+    :return: reprocessed file1, strain tensors
     """
+    print("====== > Pyrough.py : Deform {} to match {}".format(file1, file2))
     atoms1 = read(file1)
     atoms2 = read(file2)
+    cell1 = atoms1.get_cell()
     cell2 = atoms2.get_cell()
     # Modify the unit cell of file1 in x, y, and z directions
     atoms1.set_cell(cell2, scale_atoms=True)  # Scale atomic positions accordingly
     # Overwrite file1 with the modified structure
     write(file1, atoms1)
+    # Compute strain gradients
+    deformation_gradient = cell2.T @ np.linalg.inv(cell1.T)
+    infinitesimal_strain = (0.5 * (deformation_gradient + deformation_gradient.T) - np.eye(3))
+    green_lagrange_strain = 0.5 * (deformation_gradient.T @ deformation_gradient - np.eye(3))
 
-def rescale_stl_xy_to_cfg(stl_file, cfg_file, delta=0.1):
-    import re
+    #print("Deformation gradient :")
+    #print(deformation_gradient)
+    print("Infinitesimal_strain :")
+    print(infinitesimal_strain)
+    with open("strain.txt", "w") as f:
+        f.write("Infinitesimal_strain :\n")
+        f.write("{}\n".format(infinitesimal_strain))
 
-    H = np.zeros((3, 3))
+    #print("Green_lagrange_strain :")
+    #print(green_lagrange_strain)
 
-    with open(cfg_file, "r") as f:
-        for line in f:
-            match = re.match(r"H0\((\d),(\d)\)\s*=\s*([-+0-9.eE]+)", line.strip())
-            if match:
-                i, j, value = match.groups()
-                H[int(i) - 1, int(j) - 1] = float(value)
-
-    cfg_dim = np.linalg.norm(H, axis=1)
-
-    target_dim = np.array([
-        cfg_dim[0] + delta,
-        cfg_dim[1] + delta,
-        stl_dim[2]
-    ])
-
-    with open(stl_file, "r") as f:
-        lines = f.readlines()
-
-    vertex_pattern = re.compile(
-        r"(\s*vertex\s+)([-+0-9.eE]+)(\s+)([-+0-9.eE]+)(\s+)([-+0-9.eE]+)(.*)"
-    )
-
-    vertices = []
-
-    for line in lines:
-        match = vertex_pattern.match(line)
-        if match:
-            vertices.append([
-                float(match.group(2)),
-                float(match.group(4)),
-                float(match.group(6))
-            ])
-
-    vertices = np.array(vertices)
-
-    vmin = vertices.min(axis=0)
-    vmax = vertices.max(axis=0)
-    stl_dim = vmax - vmin
-
-
-    scale = target_dim / stl_dim
-
-    new_lines = []
-
-    for line in lines:
-        match = vertex_pattern.match(line)
-
-        if match:
-            prefix = match.group(1)
-            sep1 = match.group(3)
-            sep2 = match.group(5)
-            suffix = match.group(7)
-
-            v = np.array([
-                float(match.group(2)),
-                float(match.group(4)),
-                float(match.group(6))
-            ])
-
-            v_scaled = (v - vmin) * scale
-
-            new_lines.append(
-                f"{prefix}"
-                f"{v_scaled[0]:.10f}{sep1}"
-                f"{v_scaled[1]:.10f}{sep2}"
-                f"{v_scaled[2]:.10f}"
-                f"{suffix}\n"
-            )
-        else:
-            new_lines.append(line)
-
-    with open(stl_file, "w") as f:
-        f.writelines(new_lines)
-
-    print("STL overwritten:", stl_file)
-    print("CFG box:", cfg_dim)
-    print("Original STL box:", stl_dim)
-    print("Target STL box:", target_dim)
-    print("Scale factors:", scale)
+# def rescale_stl_xy_to_cfg(stl_file, cfg_file, delta=0.1):
+#     import re
+#
+#     H = np.zeros((3, 3))
+#
+#     with open(cfg_file, "r") as f:
+#         for line in f:
+#             match = re.match(r"H0\((\d),(\d)\)\s*=\s*([-+0-9.eE]+)", line.strip())
+#             if match:
+#                 i, j, value = match.groups()
+#                 H[int(i) - 1, int(j) - 1] = float(value)
+#
+#     cfg_dim = np.linalg.norm(H, axis=1)
+#
+#     target_dim = np.array([
+#         cfg_dim[0] + delta,
+#         cfg_dim[1] + delta,
+#         stl_dim[2]
+#     ])
+#
+#     with open(stl_file, "r") as f:
+#         lines = f.readlines()
+#
+#     vertex_pattern = re.compile(
+#         r"(\s*vertex\s+)([-+0-9.eE]+)(\s+)([-+0-9.eE]+)(\s+)([-+0-9.eE]+)(.*)"
+#     )
+#
+#     vertices = []
+#
+#     for line in lines:
+#         match = vertex_pattern.match(line)
+#         if match:
+#             vertices.append([
+#                 float(match.group(2)),
+#                 float(match.group(4)),
+#                 float(match.group(6))
+#             ])
+#
+#     vertices = np.array(vertices)
+#
+#     vmin = vertices.min(axis=0)
+#     vmax = vertices.max(axis=0)
+#     stl_dim = vmax - vmin
+#
+#
+#     scale = target_dim / stl_dim
+#
+#     new_lines = []
+#
+#     for line in lines:
+#         match = vertex_pattern.match(line)
+#
+#         if match:
+#             prefix = match.group(1)
+#             sep1 = match.group(3)
+#             sep2 = match.group(5)
+#             suffix = match.group(7)
+#
+#             v = np.array([
+#                 float(match.group(2)),
+#                 float(match.group(4)),
+#                 float(match.group(6))
+#             ])
+#
+#             v_scaled = (v - vmin) * scale
+#
+#             new_lines.append(
+#                 f"{prefix}"
+#                 f"{v_scaled[0]:.10f}{sep1}"
+#                 f"{v_scaled[1]:.10f}{sep2}"
+#                 f"{v_scaled[2]:.10f}"
+#                 f"{suffix}\n"
+#             )
+#         else:
+#             new_lines.append(line)
+#
+#     with open(stl_file, "w") as f:
+#         f.writelines(new_lines)
+#
+#     print("STL overwritten:", stl_file)
+#     print("CFG box:", cfg_dim)
+#     print("Original STL box:", stl_dim)
+#     print("Target STL box:", target_dim)
+#     print("Scale factors:", scale)
 
 def test_pyrough_execution(dir):
     """
