@@ -820,7 +820,6 @@ def make_atom_grain(
     with the name out_pre.lmp
     """
 
-
     dim_x = max(vertices[:, 0]) - min(vertices[:, 0])
     dim_y = max(vertices[:, 1]) - min(vertices[:, 1])
     dim_z = max(vertices[:, 2]) - min(vertices[:, 2])
@@ -848,8 +847,10 @@ def make_atom_grain(
         supercell_files.append(outfile)
 
     # Deform mat2 to match mat1 (arbitrary)
-    #for i in range(1, len(supercell_files)):
-    fp.strain_file1_to_file2(supercell_files[1], supercell_files[0])
+    #fp.strain_file1_to_file2(supercell_files[1], supercell_files[0])
+    cell0 = fp.get_cell(supercell_files[0])
+    fp.av_length_and_strain(supercell_files, cell0[2][2])
+    #fp.av_length_and_strain(supercell_files, 2*dim_z)
 
     # Rescale stl file to newly deformed materials (else miscut can appear)
     #fp.rescale_stl_xy_to_cfg(STL, supercell_files[0])
@@ -1132,12 +1133,12 @@ def make_atom_multilayered(param, out_pre):
     height_pattern = sum(height_layer[m] for m in pattern_layer)
     n_pattern = int(param.height // height_pattern)
     if param.height % height_pattern != 0:
-        print("!!!WARNING!!!,To keep the periodicity, The height of the device will be truncated to this Height:" +
+        print("!!!WARNING!!! To keep the periodicity, The height of the device will be truncated to this height:" +
               str(n_pattern * height_pattern))
 
     # Flatten the pattern repetitions into one ordered list of (material_index, height) slices
-    # spanning the whole sample, with the first material split into two half-height slices (see
-    # docstring above).
+    # spanning the whole sample, with the first material split into two half-height slices
+    # set at the bottom and top of the multilayer (see docstring above).
     first_material = pattern_layer[0]
     half_height = height_layer[first_material] / 2
     slices = [(first_material, half_height)]

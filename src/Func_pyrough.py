@@ -195,13 +195,16 @@ def atomsk_select_stl_local_cutout(infile, stlfile, outfile, shift):
     subprocess.call(["rm", "temp.lmp"])
 
 
-def av_length_and_strain(list_supercell, Height):
+def av_length_and_strain(list_supercell, height=None):
     """
-    Calculate the average dimension of each supercell, and strain all supercell to match these dimensions
-    :param list_supercell: list of all supercell file
-    :type list_supercell: List
-    :param list_distance: list of dimensions of all supercell
-    :type list_distance: List
+    Calculate the average dimensions of the supercells and strain all
+    supercells to match these dimensions.
+    If height is provided, it is used as the target dimension along z.
+    Otherwise, the average z dimension is calculated.
+    :param list_supercell: List of supercell files
+    :type list_supercell: list
+    :param height: Target dimension along z. If None, use the average value.
+    :type height: float or None
     """
 
     #print("list_supercell_out : {}".format(list_supercell_out))
@@ -215,19 +218,53 @@ def av_length_and_strain(list_supercell, Height):
 
     cell_moyx = 0
     cell_moyy = 0
-    cell_moyz = Height
+    cell_moyz = 0.0 if height is None else float(height)
     for j in range(len(cells)):
         cell_moyx = cell_moyx + (cells[j][0][0]) / (len(cells))
         #print("cells[j][0][0] : {}".format(cells[j][0][0]))
         cell_moyy = cell_moyy + (cells[j][1][1]) / (len(cells))
+        if height is None:
+            cell_moyz = cell_moyz + (cells[j][2][2] / len(cells))
 
     cell_moy = Cell.new([[cell_moyx, 0, 0], [0, cell_moyy, 0], [0, 0, cell_moyz]])
 
     #print("cell_moy : {}".format(cell_moy))
 
-    for k in range(len(atoms)):
-        atoms[k].set_cell(cell_moy, scale_atoms=True)
-        write(list_supercell[k], atoms[k])
+    with open("strain.txt", "w") as f:
+        infinitesimal_strains = []
+        for k in range(len(atoms)):
+            # Compute strain gradients
+            deformation_gradient = cell_moy.T @ np.linalg.inv(cells[k].T)
+            infinitesimal_strain = (0.5 * (deformation_gradient + deformation_gradient.T) - np.eye(3))
+            # green_lagrange_strain = 0.5 * (deformation_gradient.T @ deformation_gradient - np.eye(3))
+
+            infinitesimal_strains.append(infinitesimal_strain)
+
+            # Save strain informations
+            # print("Deformation gradient :")
+            # print(deformation_gradient)
+            print("Infinitesimal_strain of material {} :".format(k))
+            print(infinitesimal_strain)
+
+            # Save cell and strain information
+            f.write(f"Material {k}\n")
+            f.write("Initial cell:\n")
+            f.write(f"{cells[k]}\n")
+            f.write("Target cell:\n")
+            f.write(f"{cell_moy}\n")
+            f.write("Infinitesimal strain:\n")
+            f.write(f"{infinitesimal_strain}\n")
+            f.write("\n" + "-" * 50 + "\n\n")
+
+            # Update cell size and rescale atomic positions
+            atoms[k].set_cell(cell_moy, scale_atoms=True)
+            write(list_supercell[k], atoms[k])
+
+        average_infinitesimal_strain = np.mean(infinitesimal_strains, axis=0)
+        print("Average infinitesimal strain :")
+        print(f"{format(average_infinitesimal_strain)}")
+        f.write("Average infinitesimal strain:\n")
+        f.write(f"{average_infinitesimal_strain}\n")
 
 
 def base(radius, nfaces):
@@ -828,6 +865,16 @@ def G_hex(latt_param, latt_param_z):
 
     return res
 
+def get_cell(atom_file):
+    """
+    Use ASE to get the cell from an atom_file
+    :param atom_file:
+    :return: the cell of the sample
+    """
+    atoms = read(atom_file)
+    cell = atoms.get_cell()
+
+    return cell
 
 def lmp_rotate_euler(input_file, output_file, angles_deg, order='zyx'):
     """
