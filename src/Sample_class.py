@@ -820,31 +820,35 @@ def make_atom_grain(
     with the name out_pre.lmp
     """
 
+    # Define dimensions from STL file
     dim_x = max(vertices[:, 0]) - min(vertices[:, 0])
     dim_y = max(vertices[:, 1]) - min(vertices[:, 1])
     dim_z = max(vertices[:, 2]) - min(vertices[:, 2])
 
     #print("stl dim : {} {} {}".format(dim_x, dim_y, dim_z))
 
-    supercell_files = []
+    # Create atom supercells
 
-    for i in range(len(param.material)):
-        dis_x, dup_x, orien_x = fp.duplicate(dim_x, param.orien_x[i], param.lattice_parameter[i], param.lattice_structure[i])
-        dis_y, dup_y, orien_y = fp.duplicate(dim_y, param.orien_y[i], param.lattice_parameter[i], param.lattice_structure[i])
-        dis_z, dup_z, orien_z = fp.duplicate(2 * dim_z, param.orien_z[i], param.lattice_parameter[i], param.lattice_structure[i])
-
-        outfile = f"mat{i + 1}_supercell.cfg"
-        subprocess.call([
-            "atomsk", "--create",
-            param.lattice_structure[i],
-            *param.lattice_parameter[i],
-            *param.material[i],
-            "orient", orien_x, orien_y, orien_z,
-            "-duplicate", dup_x, dup_y, dup_z,
-            "-center", "com",
-            outfile, "-v", "2",
-        ])
-        supercell_files.append(outfile)
+    # supercell_files = []
+    # for i in range(len(param.material)):
+    #     dis_x, dup_x, orien_x = fp.duplicate(dim_x, param.orien_x[i], param.lattice_parameter[i], param.lattice_structure[i])
+    #     dis_y, dup_y, orien_y = fp.duplicate(dim_y, param.orien_y[i], param.lattice_parameter[i], param.lattice_structure[i])
+    #     dis_z, dup_z, orien_z = fp.duplicate(2 * dim_z, param.orien_z[i], param.lattice_parameter[i], param.lattice_structure[i])
+    #
+    #     outfile = f"mat{i + 1}_supercell.cfg"
+    #     subprocess.call([
+    #         "atomsk", "--create",
+    #         param.lattice_structure[i],
+    #         *param.lattice_parameter[i],
+    #         *param.material[i],
+    #         "orient", orien_x, orien_y, orien_z,
+    #         "-duplicate", dup_x, dup_y, dup_z,
+    #         "-center", "com",
+    #         outfile, "-v", "2",
+    #     ])
+    #     supercell_files.append(outfile)
+    supercell_files = [fp.atomsk_create_supercell(i, param, dim_x, dim_y, 2 * dim_z)
+                      for i in range(len(param.material))]
 
     # Deform mat2 to match mat1 (arbitrary)
     #fp.strain_file1_to_file2(supercell_files[1], supercell_files[0])
@@ -1157,7 +1161,7 @@ def make_atom_multilayered(param, out_pre):
         # 1 SUPERCELL PER MATERIAL, ALL WITH THE WHOLE SIZE OF THE SAMPLE
         dim_x, dim_y, dim_z = param.length, param.width, n_pattern * height_pattern
 
-        list_supercell = [fp._atomsk_create_supercell(atoms, param, dim_x, dim_y, dim_z)
+        list_supercell = [fp.atomsk_create_supercell(atoms, param, dim_x, dim_y, dim_z)
                            for atoms in range(len(param.material))]
         file_create.extend(list_supercell)
 

@@ -24,20 +24,6 @@ from ase.build import bulk
 from ase.cell import Cell
 from wulffpack import SingleCrystal
 
-
-def remove_file(path):
-    """Remove a file if it exists, silently ignoring missing files (cross-platform)."""
-    Path(path).unlink(missing_ok=True)
-
-
-def move_file(src, dst):
-    """Move a file cross-platform, overwriting destination if it already exists."""
-    dst_path = Path(dst)
-    if dst_path.exists():
-        dst_path.unlink()
-    shutil.move(str(src), str(dst))
-
-
 def align_f(vertices, angles):
     """
         Aligns the first facet with x-axis
@@ -82,6 +68,43 @@ def atomsk_cmd_to_string(cmd):
     rez = " ".join(str(c) for c in cmd)
     print("{}".format(rez))
 
+def atomsk_create_supercell(index, param, dim_x, dim_y, dim_z):
+    """
+    Creates an atomsk supercell of param.material[index] spanning (dim_x, dim_y, dim_z), handling
+    both regular crystals and binary random solid solutions (Lattice_structure given as
+    [structure, substitution_percent]).
+
+    :return: Name of the .cfg file created
+    """
+    structure = param.lattice_structure[index]
+    is_binary = isinstance(structure, list) and len(structure) > 1
+    base_structure = structure[0] if is_binary else structure
+
+    dis_x, dup_x, orien_x = duplicate(dim_x, param.orien_x[index], param.lattice_parameter[index], base_structure)
+    dis_y, dup_y, orien_y = duplicate(dim_y, param.orien_y[index], param.lattice_parameter[index], base_structure)
+    dis_z, dup_z, orien_z = duplicate(dim_z, param.orien_z[index], param.lattice_parameter[index], base_structure)
+
+    outfile = "mat{}_supercellm.cfg".format(index)
+    if is_binary:
+        print("mat{}_supercellm.cfg is a binary".format(index))
+        cmd = ["atomsk", "--create", str(base_structure), str(*param.lattice_parameter[index]),
+               str(param.material[index][0]),
+               "orient", str(orien_x), str(orien_y), str(orien_z),
+               "-duplicate", str(dup_x), str(dup_y), str(dup_z),
+               "-select", "random", str(structure[1]) + "%", str(param.material[index][0]),
+               "-substitute", str(param.material[index][0]), str(param.material[index][1]),
+               "-center", "com", outfile, "-v", "1"]
+        print("Atomsk binary solution {}".format(cmd))
+    else:
+        cmd = ["atomsk", "--create", str(base_structure), *param.lattice_parameter[index], *param.material[index],
+               "orient", str(orien_x), str(orien_y), str(orien_z),
+               "-duplicate", str(dup_x), str(dup_y), str(dup_z),
+               "-center", "com", outfile, "-v", "1"]
+        print("cmd : {}".format(cmd))
+
+    subprocess.call(cmd)
+    print("last file created is {}".format(outfile))
+    return outfile
 
 def atomsk_select_stl_local_cutin(infile, stlfile, outfile, shift):
     """
@@ -137,7 +160,6 @@ def atomsk_select_stl_local_cutin(infile, stlfile, outfile, shift):
     print("Atomsk call:", " ".join(map(str, cmd)))
     subprocess.call(cmd)
     subprocess.call(["rm", "temp.lmp"])
-
 
 def atomsk_select_stl_local_cutout(infile, stlfile, outfile, shift):
     """
@@ -1432,6 +1454,12 @@ def miller_parse(miller_str):
         raise ValueError(f"Invalid Miller index: [{s}]")
     return vec
 
+def move_file(src, dst):
+    """Move a file cross-platform, overwriting destination if it already exists."""
+    dst_path = Path(dst)
+    if dst_path.exists():
+        dst_path.unlink()
+    shutil.move(str(src), str(dst))
 
 def multi_layered(h, width, length, height, ns):
     """
@@ -2288,7 +2316,6 @@ def refine_pillar(out_pre, ns, alpha, angle, ext_fem):
     gmsh.finalize()
     return ()
 
-
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------
 def remove_duplicates_2d_ordered(data):
     """
@@ -2307,6 +2334,9 @@ def remove_duplicates_2d_ordered(data):
             seen.add(t_item)
     return result
 
+def remove_file(path):
+    """Remove a file if it exists, silently ignoring missing files (cross-platform)."""
+    Path(path).unlink(missing_ok=True)
 
 def rho(x, y):
     """
@@ -3177,44 +3207,6 @@ def rotation_from_z_axis(target_direction: np.ndarray) -> np.ndarray:
         [y * x * C + z * s, c + y * y * C, y * z * C - x * s],
         [z * x * C - y * s, z * y * C + x * s, c + z * z * C]
     ])
-
-
-def _atomsk_create_supercell(index, param, dim_x, dim_y, dim_z):
-    """
-    Creates an atomsk supercell of param.material[index] spanning (dim_x, dim_y, dim_z), handling
-    both regular crystals and binary random solid solutions (Lattice_structure given as
-    [structure, substitution_percent]).
-
-    :return: Name of the .cfg file created
-    """
-    structure = param.lattice_structure[index]
-    is_binary = isinstance(structure, list) and len(structure) > 1
-    base_structure = structure[0] if is_binary else structure
-
-    dis_x, dup_x, orien_x = duplicate(dim_x, param.orien_x[index], param.lattice_parameter[index], base_structure)
-    dis_y, dup_y, orien_y = duplicate(dim_y, param.orien_y[index], param.lattice_parameter[index], base_structure)
-    dis_z, dup_z, orien_z = duplicate(dim_z, param.orien_z[index], param.lattice_parameter[index], base_structure)
-
-    outfile = "mat{}_supercellm.cfg".format(index)
-    if is_binary:
-        cmd = ["atomsk", "--create", str(base_structure), str(*param.lattice_parameter[index]),
-               str(param.material[index][0]),
-               "orient", str(orien_x), str(orien_y), str(orien_z),
-               "-duplicate", str(dup_x), str(dup_y), str(dup_z),
-               "-select", "random", str(structure[1]) + "%", str(param.material[index][0]),
-               "-substitute", str(param.material[index][0]), str(param.material[index][1]),
-               "-center", "com", outfile, "-v", "1"]
-        print("Atomsk binary solution {}".format(cmd))
-    else:
-        cmd = ["atomsk", "--create", str(base_structure), *param.lattice_parameter[index], *param.material[index],
-               "orient", str(orien_x), str(orien_y), str(orien_z),
-               "-duplicate", str(dup_x), str(dup_y), str(dup_z),
-               "-center", "com", outfile, "-v", "1"]
-        print("cmd : {}".format(cmd))
-
-    subprocess.call(cmd)
-    print("last file created is {}".format(outfile))
-    return outfile
 
 
 def _cut_top(input_cfg, stencil_stl, output_cfg):
