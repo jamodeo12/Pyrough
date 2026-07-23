@@ -863,6 +863,7 @@ def make_atom_grain(
     subprocess.call([
         "atomsk", supercell_files[0],
         "-select", "stl", STL,
+        "-select", "invert",
         "-rmatom", "select", "mat1_out.cfg", "-v", "2",
     ])
 
@@ -870,7 +871,6 @@ def make_atom_grain(
     subprocess.call([
         "atomsk", supercell_files[1],
         "-select", "stl", STL,
-        "-select", "invert",
         "-rmatom", "select", "mat2_out.cfg", "-v", "2",
     ])
 
@@ -879,12 +879,27 @@ def make_atom_grain(
         if any(float(value) != 0.0 for value in param.shift[i]):
             print("Shift atoms processing..")
             file = f"mat{i + 1}_out.cfg"
+            cmd = [
+                "atomsk",
+                file,
+                "-shift", param.shift[i][0], param.shift[i][1], param.shift[i][2],
+                "-cell", "add", param.shift[i][0], "x",
+                "-cell", "add", param.shift[i][1], "y",
+                "-cell", "add", param.shift[i][2], "z",
+                "temp.cfg", "-v", "2",
+            ]
+            print("Running:", " ".join(cmd))
             subprocess.call([
                 "atomsk",
                 file,
                  "-shift", param.shift[i][0], param.shift[i][1], param.shift[i][2],
+                "-cell", "add", param.shift[i][0], "x",
+                "-cell", "add", param.shift[i][1], "y",
+                "-cell", "add", param.shift[i][2], "z",
                 "temp.cfg", "-v", "2",
             ])
+            #import shutil
+            #shutil.copy("temp.cfg", file)
             os.rename("temp.cfg", file)
 
     # Merge
