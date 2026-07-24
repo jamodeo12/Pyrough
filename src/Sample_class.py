@@ -874,8 +874,8 @@ def make_atom_grain(
         "-rmatom", "select", "mat2_out.cfg", "-v", "2",
     ])
 
-    import shutil
-    shutil.copy("mat2_out.cfg", "mat2_out_before_shift.cfg")
+    #import shutil
+    #shutil.copy("mat2_out.cfg", "mat2_out_before_shift.cfg")
 
     # Shifting (optional)
     for i in range(len(param.material)):
@@ -906,8 +906,6 @@ def make_atom_grain(
     fp.atomsk_merge_grain_wlargerboxz("mat1_out.cfg", "mat2_out.cfg", "temp2.cfg")
     #subprocess.call(["atomsk", "--merge", "2", "mat1_out.cfg", "mat2_out.cfg", "temp2.cfg", "-v", "2"])
 
-    quit()
-
     #import shutil
     #shutil.copy("temp2.cfg", "temp2_before_rebox.cfg")
 
@@ -925,8 +923,8 @@ def make_atom_grain(
         subprocess.call(["atomsk", "temp2.cfg", out_pre + "." + e, "-v", "2"])
 
     # Cleaning
-    #for f in supercell_files + ["mat1_out.cfg", "mat2_out.cfg", "temp2.cfg"]:
-    #    fp.remove_file(f)
+    for f in supercell_files + ["mat1_out.cfg", "mat2_out.cfg", "temp2.cfg"]:
+        fp.remove_file(f)
 
 
 def make_fpillar(param, out_pre):
