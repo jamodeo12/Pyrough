@@ -874,51 +874,59 @@ def make_atom_grain(
         "-rmatom", "select", "mat2_out.cfg", "-v", "2",
     ])
 
+    import shutil
+    shutil.copy("mat2_out.cfg", "mat2_out_before_shift.cfg")
+
     # Shifting (optional)
     for i in range(len(param.material)):
         if any(float(value) != 0.0 for value in param.shift[i]):
             print("Shift atoms processing..")
             file = f"mat{i + 1}_out.cfg"
+            boxshift = [2 * float(value) for value in param.shift[i]]
             cmd = [
                 "atomsk",
                 file,
-                "-shift", param.shift[i][0], param.shift[i][1], param.shift[i][2],
-                "-cell", "add", param.shift[i][0], "x",
-                "-cell", "add", param.shift[i][1], "y",
-                "-cell", "add", param.shift[i][2], "z",
-                "temp.cfg", "-v", "2",
+                "-shift",
+                str(param.shift[i][0]),
+                str(param.shift[i][1]),
+                str(param.shift[i][2]),
+                "-cell", "add", str(boxshift[0]), "x",
+                "-cell", "add", str(boxshift[1]), "y",
+                "-cell", "add", str(boxshift[2]), "z",
+                "temp.cfg",
+                "-v", "2",
             ]
             print("Running:", " ".join(cmd))
-            subprocess.call([
-                "atomsk",
-                file,
-                 "-shift", param.shift[i][0], param.shift[i][1], param.shift[i][2],
-                "-cell", "add", param.shift[i][0], "x",
-                "-cell", "add", param.shift[i][1], "y",
-                "-cell", "add", param.shift[i][2], "z",
-                "temp.cfg", "-v", "2",
-            ])
+            subprocess.call(cmd)
             #import shutil
             #shutil.copy("temp.cfg", file)
             os.rename("temp.cfg", file)
 
     # Merge
-    subprocess.call(["atomsk", "--merge", "2", "mat1_out.cfg", "mat2_out.cfg", "temp2.cfg", "-v", "2"])
+    fp.atomsk_merge_grain_wlargerboxz("mat1_out.cfg", "mat2_out.cfg", "temp2.cfg")
+    #subprocess.call(["atomsk", "--merge", "2", "mat1_out.cfg", "mat2_out.cfg", "temp2.cfg", "-v", "2"])
+
+    quit()
+
+    #import shutil
+    #shutil.copy("temp2.cfg", "temp2_before_rebox.cfg")
 
     # Rebox (if shift)
-    for i in range(len(param.material)):
-        if any(float(value) != 0.0 for value in param.shift[i]):
-            print("After-shift rebox processing..")
-            fp.rebox_w_atomsk("temp2.cfg", "temp2_rebox.cfg")
-            os.rename("temp2_rebox.cfg", "temp2.cfg")
+    #print("Rebox processing...")
+    # for i in range(len(param.material)):
+    #     if any(float(value) != 0.0 for value in param.shift[i]):
+    #         print("After-shift rebox processing..")
+    #         fp.rebox_w_atomsk("temp2.cfg", "temp2_rebox.cfg")
+    #         os.rename("temp2_rebox.cfg", "temp2.cfg")
+    #fp.ase_update_graincell_to_largestgraincell("temp2.cfg", "mat1_out.cfg", "mat2_out.cfg")
 
     # Outfiles
     for e in param.ext_ato:
         subprocess.call(["atomsk", "temp2.cfg", out_pre + "." + e, "-v", "2"])
 
     # Cleaning
-    for f in supercell_files + ["mat1_out.cfg", "mat2_out.cfg", "temp2.cfg"]:
-        fp.remove_file(f)
+    #for f in supercell_files + ["mat1_out.cfg", "mat2_out.cfg", "temp2.cfg"]:
+    #    fp.remove_file(f)
 
 
 def make_fpillar(param, out_pre):

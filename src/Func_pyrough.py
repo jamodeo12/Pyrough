@@ -58,6 +58,51 @@ def ase_to_spglib_cell(atoms):
     numbers = atoms.get_atomic_numbers()
     return (lattice, positions, numbers)
 
+def ase_update_graincell_to_largestgraincell(grainmerge_file, grain1, grain2):
+    """
+    Replace the cell of grainmerge_file by the largest dimensions found
+    in grain1 and grain2, without moving the atoms.
+    :param grainmerge_file: str, path to merged grain file
+    :param grain1: str, first grain
+    :param grain2: str, second grain
+    :return: str, updated merged grain with new cell
+    """
+    atoms_merge = read(grainmerge_file)
+    atoms1 = read(grain1)
+    atoms2 = read(grain2)
+
+    cell1 = atoms1.get_cell().lengths()
+    cell2 = atoms2.get_cell().lengths()
+
+    # Largest dimension along each axis
+    new_cell = np.maximum(cell1, cell2)
+
+    # Read the original Atomsk CFG file without using ASE to rewrite it
+    with open(grainmerge_file, "r") as file:
+        lines = file.readlines()
+
+    cell_values = {
+        "H0(1,1)": new_cell[0],
+        "H0(1,2)": 0.0,
+        "H0(1,3)": 0.0,
+        "H0(2,1)": 0.0,
+        "H0(2,2)": new_cell[1],
+        "H0(2,3)": 0.0,
+        "H0(3,1)": 0.0,
+        "H0(3,2)": 0.0,
+        "H0(3,3)": new_cell[2],
+    }
+
+    for i, line in enumerate(lines):
+        for key, value in cell_values.items():
+            if line.startswith(key):
+                lines[i] = f"{key} = {value:16.8f}\n"
+                break
+
+    # Rewrite the file while preserving all atomic data and Atomsk formatting
+    with open(grainmerge_file, "w") as file:
+        file.writelines(lines)
+
 
 def atomsk_cmd_to_string(cmd):
     """
@@ -105,6 +150,68 @@ def atomsk_create_supercell(index, param, dim_x, dim_y, dim_z):
     subprocess.call(cmd)
     print("last file created is {}".format(outfile))
     return outfile
+
+def atomsk_merge_grain_wlargerboxz(grain1, grain2, outfile):
+    """
+    Merge two grains with the grain having the largest cell length
+    along z placed first in the Atomsk command.
+    :param file1:
+    :param file2:
+    :return:
+    """
+    print("Merging... (fp.atomsk_merge_grain_wlargerboxz)")
+    atoms1 = read(grain1)
+    atoms2 = read(grain2)
+    cell1_z = atoms1.get_cell().lengths()[2]
+    cell2_z = atoms2.get_cell().lengths()[2]
+
+    if cell1_z >= cell2_z:
+        print("Mat1 w larger cell along z. Reverse order : off.")
+        first_file = grain1
+        second_file = grain2
+        reversed_order = False
+    else:
+        print("Mat2 w larger cell along z. Reverse order : on.")
+        first_file = grain2
+        second_file = grain1
+        reversed_order = True
+
+    subprocess.call([
+        "atomsk",
+        "--merge", "2",
+        first_file,
+        second_file,
+        outfile,
+        "-v", "2"
+    ])
+
+    if reversed_order:
+        with open(outfile, "r") as file:
+            lines = file.readlines()
+
+        for i, line in enumerate(lines):
+            values = line.split()
+            # CFG atomic lines:
+            # x y z mass sysID
+            if len(values) == 5:
+                try:
+                    float(values[0])
+                    float(values[1])
+                    float(values[2])
+                    float(values[3])
+                    atype = int(values[4])
+                except ValueError:
+                    continue
+
+                if atype == 1:
+                    values[4] = "2"
+                elif atype == 2:
+                    values[4] = "1"
+
+                lines[i] = " ".join(values) + "\n"
+
+        with open(outfile, "w") as file:
+            file.writelines(lines)
 
 def atomsk_select_stl_local_cutin(infile, stlfile, outfile, shift):
     """
